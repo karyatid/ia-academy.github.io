@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Architect : Scripts viraux en 30min - IA Academy</title>
+    <style>
+        /* Enhanced CSS Variables for consistent theming */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(148, 163, 184, 0.2);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            
+            --pattern-opacity: 0.03;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: var(--transition);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Dynamic Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-icon {
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            position: relative;
+        }
+
+        [data-theme="dark"] .theme-toggle-icon {
+            transform: translateX(23px);
+        }
+
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Prompt Code Blocks */
+        .prompt-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .prompt-label {
+            position: absolute;
+            top: -10px;
+            left: 1rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--bg-primary);
+        }
+
+        /* Results Tracking */
+        .results-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.1rem;
+        }
+
+        /* Exercise Section */
+        .exercise-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exercise-intro {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-counter {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .exercise-step {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Stats Box for Viral Content */
+        .stats-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warning-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Enhanced Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">← Dashboard</a>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-icon">
+                            🌙
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+            →
+            <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+            →
+            <span class="breadcrumb-current">Claude Architect : Scripts viraux</span>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        🎯 Micro-séquence 1B
+                    </div>
+                    <div class="lesson-badge">
+                        ⏱️ 25 min
+                    </div>
+                    <div class="lesson-badge">
+                        🧠 Claude Focus
+                    </div>
+                </div>
+                <h1 class="lesson-title">Claude Architect : Scripts viraux en 30min</h1>
+                <p class="lesson-description">
+                    Transformez une simple idée en script TikTok/YouTube prêt à tourner avec un workflow structuré : Brief → Hook → Structure → CTA → Test A/B.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="main-layout">
+            <div class="main-content">
+                
+                <!-- 🚀 Objectif de cette micro-séquence -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🚀 Objectif de cette micro-séquence
+                    </h2>
+                    
+                    <div class="interactive-box">
+                        <div class="interactive-title">🎯 Challenge viral</div>
+                        <p><strong>Défi :</strong> Transformer une idée floue en script prêt à tourner pour TikTok/YouTube qui maximise les chances de devenir viral.</p>
+                        <p><strong>Métrique de réussite :</strong> Script de 30-60 secondes optimisé avec hook, structure narrative et CTA, testé en format A/B.</p>
+                    </div>
+
+                    <div class="section-content">
+                        <h3>🎯 Idée de base que vous allez transformer :</h3>
+                        <div class="prompt-block">
+                            <div class="prompt-label">Idée initiale</div>
+                            "Je veux faire une vidéo pour expliquer pourquoi mon service de coaching business peut aider les entrepreneurs débutants."
+                        </div>
+
+                        <h3>📊 Résultats attendus à la fin :</h3>
+                        <ul>
+                            <li>✅ <strong>Script de 30-60 secondes</strong> prêt à tourner</li>
+                            <li>✅ <strong>Hook viral optimisé</strong> pour les 3 premières secondes</li>
+                            <li>✅ <strong>Structure narrative engageante</strong> qui maintient l'attention</li>
+                            <li>✅ <strong>CTA naturel et persuasif</strong> adapté à la plateforme</li>
+                            <li>✅ <strong>2 versions A/B</strong> pour tester l'efficacité</li>
+                        </ul>
+
+                        <h3>🏆 Critères de réussite :</h3>
+                        <div class="results-box">
+                            <div class="metric-item">
+                                <span class="metric-label">Temps de création</span>
+                                <span class="metric-value">< 30 min</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Durée optimale script</span>
+                                <span class="metric-value">30-60 sec</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Hook captivant</span>
+                                <span class="metric-value">3 premières sec</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Versions à tester</span>
+                                <span class="metric-value">2 variantes A/B</span>
+                            </div>
+                        </div>
+
+                        <div class="stats-box">
+                            <div class="interactive-title">📈 Pourquoi Claude pour les scripts viraux ?</div>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-number">85%</span>
+                                    <span class="stat-label">Meilleure compréhension contextuelle</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">92%</span>
+                                    <span class="stat-label">Cohérence narrative</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">78%</span>
+                                    <span class="stat-label">Adaptation au ton demandé</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 🔧 Prérequis techniques -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🔧 Prérequis techniques
+                    </h2>
+                    
+                    <div class="section-content">
+                        <h3>📱 Outils nécessaires :</h3>
+                        <ul>
+                            <li>✅ <strong>Claude (Anthropic)</strong> - version gratuite ou Pro (recommandé)</li>
+                            <li>✅ <strong>Chronomètre/Timer</strong> pour tester la durée des scripts</li>
+                            <li>✅ <strong>Éditeur de texte</strong> pour compiler les différentes versions</li>
+                            <li>✅ <strong>Application notes</strong> ou carnet pour idées spontanées</li>
+                        </ul>
+
+                        <h3>⚙️ Configuration recommandée :</h3>
+                        <ul>
+                            <li><strong>Claude :</strong> Nouvelle conversation pour contexte propre et cohérent</li>
+                            <li><strong>Timer :</strong> Prêt pour chronométrer vos scripts (lecture à voix haute)</li>
+                            <li><strong>Éditeur :</strong> Document avec 3 sections : Version A, Version B, Notes</li>
+                            <li><strong>Références :</strong> Quelques exemples de scripts viraux de votre niche ouverts</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">💡 Spécificité Claude</div>
+                            <p>Claude excelle dans la compréhension contextuelle et la cohérence narrative. Il est particulièrement doué pour adapter le ton et créer des transitions naturelles, parfait pour les scripts qui doivent "sonner juste".</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 💪 Exercice pratique guidé -->
+                <section class="section">
+                    <div class="exercise-container">
+                        <h2 class="exercise-title">
+                            💪 Exercice pratique guidé
+                        </h2>
+                        
+                        <div class="exercise-intro">
+                            <h3>🎯 Contexte et objectifs de ces exercices</h3>
+                            <p><strong>Situation :</strong> Vous êtes coach business et voulez créer du contenu TikTok/YouTube pour attirer des entrepreneurs débutants. Votre objectif est de démontrer votre expertise tout en créant un lien émotionnel avec votre audience.</p>
+                            
+                            <p><strong>Enjeu :</strong> Sur les réseaux sociaux, vous avez 3 secondes pour capter l'attention. Votre script doit non seulement informer mais aussi divertir et inciter à l'action, le tout en moins d'une minute.</p>
+                            
+                            <p><strong>Méthodologie :</strong> Nous utilisons la force de Claude pour créer des scripts naturels et cohérents avec une approche structurée en 5 étapes qui maximise les chances de viralité.</p>
+
+                            <p><strong>Résultat final :</strong> 2 scripts prêts à tourner avec angles différents pour tester lequel fonctionne le mieux avec votre audience.</p>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">1</div>
+                                Analyse du concept et définition de l'angle viral
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Analysez votre idée de base et définissez l'angle le plus viral possible avec Claude. L'objectif est de transformer un concept banal en accroche irrésistible.</p>
+                                
+                                <p><strong>Concept test à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Idée de base</div>
+                                    <button class="copy-btn" onclick="copyPrompt('concept')">📋 Copier</button>
+                                    <div id="prompt-concept">"Je veux faire une vidéo pour expliquer pourquoi mon service de coaching business peut aider les entrepreneurs débutants."</div>
+                                </div>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 1 - Angle viral</div>
+                                    <button class="copy-btn" onclick="copyPrompt('1')">📋 Copier</button>
+                                    <div id="prompt-1">Tu es un expert en contenu viral sur TikTok et YouTube, spécialisé dans les vidéos qui génèrent millions de vues.
+
+ANALYSE CETTE IDÉE : "Je veux faire une vidéo pour expliquer pourquoi mon service de coaching business peut aider les entrepreneurs débutants."
+
+MISSION : Transforme cette idée en angle viral irrésistible.
+
+ANGLES VIRAL À EXPLORER :
+1. CONTRE-INTUITIF : "Pourquoi 90% des coachs business donnent de mauvais conseils"
+2. HISTOIRE PERSONNELLE : "Comment j'ai échoué 7 fois avant de réussir"  
+3. MYTHES CASSÉS : "3 mensonges qu'on raconte aux entrepreneurs débutants"
+4. DÉMONSTRATION : "Je transforme une idée en 10k€ en 60 secondes"
+5. COMPARAISON CHOC : "Entrepreneuriat vs Job : la vérité que personne ne dit"
+
+POUR CHAQUE ANGLE :
+- Hook de 3 secondes (question ou affirmation choc)
+- Promesse claire (ce que la personne va apprendre)
+- Niveau de controverse (1-10, 7+ pour viral)
+- Public cible précis
+- Potentiel d'engagement estimé
+
+OBJECTIF : Trouver l'angle qui fait dire "WOW, je dois voir ça !"</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> 5 angles viraux différents avec hooks, promesses et niveau de controverse. Claude doit identifier l'angle avec le plus fort potentiel viral pour votre audience.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">2</div>
+                                Création du hook ultime (3 premières secondes)
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Créez plusieurs variations du hook parfait pour les 3 premières secondes. Ces secondes déterminent si votre vidéo sera scrollée ou regardée jusqu'au bout.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 2 - Hook viral</div>
+                                    <button class="copy-btn" onclick="copyPrompt('2')">📋 Copier</button>
+                                    <div id="prompt-2">Concentre-toi sur l'angle viral le plus prometteur de l'exercice précédent.
+
+MISSION : Crée 5 hooks différents pour les 3 premières secondes.
+
+FORMATS DE HOOKS VIRAL :
+1. QUESTION CHOC : "Devine combien j'ai perdu en 6 mois ?"
+2. AFFIRMATION CONTROVERSE : "Arrête de suivre tes passions"
+3. STATISTIQUE SURPRENANTE : "97% des entrepreneurs font cette erreur"
+4. HISTOIRE PERSONNELLE : "À 25 ans, j'étais fauché. Aujourd'hui..."
+5. DÉFI DIRECT : "Si tu n'arrives pas à faire ça, oublie l'entrepreneuriat"
+
+CONTRAINTES TECHNIQUES :
+- Maximum 8-10 mots
+- Lisible rapidement à l'écran
+- Prononçable en 3 secondes max
+- Crée immédiatement curiosité ou émotion
+- Fonctionne SANS le son
+
+POUR CHAQUE HOOK :
+- Version écrite (pour sous-titres)
+- Version parlée (pour voix-off)
+- Émotion déclenchée (curiosité, peur, espoir, colère)
+- Score viral estimé (1-10)
+
+OBJECTIF : Hook qui stoppe le scroll dans les 0.5 premières secondes.</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> 5 hooks différents avec versions écrite/parlée, émotions déclenchées et scores viraux. Choisissez celui qui génère le plus de curiosité immédiate.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">3</div>
+                                Structure narrative engageante (corps du script)
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Développez le corps de votre script avec une structure narrative qui maintient l'attention du début à la fin. Utilisez les techniques de storytelling adaptées au format court.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 3 - Structure narrative</div>
+                                    <button class="copy-btn" onclick="copyPrompt('3')">📋 Copier</button>
+                                    <div id="prompt-3">Développe le script complet basé sur le meilleur hook de l'exercice précédent.
+
+STRUCTURE NARRATIVE VIRAL (30-60 secondes) :
+
+INTRO (0-3s) : Hook sélectionné
+PROBLÈME (3-15s) : Pain point que vit ton audience  
+AGITATION (15-25s) : Amplifier le problème avec exemple concret
+SOLUTION (25-45s) : Ta méthode/approche unique
+PREUVE (45-55s) : Résultat rapide ou témoignage
+CTA (55-60s) : Action simple et claire
+
+TECHNIQUES NARRATIVES :
+- Utilisé "Tu" pour interpeller directement
+- Transitions fluides entre chaque partie
+- Langage simple, phrases courtes
+- Créer mini-cliffhangers ("Mais voici le truc...")
+- Rythme soutenu, pas de temps mort
+
+CONTRAINTES PRODUCTION :
+- Script lisible à voix haute
+- Indications visuelles entre parenthèses
+- Moments de pause marqués
+- Synchronisation texte/image suggérée
+
+OBJECTIF : Script qui maintient 80%+ de l'audience jusqu'à la fin.</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Script complet 30-60 secondes avec structure narrative claire, transitions fluides et indications de production. Le rythme doit être soutenu sans temps mort.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">4</div>
+                                Call-to-action naturel et persuasif
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Optimisez la fin de votre script avec un CTA qui convertit sans paraître vendeur. L'objectif est d'inciter à l'action tout en restant dans la valeur.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 4 - CTA optimisé</div>
+                                    <button class="copy-btn" onclick="copyPrompt('4')">📋 Copier</button>
+                                    <div id="prompt-4">Optimise les 10 dernières secondes du script avec un CTA qui convertit naturellement.
+
+TYPES DE CTA PAR PLATEFORME :
+
+TIKTOK :
+- "Sauvegarde ça pour plus tard"
+- "Partage à quelqu'un qui en a besoin"  
+- "Follow pour plus de tips comme ça"
+- "Commente ton plus gros challenge"
+
+YOUTUBE SHORTS :
+- "Abonne-toi si ça t'a aidé"
+- "Like si tu veux la suite"
+- "Regarde cette vidéo pour aller plus loin"
+- "Dis-moi en commentaire ton résultat"
+
+LINKEDIN/INSTAGRAM :
+- "Envoie-moi un DM si tu veux de l'aide"
+- "Connecte-toi pour plus de contenu"
+- "Partage ton expérience en commentaire"
+
+STRUCTURE CTA NATUREL :
+1. TRANSITION : "Maintenant, voici ce que tu peux faire..."
+2. ACTION PRINCIPALE : Claire et simple
+3. BÉNÉFICE : Pourquoi faire cette action
+4. FACILITÉ : "Ça prend 2 secondes"
+
+ÉVITER : "Achète maintenant", "Contacte-moi", "Visite mon site"
+
+OBJECTIF : CTA qui donne envie d'agir sans pression commerciale.</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> 3-4 options de CTA adaptées à différentes plateformes, naturels et non-intrusifs. Le CTA doit prolonger l'engagement plutôt que vendre directement.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">5</div>
+                                Création de la version A/B alternative
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Créez une version alternative de votre script pour tester l'efficacité. Changez l'angle ou l'approche pour identifier quelle version résonne le mieux avec votre audience.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 5 - Version A/B</div>
+                                    <button class="copy-btn" onclick="copyPrompt('5')">📋 Copier</button>
+                                    <div id="prompt-5">Crée une version alternative du script en changeant l'approche narrative.
+
+VERSION A (existante) : [Insérer le script créé précédemment]
+
+VERSION B À CRÉER :
+Si Version A = Problème → Solution → Preuve
+Alors Version B = Histoire → Leçon → Application
+
+ALTERNATIVES NARRATIVES :
+1. AVANT/APRÈS : "J'étais X, maintenant je suis Y"
+2. ERREURS → CORRECTIONS : "J'ai fait ces 3 erreurs, voici comment les éviter"
+3. MÉTHODE PAS-À-PAS : "Voici exactement comment faire"
+4. COMPARAISON : "Méthode classique vs ma méthode"
+5. DÉMONSTRATION : "Je vais te prouver en temps réel"
+
+ÉLÉMENTS À TESTER :
+- Hook différent (même message, angle opposé)
+- Ton différent (sérieux vs décontracté)
+- Structure différente (chronologique vs thématique)
+- CTA différent (action vs réflexion)
+
+CONTRAINTES :
+- Même durée (30-60s)
+- Même objectif final
+- Même audience cible
+- Message cohérent mais approche différente
+
+OBJECTIF : 2 scripts prêts pour test A/B réel.</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Version B complète avec approche narrative différente, même durée et même objectif. Vous aurez 2 scripts prêts pour tester lequel fonctionne le mieux.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 📊 Validation des résultats -->
+                <section class="section">
+                    <h2 class="section-title">
+                        📊 Validation des résultats
+                    </h2>
+                    
+                    <div class="section-content">
+                        <h3>📏 Checklist de qualité finale :</h3>
+                        <div class="results-box">
+                            <div class="metric-item">
+                                <span class="metric-label">Temps total de création</span>
+                                <span class="metric-value">~25 min</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Durée des scripts finaux</span>
+                                <span class="metric-value">30-60 sec</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Versions prêtes pour test</span>
+                                <span class="metric-value">2 scripts A/B</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Hook viral optimisé</span>
+                                <span class="metric-value">3 premières sec</span>
+                            </div>
+                        </div>
+
+                        <h3>🏆 Éléments à vérifier :</h3>
+                        <ul>
+                            <li>✅ <strong>Hook viral :</strong> Stoppe le scroll dans les 3 premières secondes</li>
+                            <li>✅ <strong>Structure fluide :</strong> Transitions naturelles sans temps mort</li>
+                            <li>✅ <strong>Durée optimale :</strong> 30-60 secondes chrono à voix haute</li>
+                            <li>✅ <strong>CTA naturel :</strong> Incite à l'action sans pression commerciale</li>
+                            <li>✅ <strong>Versions A/B :</strong> Angles différents pour tester l'efficacité</li>
+                            <li>✅ <strong>Prêt production :</strong> Indications visuelles et pauses marquées</li>
+                        </ul>
+
+                        <h3>💡 Comment tester vos scripts :</h3>
+                        <ul>
+                            <li><strong>Chronométrage :</strong> Lisez à voix haute, 30-60s max</li>
+                            <li><strong>Test d'écoute :</strong> Enregistrez-vous, ça sonne naturel ?</li>
+                            <li><strong>Test de compréhension :</strong> Quelqu'un comprend sans contexte ?</li>
+                            <li><strong>Test émotionnel :</strong> Génère curiosité, empathie ou action ?</li>
+                            <li><strong>Test visuel :</strong> Fonctionne-t-il même sans le son ?</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🚀 Prochaine étape</div>
+                            <p><strong>Action immédiate :</strong> Tournez les 2 versions cette semaine. Publiez Version A puis Version B quelques jours après. Analysez les métriques (vues, engagement, partages).</p>
+                            <p><strong>Optimisation :</strong> Gardez le format qui marche le mieux et créez 5 variations sur le même modèle !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="generative_4_texte_scripts_1.html" class="btn btn-secondary">← Micro-séquence 1A</a>
+                    <a href="generative_4_subtitles_tools_1c.html" class="btn btn-primary">Micro-séquence 1C →</a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🕐 Suivi de session</h3>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="global-progress"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0% terminé</div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">🎯 Objectif session</div>
+                    <p>Créer 2 scripts viraux prêts à tourner pour TikTok/YouTube avec Claude en 25 minutes.</p>
+                </div>
+
+                <div class="results-box">
+                    <div class="interactive-title">📊 Vos métriques</div>
+                    <div class="metric-item">
+                        <span class="metric-label">Temps écoulé</span>
+                        <span class="metric-value" id="elapsed-time">00:00</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Exercices complétés</span>
+                        <span class="metric-value" id="exercises-completed">0/5</span>
+                    </div>
+                </div>
+
+                <div class="stats-box">
+                    <div class="interactive-title">🔥 Scripts viraux stats</div>
+                    <div class="stat-item">
+                        <span class="stat-number">3 sec</span>
+                        <span class="stat-label">Temps pour hook viral</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">80%</span>
+                        <span class="stat-label">Rétention visée</span>
+                    </div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">💪 Actions post-session</div>
+                    <ul style="font-size: 0.9rem; margin: 0; padding-left: 1rem;">
+                        <li>Tourner les 2 versions</li>
+                        <li>Tester sur votre audience</li>
+                        <li>Analyser les métriques</li>
+                        <li>Passer à la micro-séquence 1C</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // Variables globales
+        let globalStartTime = null;
+        let completedExercises = 0;
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.querySelector('.theme-toggle-icon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.querySelector('.theme-toggle-icon');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            }
+            
+            // Start global timer
+            if (!globalStartTime) {
+                globalStartTime = Date.now();
+                updateGlobalTimer();
+            }
+        });
+
+        function completeExercise() {
+            completedExercises++;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (completedExercises / 5) * 100;
+            document.getElementById('global-progress').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = Math.round(progress) + '% terminé';
+            document.getElementById('exercises-completed').textContent = completedExercises + '/5';
+        }
+
+        function updateGlobalTimer() {
+            setInterval(() => {
+                if (globalStartTime) {
+                    const elapsed = Date.now() - globalStartTime;
+                    const minutes = Math.floor(elapsed / 60000);
+                    const seconds = Math.floor((elapsed % 60000) / 1000);
+                    document.getElementById('elapsed-time').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        // Copy prompt functionality
+        function copyPrompt(promptNumber) {
+            const promptId = `prompt-${promptNumber}`;
+            const promptElement = document.getElementById(promptId);
+            const text = promptElement.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const copyBtn = promptElement.parentElement.querySelector('.copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Copié !';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Erreur lors de la copie:', err);
+            });
+        }
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Auto-save progress
+        let progressTimer;
+        window.addEventListener('scroll', function() {
+            clearTimeout(progressTimer);
+            progressTimer = setTimeout(function() {
+                const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                if (scrollPercent > 0) {
+                    localStorage.setItem('micro_sequence_1b_progress', scrollPercent);
+                }
+                
+                // Auto-complete exercises based on scroll
+                if (scrollPercent > 20 && completedExercises < 1) {
+                    completedExercises = 1;
+                    updateProgress();
+                } else if (scrollPercent > 40 && completedExercises < 2) {
+                    completedExercises = 2;
+                    updateProgress();
+                } else if (scrollPercent > 60 && completedExercises < 3) {
+                    completedExercises = 3;
+                    updateProgress();
+                } else if (scrollPercent > 80 && completedExercises < 4) {
+                    completedExercises = 4;
+                    updateProgress();
+                } else if (scrollPercent > 95 && completedExercises < 5) {
+                    completedExercises = 5;
+                    updateProgress();
+                }
+            }, 1000);
+        });
+
+        // Load saved progress
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedProgress = localStorage.getItem('micro_sequence_1b_progress');
+            if (savedProgress && savedProgress > 20) {
+                const exercises = Math.floor(savedProgress / 20);
+                completedExercises = Math.min(exercises, 5);
+                updateProgress();
+            }
+        });
+    </script>
+</body>
+</html>

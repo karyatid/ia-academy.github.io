@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 1A: Transparence et Responsabilité - Module 7 | IA Academy</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <style>
+        /* Variables CSS pour la cohérence du thème */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border-color: rgba(148, 163, 184, 0.2);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-color: rgba(148, 163, 184, 0.3);
+            --glass-bg: rgba(248, 250, 252, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.1);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Fond animé subtil */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '🌙';
+            position: absolute;
+            left: 3px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .theme-toggle::before {
+            content: '☀️';
+            left: 25px;
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+            transform: translateX(-2px);
+        }
+
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Example Box for Practical Cases */
+        .example-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box for Important Notes */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(248, 113, 113, 0.1));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .quiz-question h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            margin: 0.5rem 0;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        .quiz-option.selected {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .quiz-explanation {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        /* Sidebar Optimized for Progress Tracking */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            width: 25%;
+        }
+
+        .sequence-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-secondary);
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .sequence-item.current {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .sequence-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .sequence-item.current .sequence-icon {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .sequence-duration {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Lesson Navigation at Bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Button Styles with Enhanced Interactivity */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">← Dashboard</a>
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                <span class="breadcrumb-separator">></span>
+                <a href="ethique_7_overview.html" class="breadcrumb-link">Module 7: Éthique et IA</a>
+                <span class="breadcrumb-separator">></span>
+                <span class="breadcrumb-current">Transparence et Responsabilité</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚖️</span>
+                        Module 7 - Séquence 1A
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        30 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        Transparence
+                    </div>
+                </div>
+                <h1 class="lesson-title">Transparence et Responsabilité</h1>
+                <p class="lesson-description">
+                    Découvrez les deux piliers fondamentaux de l'éthique en IA : la transparence des décisions automatisées et la responsabilité humaine. Cette première partie vous donnera les clés pour comprendre les enjeux d'explicabilité et de contrôle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section" id="introduction">
+                    <h2 class="section-title">🚀 Introduction</h2>
+                    <div class="section-content">
+                        <p>
+                            L'intelligence artificielle transforme notre société à une vitesse vertigineuse. Mais avec cette révolution technologique émergent des questions éthiques fondamentales qui nécessitent notre attention immédiate. Dans cette première partie, nous nous concentrerons sur deux enjeux cruciaux : la transparence et la responsabilité.
+                        </p>
+                        <p>
+                            Vous découvrirez pourquoi la transparence et l'explicabilité ne sont pas de simples concepts théoriques, mais des exigences pratiques. Nous analyserons également les questions de responsabilité : qui est responsable quand une IA prend une décision erronée ? Comment maintenir un contrôle humain significatif ?
+                        </p>
+
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Objectifs de cette micro-séquence</div>
+                            <ul>
+                                <li>Comprendre les enjeux de transparence et d'explicabilité en IA</li>
+                                <li>Identifier les questions de responsabilité dans les décisions automatisées</li>
+                                <li>Maîtriser les principes du contrôle humain et de la supervision</li>
+                                <li>Appliquer ces concepts à des cas concrets d'usage de l'IA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Transparence et explicabilité -->
+                <section class="section" id="transparence">
+                    <h2 class="section-title">🔍 Transparence et Explicabilité</h2>
+                    <div class="section-content">
+                        <h3>Le problème de la "boîte noire" en IA</h3>
+                        <p>
+                            L'un des défis majeurs de l'IA moderne réside dans son opacité. De nombreux systèmes, particulièrement ceux basés sur l'apprentissage profond, fonctionnent comme des "boîtes noires" : nous pouvons observer leurs entrées et leurs sorties, mais le processus de prise de décision interne reste mystérieux, même pour leurs créateurs.
+                        </p>
+
+                        <div class="example-box">
+                            <div class="example-title">📝 Exemple concret</div>
+                            <p>
+                                <strong>Cas médical nuancé :</strong> Une IA détecte un cancer avec 95% de précision ET montre les zones suspectes sur l'image. Le radiologue voit **où** regarder, mais l'IA ne peut pas expliquer **pourquoi** ces patterns spécifiques l'inquiètent. Il y a transparence sur la localisation, mais opacité sur le raisonnement sous-jacent.
+                            </p>
+                        </div>
+
+                        <h4>Pourquoi c'est problématique ?</h4>
+                        <ul>
+                            <li><strong>Confiance limitée :</strong> Difficile de faire confiance à ce qu'on ne comprend pas</li>
+                            <li><strong>Détection d'erreurs impossible :</strong> Sans explication, impossible de corriger les biais</li>
+                            <li><strong>Responsabilité floue :</strong> Qui répond des décisions prises par la machine ?</li>
+                            <li><strong>Apprentissage humain limité :</strong> Nous ne pouvons pas apprendre de processus opaques</li>
+                        </ul>
+
+                        <h3>Droit à l'explication et RGPD</h3>
+                        <p>
+                            Le Règlement Général sur la Protection des Données (RGPD) a introduit une notion révolutionnaire : le droit à l'explication. Selon l'article 22, toute personne a le droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé produisant des effets juridiques la concernant ou l'affectant de manière significative.
+                        </p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">⚖️ Implications juridiques</div>
+                            <p><strong>Secteurs particulièrement concernés :</strong></p>
+                            <ul>
+                                <li><strong>Banque :</strong> Octroi de crédit automatisé</li>
+                                <li><strong>Emploi :</strong> Sélection de candidats par IA</li>
+                                <li><strong>Assurance :</strong> Calcul de primes personnalisées</li>
+                                <li><strong>Justice :</strong> Aide à la décision judiciaire</li>
+                                <li><strong>Éducation :</strong> Évaluation automatisée</li>
+                            </ul>
+                        </div>
+
+                        <h3>Documentation des décisions automatisées</h3>
+                        <p>
+                            La documentation ne se limite pas à expliquer comment l'IA fonctionne. Elle doit aussi tracer les décisions prises, justifier les choix de conception, et permettre un audit régulier des performances et des biais potentiels.
+                        </p>
+
+                        <h4>Éléments clés d'une bonne documentation :</h4>
+                        <ul>
+                            <li><strong>Objectif du système :</strong> Pourquoi cette IA a-t-elle été créée ?</li>
+                            <li><strong>Données d'entraînement :</strong> Sources, qualité, représentativité</li>
+                            <li><strong>Méthodes utilisées :</strong> Algorithmes, paramètres, seuils de décision</li>
+                            <li><strong>Limitations connues :</strong> Cas d'échec, biais identifiés</li>
+                            <li><strong>Mesures de performance :</strong> Précision, rappel, équité</li>
+                        </ul>
+
+                        <h3>Communication avec les utilisateurs finaux</h3>
+                        <p>
+                            L'explication technique ne suffit pas. Il faut adapter la communication au niveau de compréhension de chaque utilisateur. Un médecin n'a pas besoin des mêmes informations qu'un patient, et un directeur financier pas des mêmes détails qu'un data scientist.
+                        </p>
+
+                        <div class="example-box">
+                            <div class="example-title">💬 Exemples de communication adaptée</div>
+                            <p><strong>Pour le grand public :</strong> "Ce système a analysé votre historique d'achat et recommande ces produits car ils correspondent à vos préférences habituelles."</p>
+                            <p><strong>Pour un expert :</strong> "Algorithme de filtrage collaboratif basé sur une similarité cosinus, avec un score de confiance de 0.87 et une précision@10 de 73%."</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Responsabilité et contrôle humain -->
+                <section class="section" id="responsabilite">
+                    <h2 class="section-title">👤 Responsabilité et Contrôle Humain</h2>
+                    <div class="section-content">
+                        <h3>Qui est responsable des décisions IA ?</h3>
+                        <p>
+                            Cette question, apparemment simple, révèle toute la complexité de l'éthique en IA. Quand une voiture autonome cause un accident, qui est responsable ? Le constructeur ? Le programmeur ? Le propriétaire ? L'IA elle-même ? Cette ambiguïté de responsabilité est l'un des défis éthiques majeurs de notre époque.
+                        </p>
+
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Zones grises de responsabilité</div>
+                            <p>
+                                Les systèmes d'IA moderne apprennent et évoluent après leur déploiement. Ils peuvent développer des comportements non prévus par leurs créateurs. Dans ce cas, qui est responsable de ces nouveaux comportements ?
+                            </p>
+                        </div>
+
+                        <h4>Chaîne de responsabilité en IA</h4>
+                        <ul>
+                            <li><strong>Concepteurs :</strong> Responsables de l'architecture et des objectifs</li>
+                            <li><strong>Développeurs :</strong> Responsables de l'implémentation et des tests</li>
+                            <li><strong>Utilisateurs finaux :</strong> Responsables de l'usage approprié</li>
+                            <li><strong>Organisations :</strong> Responsables de la governance et des politiques</li>
+                            <li><strong>Régulateurs :</strong> Responsables du cadre légal et de son application</li>
+                        </ul>
+
+                        <h3>Modèles de responsabilité</h3>
+                        <p>
+                            Plusieurs modèles émergent pour clarifier la responsabilité dans l'IA :
+                        </p>
+
+                        <h4>1. Responsabilité en cascade</h4>
+                        <p>
+                            Chaque acteur de la chaîne est responsable de sa partie, avec des mécanismes de transfert clairs en cas de problème.
+                        </p>
+
+                        <h4>2. Responsabilité partagée</h4>
+                        <p>
+                            Tous les acteurs partagent une responsabilité collective, avec des assurances et fonds de compensation mutualisés.
+                        </p>
+
+                        <h4>3. Responsabilité de l'opérateur</h4>
+                        <p>
+                            L'entité qui met en œuvre l'IA assume la responsabilité finale, quels que soient les fournisseurs technologiques.
+                        </p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Human-in-the-loop vs Human-on-the-loop</div>
+                            <p><strong>Human-in-the-loop :</strong> L'humain participe activement à chaque décision. L'IA propose, l'humain dispose.</p>
+                            <p><strong>Human-on-the-loop :</strong> L'humain supervise et peut intervenir, mais l'IA fonctionne de manière autonome la plupart du temps.</p>
+                            <p><strong>Enjeu :</strong> Trouver le bon équilibre entre efficacité et contrôle humain.</p>
+                        </div>
+
+                        <h3>Maintenir un contrôle humain significatif</h3>
+                        <p>
+                            Le contrôle humain ne peut pas être symbolique. Il doit être réel, informé et exercé de manière proactive. Cela implique plusieurs conditions :
+                        </p>
+
+                        <h4>Conditions du contrôle humain significatif :</h4>
+                        <ul>
+                            <li><strong>Compétence :</strong> Les superviseurs doivent comprendre le système</li>
+                            <li><strong>Information :</strong> Accès aux données pertinentes en temps réel</li>
+                            <li><strong>Temps :</strong> Délai suffisant pour analyser et décider</li>
+                            <li><strong>Pouvoir :</strong> Capacité réelle d'interrompre ou de modifier</li>
+                            <li><strong>Responsabilité :</strong> Obligation claire de supervision active</li>
+                        </ul>
+
+                        <div class="example-box">
+                            <div class="example-title">🏥 Cas d'étude : IA médicale</div>
+                            <p>
+                                Dans un hôpital, une IA analyse les radiographies pour détecter les cancers. Le contrôle humain significatif implique :
+                            </p>
+                            <ul>
+                                <li>Formation des radiologues sur les capacités et limites de l'IA</li>
+                                <li>Interface montrant le niveau de confiance de l'IA</li>
+                                <li>Possibilité de voir les zones d'intérêt identifiées par l'IA</li>
+                                <li>Protocole clair : quand faire confiance, quand demander un second avis</li>
+                                <li>Audit régulier des décisions prises avec l'IA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz d'évaluation -->
+                <section class="quiz-section" id="quiz">
+                    <h2 class="quiz-title">📝 Quiz d'évaluation</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Testez votre compréhension des enjeux de transparence et responsabilité en IA.
+                    </p>
+
+                    <div class="quiz-question" data-question="1">
+                        <h4>1. Qu'est-ce qu'une "boîte noire" en IA ?</h4>
+                        <ul class="quiz-options">
+                            <li class="quiz-option" data-answer="a">Un système d'IA qui ne fonctionne que dans l'obscurité</li>
+                            <li class="quiz-option" data-answer="b">Un système dont le processus de décision interne n'est pas compréhensible</li>
+                            <li class="quiz-option" data-answer="c">Un système d'IA défaillant qui ne donne aucun résultat</li>
+                            <li class="quiz-option" data-answer="d">Un système de sécurité pour protéger les données</li>
+                        </ul>
+                        <div class="quiz-explanation">
+                            <strong>Explication :</strong> Une "boîte noire" désigne un système dont on peut observer les entrées et sorties, mais pas le processus de décision interne. C'est un enjeu majeur pour la transparence en IA.
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" data-question="2">
+                        <h4>2. Selon le RGPD, quel droit ont les citoyens concernant les décisions automatisées ?</h4>
+                        <ul class="quiz-options">
+                            <li class="quiz-option" data-answer="a">Le droit d'interdire toute IA</li>
+                            <li class="quiz-option" data-answer="b">Le droit à l'explication des décisions qui les affectent</li>
+                            <li class="quiz-option" data-answer="c">Le droit de programmer eux-mêmes l'IA</li>
+                            <li class="quiz-option" data-answer="d">Le droit de posséder les algorithmes utilisés</li>
+                        </ul>
+                        <div class="quiz-explanation">
+                            <strong>Explication :</strong> L'article 22 du RGPD accorde le droit à l'explication pour les décisions automatisées ayant des effets juridiques ou affectant significativement la personne.
+                        </div>
+                    </div>
+
+                    <div class="quiz-question" data-question="3">
+                        <h4>3. Quelle est la différence entre "Human-in-the-loop" et "Human-on-the-loop" ?</h4>
+                        <ul class="quiz-options">
+                            <li class="quiz-option" data-answer="a">Il n'y a aucune différence, ce sont des synonymes</li>
+                            <li class="quiz-option" data-answer="b">Human-in-the-loop implique une participation active à chaque décision, Human-on-the-loop une supervision générale</li>
+                            <li class="quiz-option" data-answer="c">Human-in-the-loop est pour les débutants, Human-on-the-loop pour les experts</li>
+                            <li class="quiz-option" data-answer="d">Human-in-the-loop concerne le développement, Human-on-the-loop l'utilisation</li>
+                        </ul>
+                        <div class="quiz-explanation">
+                            <strong>Explication :</strong> "Human-in-the-loop" signifie que l'humain participe activement à chaque décision, tandis que "Human-on-the-loop" implique une supervision où l'humain peut intervenir mais l'IA fonctionne de manière autonome.
+                        </div>
+                    </div>
+
+                    <div class="quiz-buttons">
+                        <button class="btn btn-primary" onclick="checkQuiz()">Vérifier mes réponses</button>
+                        <button class="btn btn-secondary" onclick="resetQuiz()" style="display: none;" id="resetBtn">Recommencer</button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Progression</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <ul class="sequence-list">
+                    <li class="sequence-item current">
+                        <div class="sequence-icon">1A</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Transparence et responsabilité</div>
+                            <div class="sequence-duration">30 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon">1B</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Données et environnement</div>
+                            <div class="sequence-duration">30 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon">2</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Biais, discrimination et fairness</div>
+                            <div class="sequence-duration">60 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon">3</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Futur de l'IA et IA responsable</div>
+                            <div class="sequence-duration">55 min</div>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="lesson-navigation">
+            <a href="ethique_7_overview.html" class="btn btn-secondary">← Vue d'ensemble</a>
+            <a href="ethique_7_enjeux_1b.html" class="btn btn-primary">Séquence 1B : Données et Environnement →</a>
+        </nav>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Quiz functionality
+        let quizAnswers = {
+            1: 'b',
+            2: 'b', 
+            3: 'b'
+        };
+
+        function selectOption(option) {
+            const question = option.closest('.quiz-question');
+            const options = question.querySelectorAll('.quiz-option');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            let total = Object.keys(quizAnswers).length;
+            
+            Object.keys(quizAnswers).forEach(questionNum => {
+                const question = document.querySelector(`[data-question="${questionNum}"]`);
+                const selectedOption = question.querySelector('.quiz-option.selected');
+                const correctAnswer = quizAnswers[questionNum];
+                const explanation = question.querySelector('.quiz-explanation');
+                
+                if (selectedOption) {
+                    const selectedAnswer = selectedOption.getAttribute('data-answer');
+                    
+                    if (selectedAnswer === correctAnswer) {
+                        selectedOption.classList.add('correct');
+                        score++;
+                    } else {
+                        selectedOption.classList.add('incorrect');
+                        // Highlight correct answer
+                        const correctOption = question.querySelector(`[data-answer="${correctAnswer}"]`);
+                        correctOption.classList.add('correct');
+                    }
+                    
+                    explanation.style.display = 'block';
+                } else {
+                    // If no answer selected, highlight correct one
+                    const correctOption = question.querySelector(`[data-answer="${correctAnswer}"]`);
+                    correctOption.classList.add('correct');
+                    explanation.style.display = 'block';
+                }
+            });
+            
+            // Show results
+            alert(`Quiz terminé ! Score : ${score}/${total}`);
+            
+            // Show reset button
+            document.getElementById('resetBtn').style.display = 'inline-flex';
+        }
+
+        function resetQuiz() {
+            // Reset all selections and styles
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Hide explanations
+            document.querySelectorAll('.quiz-explanation').forEach(explanation => {
+                explanation.style.display = 'none';
+            });
+            
+            // Hide reset button
+            document.getElementById('resetBtn').style.display = 'none';
+        }
+
+        // Add click handlers to quiz options
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.quiz-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectOption(this);
+                });
+            });
+        });
+
+        // Progress tracking
+        function updateProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            // Since this is sequence 1A of 4 total sequences, we're at 25%
+            progressFill.style.width = '25%';
+        }
+
+        document.addEventListener('DOMContentLoaded', updateProgress);
+    </script>
+</body>
+</html>

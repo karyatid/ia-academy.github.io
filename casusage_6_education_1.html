@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA et Éducation : Révolutionner l'Apprentissage - Séquence 1A | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            position: relative;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            position: absolute;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Navigation */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-indicator {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 33%;
+            transition: width 0.3s ease;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .toc-link.active {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Practical Example Box */
+        .example-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Navigation Buttons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="casusage_6_overview.html" class="breadcrumb-link">Module 6: Cas d'Usage Métier</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Séquence 1A : IA et Éducation</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        📚 Séquence 1A
+                    </div>
+                    <div class="lesson-badge">
+                        ⏱️ 30 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        🎯 Outils Accessibles
+                    </div>
+                </div>
+                <h1 class="lesson-title">IA et Éducation : Révolutionner l'Apprentissage</h1>
+                <p class="lesson-description">
+                    Découvrez comment créer du contenu pédagogique de qualité avec des outils IA accessibles. Réalisez votre premier micro-module de formation avec ChatGPT, Canva et Google Forms.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Introduction</h2>
+                    <div class="section-content">
+                        <p>Vous êtes formateur, enseignant ou vous créez du contenu pédagogique ? L'IA peut vous faire gagner un temps précieux tout en améliorant la qualité de vos formations, même avec un budget limité.</p>
+                        
+                        <p>Dans cette séquence pratique de 30 minutes, nous allons :</p>
+                        <ul>
+                            <li><strong>Concevoir l'architecture pédagogique</strong> avec l'aide de l'IA</li>
+                            <li><strong>Créer le contenu principal</strong> avec ChatGPT et des prompts optimisés</li>
+                            <li><strong>Générer les supports visuels</strong> avec Canva AI</li>
+                            <li><strong>Créer un quiz interactif</strong> et analyser les résultats</li>
+                            <li><strong>Réaliser ensemble</strong> un micro-module de 30 minutes fonctionnel</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">🎯 Objectif concret</div>
+                            <p>À la fin de cette séquence, vous aurez créé un <strong>micro-module de formation de 30 minutes</strong> sur un sujet de votre choix, prêt à être diffusé à vos apprenants.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ingénierie pédagogique avec IA -->
+                <section class="section" id="ingenierie-pedagogique">
+                    <h2 class="section-title">🏗️ Ingénierie Pédagogique avec IA</h2>
+                    <div class="section-content">
+                        <p>Avant de créer du contenu, l'IA peut nous aider à structurer notre approche pédagogique de manière professionnelle.</p>
+
+                        <h3>1. Définition des objectifs pédagogiques SMART</h3>
+                        <p>L'IA excelle pour transformer une idée floue en objectifs pédagogiques précis selon la taxonomie de Bloom :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Prompt pour définir les objectifs</div>
+                            <p><strong>Prompt ChatGPT :</strong></p>
+                            <p><em>"Je veux créer une formation sur [SUJET] pour [PUBLIC CIBLE]. Aide-moi à définir 3 objectifs pédagogiques SMART selon la taxonomie de Bloom, niveau [débutant/intermédiaire/avancé]. Format : À la fin de cette formation, l'apprenant sera capable de..."</em></p>
+                        </div>
+
+                        <h3>2. Conception de l'itinéraire pédagogique</h3>
+                        <p>L'IA peut structurer la progression logique de votre formation :</p>
+                        <ul>
+                            <li><strong>Séquençage des apprentissages</strong> : du simple au complexe</li>
+                            <li><strong>Identification des prérequis</strong> pour chaque étape</li>
+                            <li><strong>Choix des modalités</strong> : théorie, pratique, évaluation</li>
+                            <li><strong>Estimation des durées</strong> réalistes pour chaque séquence</li>
+                        </ul>
+
+                        <h3>3. Scénarisation pédagogique</h3>
+                        <p>L'IA aide à concevoir le déroulé minute par minute :</p>
+                        <ul>
+                            <li><strong>Hook d'accroche</strong> pour capter l'attention (5min)</li>
+                            <li><strong>Apports théoriques</strong> avec exemples concrets (15min)</li>
+                            <li><strong>Activité pratique</strong> pour ancrer les acquis (8min)</li>
+                            <li><strong>Évaluation formative</strong> et synthèse (2min)</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🛠️ Outils recommandés pour cette étape</div>
+                            <ul>
+                                <li><strong>ChatGPT</strong> : Structuration pédagogique et objectifs SMART</li>
+                                <li><strong>Claude</strong> : Analyse de progression et scénarisation</li>
+                                <li><strong>Notion AI</strong> : Organisation et template de formation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Création de contenu avec outils accessibles -->
+                <section class="section" id="creation-contenu">
+                    <h2 class="section-title">✍️ Création de Contenu avec Outils Accessibles</h2>
+                    <div class="section-content">
+                        <p>Une fois la structure définie, créons le contenu avec des outils IA gratuits ou peu coûteux que tout formateur peut utiliser.</p>
+
+                        <h3>Génération de contenu principal avec ChatGPT</h3>
+                        <p>ChatGPT excelle pour créer le contenu de vos formations :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Prompts optimisés pour la formation</div>
+                            <p><strong>Contenu théorique :</strong></p>
+                            <p><em>"Rédige une section de formation de 500 mots sur [CONCEPT] pour [PUBLIC]. Style : accessible et engageant. Inclus 3 exemples concrets et une analogie pour faciliter la compréhension."</em></p>
+                            
+                            <p><strong>Cas pratiques :</strong></p>
+                            <p><em>"Crée un cas pratique de 200 mots sur [SUJET] avec une situation-problème, 3 questions de réflexion et les éléments de réponse attendus."</em></p>
+                        </div>
+
+                        <h3>Supports visuels avec Canva AI</h3>
+                        <p>Canva AI (Magic Design) permet de créer rapidement des supports professionnels :</p>
+                        <ul>
+                            <li><strong>Présentations automatiques</strong> : uploadez votre texte, Canva génère les slides</li>
+                            <li><strong>Infographies pédagogiques</strong> : transformez vos listes en visuels attractifs</li>
+                            <li><strong>Schémas explicatifs</strong> : Magic Write + templates pour vos processus</li>
+                            <li><strong>Cohérence visuelle</strong> : Brand Kit pour garder le même style</li>
+                        </ul>
+
+                        <h3>Adaptation pour différents formats</h3>
+                        <p>L'IA permet de décliner facilement votre contenu :</p>
+                        <ul>
+                            <li><strong>Version condensée</strong> : résumé en 5 points clés</li>
+                            <li><strong>Mémo de synthèse</strong> : aide-mémoire d'une page</li>
+                            <li><strong>FAQ automatique</strong> : anticipation des questions fréquentes</li>
+                            <li><strong>Checklist pratique</strong> : étapes d'application concrète</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🛠️ Outils recommandés (budget-friendly)</div>
+                            <ul>
+                                <li><strong>Génération de texte :</strong> ChatGPT (20€/mois), Claude (gratuit + 20€/mois)</li>
+                                <li><strong>Supports visuels :</strong> Canva Pro (11€/mois), Gamma (gratuit + 8€/mois)</li>
+                                <li><strong>Voix de synthèse :</strong> ElevenLabs (5€/mois), Murf (19€/mois)</li>
+                                <li><strong>Organisation :</strong> Notion AI (8€/mois), Obsidian (gratuit)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz et évaluation accessible -->
+                <section class="section" id="quiz-evaluation">
+                    <h2 class="section-title">📊 Création de Quiz et Analyse des Résultats</h2>
+                    <div class="section-content">
+                        <p>Créons maintenant un quiz interactif et apprenons à analyser les résultats pour améliorer notre formation.</p>
+
+                        <h3>Génération de quiz avec l'IA</h3>
+                        <p>L'IA peut créer des questions variées et pertinentes à partir de votre contenu :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Prompt pour générer un quiz</div>
+                            <p><strong>Prompt ChatGPT :</strong></p>
+                            <p><em>"À partir du contenu suivant [COLLER VOTRE TEXTE], crée 5 questions d'évaluation : 2 QCM, 2 questions ouvertes courtes et 1 cas pratique. Niveau [débutant/intermédiaire]. Fournis aussi les éléments de réponse attendus."</em></p>
+                        </div>
+
+                        <h3>Outils pratiques pour créer vos quiz</h3>
+                        <ul>
+                            <li><strong>Google Forms + IA</strong> : Gratuit, facile d'usage, analyse automatique</li>
+                            <li><strong>Kahoot!</strong> : Interactif et ludique, templates IA disponibles</li>
+                            <li><strong>Typeform</strong> : Interface moderne, logique conditionnelle</li>
+                            <li><strong>Microsoft Forms</strong> : Intégré à Office 365, scoring automatique</li>
+                        </ul>
+
+                        <h3>Configuration Google Forms avec assistance IA</h3>
+                        <p><strong>Étapes pratiques :</strong></p>
+                        <ol>
+                            <li><strong>Questions générées par IA</strong> : Copiez les questions créées par ChatGPT</li>
+                            <li><strong>Types de questions variés</strong> : QCM, échelles, réponses courtes</li>
+                            <li><strong>Scoring automatique</strong> : Activez la notation pour les QCM</li>
+                            <li><strong>Feedback personnalisé</strong> : Utilisez l'IA pour créer des messages selon les scores</li>
+                        </ol>
+
+                        <h3>Analyse des résultats avec l'IA</h3>
+                        <p>Une fois les réponses collectées, l'IA vous aide à analyser :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Prompt pour analyser les résultats</div>
+                            <p><strong>Prompt d'analyse :</strong></p>
+                            <p><em>"Voici les résultats de mon quiz [DONNÉES CSV]. Analyse : 1) Quelles questions posent le plus de difficultés ? 2) Quels concepts nécessitent un renforcement ? 3) Recommandations pour améliorer la formation."</em></p>
+                        </div>
+
+                        <h4>Métriques clés à analyser :</h4>
+                        <ul>
+                            <li><strong>Taux de réussite par question</strong> : identifier les points difficiles</li>
+                            <li><strong>Temps de completion</strong> : détecter les questions trop complexes</li>
+                            <li><strong>Patterns de réponses</strong> : comprendre les erreurs fréquentes</li>
+                            <li><strong>Corrélations</strong> : liens entre profil et performance</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🛠️ Workflow d'évaluation recommandé</div>
+                            <p><strong>1. Création :</strong> ChatGPT → Google Forms<br>
+                            <strong>2. Diffusion :</strong> Lien partagé ou QR code<br>
+                            <strong>3. Analyse :</strong> Export CSV → ChatGPT/Claude<br>
+                            <strong>4. Action :</strong> Amélioration ciblée du contenu</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cas pratique guidé -->
+                <section class="section" id="cas-pratique">
+                    <h2 class="section-title">🏗️ Pratique Guidée : Créer Votre Micro-Module en 30min</h2>
+                    <div class="section-content">
+                        <p>Passons maintenant à la pratique ! Suivez ce guide étape par étape pour créer votre premier micro-module de formation assisté par IA.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Projet : "Les Bases de [Votre Sujet]"</div>
+                            <p><strong>Objectif :</strong> Créer un module de 30 minutes sur un sujet que vous maîtrisez<br>
+                            <strong>Durée de création :</strong> 15 minutes avec l'IA<br>
+                            <strong>Livrables :</strong> Contenu + Supports + Quiz + Analyse</p>
+                        </div>
+
+                        <h3>📋 Étape 1 : Préparation (2 minutes)</h3>
+                        <p><strong>Choisissez votre sujet :</strong> Un concept que vous connaissez bien (gestion du temps, Excel, cuisine, jardinage...)</p>
+                        
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>✅ Checklist avant de commencer :</strong></p>
+                            <ul style="margin: 0;">
+                                <li>ChatGPT ouvert (ou Claude/Gemini)</li>
+                                <li>Canva.com ouvert (compte gratuit)</li>
+                                <li>Google Forms ouvert</li>
+                                <li>Votre sujet choisi</li>
+                            </ul>
+                        </div>
+
+                        <h3>🏗️ Étape 2 : Architecture pédagogique (3 minutes)</h3>
+                        <p><strong>Prompt à copier dans ChatGPT :</strong></p>
+                        <div class="example-box">
+                            <div class="example-title">📝 Template prompt architecture</div>
+                            <p><em>"Je veux créer une formation de 30 minutes sur [VOTRE SUJET] pour des débutants. Aide-moi à structurer :
+                            1. Un objectif pédagogique SMART
+                            2. Un plan en 4 parties (5min introduction + 15min contenu + 8min pratique + 2min synthèse)
+                            3. Une accroche pour capter l'attention dès le début"</em></p>
+                        </div>
+
+                        <h3>✍️ Étape 3 : Création du contenu (5 minutes)</h3>
+                        <p><strong>Générez le contenu principal :</strong></p>
+                        <div class="example-box">
+                            <div class="example-title">📝 Template prompt contenu</div>
+                            <p><em>"Maintenant rédige le contenu de formation (800 mots) sur [VOTRE SUJET] avec :
+                            - Style accessible et engageant
+                            - 3 exemples concrets du quotidien
+                            - 1 analogie pour faciliter la compréhension
+                            - Des conseils pratiques immédiatement applicables"</em></p>
+                        </div>
+
+                        <h3>🎨 Étape 4 : Supports visuels (3 minutes)</h3>
+                        <p><strong>Dans Canva :</strong></p>
+                        <ol>
+                            <li>Cliquez sur "Créer un design" → "Présentation"</li>
+                            <li>Utilisez "Magic Design" en collant votre texte</li>
+                            <li>Choisissez un template professionnel</li>
+                            <li>Ajustez les couleurs selon votre image de marque</li>
+                        </ol>
+
+                        <h3>📊 Étape 5 : Quiz d'évaluation (4 minutes)</h3>
+                        <p><strong>Prompt pour générer le quiz :</strong></p>
+                        <div class="example-box">
+                            <div class="example-title">📝 Template prompt quiz</div>
+                            <p><em>"Crée un quiz de 5 questions pour évaluer la compréhension de ma formation sur [SUJET] :
+                            - 3 QCM avec 4 choix chacun
+                            - 2 questions ouvertes courtes
+                            - Inclus les bonnes réponses et des feedback pour chaque question"</em></p>
+                        </div>
+
+                        <p><strong>Dans Google Forms :</strong></p>
+                        <ol>
+                            <li>Créez un nouveau formulaire</li>
+                            <li>Copiez les questions générées par l'IA</li>
+                            <li>Activez le "mode quiz" dans les paramètres</li>
+                            <li>Attribuez les points et ajoutez les feedbacks</li>
+                        </ol>
+
+                        <h3>🚀 Étape 6 : Test et amélioration (3 minutes)</h3>
+                        <p><strong>Actions immédiates :</strong></p>
+                        <ul>
+                            <li><strong>Auto-testez</strong> votre module en mode apprenant</li>
+                            <li><strong>Partagez</strong> le quiz à 2-3 proches pour feedback</li>
+                            <li><strong>Analysez</strong> les premières réponses avec l'IA</li>
+                            <li><strong>Ajustez</strong> le contenu selon les retours</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">🎉 Résultat attendu</div>
+                            <p>Vous avez maintenant un <strong>micro-module de formation complet</strong> :
+                            ✅ Contenu structuré et engageant<br>
+                            ✅ Support visuel professionnel<br>
+                            ✅ Quiz interactif avec feedback<br>
+                            ✅ Prêt à être diffusé immédiatement</p>
+                        </div>
+
+                        <h3>📈 Métriques de succès à suivre</h3>
+                        <p>Une fois votre module diffusé, analysez :</p>
+                        <ul>
+                            <li><strong>Taux de completion :</strong> % qui finissent le quiz</li>
+                            <li><strong>Score moyen :</strong> Compréhension globale du contenu</li>
+                            <li><strong>Questions difficiles :</strong> Taux d'échec par question</li>
+                            <li><strong>Feedback qualitatif :</strong> Commentaires des apprenants</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">💡 Conseils pour aller plus loin</div>
+                            <ul>
+                                <li><strong>Versioning :</strong> Créez des variantes pour différents niveaux</li>
+                                <li><strong>Multimédia :</strong> Ajoutez des vidéos courtes avec Loom + IA</li>
+                                <li><strong>Interactivité :</strong> Intégrez des sondages Mentimeter</li>
+                                <li><strong>Suivi :</strong> Créez un plan d'action post-formation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz de validation -->
+                <div class="quiz-section">
+                    <h2 class="quiz-title">🧠 Quiz de Validation des Connaissances</h2>
+                    
+                    <div class="quiz-question">
+                        <div class="question-text">1. Quelle est la première étape pour créer une formation avec l'IA ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) Créer directement le contenu avec ChatGPT
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) Définir les objectifs pédagogiques et l'itinéraire d'apprentissage
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) Commencer par créer le quiz d'évaluation
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) Choisir les outils techniques à utiliser
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. Quels outils permettent de créer rapidement un micro-module accessible ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) Smart Sparrow + Knewton + Canvas LMS
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) ChatGPT + Canva + Google Forms
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) Moodle + Blackboard + Adobe Captivate
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) Zoom + Teams + PowerPoint uniquement
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">3. Que permet l'analyse des résultats de quiz avec l'IA ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) Uniquement connaître la note moyenne des apprenants
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) Identifier les concepts difficiles et améliorer la formation
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) Remplacer complètement l'analyse humaine
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) Classer automatiquement les apprenants par niveau
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="casusage_6_overview.html" class="btn btn-secondary">
+                        ← Vue d'ensemble du module
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 1A sur 3</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">IA Éducation Accessible</div>
+                    </div>
+                    <a href="casusage_6_adaptive_2.html" class="btn btn-primary">
+                        Séquence 1B : Adaptive Learning →
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">📍 Séquence 1 : IA et Éducation</h3>
+                <div class="progress-indicator">
+                    <div class="progress-fill"></div>
+                </div>
+                <div style="text-align: center; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                    Séquence 1A : Outils Accessibles
+                </div>
+                <ul class="toc-list">
+                    <li class="toc-item">
+                        <a href="#ingenierie-pedagogique" class="toc-link">Ingénierie pédagogique IA</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#creation-contenu" class="toc-link">Création de contenu accessible</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#quiz-evaluation" class="toc-link">Quiz et analyse des résultats</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#cas-pratique" class="toc-link">Pratique guidée : Micro-module</a>
+                    </li>
+                </ul>
+                
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.75rem;">📋 Prochaines séquences</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="casusage_6_adaptive_2.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                                1B. Adaptive Learning Avancé
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="casusage_6_roadmap_3.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                                1C. Roadmap & Stratégie
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(optionElement, isCorrect) {
+            const question = optionElement.closest('.quiz-question');
+            const options = question.querySelectorAll('.quiz-option');
+            const feedback = question.querySelector('.quiz-feedback');
+            
+            // Reset all options
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            optionElement.classList.add('selected');
+            
+            // Show correct answer and feedback
+            if (isCorrect) {
+                optionElement.classList.add('correct');
+                feedback.className = 'quiz-feedback success';
+                feedback.textContent = '✅ Correct ! L\'IA permet effectivement d\'adapter l\'apprentissage selon chaque profil individuel.';
+            } else {
+                optionElement.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.className = 'quiz-feedback error';
+                feedback.textContent = '❌ Incorrect. La bonne réponse est mise en évidence ci-dessus.';
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Table of contents active link handling
+        function updateActiveLink() {
+            const links = document.querySelectorAll('.toc-link');
+            const sections = document.querySelectorAll('.section');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    currentSection = section.id;
+                }
+            });
+            
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(6, '1A');
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Update active link on scroll
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+        });
+    </script>
+</body>
+</html>

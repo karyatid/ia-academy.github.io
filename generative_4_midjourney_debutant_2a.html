@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midjourney - Premiers Pas | Module 4 - IA Academy</title>
+    <style>
+        /* CSS Variables for Theme System */
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --primary-color: #818cf8;
+            --secondary-color: #06b6d4;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --pattern-opacity: 0.02;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle - Fixed */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            font-size: 12px;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '>';
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--accent-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .success-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Step Cards */
+        .steps-container {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .step-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .step-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Example Cards */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            background: var(--glass-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Advanced Link */
+        .advanced-link {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .advanced-link a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .advanced-link a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_images_2.html" class="breadcrumb-link">Images professionnelles</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Midjourney - Premiers Pas</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🌱</span>
+                        <span>Micro-séquence 2A</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>25-35 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👋</span>
+                        <span>Débutant</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">🌱 Midjourney - Premiers Pas</h1>
+                <p class="lesson-description">
+                    Découvrez Midjourney pas à pas, même si vous n'avez jamais utilisé Discord ! De la création de compte à votre première image, tout est expliqué simplement pour commencer sereinement.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎨 Qu'est-ce que Midjourney ?</h2>
+                    <div class="section-content">
+                        <p>Midjourney est un <strong>outil magique</strong> qui transforme vos mots en images époustouflantes. Imaginez pouvoir décrire n'importe quelle scène et la voir apparaître sous vos yeux en quelques secondes !</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                ✨ Concrètement, que peut faire Midjourney ?
+                            </div>
+                            <ul>
+                                <li><strong>Créer des portraits professionnels</strong> pour LinkedIn ou CV</li>
+                                <li><strong>Générer des visuels</strong> pour vos présentations et réseaux sociaux</li>
+                                <li><strong>Illustrer vos idées</strong> même si vous ne savez pas dessiner</li>
+                                <li><strong>Créer des concepts artistiques</strong> pour vos projets créatifs</li>
+                                <li><strong>Visualiser des produits</strong> avant de les créer</li>
+                            </ul>
+                        </div>
+
+                        <div class="success-box">
+                            <div class="success-title">
+                                🎯 Pourquoi commencer par Midjourney ?
+                            </div>
+                            <p>Midjourney est reconnu comme <strong>le meilleur outil</strong> pour débuter dans la génération d'images IA. Sa qualité artistique exceptionnelle et sa communauté bienveillante en font le choix idéal pour apprendre.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prérequis -->
+                <section class="section">
+                    <h2 class="section-title">📋 Ce dont vous avez besoin</h2>
+                    <div class="section-content">
+                        <p>Pas de panique ! Les prérequis sont <strong>très simples</strong> et tout est gratuit pour commencer :</p>
+                        
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Un ordinateur ou smartphone</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>N'importe quel appareil avec accès internet suffit. Midjourney fonctionne via Discord, donc pas besoin d'un ordinateur puissant !</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Une adresse email</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Pour créer vos comptes Discord et Midjourney. Utilisez votre email habituel, c'est plus simple.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">10€ environ (optionnel au début)</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Midjourney offre un essai gratuit limité. Pour continuer, comptez 10€/mois pour l'abonnement Basic - moins cher qu'un repas au restaurant !</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                ⚠️ Important à savoir
+                            </div>
+                            <p>Midjourney fonctionne uniquement via <strong>Discord</strong> (une application de messagerie). Si vous ne connaissez pas Discord, pas d'inquiétude - on vous explique tout étape par étape !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Inscription Discord -->
+                <section class="section">
+                    <h2 class="section-title">💬 Étape 1 : Créer votre compte Discord</h2>
+                    <div class="section-content">
+                        <p><strong>Discord</strong> est l'application que Midjourney utilise pour fonctionner. C'est comme WhatsApp mais pour les communautés créatives.</p>
+                        
+                        <h3>Inscription Discord (5 minutes)</h3>
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Allez sur discord.com</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Cliquez sur <strong>"Ouvrir Discord dans votre navigateur"</strong> ou téléchargez l'application (recommandé pour le confort).</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Cliquez sur "S'inscrire"</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Choisissez un <strong>nom d'utilisateur simple</strong> (vous pourrez le changer plus tard). Évitez les caractères spéciaux.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">Validez votre email</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Vérifiez votre boîte mail et cliquez sur le lien de validation. Si vous ne voyez rien, regardez dans les spams !</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎉 Félicitations !
+                            </div>
+                            <p>Vous venez de créer votre compte Discord ! Vous êtes maintenant prêt pour rejoindre la communauté Midjourney.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rejoindre Midjourney -->
+                <section class="section">
+                    <h2 class="section-title">🎨 Étape 2 : Rejoindre Midjourney</h2>
+                    <div class="section-content">
+                        <p>Maintenant que Discord est prêt, rejoignons le serveur Midjourney !</p>
+                        
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Aller sur midjourney.com</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Cliquez sur le gros bouton <strong>"Join the Beta"</strong>. Cela vous redirigera automatiquement vers Discord.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Accepter l'invitation</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Discord vous demande si vous voulez rejoindre le serveur Midjourney. Cliquez <strong>"Accepter l'invitation"</strong>.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">Découvrir l'interface</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Vous voilà dans le serveur Midjourney ! Sur la gauche, vous voyez une liste de "salons" (channels). C'est là que la magie opère.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <div class="success-title">
+                                🎯 Vous y êtes !
+                            </div>
+                            <p>Bravo ! Vous êtes maintenant membre de la communauté Midjourney. Plus de 20 millions de personnes dans le monde utilisent cet outil pour créer des images extraordinaires.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interface Discord -->
+                <section class="section">
+                    <h2 class="section-title">🗺️ Comprendre l'interface Discord (pour débutants)</h2>
+                    <div class="section-content">
+                        <p>L'interface Discord peut sembler intimidante au début, mais c'est en fait <strong>très simple</strong> ! Voici les zones importantes :</p>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📍</span>
+                                <span>Les zones essentielles de Discord</span>
+                            </div>
+                            <ul>
+                                <li><strong>Colonne de gauche :</strong> Liste des "salons" ou "channels" - ce sont des salles de conversation thématiques</li>
+                                <li><strong>Zone centrale :</strong> Les messages et conversations du salon sélectionné</li>
+                                <li><strong>Barre du bas :</strong> Là où vous tapez vos messages et commandes</li>
+                                <li><strong>Colonne de droite :</strong> Liste des membres connectés (pas toujours visible)</li>
+                            </ul>
+                        </div>
+
+                        <h3>Les salons Midjourney importants :</h3>
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">📢</div>
+                                    <div class="step-title">#announcements</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Les actualités importantes de Midjourney. À lire de temps en temps pour rester informé.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">❓</div>
+                                    <div class="step-title">#getting-started</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Le guide officiel pour débuter. Très utile si vous êtes perdu !</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">🎨</div>
+                                    <div class="step-title">#newbies-XX</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Les salons pour débutants ! C'est là que vous créerez vos premières images. Choisissez n'importe lequel.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                💡 Astuce débutant
+                            </div>
+                            <p>Au début, restez dans les salons <strong>#newbies</strong>. Ils sont spécialement conçus pour les débutants et moins intimidants que les salons généraux où il y a beaucoup d'activité.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Premier prompt -->
+                <section class="section">
+                    <h2 class="section-title">✨ Votre première image avec Midjourney</h2>
+                    <div class="section-content">
+                        <p>C'est le moment magique ! Nous allons créer votre toute première image IA. Suivez ces étapes <strong>exactement</strong> :</p>
+                        
+                        <div class="steps-container">
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Choisir un salon #newbies</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Dans la liste de gauche, cliquez sur n'importe quel salon qui commence par <strong>#newbies</strong> (par exemple #newbies-42).</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Taper la commande magique</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Dans la barre de message en bas, tapez exactement ceci :</p>
+                                    <div class="code-block">/imagine prompt: a cute cat wearing sunglasses on a beach</div>
+                                    <p><strong>Important :</strong> Commencez par <code>/imagine</code> puis un espace, puis <code>prompt:</code> puis votre description !</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">Appuyer sur Entrée</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Appuyez sur la touche <strong>Entrée</strong> de votre clavier. Midjourney va commencer à créer votre image !</p>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-header">
+                                    <div class="step-number">4</div>
+                                    <div class="step-title">Patienter (1 minute)</div>
+                                </div>
+                                <div class="step-content">
+                                    <p>Une barre de progression apparaît. Attendez patiemment... Midjourney "dessine" votre image ! C'est fascinant à regarder.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <div class="success-title">
+                                🎉 Magie !
+                            </div>
+                            <p>Vous venez de créer votre première image avec l'intelligence artificielle ! Midjourney a généré 4 versions différentes de votre chat à lunettes sur la plage.</p>
+                        </div>
+
+                        <h3>Comprendre le résultat</h3>
+                        <p>Midjourney vous donne toujours <strong>4 images différentes</strong> à partir de votre description. Sous ces images, vous voyez des boutons :</p>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🔘</span>
+                                <span>Les boutons sous vos images</span>
+                            </div>
+                            <ul>
+                                <li><strong>U1, U2, U3, U4 :</strong> "Upscale" - Agrandir l'image 1, 2, 3 ou 4 en haute qualité</li>
+                                <li><strong>V1, V2, V3, V4 :</strong> "Variations" - Créer des versions similaires à l'image 1, 2, 3 ou 4</li>
+                                <li><strong>🔄 :</strong> Refaire complètement 4 nouvelles images avec la même description</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exercices pratiques -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Exercices pratiques pour débuter</h2>
+                    <div class="section-content">
+                        <p>Maintenant que vous savez comment ça marche, entraînez-vous avec ces <strong>exemples simples</strong> :</p>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>✏️</span>
+                                <span>5 prompts faciles à essayer</span>
+                            </div>
+                            <div class="code-block">1. /imagine prompt: a modern office desk with a laptop and coffee
+2. /imagine prompt: a beautiful sunset over mountains
+3. /imagine prompt: a friendly robot in a garden
+4. /imagine prompt: a cozy reading corner with books
+5. /imagine prompt: a futuristic car in a city</div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎮 Mini-défi pour vous entraîner
+                            </div>
+                            <p><strong>Mission :</strong> Créez 3 images différentes en utilisant la structure suivante :</p>
+                            <div class="code-block">/imagine prompt: a [ANIMAL] in a [LIEU] with [OBJET]</div>
+                            <p><strong>Exemples :</strong></p>
+                            <ul>
+                                <li>a dog in a park with a ball</li>
+                                <li>a bird in a forest with colorful flowers</li>
+                                <li>a fish in an aquarium with coral</li>
+                            </ul>
+                        </div>
+
+                        <h3>Conseils pour vos premiers prompts</h3>
+                        <ul>
+                            <li><strong>Restez simple :</strong> Décrivez clairement ce que vous voulez voir</li>
+                            <li><strong>Utilisez l'anglais :</strong> Midjourney comprend mieux l'anglais</li>
+                            <li><strong>Soyez patient :</strong> Chaque image prend environ 1 minute à générer</li>
+                            <li><strong>Expérimentez :</strong> Pas de mauvaise réponse, amusez-vous !</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Quiz Débutant -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Quiz de validation</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quelle est la commande pour créer une image dans Midjourney ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> /create prompt: ma description
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>B)</span> /imagine prompt: ma description
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>C)</span> /generate prompt: ma description
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> /make prompt: ma description
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback1">
+                            <strong>✅ Parfait !</strong> La commande magique est bien <code>/imagine prompt:</code> suivie de votre description. C'est la seule commande que vous devez retenir pour commencer !
+                        </div>
+                    </div>
+
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Combien d'images Midjourney génère-t-il à chaque fois ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> 1 image
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>B)</span> 2 images
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>C)</span> 4 images
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> 8 images
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback2">
+                            <strong>✅ Exact !</strong> Midjourney génère toujours 4 versions différentes de votre idée. Cela vous donne le choix et des variations créatives auxquelles vous n'auriez pas pensé !
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prochaines étapes -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Et maintenant ?</h2>
+                    <div class="section-content">
+                        <div class="success-box">
+                            <div class="success-title">
+                                🎉 Félicitations !
+                            </div>
+                            <p>Vous venez de franchir la première étape de votre aventure avec l'IA générative ! Vous savez maintenant utiliser Midjourney pour créer des images à partir de vos idées.</p>
+                        </div>
+
+                        <h3>Vos prochaines étapes :</h3>
+                        <ol>
+                            <li><strong>Pratiquez :</strong> Créez 5-10 images différentes pour vous familiariser</li>
+                            <li><strong>Explorez :</strong> Testez différents styles et sujets</li>
+                            <li><strong>Observez :</strong> Regardez ce que font les autres utilisateurs dans Discord</li>
+                            <li><strong>Progressez :</strong> Passez à la formation avancée quand vous êtes à l'aise</li>
+                        </ol>
+
+                        <div class="advanced-link">
+                            <a href="generative_4_midjourney_avance_2a.html">
+                                🎯 Prêt pour le niveau avancé ? →
+                            </a>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                💡 Rappel important
+                            </div>
+                            <p>N'oubliez pas que Midjourney offre un <strong>essai gratuit limité</strong>. Si vous voulez continuer à créer, pensez à souscrire un abonnement Basic (environ 10€/mois). C'est un investissement qui en vaut la peine !</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>📊 Votre Progression</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>🌱 Niveau</span>
+                            <span style="font-weight: 600; color: var(--success-color);">Débutant</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>⏰ Durée</span>
+                            <span>25-35 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>🎯 Objectif</span>
+                            <span>Première image !</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checklist -->
+                <div class="sidebar-card">
+                    <h4>✅ Checklist de réussite</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.9rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" style="transform: scale(1.2);">
+                            <span>Compte Discord créé</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" style="transform: scale(1.2);">
+                            <span>Serveur Midjourney rejoint</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" style="transform: scale(1.2);">
+                            <span>Interface Discord comprise</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" style="transform: scale(1.2);">
+                            <span>Première image créée</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" style="transform: scale(1.2);">
+                            <span>5 images d'entraînement</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Quick Commands -->
+                <div class="sidebar-card">
+                    <h4>⚡ Commandes de base</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.85rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Créer une image</strong><br>
+                            <code style="color: var(--text-secondary);">/imagine prompt: [description]</code>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Structure simple</strong><br>
+                            <code style="color: var(--text-secondary);">a [sujet] in a [lieu]</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help -->
+                <div class="sidebar-card">
+                    <h4>🆘 Besoin d'aide ?</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--primary-color);">Ça ne marche pas ?</strong><br>
+                        Vérifiez que vous êtes dans un salon #newbies et que votre commande commence bien par <code>/imagine prompt:</code>
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="lesson-navigation">
+            <a href="generative_4_subtitles_tools_1c.html" class="btn btn-secondary">
+                <span>←</span> Outils IA sous-titres
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Micro-séquence 2A</div>
+                <div style="font-weight: 600; color: var(--text-primary);">Midjourney - Premiers Pas</div>
+            </div>
+            <a href="generative_4_midjourney_2a.html" class="btn btn-primary">
+                Midjourney - Avancé <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections in this quiz
+            const quiz = element.closest('.quiz-container');
+            const options = quiz.querySelectorAll('.quiz-option');
+            const feedback = quiz.querySelector('.quiz-feedback');
+            
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selection and correctness classes
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Show feedback
+            feedback.classList.add('show');
+        }
+
+        // Checkbox persistence
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            const key = `checklist_${checkbox.parentElement.textContent.trim()}`;
+            checkbox.checked = localStorage.getItem(key) === 'true';
+            
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem(key, checkbox.checked);
+            });
+        });
+
+        // Progress tracking
+        let progressData = JSON.parse(localStorage.getItem('ia-academy-progress') || '{}');
+        progressData.midjourney_debutant_2a = {
+            started: new Date().toISOString(),
+            status: 'in-progress'
+        };
+        localStorage.setItem('ia-academy-progress', JSON.stringify(progressData));
+    </script>
+</body>
+</html>

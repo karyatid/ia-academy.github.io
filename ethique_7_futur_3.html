@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 3: Futur et IA Responsable - Module 7 | IA Academy</title>
+    <style>
+        /* CSS Variables for Theme */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #4338ca;
+            --secondary-color: #0891b2;
+            --accent-color: #7c3aed;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(30, 41, 59, 0.1);
+            --shadow: 0 8px 32px rgba(30, 41, 59, 0.1);
+            --glow: 0 0 20px rgba(67, 56, 202, 0.2);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Dynamic Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .theme-toggle::before {
+            content: '🌙';
+            left: 26px;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            transform: translateX(25px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Example Box for Practical Applications */
+        .example-box {
+            background: linear-gradient(45deg, rgba(251, 146, 60, 0.1), rgba(245, 101, 101, 0.1));
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box for Important Notes */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.1), rgba(220, 38, 127, 0.1));
+            border: 1px solid rgba(245, 101, 101, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Future Trends Box */
+        .future-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .future-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Regulation Box */
+        .regulation-box {
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .regulation-title {
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border-color: #10b981;
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.1), rgba(220, 38, 127, 0.1));
+            border-color: #ef4444;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .quiz-feedback.incorrect {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.1), rgba(220, 38, 127, 0.1));
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        /* Sidebar for Learning Progress */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            background: var(--bg-secondary);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 100%;
+            border-radius: 4px;
+            transition: all 0.5s ease;
+        }
+
+        .sequence-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--primary-color);
+        }
+
+        .sequence-item.completed {
+            background: var(--glass-bg);
+        }
+
+        .sequence-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: #10b981;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Navigation Buttons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+
+        /* Workshop Template Styles */
+        .workshop-box {
+            background: linear-gradient(45deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .workshop-title {
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-counter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="dashboard.html" class="breadcrumb-link">🏠 Accueil</a>
+                <span>›</span>
+                <a href="ethique_7_overview.html" class="breadcrumb-link">Module 7: Éthique et IA</a>
+                <span>›</span>
+                <span class="breadcrumb-current">Séquence 3: Futur et IA Responsable</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🚀</span>
+                        Module 7 - Séquence finale
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        55 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        Niveau: Avancé
+                    </div>
+                </div>
+                <h1 class="lesson-title">🚀 Futur de l'IA et Pratiques Responsables</h1>
+                <p class="lesson-description">
+                    Préparez-vous aux évolutions futures de l'IA en comprenant les enjeux sociétaux, le cadre réglementaire émergent et en développant une gouvernance IA responsable pour votre organisation.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Introduction</h2>
+                    <div class="section-content">
+                        <p>L'intelligence artificielle n'est plus une technologie émergente : elle transforme déjà notre société. Pour naviguer cette révolution de manière responsable, nous devons anticiper les impacts, comprendre les évolutions réglementaires et développer des pratiques durables.</p>
+                        
+                        <div class="future-box">
+                            <div class="future-title">🔮 Vision 2030</div>
+                            <p>Dans 5 ans, l'IA sera omniprésente : de votre réveil intelligent à vos décisions professionnelles. Les organisations qui auront anticipé les enjeux éthiques et réglementaires auront un avantage concurrentiel décisif.</p>
+                        </div>
+                        
+                        <p><strong>Dans cette séquence finale, nous explorerons :</strong></p>
+                        <ul>
+                            <li>L'impact de l'IA sur l'emploi et les stratégies d'adaptation</li>
+                            <li>Le cadre réglementaire européen (AI Act) et ses implications</li>
+                            <li>La mise en place d'une gouvernance IA responsable</li>
+                            <li>Les meilleures pratiques pour une IA durable et éthique</li>
+                            <li><strong>Atelier pratique :</strong> Création de votre charte d'usage IA</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Impact sur l'emploi et la société -->
+                <section class="section">
+                    <h2 class="section-title">💼 Impact sur l'Emploi et la Société</h2>
+                    <div class="section-content">
+                        <p>L'IA va transformer le marché du travail, mais pas forcément comme on l'imagine. Comprendre ces évolutions est crucial pour s'adapter et en tirer parti.</p>
+
+                        <h3>Automatisation vs Augmentation Humaine</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">🤖 Deux paradigmes différents</div>
+                            <p><strong>Automatisation :</strong> L'IA remplace complètement l'humain sur certaines tâches</p>
+                            <p><strong>Augmentation :</strong> L'IA amplifie les capacités humaines et crée de nouvelles possibilités</p>
+                            <p><strong>Tendance :</strong> L'augmentation domine sur l'automatisation dans la plupart des secteurs qualifiés.</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemples concrets de transformation</div>
+                            <ul>
+                                <li><strong>Radiologie :</strong> L'IA détecte les anomalies, le radiologue se concentre sur le diagnostic complexe et la relation patient</li>
+                                <li><strong>Journalisme :</strong> L'IA génère les dépêches simples, le journaliste produit les enquêtes et analyses</li>
+                                <li><strong>Comptabilité :</strong> L'IA traite les écritures, le comptable devient conseiller stratégique</li>
+                                <li><strong>Éducation :</strong> L'IA personnalise l'apprentissage, l'enseignant se concentre sur l'accompagnement</li>
+                            </ul>
+                        </div>
+
+                        <h3>Reconversion et Formation Continue</h3>
+                        <p>L'adaptabilité devient la compétence clé du 21ème siècle. Les organisations responsables investissent massivement dans la formation de leurs équipes.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">📈 Compétences en forte demande</div>
+                            <ul>
+                                <li><strong>Collaboration homme-IA :</strong> Savoir travailler avec des assistants intelligents</li>
+                                <li><strong>Pensée critique :</strong> Évaluer la fiabilité des outputs IA</li>
+                                <li><strong>Créativité augmentée :</strong> Utiliser l'IA comme levier créatif</li>
+                                <li><strong>Intelligence émotionnelle :</strong> Plus importante que jamais dans un monde automatisé</li>
+                                <li><strong>Éthique appliquée :</strong> Naviguer les dilemmes moraux de l'IA</li>
+                            </ul>
+                        </div>
+
+                        <h3>Inégalités d'Accès et Fracture Numérique</h3>
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Risque de creusement des inégalités</div>
+                            <p>L'IA risque de créer une nouvelle fracture entre ceux qui y ont accès et savent l'utiliser, et les autres. Cette fracture pourrait être géographique, générationnelle, socio-économique ou éducative.</p>
+                            <ul>
+                                <li><strong>Accès économique :</strong> Coût des technologies IA avancées</li>
+                                <li><strong>Compétences numériques :</strong> Formation et littératie IA</li>
+                                <li><strong>Infrastructure :</strong> Connectivité et puissance de calcul</li>
+                                <li><strong>Langue et culture :</strong> Biais vers l'anglais et les cultures dominantes</li>
+                            </ul>
+                        </div>
+
+                        <h3>Concentration du Pouvoir Technologique</h3>
+                        <p>Quelques géants technologiques contrôlent les infrastructures IA mondiales. Quels sont les risques et comment diversifier ?</p>
+                        
+                        <div class="future-box">
+                            <div class="future-title">🏛️ Enjeux de souveraineté</div>
+                            <ul>
+                                <li><strong>Dépendance technologique :</strong> Risques géopolitiques et de sécurité</li>
+                                <li><strong>Contrôle des données :</strong> Qui détient l'information détient le pouvoir</li>
+                                <li><strong>Standards et normes :</strong> Influence sur les règles du jeu mondial</li>
+                                <li><strong>Solutions :</strong> IA européenne, clouds souverains, open source</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cadre réglementaire émergent -->
+                <section class="section">
+                    <h2 class="section-title">📜 Cadre Réglementaire Émergent</h2>
+                    <div class="section-content">
+                        <p>L'Union Européenne prend les devants avec l'AI Act, la première réglementation globale sur l'IA. Comprendre ce cadre est essentiel pour anticiper vos obligations.</p>
+
+                        <h3>AI Act Européen : Ce qui change</h3>
+                        <div class="regulation-box">
+                            <div class="regulation-title">🇪🇺 AI Act - Points clés</div>
+                            <h4>Classification par niveau de risque :</h4>
+                            <ul>
+                                <li><strong>🚫 IA interdite :</strong> Manipulation cognitive, scoring social</li>
+                                <li><strong>🔴 Haut risque :</strong> Recrutement, crédit, justice, santé → Obligations strictes</li>
+                                <li><strong>🟡 Risque limité :</strong> Chatbots → Obligations de transparence</li>
+                                <li><strong>🟢 Faible risque :</strong> Jeux, spam → Aucune obligation spécifique</li>
+                            </ul>
+                            
+                            <h4>Obligations pour les systèmes à haut risque :</h4>
+                            <ul>
+                                <li>✅ Système de gestion de qualité</li>
+                                <li>✅ Documentation technique complète</li>
+                                <li>✅ Conservation des logs et traçabilité</li>
+                                <li>✅ Surveillance humaine obligatoire</li>
+                                <li>✅ Tests et validation avant mise sur le marché</li>
+                                <li>✅ Déclaration CE et marquage obligatoire</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Sanctions en cas de non-conformité</div>
+                            <ul>
+                                <li><strong>IA interdite :</strong> Jusqu'à 35 millions € ou 7% du CA mondial</li>
+                                <li><strong>Non-conformité :</strong> Jusqu'à 15 millions € ou 3% du CA mondial</li>
+                                <li><strong>Informations incorrectes :</strong> Jusqu'à 7,5 millions € ou 1,5% du CA</li>
+                            </ul>
+                            <p><strong>Entrée en vigueur :</strong> 2025-2027 selon les dispositions</p>
+                        </div>
+
+                        <h3>Réglementations Sectorielles</h3>
+                        <p>Au-delà de l'AI Act, chaque secteur développe ses propres standards :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">🏥 Secteurs les plus régulés</div>
+                            <ul>
+                                <li><strong>Santé :</strong> FDA (US), EMA (EU) - Validation clinique obligatoire</li>
+                                <li><strong>Finance :</strong> Stress tests algorithmiques, audit des modèles de crédit</li>
+                                <li><strong>Transport :</strong> Certification sécuritaire pour véhicules autonomes</li>
+                                <li><strong>Éducation :</strong> Protection des mineurs, transparence des algorithmes d'orientation</li>
+                            </ul>
+                        </div>
+
+                        <h3>Standards Internationaux en Développement</h3>
+                        <div class="regulation-box">
+                            <div class="regulation-title">🌍 Initiatives clés à suivre</div>
+                            <ul>
+                                <li><strong>ISO/IEC 23053 :</strong> Framework pour l'IA trustworthy</li>
+                                <li><strong>IEEE Standards :</strong> Conception éthique des systèmes autonomes</li>
+                                <li><strong>Partnership on AI :</strong> Meilleures pratiques industrielles</li>
+                                <li><strong>OECD AI Principles :</strong> Gouvernance IA pour les gouvernements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IA responsable en pratique -->
+                <section class="section">
+                    <h2 class="section-title">🏛️ IA Responsable en Pratique</h2>
+                    <div class="section-content">
+                        <p>Passer de la théorie à l'action : comment mettre en place une gouvernance IA robuste et opérationnelle dans votre organisation.</p>
+
+                        <h3>Gouvernance IA en Entreprise</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">🏗️ Architecture de gouvernance</div>
+                            <p><strong>Niveau stratégique :</strong> Comité de direction IA (C-level)</p>
+                            <p><strong>Niveau opérationnel :</strong> Comité d'éthique IA multidisciplinaire</p>
+                            <p><strong>Niveau technique :</strong> Équipes de développement avec formation éthique</p>
+                            <p><strong>Niveau contrôle :</strong> Audit interne et compliance</p>
+                        </div>
+
+                        <h3>Comités d'Éthique et Processus de Validation</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">👥 Composition du comité d'éthique IA</div>
+                            <ul>
+                                <li><strong>Data Scientist Senior :</strong> Expertise technique et limitations</li>
+                                <li><strong>Juriste :</strong> Conformité réglementaire et gestion des risques</li>
+                                <li><strong>Représentant métier :</strong> Impact opérationnel et acceptabilité</li>
+                                <li><strong>Expert éthique :</strong> Philosophe, sociologue ou éthicien</li>
+                                <li><strong>Représentant utilisateurs :</strong> Défense des intérêts des personnes impactées</li>
+                                <li><strong>Expert sécurité :</strong> Cybersécurité et protection des données</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">⚙️ Processus de validation IA</div>
+                            <p><strong>Étape 1 :</strong> <span class="step-counter">1</span>Évaluation préliminaire du niveau de risque</p>
+                            <p><strong>Étape 2 :</strong> <span class="step-counter">2</span>Audit technique : performance, biais, sécurité</p>
+                            <p><strong>Étape 3 :</strong> <span class="step-counter">3</span>Évaluation éthique par le comité</p>
+                            <p><strong>Étape 4 :</strong> <span class="step-counter">4</span>Tests utilisateurs et feedback</p>
+                            <p><strong>Étape 5 :</strong> <span class="step-counter">5</span>Validation finale et mise en production</p>
+                            <p><strong>Étape 6 :</strong> <span class="step-counter">6</span>Monitoring continu et revues périodiques</p>
+                        </div>
+
+                        <h3>Formation des Équipes et Sensibilisation</h3>
+                        <p>Une IA responsable commence par des équipes sensibilisées et formées.</p>
+                        
+                        <div class="workshop-box">
+                            <div class="workshop-title">🎓 Programme de formation type</div>
+                            <p><strong>Niveau 1 - Sensibilisation générale (2h) :</strong></p>
+                            <ul>
+                                <li>Enjeux éthiques fondamentaux</li>
+                                <li>Détection des biais courants</li>
+                                <li>Politiques internes et escalation</li>
+                            </ul>
+                            
+                            <p><strong>Niveau 2 - Formation métier (4h) :</strong></p>
+                            <ul>
+                                <li>Risques spécifiques au secteur</li>
+                                <li>Outils d'audit et validation</li>
+                                <li>Cas pratiques et études de cas</li>
+                            </ul>
+                            
+                            <p><strong>Niveau 3 - Expertise technique (8h) :</strong></p>
+                            <ul>
+                                <li>Audit algorithmique avancé</li>
+                                <li>Métriques de fairness</li>
+                                <li>Techniques de débiaisage</li>
+                            </ul>
+                        </div>
+
+                        <h3>Transparency Reports et Communication</h3>
+                        <div class="future-box">
+                            <div class="future-title">📊 Transparence comme avantage concurrentiel</div>
+                            <p>Les organisations transparentes sur leur usage de l'IA gagnent la confiance du public et se différencient de la concurrence.</p>
+                            
+                            <p><strong>Éléments d'un transparency report :</strong></p>
+                            <ul>
+                                <li>Liste des systèmes IA utilisés et leur finalité</li>
+                                <li>Données utilisées et méthodes de protection</li>
+                                <li>Mesures anti-biais et résultats d'audit</li>
+                                <li>Processus de recours et contact humain</li>
+                                <li>Formation des équipes et gouvernance</li>
+                                <li>Impact environnemental et mesures de réduction</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier : Charte d'usage IA -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Atelier Pratique : Charte d'Usage IA (25 min)</h2>
+                    <div class="section-content">
+                        <p>Créons ensemble votre charte d'usage responsable de l'IA. Ce document deviendra la référence éthique pour tous vos projets IA.</p>
+
+                        <div class="workshop-box">
+                            <div class="workshop-title">📋 Template de charte d'usage IA</div>
+                            
+                            <h4>1. Principes fondamentaux (5 min)</h4>
+                            <p>Définissez vos valeurs non-négociables :</p>
+                            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                                <p><strong>Exemple :</strong></p>
+                                <ul>
+                                    <li>🎯 <strong>Finalité :</strong> L'IA doit servir l'humain, pas l'inverse</li>
+                                    <li>⚖️ <strong>Équité :</strong> Pas de discrimination directe ou indirecte</li>
+                                    <li>🔍 <strong>Transparence :</strong> Explicabilité des décisions impactantes</li>
+                                    <li>🛡️ <strong>Sécurité :</strong> Protection des données et minimisation des risques</li>
+                                    <li>🌱 <strong>Durabilité :</strong> Optimisation de l'impact environnemental</li>
+                                </ul>
+                            </div>
+
+                            <h4>2. Processus opérationnels (8 min)</h4>
+                            <div class="interactive-box">
+                                <div class="interactive-title">⚙️ Workflow de validation</div>
+                                <p><strong>Avant tout déploiement IA :</strong></p>
+                                <ol>
+                                    <li><strong>Évaluation du risque :</strong> Classification selon votre grille</li>
+                                    <li><strong>Audit technique :</strong> Performance, biais, sécurité</li>
+                                    <li><strong>Validation éthique :</strong> Revue par le comité si haut risque</li>
+                                    <li><strong>Test pilote :</strong> Déploiement limité avec monitoring</li>
+                                    <li><strong>Déploiement :</strong> Avec documentation et formation utilisateurs</li>
+                                    <li><strong>Monitoring :</strong> Surveillance continue et revues périodiques</li>
+                                </ol>
+                            </div>
+
+                            <h4>3. Critères d'évaluation (7 min)</h4>
+                            <p>Développez votre grille d'évaluation :</p>
+                            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                                <p><strong>Questions à vous poser :</strong></p>
+                                <ul>
+                                    <li>🎯 <strong>Impact :</strong> Quelles sont les conséquences d'une erreur ?</li>
+                                    <li>👥 <strong>Population :</strong> Qui est impacté et comment ?</li>
+                                    <li>🔍 <strong>Transparence :</strong> Pouvons-nous expliquer les décisions ?</li>
+                                    <li>📊 <strong>Données :</strong> Sont-elles représentatives et protégées ?</li>
+                                    <li>🔄 <strong>Recours :</strong> Existe-t-il une possibilité d'appel humain ?</li>
+                                </ul>
+                            </div>
+
+                            <h4>4. Plan de formation (5 min)</h4>
+                            <p>Planifiez la sensibilisation de vos équipes :</p>
+                            <ul>
+                                <li><strong>Direction :</strong> Briefing stratégique sur les enjeux et risques</li>
+                                <li><strong>Équipes techniques :</strong> Formation approfondie aux techniques d'audit</li>
+                                <li><strong>Utilisateurs finaux :</strong> Bonnes pratiques et vigilance</li>
+                                <li><strong>Clients/partenaires :</strong> Communication transparente sur l'usage IA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz final -->
+                <section class="quiz-section">
+                    <h2 class="section-title">🧠 Quiz Final : IA Responsable</h2>
+                    <div class="section-content">
+                        <div class="quiz-question">
+                            <div class="question-title">Question 1: Selon l'AI Act européen, quel niveau de risque représente un système de recrutement automatisé utilisant l'IA ?</div>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="a">
+                                    <span>🟢 Faible risque - aucune obligation spécifique</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="b">
+                                    <span>🟡 Risque limité - obligations de transparence uniquement</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="c">
+                                    <span>🔴 Haut risque - obligations strictes et certification</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="d">
+                                    <span>🚫 IA interdite - utilisation prohibée</span>
+                                </label>
+                            </div>
+                            <div class="quiz-feedback" id="feedback1">
+                                <p id="feedback1-text"></p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-question">
+                            <div class="question-title">Question 2: Quelle est la principale différence entre "automatisation" et "augmentation humaine" par l'IA ?</div>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="a">
+                                    <span>L'automatisation est plus avancée techniquement</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="b">
+                                    <span>L'automatisation remplace l'humain, l'augmentation amplifie ses capacités</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="c">
+                                    <span>L'augmentation coûte moins cher que l'automatisation</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="d">
+                                    <span>Il n'y a pas de différence, c'est juste du marketing</span>
+                                </label>
+                            </div>
+                            <div class="quiz-feedback" id="feedback2">
+                                <p id="feedback2-text"></p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-question">
+                            <div class="question-title">Question 3: Quel élément est essentiel dans un transparency report sur l'usage de l'IA ?</div>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="a">
+                                    <span>Les détails techniques de l'algorithme et son code source</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="b">
+                                    <span>La liste des concurrents et leur positionnement</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="c">
+                                    <span>Les systèmes IA utilisés, leur finalité et les mesures de protection</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="d">
+                                    <span>Le budget consacré à l'IA et le retour sur investissement</span>
+                                </label>
+                            </div>
+                            <div class="quiz-feedback" id="feedback3">
+                                <p id="feedback3-text"></p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-buttons">
+                            <button class="btn btn-primary" onclick="checkQuiz()">Vérifier mes réponses</button>
+                            <button class="btn btn-secondary" onclick="resetQuiz()" style="display: none;" id="resetBtn">Recommencer</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Synthèse et plan d'action -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Synthèse et Plan d'Action</h2>
+                    <div class="section-content">
+                        <p>Félicitations ! Vous avez maintenant une vision complète des enjeux éthiques de l'IA. Il est temps de passer à l'action.</p>
+
+                        <div class="future-box">
+                            <div class="future-title">🚀 Votre feuille de route IA responsable</div>
+                            <h4>Semaine 1-2 : Audit initial</h4>
+                            <ul>
+                                <li>Inventorier tous les outils IA utilisés dans votre organisation</li>
+                                <li>Évaluer leur niveau de risque selon l'AI Act</li>
+                                <li>Identifier les points de vigilance prioritaires</li>
+                            </ul>
+
+                            <h4>Mois 1 : Gouvernance</h4>
+                            <ul>
+                                <li>Constituer votre comité d'éthique IA</li>
+                                <li>Rédiger votre charte d'usage responsable</li>
+                                <li>Définir vos processus de validation</li>
+                            </ul>
+
+                            <h4>Mois 2-3 : Formation</h4>
+                            <ul>
+                                <li>Sensibiliser la direction aux enjeux réglementaires</li>
+                                <li>Former les équipes techniques aux audits</li>
+                                <li>Communiquer auprès des utilisateurs finaux</li>
+                            </ul>
+
+                            <h4>Mois 4-6 : Mise en conformité</h4>
+                            <ul>
+                                <li>Auditer et corriger les systèmes à haut risque</li>
+                                <li>Mettre en place le monitoring continu</li>
+                                <li>Préparer votre premier transparency report</li>
+                            </ul>
+                        </div>
+
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Points clés à retenir</div>
+                            <ul>
+                                <li><strong>L'éthique est un avantage concurrentiel :</strong> Les consommateurs choisissent les marques responsables</li>
+                                <li><strong>La réglementation arrive vite :</strong> Mieux vaut anticiper que subir</li>
+                                <li><strong>L'humain reste central :</strong> L'IA augmente mais ne remplace pas l'intelligence humaine</li>
+                                <li><strong>La formation est continue :</strong> L'IA évolue, votre vigilance aussi</li>
+                                <li><strong>La transparence paie :</strong> Communiquer sur vos pratiques responsables vous différencie</li>
+                            </ul>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎉 Félicitations ! Module 7 terminé</div>
+                            <p>Vous maîtrisez maintenant les enjeux éthiques de l'IA et savez comment adopter une approche responsable. Vous êtes prêt pour le projet final où vous mettrez en pratique toutes vos compétences acquises !</p>
+                            
+                            <p><strong>Prochaine étape :</strong> Module 8 - Projet Final (8h)</p>
+                            <p>Concevez et réalisez un projet IA complet qui respecte tous les principes éthiques que vous venez d'apprendre.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Progression</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%;"></div>
+                </div>
+                <ul class="sequence-list">
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Enjeux éthiques fondamentaux</div>
+                            <div class="sequence-duration">60 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Biais et discrimination</div>
+                            <div class="sequence-duration">60 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item current">
+                        <div class="sequence-icon">3</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Futur et IA responsable</div>
+                            <div class="sequence-duration">55 min</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">🎉 Module terminé !</h4>
+                    <div style="background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1)); padding: 1rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <p style="color: #10b981; font-weight: 600; margin: 0;">✅ Éthique et IA maîtrisée</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.5rem 0 0 0;">Prêt pour le projet final !</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">📚 Ressources</h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li><a href="ressources_bibliotheque.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">📖 Articles AI Act</a></li>
+                        <li><a href="ressources_outils.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">🛠️ Outils d'audit</a></li>
+                        <li><a href="ressources_forum.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">💬 Partager votre charte</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="lesson-navigation">
+            <a href="ethique_7_biais_2.html" class="btn btn-secondary">← Séquence 2: Biais et discrimination</a>
+            <a href="projet_8_overview.html" class="btn btn-primary">Module 8: Projet Final →</a>
+        </nav>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Quiz functionality
+        const quizAnswers = {
+            q1: 'c', // Haut risque
+            q2: 'b', // Automatisation vs augmentation
+            q3: 'c'  // Transparency report
+        };
+
+        const quizExplanations = {
+            q1: {
+                correct: "✅ Parfait ! Le recrutement automatisé est classé 'haut risque' par l'AI Act car il impacte directement l'emploi et les droits fondamentaux. Cela implique des obligations strictes : audit, documentation, certification, surveillance humaine.",
+                incorrect: "❌ Le recrutement automatisé est considéré comme 'haut risque' par l'AI Act car il impacte l'emploi et les droits fondamentaux. Cela nécessite une certification, un audit rigoureux et une surveillance humaine obligatoire."
+            },
+            q2: {
+                correct: "✅ Exactement ! L'automatisation vise à remplacer l'humain sur certaines tâches, tandis que l'augmentation utilise l'IA pour amplifier les capacités humaines. La tendance actuelle favorise l'augmentation dans la plupart des métiers qualifiés.",
+                incorrect: "❌ La différence fondamentale est que l'automatisation remplace l'humain tandis que l'augmentation amplifie ses capacités. L'augmentation devient le paradigme dominant car elle combine efficacité IA et intelligence humaine."
+            },
+            q3: {
+                correct: "✅ Correct ! Un transparency report doit expliquer clairement quels systèmes IA sont utilisés, pourquoi, avec quelles données et quelles protections. L'objectif est d'informer les parties prenantes, pas de révéler les secrets techniques.",
+                incorrect: "❌ Un transparency report vise à informer sur l'usage de l'IA (systèmes utilisés, finalités, protections) sans révéler les détails techniques propriétaires. C'est un exercice de communication responsable, pas de divulgation technique."
+            }
+        };
+
+        function checkQuiz() {
+            let allAnswered = true;
+            let score = 0;
+            
+            for (let question in quizAnswers) {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                const options = document.querySelectorAll(`input[name="${question}"]`);
+                const feedback = document.getElementById(`feedback${question.charAt(1)}`);
+                const feedbackText = document.getElementById(`feedback${question.charAt(1)}-text`);
+                
+                if (!selectedOption) {
+                    allAnswered = false;
+                    continue;
+                }
+                
+                const isCorrect = selectedOption.value === quizAnswers[question];
+                if (isCorrect) score++;
+                
+                // Style the options
+                options.forEach(option => {
+                    const label = option.parentElement;
+                    label.style.pointerEvents = 'none';
+                    
+                    if (option.value === quizAnswers[question]) {
+                        label.classList.add('correct');
+                    } else if (option.checked && option.value !== quizAnswers[question]) {
+                        label.classList.add('incorrect');
+                    }
+                });
+                
+                // Show feedback
+                feedback.style.display = 'block';
+                feedback.className = `quiz-feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+                feedbackText.textContent = isCorrect ? 
+                    quizExplanations[question].correct : 
+                    quizExplanations[question].incorrect;
+            }
+            
+            if (!allAnswered) {
+                alert('Veuillez répondre à toutes les questions avant de vérifier.');
+                return;
+            }
+            
+            // Show final score and module completion
+            const finalMessage = score === 3 ? 
+                "🎉 Parfait ! Vous maîtrisez l'IA responsable. Module 7 terminé avec succès !" :
+                score === 2 ? 
+                "👍 Très bien ! Vous avez une excellente compréhension de l'IA responsable." :
+                "💪 Bien ! Relisez les sections pour perfectionner vos connaissances avant le projet final.";
+            
+            setTimeout(() => {
+                alert(`Score: ${score}/3 - Module 7 terminé !\n${finalMessage}\n\nProchaine étape : Module 8 - Projet Final`);
+            }, 500);
+            
+            document.getElementById('resetBtn').style.display = 'inline-flex';
+            document.querySelector('.btn-primary').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            const options = document.querySelectorAll('.quiz-option');
+            const feedbacks = document.querySelectorAll('.quiz-feedback');
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.pointerEvents = 'auto';
+            });
+            
+            feedbacks.forEach(feedback => {
+                feedback.style.display = 'none';
+                feedback.classList.remove('show', 'correct', 'incorrect');
+            });
+            
+            radioInputs.forEach(input => {
+                input.checked = false;
+            });
+            
+            document.getElementById('resetBtn').style.display = 'none';
+            document.querySelector('.btn-primary').style.display = 'inline-flex';
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '100%';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>

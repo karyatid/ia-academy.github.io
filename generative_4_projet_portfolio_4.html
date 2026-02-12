@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet + Portfolio - Séquence 4 | IA Academy</title>
+    <style>
+        :root {
+            /* Mode sombre par défaut */
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a3e;
+            --bg-tertiary: #2d2d5f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8d4;
+            --text-muted: #8888aa;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --accent-color: #0891b2;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-tertiary: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '🌙';
+            position: absolute;
+            left: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle::after {
+            content: '☀️';
+            position: absolute;
+            right: 6px;
+            font-size: 14px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        [data-theme="light"] .theme-toggle::before {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            opacity: 1;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            position: relative;
+        }
+
+        [data-theme="light"] .theme-toggle-button {
+            transform: translateX(25px);
+            background: var(--primary-color);
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .section-content ul {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Interactive Boxes */
+        .interactive-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .interactive-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Project Cards */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .project-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-icon {
+            font-size: 2rem;
+        }
+
+        .project-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .project-features {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .project-features li {
+            padding: 0.25rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-features li::before {
+            content: '✓';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .project-complexity {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .complexity-easy {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .complexity-medium {
+            background: rgba(251, 191, 36, 0.2);
+            color: #f59e0b;
+        }
+
+        .complexity-hard {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* Phase Cards */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .phase-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .phase-number {
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            font-weight: 700;
+        }
+
+        .phase-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-duration {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .phase-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            right: -50%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: var(--accent-color);
+        }
+
+        .progress-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .progress-circle.completed {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .progress-circle.current {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Practical Examples */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        /* Warning and Success Boxes */
+        .warning-box, .success-box, .info-box {
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border-left-color: #f59e0b;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
+        }
+
+        .warning-title, .success-title, .info-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .sequence-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sequence-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sequence-item:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .sequence-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .sequence-item:hover .sequence-duration {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #0891b2;
+            transform: translateY(-2px);
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .portfolio-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .portfolio-placeholder {
+            width: 100%;
+            height: 120px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 2rem;
+        }
+
+        .portfolio-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .portfolio-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .projects-grid, .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="dashboard.html" class="logo">
+                    🧠 IA Academy
+                </a>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Projet + Portfolio</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Séquence 4 - Finale</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>60-90 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>📈</span>
+                        <span>Projet Personnel</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">🎯 Projet + Portfolio</h1>
+                <p class="lesson-description">
+                    Créez votre projet personnel multimédia en intégrant toutes les compétences acquises ! De la conception à la réalisation, constituez un portfolio professionnel qui showcasera votre maîtrise de l'IA générative.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 L'aboutissement de votre formation</h2>
+                    <div class="section-content">
+                        <p>Cette séquence finale est l'occasion de mettre en pratique tout ce que vous avez appris dans le Module 4. Vous allez concevoir et réaliser un projet personnel complet qui intègre texte, images, audio et vidéo générés par IA.</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Objectifs de votre projet final
+                            </div>
+                            <ul>
+                                <li><strong>Intégrer les 4 modalités IA</strong> : Texte, images, audio et vidéo</li>
+                                <li><strong>Créer un contenu professionnel</strong> adapté à votre secteur</li>
+                                <li><strong>Documenter votre workflow</strong> pour le reproduire</li>
+                                <li><strong>Constituer un portfolio</strong> de vos meilleures créations</li>
+                                <li><strong>Développer votre personal branding</strong> avec l'IA</li>
+                            </ul>
+                        </div>
+
+                        <div class="phases-grid">
+                            <div class="phase-card">
+                                <div class="phase-number">A</div>
+                                <div class="phase-title">Conception</div>
+                                <div class="phase-duration">15-20 min</div>
+                                <div class="phase-description">Choix du projet, brief créatif et planning</div>
+                            </div>
+                            <div class="phase-card">
+                                <div class="phase-number">B</div>
+                                <div class="phase-title">Réalisation</div>
+                                <div class="phase-duration">35-50 min</div>
+                                <div class="phase-description">Production autonome avec support Discord</div>
+                            </div>
+                            <div class="phase-card">
+                                <div class="phase-number">C</div>
+                                <div class="phase-title">Portfolio</div>
+                                <div class="phase-duration">10-20 min</div>
+                                <div class="phase-description">Documentation et présentation finale</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Phase A: Conception -->
+                <section class="section">
+                    <h2 class="section-title">📋 Phase A : Conception de votre projet (15-20 min)</h2>
+                    <div class="section-content">
+                        <p>Choisissez un projet qui vous motive et correspond à vos objectifs professionnels. Voici 4 options testées et approuvées :</p>
+
+                        <div class="projects-grid">
+                            <div class="project-card" onclick="selectProject(this, 'videos')">
+                                <div class="project-header">
+                                    <div class="project-icon">📺</div>
+                                    <div class="project-name">Série de 3 vidéos expertise</div>
+                                </div>
+                                <div class="project-description">
+                                    Créez 3 vidéos courtes (30-60s) sur votre domaine d'expertise pour LinkedIn/YouTube.
+                                </div>
+                                <ul class="project-features">
+                                    <li>Scripts optimisés ChatGPT</li>
+                                    <li>Voix-off ElevenLabs</li>
+                                    <li>Visuels Midjourney/RunwayML</li>
+                                    <li>Sous-titres stylisés</li>
+                                </ul>
+                                <div class="project-complexity complexity-easy">Facile</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this, 'campaign')">
+                                <div class="project-header">
+                                    <div class="project-icon">🎬</div>
+                                    <div class="project-name">Campagne marketing complète</div>
+                                </div>
+                                <div class="project-description">
+                                    5 contenus coordonnés : post LinkedIn, story Instagram, vidéo TikTok, email, landing page.
+                                </div>
+                                <ul class="project-features">
+                                    <li>Cohérence visuelle multi-formats</li>
+                                    <li>Adaptation par plateforme</li>
+                                    <li>Message unifié décliné</li>
+                                    <li>Workflow documenté</li>
+                                </ul>
+                                <div class="project-complexity complexity-medium">Moyen</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this, 'course')">
+                                <div class="project-header">
+                                    <div class="project-icon">🎓</div>
+                                    <div class="project-name">Mini-cours en ligne</div>
+                                </div>
+                                <div class="project-description">
+                                    Introduction + 3 modules courts avec voix-off, visuels et sous-titres.
+                                </div>
+                                <ul class="project-features">
+                                    <li>Structure pédagogique claire</li>
+                                    <li>Supports visuels cohérents</li>
+                                    <li>Narration professionnelle</li>
+                                    <li>Format e-learning</li>
+                                </ul>
+                                <div class="project-complexity complexity-medium">Moyen</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this, 'libre')">
+                                <div class="project-header">
+                                    <div class="project-icon">🎨</div>
+                                    <div class="project-name">Projet libre créatif</div>
+                                </div>
+                                <div class="project-description">
+                                    Podcast automatisé, BD interactive, clip musical, ou votre idée originale !
+                                </div>
+                                <ul class="project-features">
+                                    <li>Créativité sans limite</li>
+                                    <li>Innovation technique</li>
+                                    <li>Expérimentation poussée</li>
+                                    <li>Projet unique</li>
+                                </ul>
+                                <div class="project-complexity complexity-hard">Avancé</div>
+                            </div>
+                        </div>
+
+                        <div id="project-brief" style="display: none;" class="interactive-box">
+                            <div class="interactive-title">
+                                📝 Brief de votre projet sélectionné
+                            </div>
+                            <div id="brief-content">
+                                <!-- Le contenu sera rempli via JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🎯</span>
+                                <span>Template de brief créatif</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[BRIEF PROJET - TEMPLATE]
+
+🎯 OBJECTIF :
+- Que voulez-vous accomplir avec ce projet ?
+- Quel message voulez-vous faire passer ?
+
+👥 AUDIENCE :
+- Qui est votre cible ? (âge, profession, intérêts)
+- Sur quelles plateformes la toucherez-vous ?
+
+📋 CONTRAINTES :
+- Budget temps : 35-50 minutes de production
+- Formats requis : (ex: 1:1 LinkedIn, 9:16 TikTok)
+- Ton et style : (professionnel, créatif, éducatif)
+
+🛠️ MODALITÉS IA :
+✅ Texte : Scripts optimisés (ChatGPT/Claude)
+✅ Images : Visuels cohérents (Midjourney/DALL-E)
+✅ Audio : Voix/musique (ElevenLabs/Suno)
+✅ Vidéo : Assemblage (RunwayML + CapCut)
+</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Phase B: Réalisation -->
+                <section class="section">
+                    <h2 class="section-title">⚡ Phase B : Réalisation autonome (35-50 min)</h2>
+                    <div class="section-content">
+                        <p>Passez à l'action ! Suivez ce workflow en 3 phases pour une production efficace :</p>
+
+                        <div class="progress-tracker">
+                            <div class="progress-steps">
+                                <div class="progress-step completed">
+                                    <div class="progress-circle completed">1</div>
+                                    <div class="progress-label">Contenus textes</div>
+                                </div>
+                                <div class="progress-step current">
+                                    <div class="progress-circle current">2</div>
+                                    <div class="progress-label">Visuels & Audio</div>
+                                </div>
+                                <div class="progress-step">
+                                    <div class="progress-circle">3</div>
+                                    <div class="progress-label">Assemblage final</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Phase 1 : Création des contenus textes/scripts (10-15 min)</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📝</span>
+                                <span>Checklist Phase 1</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+PHASE 1 - TEXTE & SCRIPTS
+
+□ Rédiger brief détaillé de votre projet
+□ Générer scripts avec ChatGPT/Claude (voir Séquence 1)
+□ Optimiser pour l'oral (phrases courtes, pauses)
+□ Adapter longueur selon formats (30s TikTok, 60s LinkedIn)
+□ Préparer sous-titres si besoin
+□ Sauvegarder tous les prompts utilisés
+
+⏱️ Temps cible : 10-15 minutes maximum
+</div>
+                        </div>
+
+                        <h3>Phase 2 : Génération des visuels et audio (15-25 min)</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🎨</span>
+                                <span>Checklist Phase 2</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+PHASE 2 - VISUELS & AUDIO
+
+□ Créer images cohérentes avec Midjourney (voir Séquence 2)
+□ Générer visuels complémentaires si besoin (DALL-E, Leonardo)
+□ Produire voix-off avec ElevenLabs (voir Micro-séquence 3A)
+□ Créer musique/signature audio avec Suno (optionnel)
+□ Générer vidéos IA avec RunwayML si projet vidéo (Micro-séquence 3B)
+□ Vérifier cohérence style et branding
+
+⏱️ Temps cible : 15-25 minutes
+💡 Conseil : Lancez les générations IA en parallèle pour optimiser le temps
+</div>
+                        </div>
+
+                        <h3>Phase 3 : Assemblage et synchronisation (10-15 min)</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>⚡</span>
+                                <span>Checklist Phase 3</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+PHASE 3 - ASSEMBLAGE FINAL
+
+□ Synchroniser audio/vidéo avec CapCut (voir Micro-séquence 3C)
+□ Ajouter sous-titres stylisés par plateforme
+□ Optimiser durée et format selon destination
+□ Ajuster couleurs et contraste si besoin
+□ Export en qualité finale (HD recommandé)
+□ Créer versions adaptées multi-plateformes
+
+⏱️ Temps cible : 10-15 minutes
+🎯 Résultat : Projet finalisé prêt à publier !
+</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-title">💬 Support Discord disponible</div>
+                            <p>Pendant votre réalisation, n'hésitez pas à utiliser les canaux Discord :</p>
+                            <ul>
+                                <li><strong>#module4-projets :</strong> Partagez vos créations et inspirez-vous des autres</li>
+                                <li><strong>#entraide :</strong> Posez vos questions techniques</li>
+                                <li><strong>#feedback :</strong> Obtenez des critiques constructives</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Phase C: Portfolio -->
+                <section class="section">
+                    <h2 class="section-title">📚 Phase C : Portfolio et documentation (10-20 min)</h2>
+                    <div class="section-content">
+                        <p>Constituez un portfolio professionnel qui showcasera vos compétences en IA générative :</p>
+
+                        <h3>🏆 Vos créations finalisées</h3>
+                        <div class="portfolio-grid">
+                            <div class="portfolio-item">
+                                <div class="portfolio-placeholder">📝</div>
+                                <div class="portfolio-title">Scripts IA</div>
+                                <div class="portfolio-subtitle">ChatGPT optimisés</div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="portfolio-placeholder">🎨</div>
+                                <div class="portfolio-title">Visuels IA</div>
+                                <div class="portfolio-subtitle">Midjourney/DALL-E</div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="portfolio-placeholder">🎵</div>
+                                <div class="portfolio-title">Audio IA</div>
+                                <div class="portfolio-subtitle">ElevenLabs/Suno</div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="portfolio-placeholder">🎬</div>
+                                <div class="portfolio-title">Vidéos IA</div>
+                                <div class="portfolio-subtitle">RunwayML assemblé</div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="portfolio-placeholder">📱</div>
+                                <div class="portfolio-title">Multi-formats</div>
+                                <div class="portfolio-subtitle">TikTok/LinkedIn/YouTube</div>
+                            </div>
+                            <div class="portfolio-item">
+                                <div class="portfolio-placeholder">📋</div>
+                                <div class="portfolio-title">Documentation</div>
+                                <div class="portfolio-subtitle">Workflow reproductible</div>
+                            </div>
+                        </div>
+
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📋</span>
+                                <span>Template documentation workflow</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# MON WORKFLOW IA GÉNÉRATIVE
+
+## 🎯 Projet : [Nom de votre projet]
+**Date :** [Date de réalisation]
+**Durée totale :** [Temps passé]
+**Objectif :** [But du projet]
+
+## 🛠️ Outils utilisés
+- **Texte :** ChatGPT 4 / Claude
+- **Images :** Midjourney v6 / DALL-E 3
+- **Audio :** ElevenLabs / Murf
+- **Vidéo :** RunwayML / Pika Labs
+- **Montage :** CapCut / Descript
+
+## 📝 Prompts sauvegardés
+[Coller vos meilleurs prompts ici]
+
+## 🎨 Résultats obtenus
+- ✅ [Livrable 1]
+- ✅ [Livrable 2]
+- ✅ [Livrable 3]
+
+## 💡 Leçons apprises
+- **Ce qui a bien fonctionné :** [Vos succès]
+- **Difficultés rencontrées :** [Vos défis]
+- **Améliorations possibles :** [Vos idées]
+
+## 🚀 Prochaines étapes
+[Vos objectifs futurs avec l'IA]
+</div>
+                        </div>
+
+                        <h3>🌟 Plan d'évolution personnel</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Vos prochaines compétences à développer
+                            </div>
+                            <p>Cochez les domaines qui vous intéressent pour la suite :</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Automatisation no-code (Zapier/Make)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> IA conversationnelle (chatbots)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Analyse de données avec IA
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Code avec GitHub Copilot
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> IA marketing avancée
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Créations 3D avec IA
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Récapitulatif Final -->
+                <section class="section">
+                    <h2 class="section-title">🎉 Félicitations ! Module 4 terminé</h2>
+                    <div class="section-content">
+                        <div class="success-box">
+                            <div class="success-title">🏆 Vous maîtrisez maintenant l'IA générative !</div>
+                            <p>En complétant ce module, vous avez acquis des compétences professionnelles recherchées sur le marché. Votre portfolio témoigne de votre capacité à créer du contenu de qualité avec l'IA.</p>
+                        </div>
+
+                        <h3>✅ Compétences acquises dans le Module 4 :</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📝</div>
+                                <strong>Scripts IA</strong><br>
+                                <small>ChatGPT, prompting avancé</small>
+                            </div>
+                            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
+                                <strong>Images pro</strong><br>
+                                <small>Midjourney, DALL-E, workflows</small>
+                            </div>
+                            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎵</div>
+                                <strong>Audio IA</strong><br>
+                                <small>ElevenLabs, Suno, signatures</small>
+                            </div>
+                            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎬</div>
+                                <strong>Vidéo IA</strong><br>
+                                <small>RunwayML, synchronisation</small>
+                            </div>
+                            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📱</div>
+                                <strong>Multi-plateformes</strong><br>
+                                <small>TikTok, LinkedIn, YouTube</small>
+                            </div>
+                            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+                                <strong>Production complète</strong><br>
+                                <small>Workflow de A à Z</small>
+                            </div>
+                        </div>
+
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🎯</span>
+                                <span>Votre valeur ajoutée sur le marché</span>
+                            </div>
+                            <p><strong>Vous savez maintenant :</strong></p>
+                            <ul>
+                                <li>Créer du contenu professionnel 10x plus rapidement qu'avant</li>
+                                <li>Produire des visuels de qualité sans être designer</li>
+                                <li>Générer des voix-off sans studio d'enregistrement</li>
+                                <li>Réaliser des vidéos sans équipe de production</li>
+                                <li>Adapter vos contenus à toutes les plateformes</li>
+                                <li>Documenter vos processus pour les reproduire</li>
+                            </ul>
+                            <p><strong>💰 Impact business :</strong> Ces compétences peuvent vous faire économiser des milliers d'euros en externalisation et vous positionner comme expert en IA générative.</p>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-title">🚀 La suite de votre parcours</div>
+                            <p><strong>Module 5 : Automatisation No-Code</strong> vous attend ! Apprenez à connecter tous ces outils IA à vos workflows quotidiens avec Zapier et Make.com.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="generative_4_sync_3c.html" class="btn btn-secondary">
+                        <span>←</span> Micro-séquence 3C
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Séquence 4 - Module 4 terminé !</div>
+                        <div class="nav-title">Projet + Portfolio</div>
+                    </div>
+                    <a href="automatisation_5_overview.html" class="btn btn-primary">
+                        Module 5 : Automatisation <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-text">Module 4 terminé ! 🎉</div>
+                </div>
+
+                <!-- Module Summary -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📚 Module 4 - Récap</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Texte + Scripts + Sous-titres</div>
+                                <div class="sequence-duration">90-120 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">2</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Images professionnelles</div>
+                                <div class="sequence-duration">90-120 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">3</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Audio/Vidéo + Sync</div>
+                                <div class="sequence-duration">80-100 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon current">4</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Projet + Portfolio</div>
+                                <div class="sequence-duration">60-90 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🚀 Prochaines étapes</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">✅</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Portfolio IA créé</div>
+                                <div class="sequence-duration">Professionnel</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">5</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Module 5 : Automatisation</div>
+                                <div class="sequence-duration">6 heures</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">6</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Cas d'usage métier</div>
+                                <div class="sequence-duration">5 heures</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load theme preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Copy function
+        function copyText(button) {
+            const codeBlock = button.nextElementSibling || button.parentElement.querySelector('.code-block');
+            const text = codeBlock.textContent.replace('📋 Copier', '').trim();
+            
+            navigator.clipboard.writeText(text).then(function() {
+                button.textContent = '✅ Copié !';
+                setTimeout(function() {
+                    button.textContent = '📋 Copier';
+                }, 2000);
+            });
+        }
+
+        // Project selection
+        function selectProject(card, projectType) {
+            // Remove selection from all cards
+            document.querySelectorAll('.project-card').forEach(c => c.classList.remove('selected'));
+            
+            // Add selection to clicked card
+            card.classList.add('selected');
+            
+            // Show brief section
+            const briefSection = document.getElementById('project-brief');
+            const briefContent = document.getElementById('brief-content');
+            
+            let content = '';
+            
+            switch(projectType) {
+                case 'videos':
+                    content = `
+                        <h4>📺 Série de 3 vidéos expertise - Brief détaillé</h4>
+                        <p><strong>Concept :</strong> 3 vidéos courtes qui établissent votre expertise dans votre domaine</p>
+                        <ul>
+                            <li><strong>Vidéo 1 :</strong> "Présentation" - Qui êtes-vous et votre approche unique (30s)</li>
+                            <li><strong>Vidéo 2 :</strong> "Conseil actionnable" - Un tip concret immédiatement applicable (45s)</li>
+                            <li><strong>Vidéo 3 :</strong> "Erreur commune" - Ce qu'il ne faut pas faire et pourquoi (60s)</li>
+                        </ul>
+                        <p><strong>Formats :</strong> LinkedIn (1:1) en priorité, adaptable TikTok (9:16) et YouTube (16:9)</p>
+                        <p><strong>Workflow :</strong> Scripts ChatGPT → Voix ElevenLabs → Visuels Midjourney → Assemblage CapCut</p>
+                    `;
+                    break;
+                case 'campaign':
+                    content = `
+                        <h4>🎬 Campagne marketing complète - Brief détaillé</h4>
+                        <p><strong>Concept :</strong> Lancement coordonné d'un produit/service sur 5 supports différents</p>
+                        <ul>
+                            <li><strong>Post LinkedIn :</strong> Annonce professionnelle avec carrousel (1080x1080)</li>
+                            <li><strong>Story Instagram :</strong> Teaser dynamique 15s (1080x1920)</li>
+                            <li><strong>Vidéo TikTok :</strong> Démonstration engageante 30s (1080x1920)</li>
+                            <li><strong>Email newsletter :</strong> Contenu détaillé avec visuels</li>
+                            <li><strong>Page de vente :</strong> Landing page avec éléments visuels</li>
+                        </ul>
+                        <p><strong>Défi :</strong> Maintenir cohérence visuelle et narrative sur tous les supports</p>
+                        <p><strong>Workflow :</strong> Message central → Adaptation par plateforme → Branding unifié</p>
+                    `;
+                    break;
+                case 'course':
+                    content = `
+                        <h4>🎓 Mini-cours en ligne - Brief détaillé</h4>
+                        <p><strong>Concept :</strong> Formation courte sur votre expertise (15-20 minutes total)</p>
+                        <ul>
+                            <li><strong>Introduction :</strong> Présentation du sujet et objectifs (2-3 min)</li>
+                            <li><strong>Module 1 :</strong> Concept clé #1 avec exemples (4-5 min)</li>
+                            <li><strong>Module 2 :</strong> Concept clé #2 avec exercice (4-5 min)</li>
+                            <li><strong>Module 3 :</strong> Application pratique et next steps (4-5 min)</li>
+                        </ul>
+                        <p><strong>Format :</strong> Vidéos avec slides (16:9), voix-off professionnelle, sous-titres</p>
+                        <p><strong>Workflow :</strong> Structure pédagogique → Slides visuels → Narration → Assemblage</p>
+                    `;
+                    break;
+                case 'libre':
+                    content = `
+                        <h4>🎨 Projet libre créatif - Brief ouvert</h4>
+                        <p><strong>Concept :</strong> Libérez votre créativité ! Quelques idées inspirantes :</p>
+                        <ul>
+                            <li><strong>Podcast automatisé :</strong> Interview IA avec 2 voix + questions dynamiques</li>
+                            <li><strong>BD interactive :</strong> Histoire courte avec Midjourney + narration</li>
+                            <li><strong>Clip musical :</strong> Chanson Suno + visuels RunwayML synchronisés</li>
+                            <li><strong>Formation immersive :</strong> Avatars parlants + environnements 3D</li>
+                            <li><strong>Votre idée :</strong> Combinez les 4 modalités IA de façon originale !</li>
+                        </ul>
+                        <p><strong>Contrainte :</strong> Intégrer texte, images, audio ET vidéo dans votre création</p>
+                        <p><strong>Objectif :</strong> Créer quelque chose d'unique qui showcasera votre maîtrise IA</p>
+                    `;
+                    break;
+            }
+            
+            briefContent.innerHTML = content;
+            briefSection.style.display = 'block';
+            briefSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

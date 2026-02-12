@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 3: Make.com avancé | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            content: '🌙';
+            left: auto;
+            right: 4px;
+        }
+
+        [data-theme="dark"] .theme-toggle::after {
+            left: 27px;
+            background: var(--secondary-color);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(-2px);
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tips and Notes */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(248, 113, 113, 0.1));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--error-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Step-by-step boxes */
+        .step-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--secondary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+            margin-left: 1rem;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Visual flow diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .flow-node {
+            min-width: 120px;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .flow-node.router {
+            background: var(--secondary-color);
+        }
+
+        .flow-node.iterator {
+            background: var(--accent-color);
+        }
+
+        .flow-node.ai {
+            background: var(--warning-color);
+        }
+
+        /* Code snippet styling */
+        .code-snippet {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-snippet .comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .code-snippet .keyword {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Circle */
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) 216deg, var(--bg-tertiary) 216deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            list-style: none;
+        }
+
+        .module-nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .module-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .module-nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .module-nav-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .module-nav-link.completed {
+            color: var(--success-color);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .nav-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        /* Lesson Navigation at bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Module 5</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Séquence 3</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>120 minutes</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Make.com avancé</h1>
+                <p class="lesson-description">
+                    Découvrez la puissance de Make.com pour créer des automatisations complexes avec logiques avancées. Maîtrisez les Router, Iterator, Aggregator et intégrez l'IA pour des workflows multi-étapes sophistiqués.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Make.com : La puissance de l'automatisation avancée</h2>
+                    <div class="section-content">
+                        <p>Make.com (anciennement Integromat) est la plateforme d'automatisation la plus puissante du marché no-code. Contrairement à Zapier qui privilégie la simplicité, Make.com offre une approche visuelle et modulaire qui permet de créer des workflows complexes avec logiques conditionnelles, boucles et traitements de données avancés.</p>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🎛️</span>
+                                <span>Qu'est-ce qui distingue Make.com ?</span>
+                            </div>
+                            <p>Make.com utilise une interface visuelle basée sur des <strong>scénarios</strong> composés de <strong>modules</strong> interconnectés. Chaque module peut traiter des données, prendre des décisions et rediriger le flux selon des conditions complexes, le tout de manière intuitive et visuelle.</p>
+                        </div>
+                        
+                        <h3>Make.com vs Zapier : Puissance vs Simplicité</h3>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Critère</th>
+                                    <th>Zapier</th>
+                                    <th>Make.com</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Interface</strong></td>
+                                    <td>Linéaire, étape par étape</td>
+                                    <td>Visuelle, flowchart interactif</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Logique conditionnelle</strong></td>
+                                    <td>Limitée (paths simples)</td>
+                                    <td>Avancée (Router, Filter, Iterator)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Traitement de données</strong></td>
+                                    <td>Formatters basiques</td>
+                                    <td>Transformations complexes</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Courbe d'apprentissage</strong></td>
+                                    <td>Facile</td>
+                                    <td>Moyenne à difficile</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Prix</strong></td>
+                                    <td>Plus cher pour gros volumes</td>
+                                    <td>Excellent rapport qualité/prix</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Idéal pour</strong></td>
+                                    <td>Workflows simples, débutants</td>
+                                    <td>Automatisations complexes, pros</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>Ce que vous allez maîtriser dans cette séquence :</strong></p>
+                        <ul>
+                            <li>Interface visuelle et concepts avancés de Make.com</li>
+                            <li>Modules spécialisés : Router, Iterator, Aggregator</li>
+                            <li>Intégration d'APIs IA avec gestion optimisée des tokens</li>
+                            <li>Création d'un workflow complexe d'analyse documentaire avec IA</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Interface et concepts avancés -->
+                <section class="section">
+                    <h2 class="section-title">🎨 Interface et concepts avancés</h2>
+                    <div class="section-content">
+                        
+                        <h3>Scénarios, modules et flux de données</h3>
+                        <p>Make.com repose sur des concepts fondamentaux qu'il faut bien comprendre :</p>
+                        
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Scénarios</div>
+                            <p>Un scénario est l'équivalent d'un Zap dans Zapier. C'est un workflow complet qui automatise un processus du début à la fin. Contrairement à Zapier, un scénario peut avoir plusieurs chemins d'exécution parallèles.</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Modules</div>
+                            <p>Les modules sont les briques élémentaires d'un scénario. Chaque module accomplit une tâche spécifique : recevoir des données (trigger), les transformer, ou effectuer une action. Les modules s'enchaînent visuellement.</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Flux de données (Data Flow)</div>
+                            <p>Les données circulent entre les modules sous forme de "bundles". Chaque bundle contient toutes les informations collectées et transformées au fur et à mesure du workflow. Vous pouvez visualiser le contenu de chaque bundle.</p>
+                        </div>
+
+                        <h3>Router, Iterator, Aggregator : la logique complexe</h3>
+                        <p>Ces trois modules spéciaux sont la clé de la puissance de Make.com :</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🔀</span>
+                                <span>Router : Logique conditionnelle</span>
+                            </div>
+                            <p><strong>Fonction :</strong> Divise le flux en plusieurs chemins selon des conditions</p>
+                            <p><strong>Utilisation :</strong> "Si l'email contient 'urgent' → chemin A, sinon → chemin B"</p>
+                            <p><strong>Avantage :</strong> Gestion de logiques complexes avec plusieurs conditions</p>
+                            
+                            <div class="flow-diagram">
+                                <div class="flow-node">Email reçu</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node router">Router</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node">Urgent: Slack</div>
+                            </div>
+                            <div class="flow-diagram" style="justify-content: flex-end; margin-top: 0.5rem;">
+                                <div class="flow-node">Normal: Archive</div>
+                                <div class="flow-arrow">←</div>
+                                <div style="width: 140px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🔄</span>
+                                <span>Iterator : Traitement en boucle</span>
+                            </div>
+                            <p><strong>Fonction :</strong> Traite chaque élément d'une liste individuellement</p>
+                            <p><strong>Utilisation :</strong> "Pour chaque pièce jointe → analyse IA → sauvegarde"</p>
+                            <p><strong>Avantage :</strong> Gestion automatique des listes et arrays</p>
+                            
+                            <div class="flow-diagram">
+                                <div class="flow-node">Liste documents</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node iterator">Iterator</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node ai">Analyse IA</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node">Sauvegarde</div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📊</span>
+                                <span>Aggregator : Consolidation des données</span>
+                            </div>
+                            <p><strong>Fonction :</strong> Regroupe et consolide plusieurs bundles en un seul</p>
+                            <p><strong>Utilisation :</strong> "Collecter toutes les analyses → créer rapport global"</p>
+                            <p><strong>Avantage :</strong> Synthèse et reporting automatisés</p>
+                            
+                            <div class="flow-diagram">
+                                <div class="flow-node">Analyses multiples</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node iterator">Aggregator</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node">Rapport unique</div>
+                            </div>
+                        </div>
+
+                        <h3>Gestion d'erreurs et retry logic avancée</h3>
+                        <p>Make.com offre des outils sophistiqués pour gérer les erreurs et assurer la robustesse de vos automatisations :</p>
+
+                        <h4>🛡️ Types de gestion d'erreurs</h4>
+                        <ul>
+                            <li><strong>Break :</strong> Arrête le scénario en cas d'erreur</li>
+                            <li><strong>Ignore :</strong> Continue le workflow même en cas d'erreur</li>
+                            <li><strong>Retry :</strong> Réessaie automatiquement avec délai personnalisé</li>
+                            <li><strong>Commit :</strong> Valide les données traitées avant la fin</li>
+                            <li><strong>Rollback :</strong> Annule les modifications en cas d'échec</li>
+                        </ul>
+
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>🔧</span>
+                                <span>Stratégie de gestion d'erreurs recommandée</span>
+                            </div>
+                            <ul>
+                                <li><strong>APIs externes :</strong> Retry avec backoff exponentiel</li>
+                                <li><strong>Traitements IA :</strong> Timeout élevé + retry en cas d'échec</li>
+                                <li><strong>Opérations critiques :</strong> Error handler avec notification</li>
+                                <li><strong>Données sensibles :</strong> Rollback automatique en cas d'erreur</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Workflows multi-étapes avec IA -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Workflows multi-étapes avec IA</h2>
+                    <div class="section-content">
+                        <p>La vraie puissance de Make.com réside dans sa capacité à orchestrer des workflows complexes intégrant l'IA. Voici trois exemples concrets de pipelines sophistiqués :</p>
+
+                        <h3>1. Pipeline de contenu intelligent</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📝</span>
+                                <span>Du brainstorming à la publication automatisée</span>
+                            </div>
+                            
+                            <div class="flow-diagram">
+                                <div class="flow-node">Idée initiale</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node ai">Recherche IA</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node router">Router</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node">Blog/LinkedIn</div>
+                            </div>
+                            
+                            <h4>Détail des étapes :</h4>
+                            <ol>
+                                <li><strong>Trigger :</strong> Nouvelle ligne dans un tableau d'idées de contenu</li>
+                                <li><strong>IA Research :</strong> GPT enrichit l'idée avec des données récentes et tendances</li>
+                                <li><strong>IA Writing :</strong> Génération du contenu adapté au format (article blog vs post LinkedIn)</li>
+                                <li><strong>Router :</strong> Redirection selon le type de contenu et la plateforme cible</li>
+                                <li><strong>IA Images :</strong> Génération d'images adaptées avec DALL-E</li>
+                                <li><strong>Publication :</strong> Scheduling automatique sur les plateformes</li>
+                                <li><strong>Tracking :</strong> Mise à jour du tableau avec les liens et métriques</li>
+                            </ol>
+                        </div>
+
+                        <h3>2. Analyse de données intelligente</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📊</span>
+                                <span>Pipeline d'analyse de données automatisé</span>
+                            </div>
+                            
+                            <div class="flow-diagram">
+                                <div class="flow-node">Import données</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node iterator">Iterator</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node ai">Cleaning IA</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node iterator">Aggregator</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node">Rapport final</div>
+                            </div>
+                            
+                            <h4>Processus détaillé :</h4>
+                            <ol>
+                                <li><strong>Import :</strong> Réception de fichiers CSV/Excel via email ou cloud</li>
+                                <li><strong>Iterator :</strong> Traitement ligne par ligne des données</li>
+                                <li><strong>IA Cleaning :</strong> Détection d'anomalies, correction des erreurs, standardisation</li>
+                                <li><strong>IA Analysis :</strong> Identification de patterns, tendances et insights</li>
+                                <li><strong>Aggregator :</strong> Consolidation des analyses individuelles</li>
+                                <li><strong>Report Generation :</strong> Création automatique de visualisations et résumé exécutif</li>
+                                <li><strong>Distribution :</strong> Envoi du rapport aux stakeholders</li>
+                            </ol>
+                        </div>
+
+                        <h3>3. Support client intelligent</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎫</span>
+                                <span>Workflow de support client omnicanal</span>
+                            </div>
+                            
+                            <div class="flow-diagram">
+                                <div class="flow-node">Ticket entrant</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node ai">Analyse IA</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node router">Router</div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-node">Réponse auto</div>
+                            </div>
+                            
+                            <h4>Logique de routage intelligent :</h4>
+                            <ul>
+                                <li><strong>Urgence faible + FAQ :</strong> Réponse automatique avec base de connaissances</li>
+                                <li><strong>Urgence moyenne :</strong> Création de ticket assigné selon expertise</li>
+                                <li><strong>Urgence élevée :</strong> Escalade immédiate + notification manager</li>
+                                <li><strong>Sentiment négatif :</strong> Priorisation + template d'excuse personnalisé</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>⚠️</span>
+                                <span>Attention aux limites</span>
+                            </div>
+                            <p>Les workflows complexes peuvent rapidement consommer vos opérations mensuelles. Surveillez toujours votre usage et optimisez les appels IA pour éviter les surcoûts. Une bonne pratique est de tester avec de petits volumes avant de passer en production.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- APIs IA avancées dans Make -->
+                <section class="section">
+                    <h2 class="section-title">🔗 APIs IA avancées dans Make</h2>
+                    <div class="section-content">
+                        
+                        <h3>Configuration HTTP requests pour OpenAI</h3>
+                        <p>Make.com n'a pas d'app native OpenAI, mais son module HTTP vous permet de configurer des appels API très sophistiqués :</p>
+
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Configuration de base</div>
+                            <div class="code-snippet">
+<span class="comment">// URL de l'API OpenAI</span>
+<span class="keyword">URL:</span> https://api.openai.com/v1/chat/completions
+
+<span class="comment">// Headers requis</span>
+<span class="keyword">Authorization:</span> Bearer {{YOUR_API_KEY}}
+<span class="keyword">Content-Type:</span> application/json
+
+<span class="comment">// Body JSON</span>
+{
+  "model": "gpt-4",
+  "messages": [
+    {
+      "role": "user", 
+      "content": "{{1.content}}"
+    }
+  ],
+  "temperature": 0.7,
+  "max_tokens": 1000
+}
+            </div>
+        </div>
+
+        <div class="step-box">
+            <div class="step-number">2</div>
+            <div class="step-title">Gestion avancée des prompts</div>
+            <p>Utilisez les variables Make.com pour créer des prompts dynamiques :</p>
+            <div class="code-snippet">
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "Tu es un expert en {{1.domain}}. Réponds de manière {{1.tone}}."
+    },
+    {
+      "role": "user", 
+      "content": "Analyse ce document: {{1.document_content}}"
+    }
+  ]
+}
+            </div>
+        </div>
+
+        <h3>Gestion des tokens et optimisation des coûts</h3>
+        <p>L'optimisation des coûts est cruciale lors de l'utilisation d'APIs IA dans des workflows automatisés :</p>
+
+        <div class="tip-box">
+            <div class="tip-title">
+                <span>💰</span>
+                <span>Stratégies d'optimisation des coûts</span>
+            </div>
+            <ul>
+                <li><strong>Modèles adaptés :</strong> GPT-3.5 pour tâches simples, GPT-4 pour l'analyse complexe</li>
+                <li><strong>Limitation de tokens :</strong> max_tokens ajusté selon le besoin réel</li>
+                <li><strong>Cache intelligent :</strong> Stockage des résultats fréquents dans Google Sheets</li>
+                <li><strong>Batch processing :</strong> Regroupement de plusieurs demandes en une seule</li>
+                <li><strong>Monitoring :</strong> Suivi quotidien des coûts avec alertes</li>
+            </ul>
+        </div>
+
+        <h3>Traitement par batch et optimisation</h3>
+        <div class="interactive-box">
+            <div class="interactive-title">
+                <span>⚡</span>
+                <span>Optimisation par lot (Batch Processing)</span>
+            </div>
+            <p>Au lieu de traiter chaque élément individuellement, Make.com permet de regrouper les données :</p>
+            
+            <h4>Exemple : Analyse de 100 commentaires clients</h4>
+            <ul>
+                <li><strong>Méthode inefficace :</strong> 100 appels API séparés = 100x le coût</li>
+                <li><strong>Méthode optimisée :</strong> 1 appel avec tous les commentaires = 1x le coût</li>
+            </ul>
+            
+            <div class="code-snippet">
+<span class="comment">// Prompt batch optimisé</span>
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Analyse le sentiment de ces commentaires et donne un score 1-5 pour chacun:\n{{join(1.comments, '\n---\n')}}"
+    }
+  ]
+}
+            </div>
+        </div>
+
+        <h3>Webhooks entrants pour déclenchement en temps réel</h3>
+        <p>Les webhooks Make.com permettent de créer des automatisations ultra-réactives :</p>
+
+        <div class="step-box">
+            <div class="step-number">1</div>
+            <div class="step-title">Configuration du webhook</div>
+            <p>Make.com génère une URL unique que vous pouvez utiliser dans n'importe quelle application.</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-number">2</div>
+            <div class="step-title">Authentification et sécurité</div>
+            <p>Ajoutez des vérifications de sécurité avec des tokens secrets pour éviter les appels malveillants.</p>
+        </div>
+
+        <div class="step-box">
+            <div class="step-number">3</div>
+            <div class="step-title">Traitement en temps réel</div>
+            <p>Le scénario se déclenche instantanément à la réception des données, parfait pour des alertes urgentes.</p>
+        </div>
+
+        <div class="interactive-box">
+            <div class="interactive-title">
+                <span>🚨</span>
+                <span>Cas d'usage : Monitoring intelligent de site web</span>
+            </div>
+            <p><strong>Workflow :</strong> Site web → Webhook Make.com → IA (analyse erreur) → Slack (alerte équipe) → Jira (ticket automatique)</p>
+            <p><strong>Avantage :</strong> Réaction en moins de 30 secondes à tout problème détecté</p>
+        </div>
+    </div>
+</section>
+
+<!-- Atelier pratique Make -->
+<section class="section">
+    <h2 class="section-title">🛠️ Atelier pratique : Analyse documentaire intelligente</h2>
+    <div class="section-content">
+        <p>Nous allons créer un workflow complexe qui automatise l'analyse, le tri et la notification de documents entrants avec l'IA.</p>
+
+        <div class="definition-box">
+            <div class="definition-title">
+                <span>🎯</span>
+                <span>Objectif de l'atelier</span>
+            </div>
+            <p>Créer un système qui reçoit des documents (emails, upload cloud), les analyse avec l'IA pour déterminer leur importance et contenu, les classe automatiquement et notifie l'équipe appropriée selon le type de document.</p>
+        </div>
+
+        <h3>Architecture du workflow</h3>
+        <div class="flow-diagram">
+            <div class="flow-node">Nouveau document</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node ai">Analyse IA</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node router">Router</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">Actions ciblées</div>
+        </div>
+
+        <h3>Étape 1 : Configuration du trigger</h3>
+        <div class="step-box">
+            <div class="step-number">1</div>
+            <div class="step-title">Webhook personnalisé</div>
+            <p><strong>Module :</strong> Webhooks → Custom webhook</p>
+            <p><strong>Configuration :</strong> Générer une URL unique qui acceptera les documents de diverses sources</p>
+            <p><strong>Sources possibles :</strong> Email (Zapier bridge), Google Drive, Dropbox, upload direct</p>
+        </div>
+
+        <h3>Étape 2 : Analyse IA du document</h3>
+        <div class="step-box">
+            <div class="step-number">2</div>
+            <div class="step-title">Extraction et analyse</div>
+            <p><strong>Module :</strong> HTTP → Make a request (vers OpenAI)</p>
+            <p><strong>Prompt IA :</strong></p>
+            <div class="code-snippet">
+"Analyse ce document et fournis:
+1. Type: facture|contrat|CV|rapport|autre
+2. Urgence: 1-5 (5=très urgent)
+3. Mots-clés: 3-5 mots importants
+4. Résumé: 2 phrases max
+5. Équipe cible: finance|RH|commercial|direction
+6. Actions recommandées
+
+Document: {{1.content}}"
+            </div>
+        </div>
+
+        <h3>Étape 3 : Routage intelligent</h3>
+        <div class="step-box">
+            <div class="step-number">3</div>
+            <div class="step-title">Router avec conditions multiples</div>
+            <p><strong>Module :</strong> Flow control → Router</p>
+            <p><strong>Routes configurées :</strong></p>
+            <ul>
+                <li><strong>Route 1 :</strong> Urgence ≥ 4 → Notification immédiate</li>
+                <li><strong>Route 2 :</strong> Type = "facture" → Équipe finance</li>
+                <li><strong>Route 3 :</strong> Type = "CV" → Équipe RH</li>
+                <li><strong>Route 4 :</strong> Type = "contrat" → Équipe juridique</li>
+                <li><strong>Route 5 :</strong> Autres → Archivage standard</li>
+            </ul>
+        </div>
+
+        <h3>Étape 4 : Actions spécialisées par route</h3>
+
+        <div class="step-box">
+            <div class="step-number">4</div>
+            <div class="step-title">Actions par équipe</div>
+            
+            <h4>Route Urgente :</h4>
+            <ul>
+                <li>Slack → Message direct au manager</li>
+                <li>Email → Notification avec pièce jointe</li>
+                <li>SMS → Alerte si hors heures de bureau</li>
+            </ul>
+
+            <h4>Route Finance :</h4>
+            <ul>
+                <li>Google Sheets → Ajout ligne dans tableau de suivi</li>
+                <li>Trello → Création carte avec échéance</li>
+                <li>Slack #finance → Notification équipe</li>
+            </ul>
+
+            <h4>Route RH :</h4>
+            <ul>
+                <li>ATS (système RH) → Création candidat</li>
+                <li>Google Drive → Classement dossier candidature</li>
+                <li>Calendly → Invitation à planifier entretien</li>
+            </ul>
+        </div>
+
+        <h3>Gestion des conditions et routage intelligent</h3>
+        <div class="tip-box">
+            <div class="tip-title">
+                <span>🧠</span>
+                <span>Logiques conditionnelles avancées</span>
+            </div>
+            <p>Dans Make.com, vous pouvez combiner plusieurs conditions :</p>
+            <ul>
+                <li><strong>ET logique :</strong> Urgence ≥ 4 AND Type = "contrat"</li>
+                <li><strong>OU logique :</strong> Équipe = "finance" OR Équipe = "direction"</li>
+                <li><strong>Expressions régulières :</strong> Mots-clés contains "urgent|ASAP|immédiat"</li>
+                <li><strong>Fonctions date :</strong> Heure actuelle > 18h → Route urgence</li>
+            </ul>
+        </div>
+
+        <h3>Monitoring et optimisation des performances</h3>
+        <div class="interactive-box">
+            <div class="interactive-title">
+                <span>📊</span>
+                <span>Métriques à surveiller</span>
+            </div>
+            <ul>
+                <li><strong>Taux de succès :</strong> % d'exécutions sans erreur (objectif : >95%)</li>
+                <li><strong>Temps d'exécution :</strong> Délai moyen de traitement (objectif : <2 min)</li>
+                <li><strong>Précision IA :</strong> % de routage correct (validation manuelle échantillon)</li>
+                <li><strong>Coût par document :</strong> Optimisation continue des appels IA</li>
+                <li><strong>Satisfaction utilisateur :</strong> Feedback sur la pertinence des actions</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-title">
+                <span>🔧</span>
+                <span>Conseils de debugging</span>
+            </div>
+            <ul>
+                <li><strong>Mode test :</strong> Utilisez des documents de test avant la production</li>
+                <li><strong>Logs détaillés :</strong> Activez le logging pour chaque module critique</li>
+                <li><strong>Error handlers :</strong> Prévoyez des fallbacks pour chaque étape</li>
+                <li><strong>Données d'exemple :</strong> Testez avec différents types de documents</li>
+                <li><strong>Monitoring continu :</strong> Alertes automatiques en cas de panne</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Quiz interactif -->
+<section class="section">
+    <div class="quiz-container">
+        <h2 class="quiz-title">
+            <span>🧠</span>
+            Quiz : Maîtrisez-vous Make.com avancé ?
+        </h2>
+        
+        <div class="quiz-question">
+            Quel module Make.com utiliseriez-vous pour traiter automatiquement chaque élément d'une liste de 50 documents ?
+        </div>
+        
+        <ul class="quiz-options">
+            <li class="quiz-option" onclick="selectOption(this, false)">
+                Router pour rediriger selon le type de document
+            </li>
+            <li class="quiz-option" onclick="selectOption(this, true)">
+                Iterator pour traiter chaque document individuellement
+            </li>
+            <li class="quiz-option" onclick="selectOption(this, false)">
+                Aggregator pour regrouper tous les documents
+            </li>
+            <li class="quiz-option" onclick="selectOption(this, false)">
+                HTTP Module pour appeler une API externe
+            </li>
+        </ul>
+        
+        <div class="quiz-feedback">
+            <p></p>
+        </div>
+    </div>
+</section>
+
+<!-- Navigation -->
+<div class="lesson-navigation">
+    <div class="breadcrumb">
+        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+        <span>></span>
+        <a href="automatisation_5_overview.html" class="breadcrumb-link">Module 5: Automatisation</a>
+        <span>></span>
+        <span class="breadcrumb-current">Make.com avancé</span>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+        <a href="automatisation_5_zapier_2.html" class="btn btn-secondary">
+            <span>←</span> Séquence 2: Zapier
+        </a>
+        <a href="automatisation_5_projet_4.html" class="btn btn-primary">
+            Séquence 4: Projet personnalisé <span>→</span>
+        </a>
+    </div>
+</div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Progression</h3>
+                    <div class="progress-circle">
+                        <span class="progress-text">4/5</span>
+                    </div>
+                    <div style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        Séquence 3 sur 4 (+ overview)
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="module-nav">
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_overview.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Vue d'ensemble</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_introduction_1.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Introduction et stratégie</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_zapier_2.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Zapier et workflows IA</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_make_3.html" class="module-nav-link active">
+                                <div class="nav-icon current">3</div>
+                                <span>Make.com avancé</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_projet_4.html" class="module-nav-link">
+                                <div class="nav-icon locked">4</div>
+                                <span>Projet personnalisé</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">💡 Points clés</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>🔀 Router :</strong> Logique conditionnelle complexe
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>🔄 Iterator :</strong> Traitement en boucle automatique
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>💰 Optimisation :</strong> Batch processing pour réduire les coûts
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🚀 Prochaines étapes</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Dans la dernière séquence, vous concevrez et développerez votre propre projet d'automatisation personnalisé de A à Z.
+                    </p>
+                    <a href="automatisation_5_projet_4.html" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        Projet final
+                    </a>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            element.classList.add('selected');
+            
+            // Show correct/incorrect state
+            if (isCorrect) {
+                element.classList.add('correct');
+                showFeedback('Correct ! L\'Iterator est le module spécialement conçu pour traiter chaque élément d\'une liste individuellement. Il parcourt automatiquement tous les éléments et exécute les modules suivants pour chacun d\'eux, ce qui est parfait pour traiter 50 documents un par un.', true);
+            } else {
+                element.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(option => {
+                    if (option.onclick.toString().includes('true')) {
+                        option.classList.add('correct');
+                    }
+                });
+                showFeedback('Pas tout à fait. Le Router rediriger selon des conditions, l\'Aggregator regroupe des données, et le HTTP Module fait des appels API. Pour traiter chaque élément d\'une liste séparément, c\'est l\'Iterator qu\'il faut utiliser.', false);
+            }
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.querySelector('.quiz-feedback');
+            const feedbackText = feedback.querySelector('p');
+            
+            feedbackText.textContent = message;
+            feedback.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(5, 3);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

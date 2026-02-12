@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types d'IA et Safari IA - Module 1 | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            box-shadow: var(--glow);
+            color: var(--primary-color);
+        }
+
+        /* Simple Breadcrumbs for Navigation */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '⟩';
+            margin: 0 1rem;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .breadcrumb-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .breadcrumb-link:hover {
+            background: var(--glass-bg);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Analogy Box for Understanding */
+        .analogy-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .analogy-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Safari IA Styles */
+        .safari-container {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .safari-stop {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .safari-stop:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .safari-stop.completed {
+            border-color: var(--success-color);
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.05), rgba(6, 182, 212, 0.05));
+        }
+
+        .safari-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .safari-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .safari-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .safari-content {
+            margin-bottom: 1rem;
+        }
+
+        .safari-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .check-button {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-button:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .check-button:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Detective Exercise Styles */
+        .detective-case {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .detective-case.answered {
+            border-color: var(--primary-color);
+        }
+
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .case-number {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .verdict-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .verdict-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .verdict-btn.ai {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .verdict-btn.not-ai {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .verdict-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .verdict-btn.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .case-explanation {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .case-explanation.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+            }
+        }
+
+        /* Sidebar for Navigation and Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Tracking */
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 75%, var(--bg-tertiary) 75%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border-radius: 50%;
+            background: var(--card-bg);
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            list-style: none;
+        }
+
+        .module-nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .module-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .module-nav-link:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+
+        .module-nav-link.active {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            color: var(--primary-color);
+            font-weight: 600;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .nav-icon.completed { background: var(--success-color); }
+        .nav-icon.current { background: var(--primary-color); }
+        .nav-icon.locked { background: var(--text-muted); }
+
+        /* Clean Navigation Between Lessons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .verdict-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="fondamentaux_1_overview.html" class="breadcrumb-link">Module 1: Fondamentaux de l'IA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Types d'IA et Safari IA</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📚</span>
+                        <span>Séquence 3 sur 4</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>85 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Débutant</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Types d'IA et Safari IA</h1>
+                <p class="lesson-description">
+                    Explorez les différentes familles de technologies IA et partez en safari pour découvrir l'IA qui vous entoure déjà !
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 L'IA sous toutes ses formes</h2>
+                    <div class="section-content">
+                        <p>Maintenant que vous connaissez <strong>ce qu'est l'IA</strong> (séquence 1) et <strong>son histoire</strong> (séquence 2), plongeons dans la diversité fascinante des technologies IA qui nous entourent !</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🤯</span>
+                                Spoiler alert
+                            </div>
+                            <p>Vous utilisez probablement déjà <strong>10-15 outils IA différents</strong> chaque jour sans vous en rendre compte !</p>
+                        </div>
+
+                        <h4>🎪 Au programme de cette exploration :</h4>
+                        <ul>
+                            <li><strong>Panorama des technologies</strong> : ML, DL, LLM expliqués simplement</li>
+                            <li><strong>Types d'IA par usage</strong> : De la recommandation à la création</li>
+                            <li><strong>Safari IA</strong> : Exploration guidée de 6 outils que vous connaissez</li>
+                            <li><strong>Détective IA</strong> : Exercice "Est-ce vraiment de l'IA ?"</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Panorama des technologies -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Panorama des technologies IA</h2>
+                    <div class="section-content">
+                        
+                        <h3>1. Machine Learning (ML) - L'apprentissage par l'exemple</h3>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🎯</span>
+                                Principe de base
+                            </div>
+                            <p>Imaginez apprendre à reconnaître les chiens en regardant 10 000 photos de chiens. C'est exactement comme ça que fonctionne le Machine Learning !</p>
+                        </div>
+
+                        <h4>🔧 Comment ça marche :</h4>
+                        <ul>
+                            <li>On montre des milliers d'exemples à l'algorithme</li>
+                            <li>Il trouve des patterns (motifs répétitifs)</li>
+                            <li>Il peut ensuite faire des prédictions sur de nouveaux cas</li>
+                        </ul>
+
+                        <h4>📱 Exemples concrets :</h4>
+                        <ul>
+                            <li><strong>Filtres anti-spam</strong> : Appris sur des millions d'emails</li>
+                            <li><strong>Recommandations Netflix</strong> : Basées sur vos goûts et ceux des autres</li>
+                            <li><strong>Détection de fraude</strong> : Reconnaissance de comportements suspects</li>
+                        </ul>
+
+                        <div class="analogy-box">
+                            <div class="analogy-title">
+                                <span>💡</span>
+                                Analogie simple
+                            </div>
+                            <p>Un enfant qui apprend à reconnaître les voitures en en voyant beaucoup dans la rue.</p>
+                        </div>
+
+                        <h3>2. Deep Learning (DL) - Les réseaux de neurones profonds</h3>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🎯</span>
+                                Principe de base
+                            </div>
+                            <p>Le Deep Learning, c'est du Machine Learning "survitaminé" qui imite (très grossièrement) le fonctionnement du cerveau humain.</p>
+                        </div>
+
+                        <h4>🧠 Comment ça marche :</h4>
+                        <ul>
+                            <li>Réseaux de "neurones artificiels" organisés en couches</li>
+                            <li>Chaque couche détecte des caractéristiques de plus en plus complexes</li>
+                            <li>Plus c'est "profond" (nombreuses couches), plus c'est puissant</li>
+                        </ul>
+
+                        <h4>📱 Exemples concrets :</h4>
+                        <ul>
+                            <li><strong>Reconnaissance faciale</strong> (Facebook, iPhone Face ID)</li>
+                            <li><strong>Voitures autonomes</strong> (vision et décision en temps réel)</li>
+                            <li><strong>Traduction automatique</strong> (Google Translate, DeepL)</li>
+                            <li><strong>Génération d'images</strong> (DALL-E, Midjourney)</li>
+                        </ul>
+
+                        <div class="analogy-box">
+                            <div class="analogy-title">
+                                <span>💡</span>
+                                Analogie simple
+                            </div>
+                            <p>Un détective qui regarde d'abord les formes générales, puis les détails, puis les micro-détails pour identifier un suspect.</p>
+                        </div>
+
+                        <h3>3. Large Language Models (LLM) - Les virtuoses du langage</h3>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🎯</span>
+                                Principe de base
+                            </div>
+                            <p>Des IA spécialisées dans la compréhension et la génération de texte, entraînées sur une grande partie d'Internet !</p>
+                        </div>
+
+                        <h4>📚 Comment ça marche :</h4>
+                        <ul>
+                            <li>Entraînés sur des milliards de textes (livres, articles, sites web)</li>
+                            <li>Apprennent les patterns du langage humain</li>
+                            <li>Peuvent prédire le mot suivant dans une phrase avec une précision impressionnante</li>
+                        </ul>
+
+                        <h4>📱 Exemples concrets :</h4>
+                        <ul>
+                            <li><strong>ChatGPT, Claude, Gemini</strong> : Conversation naturelle</li>
+                            <li><strong>GitHub Copilot</strong> : Génération de code</li>
+                            <li><strong>Jasper, Copy.ai</strong> : Rédaction marketing</li>
+                            <li><strong>Notion AI</strong> : Assistance à l'écriture</li>
+                        </ul>
+
+                        <div class="analogy-box">
+                            <div class="analogy-title">
+                                <span>💡</span>
+                                Analogie simple
+                            </div>
+                            <p>Un écrivain génial qui a lu tous les livres de la bibliothèque et peut écrire dans n'importe quel style.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Types d'IA par usage -->
+                <section class="section">
+                    <h2 class="section-title">🎪 Types d'IA par usage quotidien</h2>
+                    <div class="section-content">
+                        
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary-color);">
+                                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">🔍 IA de Recommandation</h4>
+                                <p><strong>Ce qu'elle fait :</strong> Suggère du contenu personnalisé</p>
+                                <p><strong>Où on la trouve :</strong> Netflix ("Films que vous pourriez aimer"), Spotify (Playlists Discover Weekly), Amazon ("Les clients ayant acheté ceci ont aussi acheté"), TikTok/Instagram (Algorithme du feed)</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--accent-color);">
+                                <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;">🗣️ IA Conversationnelle</h4>
+                                <p><strong>Ce qu'elle fait :</strong> Comprend et répond au langage naturel</p>
+                                <p><strong>Où on la trouve :</strong> Siri, Alexa, Google Assistant, Chatbots de sites e-commerce, ChatGPT, Claude, Assistants client des banques</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success-color);">
+                                <h4 style="color: var(--success-color); margin-bottom: 0.5rem;">👁️ IA de Vision</h4>
+                                <p><strong>Ce qu'elle fait :</strong> Analyse et comprend les images/vidéos</p>
+                                <p><strong>Où on la trouve :</strong> Reconnaissance faciale (photos iPhone/Google), Filtres Instagram/Snapchat, Google Lens (reconnaissance d'objets), Voitures autonomes (détection d'obstacles)</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning-color);">
+                                <h4 style="color: var(--warning-color); margin-bottom: 0.5rem;">✍️ IA Générative</h4>
+                                <p><strong>Ce qu'elle fait :</strong> Crée du contenu original</p>
+                                <p><strong>Où on la trouve :</strong> DALL-E, Midjourney (images), ChatGPT (texte), Synthesia (vidéos avec avatars), AIVA (composition musicale)</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--error-color);">
+                                <h4 style="color: var(--error-color); margin-bottom: 0.5rem;">🔒 IA de Classification/Filtrage</h4>
+                                <p><strong>Ce qu'elle fait :</strong> Trie et filtre automatiquement</p>
+                                <p><strong>Où on la trouve :</strong> Gmail (détection spam), Modération Facebook/YouTube, Détection de fraude bancaire, Antivirus (détection malwares)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Safari IA -->
+                <section class="section">
+                    <h2 class="section-title">🦁 ATELIER SAFARI IA : Exploration guidée</h2>
+                    <div class="section-content">
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                Mission
+                            </div>
+                            <p>Découvrir l'IA cachée dans 6 outils que vous utilisez probablement ! Cliquez sur "Exploré !" après avoir testé chaque outil.</p>
+                        </div>
+
+                        <div class="safari-container">
+                            <!-- Safari Stop 1 -->
+                            <div class="safari-stop" data-stop="1">
+                                <div class="safari-header">
+                                    <div class="safari-number">1</div>
+                                    <div class="safari-title">Google Translate</div>
+                                </div>
+                                <div class="safari-content">
+                                    <p><strong>🔍 Cherchez :</strong></p>
+                                    <ul>
+                                        <li>Traduisez une phrase complexe du français vers le japonais</li>
+                                        <li>Remarquez comme il comprend le contexte et les nuances</li>
+                                        <li>Testez la traduction d'image avec votre téléphone</li>
+                                    </ul>
+                                    <p><strong>🧠 IA en action :</strong> Deep Learning pour traduction neuronale</p>
+                                </div>
+                                <div class="safari-actions">
+                                    <button class="check-button" onclick="markSafariCompleted(1)">Exploré ! ✓</button>
+                                </div>
+                            </div>
+
+                            <!-- Safari Stop 2 -->
+                            <div class="safari-stop" data-stop="2">
+                                <div class="safari-header">
+                                    <div class="safari-number">2</div>
+                                    <div class="safari-title">Siri/Google Assistant/Alexa</div>
+                                </div>
+                                <div class="safari-content">
+                                    <p><strong>🔍 Cherchez :</strong></p>
+                                    <ul>
+                                        <li>"Dis-moi une blague"</li>
+                                        <li>"Quel temps fera-t-il demain ?"</li>
+                                        <li>"Rappelle-moi d'appeler maman à 18h"</li>
+                                    </ul>
+                                    <p><strong>🧠 IA en action :</strong> Reconnaissance vocale + Traitement du langage naturel</p>
+                                </div>
+                                <div class="safari-actions">
+                                    <button class="check-button" onclick="markSafariCompleted(2)">Exploré ! ✓</button>
+                                </div>
+                            </div>
+
+                            <!-- Safari Stop 3 -->
+                            <div class="safari-stop" data-stop="3">
+                                <div class="safari-header">
+                                    <div class="safari-number">3</div>
+                                    <div class="safari-title">Netflix/Spotify Recommendations</div>
+                                </div>
+                                <div class="safari-content">
+                                    <p><strong>🔍 Cherchez :</strong></p>
+                                    <ul>
+                                        <li>Section "Recommandé pour vous"</li>
+                                        <li>Observez comme les suggestions changent selon vos goûts</li>
+                                        <li>Testez la radio personnalisée Spotify</li>
+                                    </ul>
+                                    <p><strong>🧠 IA en action :</strong> Filtrage collaboratif + Machine Learning</p>
+                                </div>
+                                <div class="safari-actions">
+                                    <button class="check-button" onclick="markSafariCompleted(3)">Exploré ! ✓</button>
+                                </div>
+                            </div>
+
+                            <!-- Safari Stop 4 -->
+                            <div class="safari-stop" data-stop="4">
+                                <div class="safari-header">
+                                    <div class="safari-number">4</div>
+                                    <div class="safari-title">Instagram/TikTok Feed</div>
+                                </div>
+                                <div class="safari-content">
+                                    <p><strong>🔍 Cherchez :</strong></p>
+                                    <ul>
+                                        <li>Observez votre feed personnalisé</li>
+                                        <li>Remarquez les publicités ultra-ciblées</li>
+                                        <li>Testez les filtres de réalité augmentée</li>
+                                    </ul>
+                                    <p><strong>🧠 IA en action :</strong> Algorithme de recommandation + Vision par ordinateur</p>
+                                </div>
+                                <div class="safari-actions">
+                                    <button class="check-button" onclick="markSafariCompleted(4)">Exploré ! ✓</button>
+                                </div>
+                            </div>
+
+                            <!-- Safari Stop 5 -->
+                            <div class="safari-stop" data-stop="5">
+                                <div class="safari-header">
+                                    <div class="safari-number">5</div>
+                                    <div class="safari-title">Gmail Smart Features</div>
+                                </div>
+                                <div class="safari-content">
+                                    <p><strong>🔍 Cherchez :</strong></p>
+                                    <ul>
+                                        <li>Réponses automatiques suggérées</li>
+                                        <li>Détection automatique des spams</li>
+                                        <li>Tri automatique des emails (Principal/Promotions/Social)</li>
+                                    </ul>
+                                    <p><strong>🧠 IA en action :</strong> Classification de texte + Génération de langage</p>
+                                </div>
+                                <div class="safari-actions">
+                                    <button class="check-button" onclick="markSafariCompleted(5)">Exploré ! ✓</button>
+                                </div>
+                            </div>
+
+                            <!-- Safari Stop 6 -->
+                            <div class="safari-stop" data-stop="6">
+                                <div class="safari-header">
+                                    <div class="safari-number">6</div>
+                                    <div class="safari-title">Google Photos</div>
+                                </div>
+                                <div class="safari-content">
+                                    <p><strong>🔍 Cherchez :</strong></p>
+                                    <ul>
+                                        <li>Recherchez "chien" dans vos photos</li>
+                                        <li>Testez la reconnaissance de personnes</li>
+                                        <li>Explorez les albums automatiques créés</li>
+                                    </ul>
+                                    <p><strong>🧠 IA en action :</strong> Vision par ordinateur + Classification d'images</p>
+                                </div>
+                                <div class="safari-actions">
+                                    <button class="check-button" onclick="markSafariCompleted(6)">Exploré ! ✓</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="safari-completion" style="display: none;">
+                            <div class="definition-box">
+                                <div class="definition-title">
+                                    <span>🎉</span>
+                                    Safari terminé !
+                                </div>
+                                <p>Félicitations ! Vous venez de découvrir que l'IA fait déjà partie intégrante de votre quotidien numérique. Passons maintenant à l'exercice détective !</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exercice Détective -->
+                <section class="section">
+                    <h2 class="section-title">🕵️ EXERCICE DÉTECTIVE : "Est-ce vraiment de l'IA ?"</h2>
+                    <div class="section-content">
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                Mission
+                            </div>
+                            <p>Distinguer la vraie IA du marketing ! Pour chaque cas, dites si c'est vraiment de l'IA ou non.</p>
+                        </div>
+
+                        <!-- Cas 1 -->
+                        <div class="detective-case" data-case="1">
+                            <div class="case-header">
+                                <div class="case-number">1</div>
+                                <div>
+                                    <h4>Calculatrice iPhone</h4>
+                                    <p><strong>Fonction :</strong> Calcule 2+2=4</p>
+                                </div>
+                            </div>
+                            <div class="verdict-buttons">
+                                <button class="verdict-btn ai" onclick="selectVerdict(1, false, this)">✅ C'est de l'IA</button>
+                                <button class="verdict-btn not-ai" onclick="selectVerdict(1, true, this)">❌ Pas d'IA</button>
+                            </div>
+                            <div class="case-explanation case-explanation-correct">
+                                <strong>✅ Correct !</strong> <strong>Pas d'IA</strong> - Simple algorithme mathématique programmé.
+                            </div>
+                            <div class="case-explanation case-explanation-incorrect">
+                                <strong>❌ Incorrect !</strong> Ce n'est <strong>pas de l'IA</strong> - Juste un algorithme mathématique programmé, aucun apprentissage impliqué.
+                            </div>
+                        </div>
+
+                        <!-- Cas 2 -->
+                        <div class="detective-case" data-case="2">
+                            <div class="case-header">
+                                <div class="case-number">2</div>
+                                <div>
+                                    <h4>Correction automatique (Autocorrect)</h4>
+                                    <p><strong>Fonction :</strong> Corrige "bonour" en "bonjour"</p>
+                                </div>
+                            </div>
+                            <div class="verdict-buttons">
+                                <button class="verdict-btn ai" onclick="selectVerdict(2, true, this)">✅ C'est de l'IA</button>
+                                <button class="verdict-btn not-ai" onclick="selectVerdict(2, false, this)">❌ Pas d'IA</button>
+                            </div>
+                            <div class="case-explanation case-explanation-correct">
+                                <strong>✅ Exact !</strong> <strong>IA simple</strong> - Reconnaissance de patterns + prédiction basée sur l'apprentissage.
+                            </div>
+                            <div class="case-explanation case-explanation-incorrect">
+                                <strong>❌ Pas tout à fait !</strong> C'est bien de <strong>l'IA simple</strong> - reconnaissance de patterns et prédiction basée sur l'apprentissage automatique.
+                            </div>
+                        </div>
+
+                        <!-- Cas 3 -->
+                        <div class="detective-case" data-case="3">
+                            <div class="case-header">
+                                <div class="case-number">3</div>
+                                <div>
+                                    <h4>"Smart TV" qui s'allume à 20h</h4>
+                                    <p><strong>Fonction :</strong> Programmation horaire</p>
+                                </div>
+                            </div>
+                            <div class="verdict-buttons">
+                                <button class="verdict-btn ai" onclick="selectVerdict(3, false, this)">✅ C'est de l'IA</button>
+                                <button class="verdict-btn not-ai" onclick="selectVerdict(3, true, this)">❌ Pas d'IA</button>
+                            </div>
+                            <div class="case-explanation case-explanation-correct">
+                                <strong>✅ Bien vu !</strong> <strong>Pas d'IA</strong> - Simple minuterie programmée (marketing trompeur !).
+                            </div>
+                            <div class="case-explanation case-explanation-incorrect">
+                                <strong>❌ Attention au marketing !</strong> Ce n'est <strong>pas de l'IA</strong> - juste une minuterie programmée. Le mot "Smart" ne veut pas dire IA !
+                            </div>
+                        </div>
+
+                        <!-- Cas 4 -->
+                        <div class="detective-case" data-case="4">
+                            <div class="case-header">
+                                <div class="case-number">4</div>
+                                <div>
+                                    <h4>Siri qui comprend "Appelle Papa"</h4>
+                                    <p><strong>Fonction :</strong> Reconnaît la voix et exécute l'action</p>
+                                </div>
+                            </div>
+                            <div class="verdict-buttons">
+                                <button class="verdict-btn ai" onclick="selectVerdict(4, true, this)">✅ C'est de l'IA</button>
+                                <button class="verdict-btn not-ai" onclick="selectVerdict(4, false, this)">❌ Pas d'IA</button>
+                            </div>
+                            <div class="case-explanation case-explanation-correct">
+                                <strong>✅ Parfait !</strong> <strong>Vraie IA</strong> - Reconnaissance vocale + traitement du langage naturel (NLP).
+                            </div>
+                            <div class="case-explanation case-explanation-incorrect">
+                                <strong>❌ Détrompez-vous !</strong> C'est bien de <strong>l'IA</strong> - reconnaissance vocale + traitement du langage naturel très sophistiqué.
+                            </div>
+                        </div>
+
+                        <!-- Cas 5 -->
+                        <div class="detective-case" data-case="5">
+                            <div class="case-header">
+                                <div class="case-number">5</div>
+                                <div>
+                                    <h4>Excel formule SOMME</h4>
+                                    <p><strong>Fonction :</strong> =SOMME(A1:A10)</p>
+                                </div>
+                            </div>
+                            <div class="verdict-buttons">
+                                <button class="verdict-btn ai" onclick="selectVerdict(5, false, this)">✅ C'est de l'IA</button>
+                                <button class="verdict-btn not-ai" onclick="selectVerdict(5, true, this)">❌ Pas d'IA</button>
+                            </div>
+                            <div class="case-explanation case-explanation-correct">
+                                <strong>✅ Correct !</strong> <strong>Pas d'IA</strong> - Simple opération mathématique programmée, aucun apprentissage.
+                            </div>
+                            <div class="case-explanation case-explanation-incorrect">
+                                <strong>❌ Non !</strong> Ce n'est <strong>pas de l'IA</strong> - juste une opération mathématique programmée, aucun apprentissage automatique.
+                            </div>
+                        </div>
+
+                        <!-- Cas 6 -->
+                        <div class="detective-case" data-case="6">
+                            <div class="case-header">
+                                <div class="case-number">6</div>
+                                <div>
+                                    <h4>Thermostat Nest qui apprend vos habitudes</h4>
+                                    <p><strong>Fonction :</strong> Ajuste la température selon vos patterns</p>
+                                </div>
+                            </div>
+                            <div class="verdict-buttons">
+                                <button class="verdict-btn ai" onclick="selectVerdict(6, true, this)">✅ C'est de l'IA</button>
+                                <button class="verdict-btn not-ai" onclick="selectVerdict(6, false, this)">❌ Pas d'IA</button>
+                            </div>
+                            <div class="case-explanation case-explanation-correct">
+                                <strong>✅ Excellent !</strong> <strong>IA simple</strong> - Apprentissage de patterns et adaptation comportementale.
+                            </div>
+                            <div class="case-explanation case-explanation-incorrect">
+                                <strong>❌ Raté !</strong> C'est bien de <strong>l'IA simple</strong> - le thermostat apprend vos habitudes et s'adapte automatiquement.
+                            </div>
+                        </div>
+
+                        <div id="detective-completion" style="display: none;">
+                            <div class="definition-box">
+                                <div class="definition-title">
+                                    <span>🎉</span>
+                                    Détective confirmé !
+                                </div>
+                                <p>Bravo ! Vous savez maintenant distinguer la vraie IA du marketing. Vous êtes immunisé contre le "AI-washing" !</p>
+                            </div>
+                        </div>
+
+                        <h3>🧠 Règles de détection de la vraie IA :</h3>
+                        
+                        <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                            <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--success-color);">
+                                <h4 style="color: var(--success-color);">✅ C'est probablement de l'IA si :</h4>
+                                <ul>
+                                    <li>Ça s'améliore avec l'usage</li>
+                                    <li>Ça fait des prédictions/recommandations</li>
+                                    <li>Ça comprend le langage naturel</li>
+                                    <li>Ça reconnaît des images/voix</li>
+                                    <li>Ça génère du contenu original</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--error-color);">
+                                <h4 style="color: var(--error-color);">❌ Ce n'est probablement pas de l'IA si :</h4>
+                                <ul>
+                                    <li>Ça suit toujours les mêmes règles</li>
+                                    <li>Ça fait juste des calculs mathématiques</li>
+                                    <li>Ça exécute des commandes programmées</li>
+                                    <li>C'est juste une base de données avec recherche</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Points clés -->
+                <section class="section">
+                    <h2 class="section-title">💡 Points clés à retenir</h2>
+                    <div class="section-content">
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary-color);">
+                                <h4 style="color: var(--primary-color);">🎯 Les 3 technologies principales</h4>
+                                <ul>
+                                    <li><strong>Machine Learning</strong> : Apprentissage par l'exemple</li>
+                                    <li><strong>Deep Learning</strong> : Réseaux de neurones complexes</li>
+                                    <li><strong>Large Language Models</strong> : Maîtres du langage</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--accent-color);">
+                                <h4 style="color: var(--accent-color);">🔍 Les 5 grands usages IA</h4>
+                                <ul>
+                                    <li><strong>Recommandation</strong> : Netflix, Spotify, Amazon</li>
+                                    <li><strong>Conversation</strong> : Siri, ChatGPT, chatbots</li>
+                                    <li><strong>Vision</strong> : Reconnaissance faciale, filtres</li>
+                                    <li><strong>Génération</strong> : DALL-E, ChatGPT, Synthesia</li>
+                                    <li><strong>Classification</strong> : Spam, fraude, modération</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success-color);">
+                                <h4 style="color: var(--success-color);">🕵️ Test de détection IA</h4>
+                                <ul>
+                                    <li><strong>Apprend-elle</strong> de nouvelles données ?</li>
+                                    <li><strong>Prédit-elle</strong> ou <strong>recommande-t-elle</strong> ?</li>
+                                    <li><strong>Comprend-elle</strong> le contexte ?</li>
+                                    <li><strong>S'adapte-t-elle</strong> à l'utilisateur ?</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning-color);">
+                                <h4 style="color: var(--warning-color);">🤯 Réalisation importante</h4>
+                                <p>Vous utilisez déjà <strong>10-15 outils IA différents</strong> chaque jour ! L'IA n'est pas le futur, c'est déjà votre présent.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Préparation suite -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Préparation pour la suite</h2>
+                    <div class="section-content">
+                        <p>Dans la <strong>Séquence 4</strong>, nous testerons vos connaissances avec un quiz interactif et démystifierons les dernières idées reçues sur l'IA.</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🤔</span>
+                                Questions teasers
+                            </div>
+                            <ul>
+                                <li>L'IA va-t-elle vraiment remplacer tous les emplois ?</li>
+                                <li>ChatGPT "comprend-il" vraiment ce qu'il dit ?</li>
+                                <li>Peut-on faire confiance aux réponses de l'IA ?</li>
+                            </ul>
+                        </div>
+
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🎉</span>
+                                Félicitations !
+                            </div>
+                            <p>Vous venez de faire votre premier "Safari IA" et vous savez maintenant identifier la vraie IA du marketing ! Dans la prochaine séquence, nous consoliderons tout cela avec un quiz ludique et quelques surprises... 😉</p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Progression</h3>
+                    <div class="progress-circle">
+                        <span class="progress-text">3/5</span>
+                    </div>
+                    <div style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        Séquence 3 sur 4 (+ overview)
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="module-nav">
+                        <li class="module-nav-item">
+                            <a href="fondamentaux_1_overview.html" class="module-nav-link">
+                                <div class="nav-icon completed">📋</div>
+                                <span>Vue d'ensemble</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="fondamentaux_1_introduction_1.html" class="module-nav-link">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Introduction à l'IA</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="fondamentaux_1_histoire_2.html" class="module-nav-link">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Histoire et évolution</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="fondamentaux_1_types_safari_3.html" class="module-nav-link active">
+                                <div class="nav-icon current">3</div>
+                                <span>Types d'IA et Safari</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="fondamentaux_1_quiz_4.html" class="module-nav-link">
+                                <div class="nav-icon locked">🔒</div>
+                                <span>Quiz et démystification</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Resources Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📚 Ressources</h3>
+                    <div style="space-y: 0.5rem;">
+                        <a href="ressources_outils.html" class="module-nav-link">
+                            <span>🛠️</span>
+                            <span>Outils IA</span>
+                        </a>
+                        <a href="ressources_bibliotheque.html" class="module-nav-link">
+                            <span>📖</span>
+                            <span>Bibliothèque</span>
+                        </a>
+                        <a href="projet_brief.html" class="module-nav-link">
+                            <span>🎯</span>
+                            <span>Projet final</span>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="lesson-navigation">
+            <a href="fondamentaux_1_histoire_2.html" class="btn btn-secondary">
+                <span>←</span> Séquence 2: Histoire IA
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 3 sur 4</div>
+                <div style="font-weight: 600; color: var(--text-primary);">Types d'IA et Safari IA</div>
+            </div>
+            <a href="fondamentaux_1_quiz_4.html" class="btn btn-primary">
+                Séquence 4: Quiz <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Safari IA functionality
+        let safariProgress = {
+            completed: new Set(),
+            total: 6
+        };
+
+        function markSafariCompleted(stopNumber) {
+            safariProgress.completed.add(stopNumber);
+            
+            // Update UI
+            const safariStop = document.querySelector(`[data-stop="${stopNumber}"]`);
+            safariStop.classList.add('completed');
+            
+            const button = safariStop.querySelector('.check-button');
+            button.textContent = 'Exploré ! ✓';
+            button.disabled = true;
+            
+            // Check if all completed
+            if (safariProgress.completed.size === safariProgress.total) {
+                document.getElementById('safari-completion').style.display = 'block';
+                document.getElementById('safari-completion').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+
+        // Detective Exercise functionality - CORRIGÉ
+        let detectiveProgress = {
+            answered: new Set(),
+            total: 6
+        };
+
+        function selectVerdict(caseNumber, isCorrect, buttonElement) {
+            detectiveProgress.answered.add(caseNumber);
+            
+            const caseDiv = document.querySelector(`[data-case="${caseNumber}"]`);
+            const explanations = caseDiv.querySelectorAll('.case-explanation');
+            const buttons = caseDiv.querySelectorAll('.verdict-btn');
+            
+            // Remove previous selections
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            
+            // Mark selected button
+            buttonElement.classList.add('selected');
+            
+            // Hide all explanations first
+            explanations.forEach(exp => {
+                exp.classList.remove('show');
+                exp.style.display = 'none';
+            });
+            
+            // Show the correct explanation based on whether the answer is correct
+            let explanationToShow;
+            if (isCorrect) {
+                explanationToShow = caseDiv.querySelector('.case-explanation-correct');
+                buttonElement.style.background = 'var(--success-color)';
+                buttonElement.style.color = 'white';
+                buttonElement.style.borderColor = 'var(--success-color)';
+            } else {
+                explanationToShow = caseDiv.querySelector('.case-explanation-incorrect');
+                buttonElement.style.background = 'var(--error-color)';
+                buttonElement.style.color = 'white';
+                buttonElement.style.borderColor = 'var(--error-color)';
+            }
+            
+            // Show the appropriate explanation
+            if (explanationToShow) {
+                explanationToShow.style.display = 'block';
+                explanationToShow.classList.add('show');
+            }
+            
+            caseDiv.classList.add('answered');
+            
+            // Check if all answered
+            if (detectiveProgress.answered.size === detectiveProgress.total) {
+                setTimeout(() => {
+                    document.getElementById('detective-completion').style.display = 'block';
+                    document.getElementById('detective-completion').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }, 500);
+            }
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString(),
+                safariCompleted: safariProgress.completed.size,
+                detectiveCompleted: detectiveProgress.answered.size
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(1, 3);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

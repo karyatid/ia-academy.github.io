@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap & Stratégie IA Éducative - Séquence 1C | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            position: relative;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            position: absolute;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Navigation */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-indicator {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .toc-link.active {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Roadmap Timeline */
+        .roadmap-timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+        }
+
+        .roadmap-phase {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 80px;
+        }
+
+        .phase-marker {
+            position: absolute;
+            left: 15px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .phase-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .phase-duration {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .phase-budget {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .budget-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .budget-amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Level Cards */
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .level-card {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card.starter {
+            border-color: var(--success-color);
+        }
+
+        .level-card.professional {
+            border-color: var(--primary-color);
+        }
+
+        .level-card.enterprise {
+            border-color: var(--warning-color);
+        }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            transition: left 0.5s ease;
+        }
+
+        .level-card.starter::before {
+            background: var(--success-color);
+        }
+
+        .level-card.professional::before {
+            background: var(--primary-color);
+        }
+
+        .level-card.enterprise::before {
+            background: var(--warning-color);
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .level-card:hover::before {
+            left: 0;
+        }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .level-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .level-card.starter .level-icon {
+            background: var(--success-color);
+        }
+
+        .level-card.professional .level-icon {
+            background: var(--primary-color);
+        }
+
+        .level-card.enterprise .level-icon {
+            background: var(--warning-color);
+        }
+
+        .level-info h3 {
+            color: var(--text-primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .level-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .kpi-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Navigation Buttons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .levels-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-phase {
+                padding-left: 60px;
+            }
+
+            .roadmap-timeline::before {
+                left: 22px;
+            }
+
+            .phase-marker {
+                left: 7px;
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="casusage_6_overview.html" class="breadcrumb-link">Module 6: Cas d'Usage Métier</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Séquence 1C : Roadmap & Stratégie</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        🚀 Séquence 1C
+                    </div>
+                    <div class="lesson-badge">
+                        ⏱️ 20 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        📊 Stratégie & Décision
+                    </div>
+                </div>
+                <h1 class="lesson-title">Roadmap & Stratégie IA Éducative</h1>
+                <p class="lesson-description">
+                    Construisez votre plan de transformation digitale éducative. De l'expérimentation aux solutions enterprise, découvrez comment évoluer progressivement et mesurer l'impact de l'IA dans votre organisation.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Vision Stratégique de l'IA Éducative</h2>
+                    <div class="section-content">
+                        <p>L'adoption de l'IA en éducation ne se fait pas du jour au lendemain. Elle nécessite une approche progressive, structurée et alignée sur vos objectifs organisationnels.</p>
+                        
+                        <p>Cette séquence s'adresse aux <strong>décideurs</strong> et <strong>responsables de formation</strong> qui souhaitent :</p>
+                        <ul>
+                            <li><strong>Planifier</strong> une transformation digitale réussie</li>
+                            <li><strong>Optimiser</strong> les investissements selon les priorités</li>
+                            <li><strong>Mesurer</strong> l'impact et le ROI de chaque étape</li>
+                            <li><strong>Anticiper</strong> les résistances et accompagner le changement</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">🎯 Principe clé</div>
+                            <p><strong>"Start small, scale fast"</strong> : Commencez par des expérimentations à faible risque pour valider l'approche, puis accélérez sur les cas d'usage qui prouvent leur valeur.</p>
+                        </div>
+
+                        <h3>Les 3 erreurs stratégiques à éviter</h3>
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Pièges courants</div>
+                            <ul>
+                                <li><strong>L'approche "big bang" :</strong> Investir massivement dès le départ sans validation</li>
+                                <li><strong>La technologie sans pédagogie :</strong> Choisir les outils avant de définir les objectifs</li>
+                                <li><strong>L'oubli du changement humain :</strong> Négliger l'accompagnement des équipes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Roadmap 3 niveaux -->
+                <section class="section" id="roadmap-evolution">
+                    <h2 class="section-title">🛣️ Roadmap d'Évolution Progressive</h2>
+                    <div class="section-content">
+                        <p>Voici une approche en 3 niveaux pour structurer votre transformation IA éducative, avec des seuils de décision clairs.</p>
+
+                        <div class="levels-grid">
+                            <div class="level-card starter">
+                                <div class="level-header">
+                                    <div class="level-icon">1</div>
+                                    <div class="level-info">
+                                        <h3>Niveau 1 : Exploration</h3>
+                                        <div class="level-subtitle">Expérimentation & Validation</div>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li><strong>Durée :</strong> 3-6 mois</li>
+                                    <li><strong>Public :</strong> 50-200 apprenants</li>
+                                    <li><strong>Outils :</strong> ChatGPT, Canva, Google Forms</li>
+                                    <li><strong>Objectif :</strong> Prouver la valeur et former les équipes</li>
+                                    <li><strong>Budget :</strong> 2-5k€/an</li>
+                                </ul>
+                            </div>
+
+                            <div class="level-card professional">
+                                <div class="level-header">
+                                    <div class="level-icon">2</div>
+                                    <div class="level-info">
+                                        <h3>Niveau 2 : Professionnalisation</h3>
+                                        <div class="level-subtitle">Structuration & Intégration</div>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li><strong>Durée :</strong> 12-18 mois</li>
+                                    <li><strong>Public :</strong> 200-1000 apprenants</li>
+                                    <li><strong>Outils :</strong> LMS + IA, workflows automatisés</li>
+                                    <li><strong>Objectif :</strong> Industrialiser et mesurer l'impact</li>
+                                    <li><strong>Budget :</strong> 15-50k€/an</li>
+                                </ul>
+                            </div>
+
+                            <div class="level-card enterprise">
+                                <div class="level-header">
+                                    <div class="level-icon">3</div>
+                                    <div class="level-info">
+                                        <h3>Niveau 3 : Enterprise</h3>
+                                        <div class="level-subtitle">Adaptive Learning & Analytics</div>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li><strong>Durée :</strong> 18-24 mois</li>
+                                    <li><strong>Public :</strong> 1000+ apprenants</li>
+                                    <li><strong>Outils :</strong> Smart Sparrow, Knewton, ALEKS</li>
+                                    <li><strong>Objectif :</strong> Personnalisation massive et prédictive</li>
+                                    <li><strong>Budget :</strong> 50-500k€/an</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="roadmap-timeline">
+                            <div class="roadmap-phase">
+                                <div class="phase-marker">1</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-title">Phase 1 : Expérimentation (3-6 mois)</div>
+                                        <div class="phase-duration">Démarrage</div>
+                                    </div>
+                                    <p><strong>Objectifs :</strong> Valider l'approche, former les équipes, mesurer l'acceptation</p>
+                                    <ul>
+                                        <li>Formation de 2-3 formateurs aux outils IA accessibles</li>
+                                        <li>Création de 3-5 micro-modules pilotes avec ChatGPT + Canva</li>
+                                        <li>Test sur 50-100 apprenants volontaires</li>
+                                        <li>Mesure de satisfaction et gain de temps</li>
+                                    </ul>
+                                    <div class="phase-budget">
+                                        <div class="budget-label">Budget total :</div>
+                                        <div class="budget-amount">2 000 - 5 000€</div>
+                                    </div>
+                                    <p><strong>Critères de passage au niveau 2 :</strong> Satisfaction >80%, gain de temps >30%, équipe motivée</p>
+                                </div>
+                            </div>
+
+                            <div class="roadmap-phase">
+                                <div class="phase-marker">2</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-title">Phase 2 : Structuration (12-18 mois)</div>
+                                        <div class="phase-duration">Croissance</div>
+                                    </div>
+                                    <p><strong>Objectifs :</strong> Industrialiser la production, intégrer aux processus, former toutes les équipes</p>
+                                    <ul>
+                                        <li>Intégration IA dans le LMS existant (Moodle, Canvas)</li>
+                                        <li>Workflows automatisés (création → diffusion → évaluation)</li>
+                                        <li>Formation de 10-20 formateurs supplémentaires</li>
+                                        <li>Analytics et tableaux de bord de performance</li>
+                                    </ul>
+                                    <div class="phase-budget">
+                                        <div class="budget-label">Budget annuel :</div>
+                                        <div class="budget-amount">15 000 - 50 000€</div>
+                                    </div>
+                                    <p><strong>Critères de passage au niveau 3 :</strong> 500+ apprenants, ROI >150%, demande de personnalisation</p>
+                                </div>
+                            </div>
+
+                            <div class="roadmap-phase">
+                                <div class="phase-marker">3</div>
+                                <div class="phase-content">
+                                    <div class="phase-header">
+                                        <div class="phase-title">Phase 3 : Excellence (18-24 mois)</div>
+                                        <div class="phase-duration">Maturité</div>
+                                    </div>
+                                    <p><strong>Objectifs :</strong> Personnalisation massive, prédiction de performance, innovation continue</p>
+                                    <ul>
+                                        <li>Déploiement plateforme adaptive learning (Smart Sparrow/Knewton)</li>
+                                        <li>Parcours 100% adaptatifs avec prédiction de réussite</li>
+                                        <li>Équipe dédiée IA éducative (2-3 personnes)</li>
+                                        <li>R&D et partenariats avec éditeurs/universités</li>
+                                    </ul>
+                                    <div class="phase-budget">
+                                        <div class="budget-label">Budget annuel :</div>
+                                        <div class="budget-amount">50 000 - 500 000€</div>
+                                    </div>
+                                    <p><strong>Résultat :</strong> Organisation leader sur l'IA éducative, avantage concurrentiel durable</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Budget et ressources -->
+                <section class="section" id="budget-ressources">
+                    <h2 class="section-title">💰 Budget et Ressources par Étape</h2>
+                    <div class="section-content">
+                        <p>Détaillons l'investissement nécessaire pour chaque niveau de maturité IA éducative.</p>
+
+                        <h3>📊 Répartition budgétaire recommandée</h3>
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <h4>Niveau 1 - Expérimentation (2k-5k€)</h4>
+                            <ul>
+                                <li><strong>Outils IA :</strong> 60% (1.2k-3k€) → ChatGPT Plus, Canva Pro, licences</li>
+                                <li><strong>Formation équipe :</strong> 30% (600-1.5k€) → Formation, coaching, temps</li>
+                                <li><strong>Tests et ajustements :</strong> 10% (200-500€) → Feedback, itérations</li>
+                            </ul>
+
+                            <h4>Niveau 2 - Structuration (15k-50k€)</h4>
+                            <ul>
+                                <li><strong>Plateforme et intégrations :</strong> 50% (7.5k-25k€) → LMS upgrades, APIs, développement</li>
+                                <li><strong>Formation et accompagnement :</strong> 30% (4.5k-15k€) → Formation élargie, change management</li>
+                                <li><strong>Outils avancés :</strong> 20% (3k-10k€) → Analytics, automation, premium tools</li>
+                            </ul>
+
+                            <h4>Niveau 3 - Enterprise (50k-500k€)</h4>
+                            <ul>
+                                <li><strong>Plateforme adaptive :</strong> 60% (30k-300k€) → Licence Smart Sparrow/Knewton</li>
+                                <li><strong>Équipe dédiée :</strong> 25% (12.5k-125k€) → Salaires, consultants spécialisés</li>
+                                <li><strong>R&D et innovation :</strong> 15% (7.5k-75k€) → Expérimentations, partenariats</li>
+                            </ul>
+                        </div>
+
+                        <h3>👥 Ressources humaines nécessaires</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Équipe type par niveau</div>
+                            <p><strong>Niveau 1 :</strong> 1 chef de projet + 2-3 formateurs early adopters (0.2 ETP)</p>
+                            <p><strong>Niveau 2 :</strong> 1 responsable IA éducative + 5-10 formateurs + 1 tech (0.8 ETP)</p>
+                            <p><strong>Niveau 3 :</strong> 1 directeur innovation + 2 ingénieurs pédagogiques IA + 1 data analyst + support technique (2.5 ETP)</p>
+                        </div>
+
+                        <h3>⏱️ Timeline et jalons de décision</h3>
+                        <ul>
+                            <li><strong>Mois 1-3 :</strong> Formation initiale et premiers tests</li>
+                            <li><strong>Mois 4-6 :</strong> Évaluation niveau 1, décision passage niveau 2</li>
+                            <li><strong>Mois 7-18 :</strong> Structuration et intégration LMS</li>
+                            <li><strong>Mois 19-24 :</strong> Évaluation niveau 2, décision adaptive learning</li>
+                            <li><strong>Mois 25-42 :</strong> Déploiement solution enterprise</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Conduite du changement -->
+                <section class="section" id="conduite-changement">
+                    <h2 class="section-title">🔄 Conduite du Changement et Transformation</h2>
+                    <div class="section-content">
+                        <p>La technologie n'est que 20% du défi. 80% réside dans l'accompagnement humain et organisationnel.</p>
+
+                        <h3>🎯 Stratégie d'adoption progressive</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">📈 Courbe d'adoption d'innovation</div>
+                            <p><strong>Phase 1 :</strong> Innovateurs (2.5%) → Formateurs tech-friendly volontaires<br>
+                            <strong>Phase 2 :</strong> Early adopters (13.5%) → Équipe pédagogique motivée<br>
+                            <strong>Phase 3 :</strong> Majorité précoce (34%) → Généralisation progressive<br>
+                            <strong>Phase 4 :</strong> Majorité tardive (34%) → Accompagnement renforcé<br>
+                            <strong>Phase 5 :</strong> Retardataires (16%) → Support individualisé</p>
+                        </div>
+
+                        <h3>🚧 Résistances typiques et solutions</h3>
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <h4>❌ "L'IA va remplacer les formateurs"</h4>
+                            <p>✅ <strong>Réponse :</strong> Démontrez que l'IA libère du temps pour l'accompagnement humain à haute valeur ajoutée. Montrez des exemples de formateurs augmentés, pas remplacés.</p>
+
+                            <h4>❌ "C'est trop complexe techniquement"</h4>
+                            <p>✅ <strong>Réponse :</strong> Commencez par des outils simples (ChatGPT) avec formation pratique. Progressez étape par étape selon le rythme de chacun.</p>
+
+                            <h4>❌ "Ça va déshumaniser la formation"</h4>
+                            <p>✅ <strong>Réponse :</strong> L'IA permet plus de personnalisation, donc plus d'humanisation. Montrez des résultats concrets d'engagement et satisfaction.</p>
+
+                            <h4>❌ "Les coûts sont trop élevés"</h4>
+                            <p>✅ <strong>Réponse :</strong> Commencez petit (2k€) et démontrez le ROI avant d'investir plus. Calculez le coût de l'inaction face à la concurrence.</p>
+                        </div>
+
+                        <h3>📚 Plan de formation des équipes</h3>
+                        <ul>
+                            <li><strong>Niveau 1 - Sensibilisation (2h) :</strong> Découverte IA, mythes vs réalité, démo outils simples</li>
+                            <li><strong>Niveau 2 - Initiation (1 jour) :</strong> Hands-on ChatGPT, création premier module, prompting</li>
+                            <li><strong>Niveau 3 - Perfectionnement (2 jours) :</strong> Workflows avancés, analytics, optimisation</li>
+                            <li><strong>Niveau 4 - Expertise (1 semaine) :</strong> Adaptive learning, data science éducative, innovation</li>
+                        </ul>
+
+                        <h3>🏆 Facteurs clés de succès</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">✅ Les 5 piliers de la réussite</div>
+                            <ol>
+                                <li><strong>Sponsorship direction :</strong> Engagement visible du top management</li>
+                                <li><strong>Quick wins :</strong> Succès rapides et visibles dès le niveau 1</li>
+                                <li><strong>Formation continue :</strong> Montée en compétences progressive</li>
+                                <li><strong>Mesure d'impact :</strong> KPIs clairs et communication régulière</li>
+                                <li><strong>Innovation culture :</strong> Droit à l'erreur et expérimentation</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mesure d'impact et KPIs -->
+                <section class="section" id="mesure-impact">
+                    <h2 class="section-title">📈 Mesure d'Impact et KPIs</h2>
+                    <div class="section-content">
+                        <p>Pour piloter votre transformation IA éducative, définissez des indicateurs clairs selon 4 dimensions.</p>
+
+                        <div class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-value">-40%</div>
+                                <div class="kpi-label">Temps de création de contenu</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value">+25%</div>
+                                <div class="kpi-label">Taux de completion des formations</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value">+35%</div>
+                                <div class="kpi-label">Satisfaction des apprenants</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-value">200%</div>
+                                <div class="kpi-label">ROI à 18 mois</div>
+                            </div>
+                        </div>
+
+                        <h3>🎯 KPIs par dimension</h3>
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <h4>💰 Dimension Économique</h4>
+                            <ul>
+                                <li><strong>ROI global :</strong> (Économies - Investissements) / Investissements</li>
+                                <li><strong>Coût par apprenant :</strong> Budget total / Nombre d'apprenants formés</li>
+                                <li><strong>Temps formateur économisé :</strong> Heures gagnées par mois</li>
+                                <li><strong>Productivité création :</strong> Modules créés par formateur par mois</li>
+                            </ul>
+
+                            <h4>📚 Dimension Pédagogique</h4>
+                            <ul>
+                                <li><strong>Taux de completion :</strong> % d'apprenants finissant les formations</li>
+                                <li><strong>Scores d'évaluation :</strong> Moyenne des notes aux quiz/examens</li>
+                                <li><strong>Rétention à 3 mois :</strong> % de connaissances conservées</li>
+                                <li><strong>Engagement :</strong> Temps passé sur plateforme, interactions</li>
+                            </ul>
+
+                            <h4>😊 Dimension Satisfaction</h4>
+                            <ul>
+                                <li><strong>NPS apprenants :</strong> Net Promoter Score des formations</li>
+                                <li><strong>Satisfaction formateurs :</strong> Enquête trimestrielle équipes</li>
+                                <li><strong>Taux d'adoption outils :</strong> % formateurs utilisant l'IA régulièrement</li>
+                                <li><strong>Feedback qualitatif :</strong> Verbatims et suggestions d'amélioration</li>
+                            </ul>
+
+                            <h4>🚀 Dimension Innovation</h4>
+                            <ul>
+                                <li><strong>Nouveaux formats créés :</strong> Innovations pédagogiques par trimestre</li>
+                                <li><strong>Time-to-market :</strong> Délai création nouvelle formation</li>
+                                <li><strong>Expérimentations :</strong> Nombre de tests menés par an</li>
+                                <li><strong>Veille concurrentielle :</strong> Positionnement vs marché</li>
+                            </ul>
+                        </div>
+
+                        <h3>📊 Tableau de bord de pilotage</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">📈 Reporting mensuel recommandé</div>
+                            <p><strong>Dashboard direction :</strong> ROI, satisfaction globale, adoption, innovation<br>
+                            <strong>Dashboard opérationnel :</strong> Volumes, qualité, performance, incidents<br>
+                            <strong>Dashboard formateurs :</strong> Productivité, outils, formation, support</p>
+                        </div>
+
+                        <h3>🎯 Benchmarks sectoriels</h3>
+                        <ul>
+                            <li><strong>Enseignement supérieur :</strong> ROI 150-300%, adoption 60-80% à 18 mois</li>
+                            <li><strong>Formation professionnelle :</strong> ROI 200-400%, gain temps 40-60%</li>
+                            <li><strong>Formation corporate :</strong> ROI 100-250%, satisfaction +30-50%</li>
+                            <li><strong>E-learning pure :</strong> ROI 300-500%, automatisation 70-90%</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Quiz de validation -->
+                <div class="quiz-section">
+                    <h2 class="quiz-title">🧠 Quiz Stratégique de Validation</h2>
+                    
+                    <div class="quiz-question">
+                        <div class="question-text">1. Quelle est la première étape recommandée pour démarrer une transformation IA éducative ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) Investir directement dans une plateforme adaptive learning
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) Expérimenter avec des outils accessibles sur 50-100 apprenants
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) Former toute l'équipe aux technologies IA avancées
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) Recruter une équipe technique spécialisée en IA
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. Quel est le budget recommandé pour une expérimentation IA éducative de niveau 1 ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) 500-1000€
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) 2000-5000€
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) 10000-20000€
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) 50000€ minimum
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">3. Quelle est la principale cause d'échec dans les projets de transformation IA éducative ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) Le manque de budget
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                B) La complexité technique des outils
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                C) L'insuffisance d'accompagnement humain et organisationnel
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) L'absence de technologies adaptatives
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="casusage_6_adaptive_2.html" class="btn btn-secondary">
+                        ← Séquence 1B : Adaptive Learning Avancé
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 1C sur 3</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Roadmap & Stratégie IA Éducative</div>
+                    </div>
+                    <a href="casusage_6_marketing_4.html" class="btn btn-primary">
+                        Séquence 2 : IA et Marketing →
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">📍 Séquence 1 : IA et Éducation</h3>
+                <div class="progress-indicator">
+                    <div class="progress-fill"></div>
+                </div>
+                <div style="text-align: center; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                    Séquence 1C : Roadmap & Stratégie
+                </div>
+                <ul class="toc-list">
+                    <li class="toc-item">
+                        <a href="#roadmap-evolution" class="toc-link">Roadmap d'évolution progressive</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#budget-ressources" class="toc-link">Budget et ressources par étape</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#conduite-changement" class="toc-link">Conduite du changement</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#mesure-impact" class="toc-link">Mesure d'impact et KPIs</a>
+                    </li>
+                </ul>
+                
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.75rem;">📋 Autres séquences</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="casusage_6_education_1.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                                1A. Outils Accessibles
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="casusage_6_adaptive_2.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                                1B. Adaptive Learning Avancé
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(optionElement, isCorrect) {
+            const question = optionElement.closest('.quiz-question');
+            const options = question.querySelectorAll('.quiz-option');
+            const feedback = question.querySelector('.quiz-feedback');
+            
+            // Reset all options
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            optionElement.classList.add('selected');
+            
+            // Show correct answer and feedback
+            if (isCorrect) {
+                optionElement.classList.add('correct');
+                feedback.className = 'quiz-feedback success';
+                feedback.textContent = '✅ Correct ! L\'approche "start small, scale fast" minimise les risques et valide la valeur avant d\'investir massivement.';
+            } else {
+                optionElement.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.className = 'quiz-feedback error';
+                feedback.textContent = '❌ Incorrect. La bonne réponse est mise en évidence ci-dessus.';
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Table of contents active link handling
+        function updateActiveLink() {
+            const links = document.querySelectorAll('.toc-link');
+            const sections = document.querySelectorAll('.section');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    currentSection = section.id;
+                }
+            });
+            
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(6, '1C');
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Update active link on scroll
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+        });
+    </script>
+</body>
+</html>

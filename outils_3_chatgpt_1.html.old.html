@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT et GPT-4 - Maîtrise complète | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle-button::after {
+            content: '☀️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(23px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::after {
+            content: '🌙';
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs for Better Navigation */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '→';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Sidebar for Learning Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .collapsible-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .collapsible-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .collapsible.active .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible.active .collapsible-content {
+            max-height: 1000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Navigation Controls */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Buttons with Enhanced Interactions */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Tips and Warnings */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Sequence List for Sidebar */
+        .sequence-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="outils_3_overview.html" class="breadcrumb-link">Module 3: Outils IA Populaires</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">ChatGPT et GPT-4 - Maîtrise complète</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📚</span>
+                        <span>Séquence 1/4</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>90 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Débutant</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">ChatGPT et GPT-4 - Maîtrise complète</h1>
+                <p class="lesson-description">
+                    Découvrez toutes les facettes de ChatGPT et GPT-4, depuis l'interface de base jusqu'aux GPTs personnalisés. 
+                    Apprenez à optimiser vos interactions et à créer des assistants IA sur mesure pour vos besoins spécifiques.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Objectifs de cette séquence</h2>
+                    <div class="section-content">
+                        <p>À la fin de cette séquence, vous serez capable de :</p>
+                        <ul>
+                            <li><strong>Naviguer efficacement</strong> dans toutes les interfaces de ChatGPT (web, mobile, API)</li>
+                            <li><strong>Comprendre les différences</strong> entre GPT-3.5, GPT-4 et GPT-4 Turbo</li>
+                            <li><strong>Créer et configurer</strong> des GPTs personnalisés pour vos besoins spécifiques</li>
+                            <li><strong>Maîtriser les paramètres avancés</strong> pour optimiser vos résultats</li>
+                            <li><strong>Intégrer ChatGPT</strong> dans votre workflow quotidien</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Intégration dans votre workflow -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Intégrer ChatGPT dans votre workflow quotidien</h2>
+                    
+                    <div class="section-content">
+                        <p>L'objectif n'est pas seulement de savoir utiliser ChatGPT, mais de le transformer en un véritable assistant qui vous fait gagner du temps chaque jour. Cette intégration réussie peut révolutionner votre productivité en automatisant les tâches répétitives et en améliorant la qualité de votre travail.</p>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Le secret d'une intégration réussie</div>
+                            <p>Ne cherchez pas à tout changer d'un coup. Commencez par identifier <strong>une seule tâche</strong> que vous faites régulièrement et qui vous prend du temps. Maîtrisez ChatGPT pour cette tâche, puis étendez progressivement.</p>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Audit de vos tâches : identifier les opportunités
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Avant de vous lancer, prenez 30 minutes pour analyser votre quotidien professionnel. Cette étape cruciale détermine le succès de votre intégration.</p>
+                                
+                                <h4>Questions à vous poser :</h4>
+                                <ul>
+                                    <li>Quelles tâches me prennent le plus de temps chaque semaine ?</li>
+                                    <li>Qu'est-ce que je répète souvent de manière quasi-identique ?</li>
+                                    <li>Dans quels domaines j'ai besoin d'aide pour la créativité ou l'inspiration ?</li>
+                                    <li>Où est-ce que je perds du temps à chercher des informations ?</li>
+                                </ul>
+                                
+                                <div class="definition-box">
+                                    <div class="definition-title">📋 Matrice d'évaluation personnalisée</div>
+                                    <p>Pour chaque tâche identifiée, évaluez :</p>
+                                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                                        <thead>
+                                            <tr style="background: var(--bg-secondary);">
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Critère</th>
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Faible</th>
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Moyen</th>
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Élevé</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Fréquence</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Mensuel</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Hebdomadaire</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Quotidien</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Temps</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">< 30 min</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">30min - 2h</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">> 2h</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Potentiel IA</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">🔴 Difficile</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">🟡 Possible</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">🟢 Idéal</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🎯 Exercice pratique</div>
+                                    <p><strong>Votre audit personnel (15 minutes) :</strong></p>
+                                    <ol>
+                                        <li>Listez 10 tâches de votre semaine type</li>
+                                        <li>Notez chacune selon la matrice ci-dessus</li>
+                                        <li>Identifiez les 3 tâches avec le meilleur score global</li>
+                                        <li>Commencez par celle qui a le plus haut potentiel IA</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Templates par métier : solutions prêtes à l'emploi
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Voici des exemples concrets d'intégration ChatGPT selon votre domaine d'activité. Ces templates sont directement utilisables et personnalisables.</p>
+                                
+                                <h4>🏢 Manager / Chef d'équipe</h4>
+                                <p>Vos défis : réunions, reporting, communication d'équipe, prise de décision.</p>
+                                <ul>
+                                    <li><strong>Préparation de réunions :</strong> "Crée un ordre du jour structuré pour une réunion sur [sujet] avec [participants]"</li>
+                                    <li><strong>Feedback constructif :</strong> "Aide-moi à formuler un retour bienveillant mais direct sur [situation]"</li>
+                                    <li><strong>Synthèse de décisions :</strong> "Résume les points clés et actions de cette discussion : [contenu]"</li>
+                                </ul>
+
+                                <h4>📈 Commercial / Marketing</h4>
+                                <p>Vos défis : prospection, argumentaires, contenus, analyse de marché.</p>
+                                <ul>
+                                    <li><strong>Emails de prospection :</strong> "Crée un email personnalisé pour [prospect] dans [secteur] proposant [service]"</li>
+                                    <li><strong>Objections client :</strong> "Comment répondre à l'objection '[objection]' pour [produit/service]"</li>
+                                    <li><strong>Analyse concurrentielle :</strong> "Compare [notre solution] vs [concurrent] sur [critères]"</li>
+                                </ul>
+
+                                <h4>💻 Développeur / Tech</h4>
+                                <p>Vos défis : code, documentation, debugging, apprentissage de nouvelles technologies.</p>
+                                <ul>
+                                    <li><strong>Revue de code :</strong> "Analyse ce code et suggère des améliorations : [code]"</li>
+                                    <li><strong>Documentation :</strong> "Crée une documentation claire pour cette fonction : [code]"</li>
+                                    <li><strong>Apprentissage :</strong> "Explique [concept technique] avec des exemples pratiques"</li>
+                                </ul>
+
+                                <h4>🎨 Créatif / Designer</h4>
+                                <p>Vos défis : inspiration, brief créatif, argumentation de choix design.</p>
+                                <ul>
+                                    <li><strong>Brainstorming :</strong> "Génère 10 concepts créatifs pour [projet] ciblant [audience]"</li>
+                                    <li><strong>Brief créatif :</strong> "Structure un brief complet pour [projet] avec objectifs et contraintes"</li>
+                                    <li><strong>Présentation client :</strong> "Aide-moi à argumenter ces choix créatifs : [description]"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Stratégie d'implémentation progressive
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>L'erreur classique est de vouloir tout changer d'un coup. Voici une méthode progressive qui garantit l'adoption et l'efficacité.</p>
+
+                                <h4>🚀 Phase 1 : Le Quick Win (Semaine 1)</h4>
+                                <p>Choisissez UNE tâche simple et fréquente. L'objectif est de créer une habitude et de constater un bénéfice immédiat.</p>
+                                <ul>
+                                    <li>Sélectionnez votre tâche avec le meilleur ratio temps/fréquence</li>
+                                    <li>Créez 2-3 prompts templates pour cette tâche</li>
+                                    <li>Utilisez-les systématiquement pendant 5 jours</li>
+                                    <li>Mesurez le temps économisé</li>
+                                </ul>
+
+                                <h4>📈 Phase 2 : L'Expansion (Semaine 2-3)</h4>
+                                <p>Une fois la première habitude prise, étendez à 2-3 tâches complémentaires.</p>
+                                <ul>
+                                    <li>Ajoutez des tâches dans le même domaine d'activité</li>
+                                    <li>Créez des GPTs spécialisés si nécessaire</li>
+                                    <li>Commencez à chaîner les tâches (workflow)</li>
+                                    <li>Partagez vos templates avec l'équipe</li>
+                                </ul>
+
+                                <h4>⚙️ Phase 3 : L'Optimisation (Mois 2)</h4>
+                                <p>Affinez vos processus et explorez les intégrations avancées.</p>
+                                <ul>
+                                    <li>Automatisez avec des outils no-code (Zapier, Make)</li>
+                                    <li>Créez des GPTs personnalisés pour vos besoins spécifiques</li>
+                                    <li>Mesurez le ROI global de votre intégration</li>
+                                    <li>Formez votre équipe aux meilleures pratiques</li>
+                                </ul>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">🎯 Mesurer le succès</div>
+                                    <p>Tenez un simple tableau de bord :</p>
+                                    <ul>
+                                        <li><strong>Temps économisé :</strong> Minutes gagnées par jour</li>
+                                        <li><strong>Qualité :</strong> Satisfaction sur vos productions (1-10)</li>
+                                        <li><strong>Adoption :</strong> % de fois où vous utilisez ChatGPT pour la tâche</li>
+                                        <li><strong>Créativité :</strong> Nouvelles idées générées</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Fonctionnalités essentielles -->
+                <section class="section">
+                    <h2 class="section-title">⚡ Fonctionnalités essentielles</h2>
+                    
+                    <div class="section-content">
+                        <p>ChatGPT s'utilise aujourd'hui de plusieurs façons, chacune adaptée à des besoins spécifiques. Comprendre ces différentes interfaces vous permettra de choisir la meilleure approche selon votre situation et vos objectifs.</p>
+                    </div>
+                    
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Interface web vs API vs applications mobiles
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <h4>Interface Web (chat.openai.com)</h4>
+                                <p>C'est votre point d'entrée principal, conçu pour être accessible et intuitif. L'interface web excelle dans les conversations naturelles et les sessions de travail prolongées.</p>
+                                <ul>
+                                    <li><strong>Points forts :</strong> Aucune compétence technique requise, historique automatique, partage facile des conversations</li>
+                                    <li><strong>Usage optimal :</strong> Brainstorming, rédaction collaborative, apprentissage, résolution de problèmes complexes</li>
+                                    <li><strong>À considérer :</strong> Nécessite une connexion internet stable, pas d'intégration directe avec vos outils</li>
+                                </ul>
+                                
+                                <h4>API OpenAI</h4>
+                                <p>L'API ouvre un monde de possibilités pour les utilisateurs techniques. Elle permet d'intégrer l'intelligence de ChatGPT directement dans vos applications et workflows existants.</p>
+                                <ul>
+                                    <li><strong>Avantages :</strong> Contrôle total des paramètres, intégration avec vos systèmes, traitement en masse</li>
+                                    <li><strong>Parfait pour :</strong> Automatisation, applications personnalisées, traitement de gros volumes</li>
+                                    <li><strong>Modèle économique :</strong> Paiement à l'usage (tokens), souvent plus économique pour un usage intensif</li>
+                                </ul>
+                                
+                                <h4>Applications mobiles</h4>
+                                <p>L'application mobile transforme ChatGPT en assistant personnel nomade, particulièrement puissante grâce à l'interaction vocale intégrée.</p>
+                                <ul>
+                                    <li><strong>Atouts majeurs :</strong> Disponibilité permanente, reconnaissance vocale fluide, notifications</li>
+                                    <li><strong>Cas d'usage :</strong> Questions rapides en déplacement, dictée vocale, assistance immediate</li>
+                                    <li><strong>Synchronisation :</strong> Toutes vos conversations sont partagées entre web et mobile</li>
+                                </ul>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">💡 Conseil stratégique</div>
+                                    <p>Commencez par maîtriser l'interface web, puis explorez l'application mobile pour les tâches nomades. L'API ne devient intéressante que si vous avez des besoins d'automatisation spécifiques.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Différences GPT-3.5 vs GPT-4 vs GPT-4 Turbo
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Comprendre les différences entre les versions de GPT est crucial pour optimiser vos résultats et votre budget. Chaque modèle a ses spécialités et son domaine d'excellence.</p>
+                                
+                                <p><strong>GPT-3.5</strong> reste le modèle de référence pour de nombreuses tâches. Il excelle dans la rédaction fluide, la traduction et les tâches répétitives. Sa rapidité en fait l'outil idéal pour les workflows quotidiens où la vitesse prime sur la nuance.</p>
+                                
+                                <p><strong>GPT-4</strong> apporte une compréhension contextuelle bien supérieure. Il saisit les subtilités, gère mieux les instructions complexes et produit des analyses plus sophistiquées. C'est votre allié pour les tâches créatives et analytiques exigeantes.</p>
+                                
+                                <p><strong>GPT-4 Turbo</strong> combine le meilleur des deux mondes : la puissance de GPT-4 avec une vitesse considérablement améliorée. Son contexte étendu (128K tokens) permet de traiter des documents entiers sans perte d'information.</p>
+                                
+                                <div class="definition-box">
+                                    <div class="definition-title">📊 Comparaison détaillée</div>
+                                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                                        <thead>
+                                            <tr style="background: var(--bg-secondary);">
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Critère</th>
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">GPT-3.5</th>
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">GPT-4</th>
+                                                <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">GPT-4 Turbo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Raisonnement complexe</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Basique</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Excellent</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Excellent</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Vitesse de réponse</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Très rapide</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Lent</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Rapide</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Contexte maximum</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">16K tokens</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">32K tokens</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">128K tokens</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color); font-weight: 600;">Créativité</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Correcte</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Élevée</td>
+                                                <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Élevée</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="tip-box">
+                                    <div class="tip-title">🎯 Guide de choix pratique</div>
+                                    <p><strong>Utilisez GPT-3.5 pour :</strong> Emails, traductions, résumés courts, tâches répétitives</p>
+                                    <p><strong>Utilisez GPT-4 pour :</strong> Analyses approfondies, créativité, résolution de problèmes complexes</p>
+                                    <p><strong>Utilisez GPT-4 Turbo pour :</strong> Documents longs, workflows rapides, analyses de gros volumes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Gestion des conversations et historique
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>L'organisation de vos conversations ChatGPT peut transformer votre productivité. Bien organisé, votre historique devient une véritable base de connaissances personnelle où vous retrouvez instantanément vos meilleures interactions.</p>
+
+                                <p>ChatGPT conserve automatiquement toutes vos conversations, mais sans organisation, cette richesse devient rapidement inutilisable. La clé est de traiter chaque conversation comme un projet avec un objectif clair.</p>
+
+                                <h4>Stratégies d'organisation efficace</h4>
+                                <ul>
+                                    <li><strong>Nommage descriptif :</strong> Remplacez les titres auto-générés par des noms clairs comme "Brief client Projet X" ou "Recherche concurrentielle secteur Y"</li>
+                                    <li><strong>Une conversation = un sujet :</strong> Évitez de mélanger plusieurs projets dans un même chat</li>
+                                    <li><strong>Conversations templates :</strong> Créez des conversations modèles pour vos tâches récurrentes</li>
+                                    <li><strong>Archivage régulier :</strong> Supprimez ou archivez les conversations obsolètes chaque mois</li>
+                                </ul>
+                                
+                                <h4>Optimiser la continuité contextuelle</h4>
+                                <p>ChatGPT excelle dans la compréhension contextuelle au sein d'une conversation. Il se souvient de tous les éléments mentionnés précédemment et peut s'y référer naturellement. Cependant, cette mémoire a ses limites.</p>
+                                
+                                <ul>
+                                    <li><strong>Contexte persistant :</strong> Parfait pour les projets qui évoluent sur plusieurs sessions</li>
+                                    <li><strong>Références croisées :</strong> "Reprends le plan que tu as proposé plus haut" fonctionne parfaitement</li>
+                                    <li><strong>Limite de tokens :</strong> Les très longues conversations (>32K tokens) peuvent perdre les premiers échanges</li>
+                                    <li><strong>Nouvelle conversation :</strong> Commencez un nouveau chat quand vous changez complètement de sujet</li>
+                                </ul>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">🎯 Technique du "Checkpoint"</div>
+                                    <p>Dans les longues conversations, faites périodiquement un résumé : "Récapitule les décisions prises et les prochaines étapes". Cela consolide le contexte et évite les pertes d'information.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Paramètres avancés (température, tokens, etc.)
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Les paramètres avancés vous permettent de fine-tuner le comportement de ChatGPT selon vos besoins précis. Bien maîtrisés, ils transforment l'expérience utilisateur en vous donnant un contrôle précis sur le style et la nature des réponses.</p>
+
+                                <h4>🌡️ La température : équilibre créativité vs précision</h4>
+                                <p>La température est probablement le paramètre le plus impactant. Elle détermine la "créativité" ou la "variabilité" des réponses. Une température basse privilégie la cohérence et la précision, tandis qu'une température élevée favorise l'originalité et la diversité.</p>
+                                
+                                <ul>
+                                    <li><strong>0.0 - 0.3 (Précision maximale) :</strong> Parfait pour les faits, traductions, analyses techniques</li>
+                                    <li><strong>0.4 - 0.6 (Équilibre optimal) :</strong> Usage général, rédaction professionnelle, conseils</li>
+                                    <li><strong>0.7 - 1.0 (Créativité élevée) :</strong> Idéal pour brainstorming, écriture créative, innovation</li>
+                                </ul>
+                                
+                                <h4>🎯 Gestion intelligente des tokens</h4>
+                                <p>Comprendre les tokens vous permet d'optimiser vos coûts (pour l'API) et de mieux gérer les limitations de contexte. Un token correspond approximativement à 4 caractères en français, ou à un mot court en anglais.</p>
+                                
+                                <p>La stratégie optimale consiste à équilibrer la précision de vos prompts avec la concision. Des prompts trop courts manquent de contexte, des prompts trop longs gaspillent des tokens et peuvent diluer l'attention du modèle.</p>
+                                
+                                <ul>
+                                    <li><strong>Max tokens :</strong> Limite la longueur des réponses - utile pour des formats contraints</li>
+                                    <li><strong>Comptage précis :</strong> Utilisez des outils comme tokenizer.ai pour mesurer</li>
+                                    <li><strong>Optimisation continue :</strong> Surveillez votre usage via le dashboard OpenAI</li>
+                                </ul>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🧪 Expérimentation pratique</div>
+                                    <p><strong>Testez l'impact de la température :</strong></p>
+                                    <ol>
+                                        <li><strong>Question factuelle :</strong> "Explique la photosynthèse" (température 0.1)</li>
+                                        <li><strong>Tâche créative :</strong> "Écris un poème sur l'hiver" (température 0.8)</li>
+                                        <li><strong>Comparaison :</strong> Posez la même question créative avec température 0.2</li>
+                                        <li><strong>Analyse :</strong> Observez les différences de style, vocabulaire et approche</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GPTs personnalisés -->
+                <section class="section">
+                    <h2 class="section-title">🤖 GPTs personnalisés</h2>
+                    
+                    <div class="section-content">
+                        <p>Les GPTs personnalisés représentent la révolution de ChatGPT : ils transforment l'IA généraliste en assistants spécialisés sur mesure. Imaginez avoir un expert dédié pour chacune de vos tâches récurrentes, configuré exactement selon vos besoins et votre style de travail.</p>
+                        
+                        <div class="tip-box">
+                            <div class="tip-title">💳 Prérequis important</div>
+                            <p><strong>Les GPTs personnalisés nécessitent un abonnement ChatGPT Plus ou ChatGPT Team</strong> (à partir de 20$/mois). Cette fonctionnalité n'est pas disponible avec la version gratuite de ChatGPT.</p>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Comment accéder aux GPTs dans ChatGPT
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>L'accès aux GPTs se fait directement depuis votre interface ChatGPT habituelle. Voici le parcours exact pour les trouver et commencer à les utiliser.</p>
+
+                                <h4>📍 Localiser les GPTs dans l'interface</h4>
+                                <ol>
+                                    <li><strong>Connectez-vous à ChatGPT</strong> avec votre compte Plus ou Team sur <a href="https://chat.openai.com" target="_blank" style="color: var(--primary-color);">chat.openai.com</a></li>
+                                    <li><strong>Repérez la barre latérale gauche</strong> - vous verrez une section "Explore GPTs" ou un bouton "GPTs" selon votre version</li>
+                                    <li><strong>Cliquez sur "Explore GPTs"</strong> - cela ouvre le GPT Store avec les GPTs populaires</li>
+                                    <li><strong>En haut à droite</strong>, vous verrez un bouton "+ Create" ou "Create a GPT" - c'est votre point d'entrée</li>
+                                </ol>
+
+                                <h4>🎯 Navigation dans le GPT Store</h4>
+                                <p>Avant de créer le vôtre, explorez les GPTs existants. Le store est organisé en catégories : Productivité, Éducation, Lifestyle, Programming, etc. Cette exploration vous donnera des idées pour vos propres créations.</p>
+
+                                <h4>⚡ Raccourci rapide</h4>
+                                <p>Vous pouvez aussi démarrer une nouvelle conversation normale, puis cliquer sur le sélecteur de modèle en haut (qui affiche "ChatGPT" par défaut) pour accéder à vos GPTs personnalisés ou au store.</p>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">🔍 Que faire si vous ne voyez pas les GPTs ?</div>
+                                    <ul>
+                                        <li><strong>Vérifiez votre abonnement :</strong> Seuls Plus et Team y ont accès</li>
+                                        <li><strong>Actualisez la page :</strong> Parfois nécessaire après un upgrade</li>
+                                        <li><strong>Changez de navigateur :</strong> Certains navigateurs peuvent avoir des problèmes d'affichage</li>
+                                        <li><strong>Contactez le support :</strong> Si le problème persiste malgré un abonnement valide</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Création d'un GPT spécialisé step-by-step
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Créer un GPT efficace nécessite de la réflexion en amont. Le processus se déroule en plusieurs étapes logiques, chacune construisant sur la précédente pour aboutir à un assistant vraiment utile.</p>
+
+                                <h4>🎯 Étape 1 : Définir l'objectif et le public</h4>
+                                <p>Avant même d'ouvrir l'interface de création, posez-vous ces questions fondamentales. Elles détermineront toute l'architecture de votre GPT.</p>
+                                <ul>
+                                    <li>Quel problème spécifique votre GPT doit-il résoudre ?</li>
+                                    <li>Qui l'utilisera ? (Vous seul, votre équipe, le public ?)</li>
+                                    <li>Dans quel contexte sera-t-il utilisé ? (Travail, créatif, éducatif ?)</li>
+                                    <li>Quelle expertise doit-il simuler ?</li>
+                                </ul>
+
+                                <h4>🎨 Étape 2 : Configurer l'identité et l'apparence</h4>
+                                <p>Une fois dans l'interface de création (bouton "Create a GPT"), commencez par l'identité visuelle. Cette étape influence la perception et l'adoption de votre GPT.</p>
+                                <ul>
+                                    <li><strong>Nom descriptif :</strong> Clair et mémorable, évitez les noms trop génériques</li>
+                                    <li><strong>Description concise :</strong> Une phrase qui résume parfaitement sa fonction</li>
+                                    <li><strong>Image représentative :</strong> Générée par DALL-E ou uploadée depuis votre ordinateur</li>
+                                    <li><strong>Tone et personnalité :</strong> Formel, décontracté, encourageant, directif ?</li>
+                                </ul>
+
+                                <h4>📝 Étape 3 : Rédiger les instructions système</h4>
+                                <p>C'est le cœur de votre GPT. Ces instructions définissent comment il se comporte, répond et interagit. Pensez à cela comme le "manuel d'emploi" de votre assistant IA.</p>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">📋 Structure d'instructions efficace</div>
+                                    <p><strong>1. Rôle et expertise :</strong> "Tu es un [expert/consultant/assistant] spécialisé en [domaine précis]"</p>
+                                    <p><strong>2. Style de communication :</strong> "Tu communiques de manière [professionnelle/décontractée], avec un niveau [technique/accessible]"</p>
+                                    <p><strong>3. Règles de fonctionnement :</strong> "Tu dois TOUJOURS [action obligatoire]. Tu ne dois JAMAIS [interdiction]"</p>
+                                    <p><strong>4. Format de sortie :</strong> "Tes réponses suivent cette structure : [sections, longueur, éléments obligatoires]"</p>
+                                </div>
+
+                                <h4>🔧 Étape 4 : Tester et affiner</h4>
+                                <p>La création ne s'arrête pas à la publication. L'interface de création inclut un chat de test sur la droite. Utilisez-le intensivement avant de finaliser.</p>
+                                <ul>
+                                    <li>Testez plusieurs types de demandes typiques</li>
+                                    <li>Vérifiez que le ton et le style correspondent à vos attentes</li>
+                                    <li>Ajustez les instructions si nécessaire</li>
+                                    <li>Validez que les interdictions sont respectées</li>
+                                </ul>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🎯 Exemple concret : GPT "Assistant Réunions"</div>
+                                    <p><strong>Objectif :</strong> Automatiser la préparation et le suivi de réunions d'équipe</p>
+                                    <p><strong>Instructions clés :</strong></p>
+                                    <p style="font-style: italic; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                        "Tu es un assistant spécialisé dans l'organisation de réunions efficaces. Pour chaque demande, tu demandes d'abord le type de réunion, les participants et l'objectif. Tu proposes systématiquement un ordre du jour structuré avec timing, et après la réunion, tu peux générer un compte-rendu avec actions assignées. Tu gardes un ton professionnel mais bienveillant."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Configuration des instructions système
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Les instructions système sont l'âme de votre GPT. Elles définissent non seulement ce qu'il sait faire, mais surtout comment il le fait. Une instruction bien rédigée peut transformer un assistant générique en expert ultra-spécialisé.</p>
+
+                                <p>La rédaction d'instructions efficaces suit une logique précise. Commencez toujours par définir le rôle et l'expertise, puis précisez le style de communication, établissez les règles de fonctionnement, et terminez par le format de sortie souhaité.</p>
+
+                                <h4>🎭 Définition du rôle et de la personnalité</h4>
+                                <p>Votre GPT doit avoir une identité claire et cohérente. Cette identité influence tous ses comportements et crée une expérience utilisateur prévisible et professionnelle.</p>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">✍️ Formules d'ouverture efficaces</div>
+                                    <ul>
+                                        <li><strong>Expertise technique :</strong> "Tu es un développeur senior spécialisé en Python avec 10 ans d'expérience"</li>
+                                        <li><strong>Conseil business :</strong> "Tu es un consultant en stratégie d'entreprise, expert en transformation digitale"</li>
+                                        <li><strong>Créativité :</strong> "Tu es un directeur artistique créatif avec une expertise en branding et storytelling"</li>
+                                        <li><strong>Éducation :</strong> "Tu es un professeur patient et pédagogue, expert en vulgarisation scientifique"</li>
+                                    </ul>
+                                </div>
+
+                                <h4>💬 Style de communication adapté</h4>
+                                <p>Le ton de votre GPT doit correspondre à son usage et à son audience. Un GPT destiné aux dirigeants n'aura pas le même registre qu'un assistant pour étudiants. Cette cohérence renforce la crédibilité et l'adoption.</p>
+
+                                <ul>
+                                    <li><strong>Niveau de formalité :</strong> Professionnel, décontracté, ou technique selon le contexte</li>
+                                    <li><strong>Vocabulaire :</strong> Spécialisé pour les experts, accessible pour le grand public</li>
+                                    <li><strong>Longueur des réponses :</strong> Concis pour l'opérationnel, détaillé pour l'éducatif</li>
+                                    <li><strong>Approche :</strong> Directif, consultatif, ou collaboratif selon les besoins</li>
+                                </ul>
+
+                                <h4>⚖️ Règles et limitations</h4>
+                                <p>Les règles définissent les garde-fous de votre GPT. Elles garantissent la qualité et la cohérence des réponses, même dans des situations imprévues ou des tentatives de contournement.</p>
+
+                                <p>Structurez vos règles en obligations ("Tu dois TOUJOURS...") et en interdictions ("Tu ne dois JAMAIS..."). Cette clarté binaire évite les ambiguïtés d'interprétation.</p>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🎯 Exemple d'instructions complètes</div>
+                                    <p><strong>GPT "Coach Productivité Entreprise" :</strong></p>
+                                    <p style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; font-style: italic;">
+                                        "Tu es un coach en productivité spécialisé dans l'optimisation des workflows d'équipe. Tu t'adresses à des managers et dirigeants cherchant à améliorer l'efficacité de leur organisation.<br><br>
+                                        
+                                        <strong>Style :</strong> Professionnel mais accessible, avec des exemples concrets et des actions immédiatement applicables.<br><br>
+                                        
+                                        <strong>Tu dois TOUJOURS :</strong> Demander le contexte de l'équipe avant tout conseil, proposer des solutions mesurables, donner des délais réalistes d'implémentation.<br><br>
+                                        
+                                        <strong>Tu ne dois JAMAIS :</strong> Critiquer les méthodes existantes, proposer plus de 3 actions à la fois, donner de conseils RH ou juridiques.<br><br>
+                                        
+                                        <strong>Format :</strong> Tes réponses incluent toujours un diagnostic, 2-3 recommandations prioritaires, et un plan d'action en 3 étapes."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Upload de documents et base de connaissances
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>La possibilité d'ajouter des documents à votre GPT transforme un assistant généraliste en expert de votre domaine spécifique. Cette fonctionnalité permet de créer une véritable base de connaissances personnalisée, accessible via conversation naturelle.</p>
+
+                                <p>Votre GPT peut analyser, synthétiser et référencer le contenu de vos documents pour répondre aux questions avec une précision et une pertinence inégalées. C'est particulièrement puissant pour les domaines techniques, les procédures internes, ou les connaissances métier spécialisées.</p>
+
+                                <h4>📁 Documents supportés et optimisation</h4>
+                                <p>ChatGPT accepte une large variété de formats, mais tous ne se valent pas en termes d'efficacité d'extraction d'information. La qualité de vos documents d'entrée détermine directement la pertinence des réponses.</p>
+
+                                <ul>
+                                    <li><strong>PDF :</strong> Excellent pour rapports, ebooks, documentation technique (évitez les scans de mauvaise qualité)</li>
+                                    <li><strong>Texte brut :</strong> .txt, .md, .rtf - format optimal pour l'analyse, idéal pour procédures et guides</li>
+                                    <li><strong>Données structurées :</strong> .csv, .xlsx pour bases de données, listes, analyses quantitatives</li>
+                                    <li><strong>Code source :</strong> Tous langages de programmation pour documentation technique et examples</li>
+                                </ul>
+
+                                <h4>🎯 Stratégies d'organisation optimale</h4>
+                                <p>L'organisation de vos documents influence directement la capacité de votre GPT à retrouver et utiliser l'information pertinente. Une structure logique améliore considérablement les performances.</p>
+
+                                <p>Privilégiez plusieurs documents spécialisés plutôt qu'un seul document généraliste. Cette segmentation permet au GPT de mieux cibler l'information pertinente et d'éviter les mélanges de contextes.</p>
+
+                                <ul>
+                                    <li><strong>Nommage descriptif :</strong> "Procédure_Onboarding_2024.pdf" plutôt que "Document1.pdf"</li>
+                                    <li><strong>Taille optimisée :</strong> 5-10 documents de 1-5MB chacun plutôt qu'un gros fichier</li>
+                                    <li><strong>Structure claire :</strong> Titres, sous-titres, et sections bien définies dans vos documents</li>
+                                    <li><strong>Mise à jour régulière :</strong> Remplacez les documents obsolètes pour éviter les conflits d'information</li>
+                                </ul>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">⚠️ Limitations à connaître</div>
+                                    <p><strong>Contraintes techniques :</strong> Maximum 20 fichiers par GPT, 512 MB par fichier. Le GPT ne peut pas modifier vos documents, seulement les consulter et les analyser.</p>
+                                    <p><strong>Sécurité :</strong> Évitez d'uploader des documents contenant des informations confidentielles ou personnelles sensibles.</p>
+                                </div>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🏆 Cas d'usage exemplaire</div>
+                                    <p><strong>GPT "Expert Onboarding" :</strong></p>
+                                    <ul>
+                                        <li>Manuel employé (procédures, valeurs, organisation)</li>
+                                        <li>Guide technique (outils, accès, formations)</li>
+                                        <li>FAQ récurrentes (questions/réponses habituelles)</li>
+                                        <li>Contacts utiles (annuaire, responsabilités)</li>
+                                    </ul>
+                                    <p>Résultat : Nouveau collaborateur autonome en 24h au lieu d'une semaine !</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Actions et intégrations externes
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Les Actions représentent la fonctionnalité la plus avancée des GPTs personnalisés. Elles transforment votre assistant de simple conversationnel en véritable interface avec le monde extérieur, capable d'interagir avec vos systèmes, bases de données et services en temps réel.</p>
+
+                                <p>Concrètement, une Action permet à votre GPT de faire des appels API vers des services externes : consulter une base de données client, vérifier un stock produit, créer un événement dans votre calendrier, ou même déclencher des workflows automatisés. Cette intégration ouvre des possibilités illimitées.</p>
+
+                                <h4>🌐 Exemples d'intégrations transformantes</h4>
+                                <p>Pour vous donner une idée du potentiel, voici des cas d'usage réels qui révolutionnent certaines activités professionnelles.</p>
+
+                                <ul>
+                                    <li><strong>GPT Service Client :</strong> Connecté au CRM pour consulter l'historique client, créer des tickets, vérifier les garanties</li>
+                                    <li><strong>GPT E-commerce :</strong> Consultation stock en temps réel, création de commandes, suivi de livraisons</li>
+                                    <li><strong>GPT Planning :</strong> Intégration calendrier pour proposer des créneaux, créer des rendez-vous, envoyer des invitations</li>
+                                    <li><strong>GPT Données :</strong> Requêtes SQL automatiques, génération de rapports, analyses de performance</li>
+                                </ul>
+
+                                <h4>🔧 Configuration technique simplifiée</h4>
+                                <p>Malgré son potentiel technique, la configuration d'une Action reste accessible. ChatGPT utilise le standard OpenAPI (anciennement Swagger) que de nombreuses APIs modernes supportent nativement.</p>
+
+                                <p>La plupart des services populaires (Google, Microsoft, Slack, Notion, etc.) fournissent déjà des schémas OpenAPI prêts à l'emploi. Pour les services personnalisés, de nombreux outils génèrent automatiquement ces schémas à partir de votre API existante.</p>
+
+                                <ul>
+                                    <li><strong>Schema OpenAPI :</strong> Description standardisée de votre API (endpoints, paramètres, réponses)</li>
+                                    <li><strong>Authentification :</strong> Support des méthodes modernes (OAuth2, Bearer tokens, API keys)</li>
+                                    <li><strong>Test intégré :</strong> Interface de validation pour tester vos appels avant publication</li>
+                                    <li><strong>Gestion d'erreurs :</strong> Instructions personnalisées pour gérer les cas d'échec</li>
+                                </ul>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🚀 Premier projet d'Action</div>
+                                    <p><strong>Commencez simple avec une API publique :</strong></p>
+                                    <ol>
+                                        <li><strong>Choisissez une API gratuite</strong> comme OpenWeatherMap (météo) ou JSONPlaceholder (données test)</li>
+                                        <li><strong>Récupérez le schema OpenAPI</strong> depuis la documentation officielle</li>
+                                        <li><strong>Configurez l'Action</strong> dans votre GPT via l'interface dédiée</li>
+                                        <li><strong>Testez en conversation</strong> : "Quelle est la météo à Paris ?"</li>
+                                        <li><strong>Affinez les instructions</strong> pour optimiser l'utilisation des données</li>
+                                    </ol>
+                                </div>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">⚡ Conseil d'expert</div>
+                                    <p>Commencez par une Action simple en lecture seule (consultation de données) avant de passer aux Actions de modification. Cela vous permet de maîtriser les concepts sans risque d'impact sur vos systèmes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Publication et partage dans le GPT Store
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>La publication de votre GPT marque le passage de l'outil personnel à la solution partagée. Cette décision influence non seulement qui peut utiliser votre création, mais aussi comment elle sera découverte et adoptée par d'autres utilisateurs.</p>
+
+                                <p>OpenAI propose trois niveaux de partage, chacun répondant à des besoins spécifiques. Le choix dépend de vos objectifs : usage personnel, collaboration équipe, ou impact communautaire.</p>
+
+                                <h4>🔐 Options de partage stratégiques</h4>
+                                <p><strong>Mode Privé</strong> convient parfaitement pour vos GPTs contenant des informations sensibles ou des processus internes. Vous seul y avez accès, garantissant la confidentialité totale.</p>
+
+                                <p><strong>Partage par lien</strong> offre un contrôle granulaire : vous décidez précisément qui peut accéder à votre GPT en partageant le lien sécurisé. Idéal pour les équipes, clients, ou collaborateurs spécifiques.</p>
+
+                                <p><strong>Publication publique</strong> ouvre votre GPT au GPT Store, lui donnant une visibilité potentielle auprès de millions d'utilisateurs. Cette option demande le plus de préparation mais offre le plus grand impact.</p>
+
+                                <h4>🏆 Excellence pour le GPT Store</h4>
+                                <p>Le GPT Store privilégie la qualité et l'utilité réelle. Les GPTs qui réussissent résolvent des problèmes authentiques avec une approche originale et une exécution irréprochable.</p>
+
+                                <p>La concurrence étant intense, votre GPT doit apporter une valeur unique et démontrable. Les utilisateurs adoptent les GPTs qui leur font économiser du temps ou leur apportent des capacités qu'ils ne trouvent nulle part ailleurs.</p>
+
+                                <ul>
+                                    <li><strong>Problème réel :</strong> Votre GPT résout-il un pain point authentique et fréquent ?</li>
+                                    <li><strong>Exécution soignée :</strong> Instructions précises, réponses cohérentes, gestion d'erreurs</li>
+                                    <li><strong>Différenciation claire :</strong> En quoi votre approche est-elle unique ou supérieure ?</li>
+                                    <li><strong>Expérience utilisateur :</strong> Simplicité d'utilisation, onboarding fluide, résultats immédiats</li>
+                                </ul>
+
+                                <h4>📈 Optimisation pour la découverte</h4>
+                                <p>La visibilité dans le GPT Store dépend largement de votre capacité à communiquer clairement la valeur de votre création. Les utilisateurs doivent comprendre immédiatement ce que fait votre GPT et pourquoi ils en ont besoin.</p>
+
+                                <ul>
+                                    <li><strong>Nom explicite :</strong> "Assistant Email Marketing" plutôt que "MarketingBot Pro"</li>
+                                    <li><strong>Description accrocheuse :</strong> Bénéfice concret en une phrase percutante</li>
+                                    <li><strong>Mots-clés pertinents :</strong> Termes que votre audience cible utilise naturellement</li>
+                                    <li><strong>Instructions d'onboarding :</strong> Premiers prompts suggérés pour démarrer facilement</li>
+                                </ul>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">💰 Modèle économique émergent</div>
+                                    <p>OpenAI développe un système de rémunération basé sur l'engagement utilisateur. Les créateurs de GPTs populaires recevront une part des revenus proportionnelle à l'utilisation de leurs créations. Bien que les détails évoluent encore, c'est une motivation supplémentaire pour créer des GPTs de qualité.</p>
+                                </div>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">📋 Checklist de publication</div>
+                                    <p><strong>Avant de publier, vérifiez :</strong></p>
+                                    <ul>
+                                        <li>✅ Test approfondi avec 10+ scénarios d'usage différents</li>
+                                        <li>✅ Instructions claires et gestion des cas limites</li>
+                                        <li>✅ Nom, description et image professionnels</li>
+                                        <li>✅ Respect des conditions d'utilisation OpenAI</li>
+                                        <li>✅ Valeur unique vs GPTs existants du même domaine</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Techniques d'optimisation -->
+                <section class="section">
+                    <h2 class="section-title">⚙️ Techniques d'optimisation</h2>
+                    
+                    <div class="section-content">
+                        <p>Maîtriser ChatGPT ne s'arrête pas à savoir poser des questions. Les vraies gains de productivité viennent de l'optimisation : comprendre les limites, contourner les obstacles, et exploiter les fonctionnalités avancées pour maximiser vos résultats.</p>
+                    </div>
+                    
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Gestion intelligente des limites de tokens
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Les tokens représentent la "mémoire de travail" de ChatGPT. Comprendre et optimiser leur utilisation transforme votre approche, particulièrement pour les tâches complexes nécessitant beaucoup de contexte.</p>
+
+                                <p>Chaque modèle a ses propres limites : GPT-3.5 gère environ 16 000 tokens, GPT-4 jusqu'à 32 000, et GPT-4 Turbo impressionnants 128 000 tokens. Pour vous donner une idée, cette page entière représente environ 4 000 tokens.</p>
+
+                                <h4>⚡ Stratégies d'optimisation efficaces</h4>
+                                <p>L'art de la gestion des tokens consiste à transmettre le maximum d'information utile dans l'espace disponible, tout en gardant la conversation fluide et naturelle.</p>
+
+                                <ul>
+                                    <li><strong>Prompts concis mais précis :</strong> Éliminez les formules de politesse inutiles, mais gardez tous les détails pertinents</li>
+                                    <li><strong>Segmentation intelligente :</strong> Divisez les gros documents en sections logiques plutôt que de tout envoyer d'un coup</li>
+                                    <li><strong>Résumés itératifs :</strong> Faites synthétiser progressivement plutôt que d'accumuler</li>
+                                    <li><strong>Contexte sélectif :</strong> Ne gardez que les informations directement pertinentes à votre question actuelle</li>
+                                </ul>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">🎯 Technique du "Résumé en cascade"</div>
+                                    <p>Pour traiter de très longs documents :</p>
+                                    <ol>
+                                        <li><strong>Divisez</strong> votre document en sections de 3-4 pages maximum</li>
+                                        <li><strong>Demandez un résumé</strong> détaillé de chaque section avec les points clés</li>
+                                        <li><strong>Combinez les résumés</strong> en un seul document</li>
+                                        <li><strong>Demandez un résumé final</strong> ou une analyse globale du document complet</li>
+                                    </ol>
+                                    <p>Cette méthode préserve les nuances importantes tout en restant dans les limites techniques.</p>
+                                </div>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">💡 Astuce d'expert</div>
+                                    <p>Utilisez la commande "Continue" quand ChatGPT s'arrête en plein milieu d'une réponse. C'est souvent plus efficace que de redemander depuis le début.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Maîtriser les conversations longues et la mémoire contextuelle
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Les conversations longues sont où ChatGPT révèle sa vraie puissance. Contrairement aux interactions ponctuelles, elles permettent de construire progressivement une compréhension nuancée et d'approfondir les sujets complexes.</p>
+
+                                <p>La clé est de traiter votre conversation comme un projet collaboratif : vous apportez les informations et le contexte, ChatGPT apporte l'analyse et les suggestions. Cette synergie s'améliore au fil des échanges.</p>
+
+                                <h4>🧠 Optimiser la mémoire contextuelle</h4>
+                                <p>ChatGPT se souvient de tout dans une conversation, mais son attention peut se disperser dans les discussions très longues. Votre rôle est de maintenir la focale sur l'essentiel.</p>
+
+                                <ul>
+                                    <li><strong>Récapitulatifs stratégiques :</strong> "Avant de continuer, résume les 3 décisions principales qu'on vient de prendre"</li>
+                                    <li><strong>Points de repère :</strong> Numérotez les étapes importantes et référez-vous-y explicitement</li>
+                                    <li><strong>Références directes :</strong> "Comme tu l'as suggéré dans ta deuxième proposition..." maintient la cohérence</li>
+                                    <li><strong>Nouvelle conversation :</strong> Démarrez fresh quand le contexte devient trop chargé ou confus</li>
+                                </ul>
+
+                                <h4>🎯 Maintenir l'efficacité sur la durée</h4>
+                                <p>Les longues conversations demandent une gestion active pour éviter les dérives et maintenir la productivité. Voici des techniques éprouvées pour garder le cap.</p>
+
+                                <ul>
+                                    <li><strong>Checkpoints réguliers :</strong> Faites des bilans d'étape pour consolider les acquis</li>
+                                    <li><strong>Objectifs visibles :</strong> Rappelez régulièrement l'objectif global du projet</li>
+                                    <li><strong>Documentation externe :</strong> Sortez les informations importantes de la conversation (notes, fichiers)</li>
+                                    <li><strong>Sessions dédiées :</strong> Une conversation = un projet ou un sujet principal</li>
+                                </ul>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🧪 Test de mémoire contextuelle</div>
+                                    <p><strong>Expérimentez les limites :</strong></p>
+                                    <ol>
+                                        <li>Démarrez avec 5 informations personnelles spécifiques</li>
+                                        <li>Engagez 15-20 échanges sur des sujets variés</li>
+                                        <li>Demandez : "Peux-tu me rappeler les 5 informations que j'ai partagées au début ?"</li>
+                                        <li>Analysez ce qui est retenu, oublié, ou déformé</li>
+                                        <li>Adaptez votre stratégie en conséquence</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapsible">
+                        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+                            Exploiter les plugins et extensions
+                            <span class="collapsible-icon">▼</span>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="collapsible-body">
+                                <p>Les plugins transforment ChatGPT de simple conversationnel en véritable couteau suisse numérique. Ils ajoutent des capacités spécialisées : accès web, calculs avancés, génération d'images, et bien plus.</p>
+
+                                <p>Chaque plugin répond à une limitation spécifique de ChatGPT de base. Web Browsing lui donne accès aux informations actuelles, Code Interpreter lui permet d'exécuter du code, DALL-E ajoute la création visuelle. Combinés intelligemment, ils créent des workflows puissants.</p>
+
+                                <h4>🔌 Plugins officiels essentiels</h4>
+                                <p>OpenAI propose plusieurs plugins intégrés qui couvrent les besoins les plus fréquents. Maîtriser ces outils de base vous donne déjà un avantage considérable.</p>
+
+                                <ul>
+                                    <li><strong>Web Browsing :</strong> Recherches actuelles, vérification de faits, analyse de sites web en temps réel</li>
+                                    <li><strong>Code Interpreter :</strong> Analyses de données, calculs complexes, génération de graphiques, traitement de fichiers</li>
+                                    <li><strong>DALL-E 3 :</strong> Création d'images sur mesure directement intégrée à la conversation</li>
+                                    <li><strong>Plugins tiers :</strong> Intégrations spécialisées selon vos besoins (Zapier, Canva, etc.)</li>
+                                </ul>
+
+                                <h4>🌐 Extensions navigateur complémentaires</h4>
+                                <p>L'écosystème d'extensions enrichit encore l'expérience ChatGPT. Ces outils comblent les gaps d'usage et améliorent l'intégration dans votre workflow quotidien.</p>
+
+                                <ul>
+                                    <li><strong>ChatGPT Writer :</strong> Assistant de rédaction intégré à tous vos sites web</li>
+                                    <li><strong>WebChatGPT :</strong> Recherche web directement depuis l'interface ChatGPT</li>
+                                    <li><strong>Voice Control :</strong> Interaction vocale fluide, idéale pour la mobilité</li>
+                                    <li><strong>ChatGPT Prompt Genius :</strong> Bibliothèque de prompts prêts à l'emploi</li>
+                                </ul>
+
+                                <div class="tip-box">
+                                    <div class="tip-title">⚡ Workflow de plugins combinés</div>
+                                    <p><strong>Exemple puissant :</strong> Web Browsing pour rechercher les dernières tendances de votre secteur → Code Interpreter pour analyser les données collectées → DALL-E pour créer une infographie des résultats. Trois plugins, un résultat professionnel complet.</p>
+                                </div>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">🎯 Challenge multi-plugins</div>
+                                    <p><strong>Créez un rapport de veille complet :</strong></p>
+                                    <ol>
+                                        <li>Web Browsing : Recherchez les 5 dernières news de votre secteur</li>
+                                        <li>Code Interpreter : Analysez les tendances et créez un graphique</li>
+                                        <li>DALL-E : Générez une illustration pour accompagner le rapport</li>
+                                        <li>Assemblage : Demandez un rapport structuré intégrant tout</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="outils_3_overview.html" class="btn btn-secondary">
+                        <span>←</span> Vue d'ensemble
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Séquence 1 sur 4</div>
+                        <div class="nav-title">ChatGPT et GPT-4 - Maîtrise complète</div>
+                    </div>
+                    <a href="outils_3_claude_2.html" class="btn btn-primary">
+                        Séquence 2 <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%;"></div>
+                    </div>
+                    <div class="progress-text">Séquence 1 sur 4 - Module 3</div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item current">
+                            <div class="sequence-icon current">1</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">ChatGPT et GPT-4</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">2</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Claude et alternatives</div>
+                                <div class="sequence-duration">75 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">3</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Outils spécialisés</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">4</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Atelier comparatif</div>
+                                <div class="sequence-duration">105 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">⚡ Actions rapides</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="https://chat.openai.com" target="_blank" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            🔗 Ouvrir ChatGPT
+                        </a>
+                        <a href="#" class="btn btn-secondary" style="font-size: 0.9rem;" onclick="markCompleted()">
+                            ✅ Marquer comme terminé
+                        </a>
+                        <a href="ressources_outils.html" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            📚 Voir toutes les ressources
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Collapsible functionality
+        function toggleCollapsible(header) {
+            const collapsible = header.parentElement;
+            const content = collapsible.querySelector('.collapsible-content');
+            const icon = header.querySelector('.collapsible-icon');
+            
+            collapsible.classList.toggle('active');
+            
+            if (collapsible.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Mark sequence as completed
+        function markCompleted() {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[3]) progress.modules[3] = {};
+            
+            progress.modules[3][1] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+            
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = '50%';
+            
+            // Show confirmation
+            alert('Séquence marquée comme terminée ! 🎉');
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Auto-expand first collapsible for better UX
+            const firstCollapsible = document.querySelector('.collapsible');
+            if (firstCollapsible) {
+                toggleCollapsible(firstCollapsible.querySelector('.collapsible-header'));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Master : Textes longs qui convertissent - IA Academy</title>
+    <style>
+        /* Enhanced CSS Variables for consistent theming */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(148, 163, 184, 0.2);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            
+            --pattern-opacity: 0.03;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: var(--transition);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Dynamic Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-icon {
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            position: relative;
+        }
+
+        [data-theme="dark"] .theme-toggle-icon {
+            transform: translateX(23px);
+        }
+
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Prompt Code Blocks */
+        .prompt-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .prompt-label {
+            position: absolute;
+            top: -10px;
+            left: 1rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--bg-primary);
+        }
+
+        /* Results Tracking */
+        .results-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.1rem;
+        }
+
+        /* Exercise Section */
+        .exercise-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exercise-intro {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-counter {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .exercise-step {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Enhanced Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">← Dashboard</a>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-icon">
+                            🌙
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+            →
+            <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+            →
+            <span class="breadcrumb-current">ChatGPT Master : Textes longs</span>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        🎯 Micro-séquence 1A
+                    </div>
+                    <div class="lesson-badge">
+                        ⏱️ 25 min
+                    </div>
+                    <div class="lesson-badge">
+                        🔧 ChatGPT Focus
+                    </div>
+                </div>
+                <h1 class="lesson-title">ChatGPT Master : Textes longs qui convertissent</h1>
+                <p class="lesson-description">
+                    Transformez un brief de 2 lignes en article de 1500 mots engageant avec 5 prompts step-by-step qui garantissent des résultats professionnels.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="main-layout">
+            <div class="main-content">
+                
+                <!-- 🚀 Objectif SMART -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🚀 Objectif de cette micro-séquence
+                    </h2>
+                    
+                    <div class="interactive-box">
+                        <div class="interactive-title">🎯 Mission impossible</div>
+                        <p><strong>Défi :</strong> Passer d'un brief client banal à un article de 1500 mots qui engage, informe et convertit.</p>
+                        <p><strong>Métrique de réussite :</strong> Article complet en moins de 15 minutes avec score de lisibilité > 60 et structure parfaite.</p>
+                    </div>
+
+                    <div class="section-content">
+                        <h3>🎯 Brief client type que vous allez transformer :</h3>
+                        <div class="prompt-block">
+                            <div class="prompt-label">Brief initial</div>
+                            "Écris un article sur l'importance du marketing digital pour les PME. Public cible : dirigeants de PME. Objectif : les convaincre de nous contacter."
+                        </div>
+
+                        <h3>📊 Résultats attendus à la fin :</h3>
+                        <ul>
+                            <li>✅ <strong>Article de 1500 mots</strong> structuré et engageant</li>
+                            <li>✅ <strong>Score de lisibilité élevé</strong> (mesurable avec Hemingway Editor)</li>
+                            <li>✅ <strong>Call-to-action naturel et persuasif</strong></li>
+                            <li>✅ <strong>Temps de création divisé par 5</strong> vs méthode manuelle</li>
+                            <li>✅ <strong>5 prompts maîtrisés</strong> réutilisables pour tout sujet</li>
+                        </ul>
+
+                        <h3>🏆 Critères de réussite :</h3>
+                        <div class="results-box">
+                            <div class="metric-item">
+                                <span class="metric-label">Temps de rédaction</span>
+                                <span class="metric-value">< 15 min</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Longueur finale</span>
+                                <span class="metric-value">1500+ mots</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Score Hemingway</span>
+                                <span class="metric-value">Grade 8-10</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Taux d'engagement prédit</span>
+                                <span class="metric-value">+60%</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 🔧 Prérequis techniques -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🔧 Prérequis techniques
+                    </h2>
+                    
+                    <div class="section-content">
+                        <h3>📱 Outils nécessaires :</h3>
+                        <ul>
+                            <li>✅ <strong>ChatGPT Plus ou version gratuite</strong> (GPT-4 recommandé pour de meilleurs résultats)</li>
+                            <li>✅ <strong>Hemingway Editor</strong> (gratuit en ligne sur hemingwayapp.com)</li>
+                            <li>✅ <strong>Éditeur de texte</strong> (Google Docs, Word, ou simple bloc-notes)</li>
+                            <li>✅ <strong>Navigateur avec onglets multiples</strong> pour jongler entre outils</li>
+                        </ul>
+
+                        <h3>⚙️ Configuration recommandée :</h3>
+                        <ul>
+                            <li><strong>ChatGPT :</strong> Ouvrir une nouvelle conversation pour un contexte propre</li>
+                            <li><strong>Hemingway Editor :</strong> Garder ouvert dans un onglet pour tests rapides</li>
+                            <li><strong>Éditeur de texte :</strong> Document vierge prêt pour assemblage final</li>
+                            <li><strong>Cette page :</strong> Garder accessible pour copier les prompts</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">💡 Astuce pro</div>
+                            <p>Préparez 5 onglets : ChatGPT, Hemingway Editor, votre éditeur, cette page de formation, et un onglet pour recherche rapide si besoin de données actuelles.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 💪 Exercice pratique guidé -->
+                <section class="section">
+                    <div class="exercise-container">
+                        <h2 class="exercise-title">
+                            💪 Exercice pratique guidé
+                        </h2>
+                        
+                        <div class="exercise-intro">
+                            <h3>🎯 Contexte et objectifs de ces exercices</h3>
+                            <p><strong>Situation :</strong> Vous êtes consultant en marketing digital et un client restaurateur vous demande "quelque chose" sur les réseaux sociaux pour attirer plus de clients. Vous devez transformer ce brief flou en article professionnel de 1500 mots qui démontre votre expertise et incite à vous contacter.</p>
+                            
+                            <p><strong>Enjeu :</strong> L'article doit être suffisamment informatif pour apporter de la valeur, mais aussi suffisamment persuasif pour convertir le lecteur en prospect qualifié.</p>
+                            
+                            <p><strong>Méthodologie :</strong> Nous allons appliquer une approche structurée en 5 étapes avec des prompts optimisés qui garantissent un résultat professionnel. Chaque prompt a été testé et affiné pour maximiser la qualité du contenu généré.</p>
+
+                            <p><strong>Temps estimé :</strong> 12-15 minutes pour l'article complet (vs 2-3h en rédaction manuelle traditionnelle)</p>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">1</div>
+                                Analyse et structuration du contenu
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Analysez le brief client et créez un plan détaillé d'article optimisé pour convertir. Copiez le brief test ci-dessous et appliquez le premier prompt dans ChatGPT.</p>
+                                
+                                <p><strong>Brief test à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Brief client</div>
+                                    <button class="copy-btn" onclick="copyPrompt('brief')">📋 Copier</button>
+                                    <div id="prompt-brief">"Écris un article sur pourquoi les restaurants doivent absolument être sur les réseaux sociaux. Public : propriétaires de restaurants indépendants. Objectif : montrer qu'on peut les aider."</div>
+                                </div>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 1 - Structuration</div>
+                                    <button class="copy-btn" onclick="copyPrompt('1')">📋 Copier</button>
+                                    <div id="prompt-1">Agis comme un expert en content marketing avec 10 ans d'expérience.
+
+ANALYSE CE BRIEF : "Écris un article sur pourquoi les restaurants doivent absolument être sur les réseaux sociaux. Public : propriétaires de restaurants indépendants. Objectif : montrer qu'on peut les aider."
+
+TÂCHE : Crée un plan détaillé d'article optimisé pour convertir.
+
+FORMAT OBLIGATOIRE :
+1. TITRE principal (accrocheur, 8-12 mots)
+2. HOOK d'ouverture (1 question + 1 statistique choc)
+3. STRUCTURE en 5 sections logiques avec sous-titres H2
+4. MOTS-CLÉS principaux à intégrer naturellement
+5. ANGLE UNIQUE qui différencie de la concurrence
+6. CALL-TO-ACTION final (naturel, pas commercial)
+
+CONTRAINTES :
+- Ton : professionnel mais accessible
+- Public : propriétaires de restaurants indépendants (pas experts tech)
+- Longueur visée : 1500 mots
+- Objectif : 70% valeur + 30% persuasion</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Plan détaillé avec titre accrocheur, hook statistique, 5 sections logiques, mots-clés et angle unique. ChatGPT doit vous fournir une structure complète prête à développer.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">2</div>
+                                Rédaction de l'introduction engageante
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Créez une introduction qui accroche immédiatement le lecteur avec une question rhétorique et une statistique surprenante. L'objectif est de captiver dès les premières lignes.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 2 - Introduction</div>
+                                    <button class="copy-btn" onclick="copyPrompt('2')">📋 Copier</button>
+                                    <div id="prompt-2">Rédige l'introduction de l'article selon cette structure :
+
+STRUCTURE OBLIGATOIRE :
+1. HOOK : Question rhétorique qui interpelle + statistique récente surprenante
+2. PROBLÈME : Pain point concret que vit le lecteur quotidiennement  
+3. PROMESSE : Ce qu'il va apprendre/gagner en lisant l'article
+4. APERÇU : Annonce des 3 points clés qui seront développés
+
+CONTRAINTES :
+- 200-250 mots maximum
+- Vocabulaire accessible (éviter jargon technique)
+- Ton conversationnel mais crédible
+- Inclure une référence/étude récente
+- Finir par une transition naturelle vers le développement
+
+EXEMPLE DE HOOK : "Saviez-vous que 73% des restaurants qui investissent dans les réseaux sociaux voient leur fréquentation augmenter de 25% en moins de 6 mois ?"</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Introduction de 200-250 mots avec hook statistique, problématique claire, promesse de valeur et aperçu des points clés. Le lecteur doit avoir envie de continuer la lecture.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">3</div>
+                                Développement des sections principales
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Développez les 2 premières sections de votre plan avec des exemples concrets et des cas pratiques. Pour gagner du temps, nous ne développerons que 2 sections dans cet exercice, mais vous pourrez appliquer la même méthode aux autres.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 3 - Développement</div>
+                                    <button class="copy-btn" onclick="copyPrompt('3')">📋 Copier</button>
+                                    <div id="prompt-3">Développe la section "[REMPLACE PAR LE TITRE DE LA 1ÈRE SECTION]" de l'article.
+
+STRUCTURE PAR SECTION :
+1. SOUS-TITRE H2 actionnable (commence par un verbe)
+2. PARAGRAPHE d'introduction (pourquoi c'est important)
+3. 3-4 POINTS CLÉS avec exemples concrets de restaurants
+4. CAS PRATIQUE ou témoignage court
+5. TRANSITION vers la section suivante
+
+CONTRAINTES :
+- 250-300 mots par section
+- 1 exemple concret de restaurant par point clé
+- Éviter les listes trop longues
+- Ajouter des données chiffrées si pertinent
+- Ton expert mais pédagogique
+
+FORMULE : Explication simple + Exemple concret + Bénéfice direct = Section parfaite</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> 2 sections de 250-300 mots chacune avec sous-titres actionnnables, exemples concrets de restaurants et cas pratiques. Répétez ce prompt pour chaque section en changeant le titre.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">4</div>
+                                Conclusion qui convertit naturellement
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Rédigez une conclusion qui récapitule les points clés et propose naturellement vos services sans être intrusif. L'objectif est d'inciter à l'action tout en restant dans la valeur ajoutée.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 4 - Conclusion</div>
+                                    <button class="copy-btn" onclick="copyPrompt('4')">📋 Copier</button>
+                                    <div id="prompt-4">Rédige une conclusion qui récapitule ET convertit naturellement.
+
+STRUCTURE OBLIGATOIRE :
+1. RÉCAPITULATIF : Les 3 points clés en 1 phrase chacun
+2. BÉNÉFICE PRINCIPAL : Le "gros gain" si le lecteur applique
+3. OBJECTION : Adresse le principal frein ("Oui mais c'est compliqué/cher...")
+4. RÉASSURANCE : Solution simple ou premier pas facile
+5. CTA NATUREL : Proposition d'aide sans être vendeur
+
+CONTRAINTES :
+- 150-200 mots maximum
+- Ton motivant et rassurant
+- CTA discret mais clair
+- Éviter "Contactez-nous maintenant!"
+- Finir sur une note positive et actionnable
+
+EXEMPLE CTA : "Si vous souhaitez être accompagné dans cette démarche, nous serions ravis d'échanger sur vos objectifs spécifiques."</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Conclusion de 150-200 mots avec récapitulatif des points clés, réponse aux objections et call-to-action naturel. Le lecteur doit se sentir capable d'agir et savoir comment vous contacter.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">5</div>
+                                Optimisation finale pour lisibilité
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Peaufinez votre article pour maximiser l'engagement et la conversion. Testez la lisibilité avec Hemingway Editor pour vous assurer qu'elle est accessible à votre audience cible.</p>
+
+                                <p><strong>Prompt à utiliser :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt 5 - Optimisation</div>
+                                    <button class="copy-btn" onclick="copyPrompt('5')">📋 Copier</button>
+                                    <div id="prompt-5">Optimise cet article complet pour maximiser l'engagement et la conversion.
+
+VÉRIFICATIONS OBLIGATOIRES :
+1. LISIBILITÉ : Phrases < 25 mots, paragraphes < 150 mots
+2. ENGAGEMENT : Questions rhétoriques, interpellations directes
+3. SCANNABILITÉ : Sous-titres clairs, listes à puces, mots en gras
+4. TRANSITIONS : Liens logiques entre paragraphes
+5. SEO NATUREL : Mots-clés intégrés sans forçage
+
+AMÉLIORATIONS À APPORTER :
+- Remplace les mots complexes par des équivalents simples
+- Ajoute des connecteurs logiques manquants
+- Enrichis avec 2-3 données chiffrées pertinentes
+- Vérifie que chaque section apporte une valeur unique
+- Optimise le titre final pour le clic ET l'information
+
+RÉSULTAT : Article prêt à publier avec score Hemingway < 10 et structure parfaite.</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Article optimisé prêt à publier avec score Hemingway Grade 8-10, transitions fluides et lisibilité parfaite. Copiez le résultat final dans Hemingway Editor pour vérifier le score.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 📊 Résultats & métriques -->
+                <section class="section">
+                    <h2 class="section-title">
+                        📊 Validation des résultats
+                    </h2>
+                    
+                    <div class="section-content">
+                        <h3>📏 Checklist de qualité finale :</h3>
+                        <div class="results-box">
+                            <div class="metric-item">
+                                <span class="metric-label">Temps total de rédaction</span>
+                                <span class="metric-value">~15 min</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Nombre de mots générés</span>
+                                <span class="metric-value">~1500 mots</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Gain de temps vs rédaction manuelle</span>
+                                <span class="metric-value">5x plus rapide</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Score Hemingway visé</span>
+                                <span class="metric-value">Grade 8-10</span>
+                            </div>
+                        </div>
+
+                        <h3>🏆 Éléments à vérifier :</h3>
+                        <ul>
+                            <li>✅ <strong>Structure complète :</strong> Intro + 3-5 sections + Conclusion + CTA</li>
+                            <li>✅ <strong>Longueur optimale :</strong> 1200-1800 mots (lecture 5-7 min)</li>
+                            <li>✅ <strong>Lisibilité élevée :</strong> Score Hemingway < Grade 10</li>
+                            <li>✅ <strong>Engagement naturel :</strong> Questions, interpellations, exemples concrets</li>
+                            <li>✅ <strong>CTA non-intrusif :</strong> Proposition d'aide vs vente directe</li>
+                            <li>✅ <strong>Réutilisabilité :</strong> Les 5 prompts marchent sur tout sujet</li>
+                        </ul>
+
+                        <h3>💡 Applications immédiates :</h3>
+                        <ul>
+                            <li><strong>Articles de blog</strong> pour votre site ou vos clients</li>
+                            <li><strong>Livres blancs</strong> en assemblant plusieurs articles</li>
+                            <li><strong>Newsletters détaillées</strong> avec forte valeur ajoutée</li>
+                            <li><strong>Contenus LinkedIn</strong> en format long</li>
+                            <li><strong>Scripts de webinaires</strong> structurés et engageants</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🚀 Prochaine étape</div>
+                            <p><strong>Défi personnel :</strong> Utilisez ces 5 prompts cette semaine sur 3 sujets différents de votre secteur. Mesurez le temps gagné et la qualité obtenue.</p>
+                            <p><strong>Objectif :</strong> Constituer votre bibliothèque de contenus longs de qualité professionnelle en un temps record !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="generative_4_overview.html" class="btn btn-secondary">← Vue d'ensemble</a>
+                    <a href="generative_4_scripts_claude_1b.html" class="btn btn-primary">Micro-séquence 1B →</a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🕐 Suivi de session</h3>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="global-progress"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0% terminé</div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">🎯 Objectif session</div>
+                    <p>Maîtriser la création d'articles longs et engageants avec ChatGPT en 25 minutes chrono.</p>
+                </div>
+
+                <div class="results-box">
+                    <div class="interactive-title">📊 Vos métriques</div>
+                    <div class="metric-item">
+                        <span class="metric-label">Temps écoulé</span>
+                        <span class="metric-value" id="elapsed-time">00:00</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Sections complétées</span>
+                        <span class="metric-value" id="sections-completed">0/4</span>
+                    </div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">💪 Actions post-session</div>
+                    <ul style="font-size: 0.9rem; margin: 0; padding-left: 1rem;">
+                        <li>Sauvegarder les 5 prompts</li>
+                        <li>Tester sur votre secteur</li>
+                        <li>Mesurer temps gagné</li>
+                        <li>Passer à la micro-séquence 1B</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // Variables globales
+        let globalStartTime = null;
+        let completedSections = 0;
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.querySelector('.theme-toggle-icon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.querySelector('.theme-toggle-icon');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            }
+            
+            // Start global timer
+            if (!globalStartTime) {
+                globalStartTime = Date.now();
+                updateGlobalTimer();
+            }
+        });
+
+        function completeSection() {
+            completedSections++;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (completedSections / 4) * 100;
+            document.getElementById('global-progress').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = Math.round(progress) + '% terminé';
+            document.getElementById('sections-completed').textContent = completedSections + '/4';
+        }
+
+        function updateGlobalTimer() {
+            setInterval(() => {
+                if (globalStartTime) {
+                    const elapsed = Date.now() - globalStartTime;
+                    const minutes = Math.floor(elapsed / 60000);
+                    const seconds = Math.floor((elapsed % 60000) / 1000);
+                    document.getElementById('elapsed-time').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        // Copy prompt functionality
+        function copyPrompt(promptNumber) {
+            const promptId = `prompt-${promptNumber}`;
+            const promptElement = document.getElementById(promptId);
+            const text = promptElement.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const copyBtn = promptElement.parentElement.querySelector('.copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Copié !';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Erreur lors de la copie:', err);
+            });
+        }
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Auto-save progress
+        let progressTimer;
+        window.addEventListener('scroll', function() {
+            clearTimeout(progressTimer);
+            progressTimer = setTimeout(function() {
+                const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                if (scrollPercent > 0) {
+                    localStorage.setItem('micro_sequence_1a_progress', scrollPercent);
+                }
+                
+                // Auto-complete sections based on scroll
+                if (scrollPercent > 25 && completedSections < 1) {
+                    completedSections = 1;
+                    updateProgress();
+                } else if (scrollPercent > 50 && completedSections < 2) {
+                    completedSections = 2;
+                    updateProgress();
+                } else if (scrollPercent > 75 && completedSections < 3) {
+                    completedSections = 3;
+                    updateProgress();
+                } else if (scrollPercent > 90 && completedSections < 4) {
+                    completedSections = 4;
+                    updateProgress();
+                }
+            }, 1000);
+        });
+
+        // Load saved progress
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedProgress = localStorage.getItem('micro_sequence_1a_progress');
+            if (savedProgress && savedProgress > 25) {
+                const sections = Math.floor(savedProgress / 25);
+                completedSections = Math.min(sections, 4);
+                updateProgress();
+            }
+        });
+    </script>
+</body>
+</html>

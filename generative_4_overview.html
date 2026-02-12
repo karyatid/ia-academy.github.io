@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4: IA Générative - Vue d'ensemble | IA Academy</title>
+    
+    <style>
+        /* Variables CSS - NeuroDesign Theme */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%);
+            background-size: 40px 40px, 40px 40px, 40px 40px;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-btn {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+            background: var(--card-bg);
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle-button {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(30px);
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumbs .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.3;
+        }
+
+        .hero .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .section-content strong {
+            color: var(--text-primary);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-color)10, var(--accent-color)10);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .highlight-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-title span:first-child {
+            font-size: 1.2rem;
+        }
+
+        /* Objectives Grid */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .objective-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow);
+        }
+
+        .objective-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .objective-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .objective-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Program Details */
+        .program-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .program-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .program-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .program-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .program-number {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .program-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .program-duration {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+
+        .program-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .program-content ul {
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .program-content li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-list {
+            list-style: none;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--glass-bg);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(135deg, var(--primary-color)20, var(--accent-color)20);
+            border: 1px solid var(--border-color);
+        }
+
+        .sequence-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .sequence-icon.overview {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Navigation Buttons */
+        .sequence-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card-bg);
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn span {
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .sequence-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .objectives-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .program-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="dashboard.html" class="back-btn">← Dashboard</a>
+            <a href="dashboard.html" class="logo">IA Academy</a>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <div class="theme-toggle-button"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Module 4: IA Générative</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">Module 4 • 7 heures • IA Générative</div>
+            <h1 class="hero-title">IA Générative</h1>
+            <p class="hero-subtitle">
+                Maîtrisez la création de contenu multimédia avec l'intelligence artificielle : texte, images, audio et vidéo pour donner vie à vos idées créatives.
+            </p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content-grid">
+            <main class="main-content">
+                <!-- Pourquoi ce module -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Pourquoi ce module ?</h2>
+                    <div class="section-content">
+                        <p>L'IA générative révolutionne la création de contenu en permettant de produire rapidement du texte, des images, de l'audio et de la vidéo de qualité professionnelle. Cette technologie transforme la façon dont nous concevons, créons et partageons nos idées.</p>
+                        
+                        <div class="highlight-box">
+                            <div class="highlight-title">
+                                <span>🎨</span>
+                                <span>Ce que vous allez découvrir</span>
+                            </div>
+                            <p>Ce module vous donne les clés pour devenir autonome dans la création de contenu multimédia avec l'IA. Vous apprendrez à utiliser les outils de génération les plus performants et à mener des projets créatifs complets, de l'idée à la réalisation finale.</p>
+                        </div>
+                        
+                        <p><strong>À la fin de ce module, vous serez capable de :</strong></p>
+                        <ul>
+                            <li>Générer du contenu textuel long et structuré pour tous vos besoins</li>
+                            <li>Créer des visuels professionnels avec Midjourney, DALL-E et autres outils</li>
+                            <li>Produire du contenu audio et vidéo avec l'intelligence artificielle</li>
+                            <li>Mener un projet créatif multimédia de A à Z</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Objectifs pédagogiques -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Objectifs pédagogiques</h2>
+                    <div class="section-content">
+                        <p>Ce module développe votre créativité et vos compétences techniques pour exploiter tout le potentiel de l'IA générative.</p>
+                        
+                        <div class="objectives-grid">
+                            <div class="objective-card">
+                                <span class="objective-icon">📝</span>
+                                <h3 class="objective-title">Génération de texte avancée</h3>
+                                <p class="objective-description">
+                                    Maîtriser la création de contenus textuels longs, structurés et adaptés à différents formats : articles, scripts, documentation, etc.
+                                </p>
+                            </div>
+                            <div class="objective-card">
+                                <span class="objective-icon">🎨</span>
+                                <h3 class="objective-title">Création d'images professionnelles</h3>
+                                <p class="objective-description">
+                                    Utiliser Midjourney, DALL-E et autres outils pour créer des visuels selon des consignes précises et un style cohérent.
+                                </p>
+                            </div>
+                            <div class="objective-card">
+                                <span class="objective-icon">🎵</span>
+                                <h3 class="objective-title">Production audio et vidéo</h3>
+                                <p class="objective-description">
+                                    Découvrir les outils de génération audio et vidéo pour créer des contenus multimédias engageants et professionnels.
+                                </p>
+                            </div>
+                            <div class="objective-card">
+                                <span class="objective-icon">🚀</span>
+                                <h3 class="objective-title">Projet créatif intégré</h3>
+                                <p class="objective-description">
+                                    Mener un projet complet intégrant plusieurs modalités de création IA pour un résultat cohérent et impactant.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Programme détaillé -->
+                <section class="section">
+                    <h2 class="section-title">📋 Programme détaillé</h2>
+                    <div class="section-content">
+                        <p>Ce module de 7 heures vous guide progressivement dans la maîtrise de l'IA générative, de la théorie à la pratique créative.</p>
+                        
+                        <div class="program-details">
+                            <div class="program-card">
+                                <div class="program-header">
+                                    <div class="program-number">1</div>
+                                    <div class="program-title">Génération de texte avancée</div>
+                                    <div class="program-duration">105 min</div>
+                                </div>
+                                <div class="program-content">
+                                    <p>Maîtrisez la création de contenus textuels longs et complexes avec l'IA.</p>
+                                    <ul>
+                                        <li>Techniques de génération de contenus longs</li>
+                                        <li>Structuration et cohérence narrative</li>
+                                        <li>Adaptation du style et du ton</li>
+                                        <li>Génération de formats spécialisés</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="program-card">
+                                <div class="program-header">
+                                    <div class="program-number">2</div>
+                                    <div class="program-title">Création d'images</div>
+                                    <div class="program-duration">120 min</div>
+                                </div>
+                                <div class="program-content">
+                                    <p>Explorez les outils leaders de création d'images avec l'IA.</p>
+                                    <ul>
+                                        <li>Midjourney : maîtrise complète</li>
+                                        <li>DALL-E : techniques avancées</li>
+                                        <li>Prompting visuel et composition</li>
+                                        <li>Styles artistiques et cohérence visuelle</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="program-card">
+                                <div class="program-header">
+                                    <div class="program-number">3</div>
+                                    <div class="program-title">Audio et vidéo</div>
+                                    <div class="program-duration">90 min</div>
+                                </div>
+                                <div class="program-content">
+                                    <p>Découvrez la production de contenus audio et vidéo avec l'IA.</p>
+                                    <ul>
+                                        <li>Synthèse vocale et clonage de voix</li>
+                                        <li>Génération musicale et effets sonores</li>
+                                        <li>Création vidéo automatisée</li>
+                                        <li>Montage et post-production IA</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="program-card">
+                                <div class="program-header">
+                                    <div class="program-number">4</div>
+                                    <div class="program-title">Projet créatif intégré</div>
+                                    <div class="program-duration">105 min</div>
+                                </div>
+                                <div class="program-content">
+                                    <p>Réalisez un projet multimédia complet avec plusieurs technologies IA.</p>
+                                    <ul>
+                                        <li>Conception d'un projet créatif</li>
+                                        <li>Intégration texte + images + audio</li>
+                                        <li>Workflow de production optimisé</li>
+                                        <li>Présentation et feedback</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ateliers pratiques -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Ateliers pratiques</h2>
+                    <div class="section-content">
+                        <p>Des exercices hands-on pour appliquer immédiatement vos nouvelles compétences :</p>
+                        
+                        <div class="highlight-box">
+                            <div class="highlight-title">
+                                <span>🎯</span>
+                                <span>Atelier 1 : Création de contenu marketing complet</span>
+                            </div>
+                            <p>Produisez une campagne marketing complète avec articles, visuels et vidéos générés par IA, en gardant une cohérence de marque.</p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">
+                                <span>🎨</span>
+                                <span>Atelier 2 : Génération d'images selon consignes précises</span>
+                            </div>
+                            <p>Maîtrisez la création d'images en suivant un brief créatif détaillé, avec contraintes de style, couleurs et composition.</p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <div class="highlight-title">
+                                <span>🚀</span>
+                                <span>Atelier 3 : Projet créatif intégrant plusieurs modalités</span>
+                            </div>
+                            <p>Concevez et réalisez un projet personnel alliant texte, images, audio et vidéo pour créer une expérience multimédia unique.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cas d'usage -->
+                <section class="section">
+                    <h2 class="section-title">💼 Cas d'usage concrets</h2>
+                    <div class="section-content">
+                        <p>Exemples d'applications pratiques que vous pourrez réaliser :</p>
+                        <ul>
+                            <li><strong>Création de contenu marketing multimédia :</strong> Campagnes complètes avec visuels, textes et vidéos</li>
+                            <li><strong>Production de supports de présentation :</strong> Slides, infographies et contenus visuels impactants</li>
+                            <li><strong>Développement de contenu éducatif :</strong> Cours, tutoriels et ressources pédagogiques enrichies</li>
+                            <li><strong>Création artistique et design :</strong> Œuvres originales, illustrations et concepts visuels</li>
+                            <li><strong>Production de contenu pour réseaux sociaux :</strong> Posts, stories et contenus engageants</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Prérequis -->
+                <section class="section">
+                    <h2 class="section-title">📚 Prérequis et préparation</h2>
+                    <div class="section-content">
+                        <p>Pour tirer le meilleur parti de ce module :</p>
+                        <ul>
+                            <li><strong>Modules précédents :</strong> Avoir suivi les modules 1-3 ou avoir des bases équivalentes</li>
+                            <li><strong>Matériel :</strong> Ordinateur avec connexion internet stable</li>
+                            <li><strong>Comptes recommandés :</strong> Midjourney, OpenAI (ChatGPT/DALL-E), Claude</li>
+                            <li><strong>Créativité :</strong> Venir avec des idées de projets ou contenus à créer</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                <ul class="sequence-list">
+                    <li class="sequence-item current">
+                        <div class="sequence-icon overview">📋</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Vue d'ensemble</div>
+                            <div class="sequence-duration">5 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Génération de texte avancée</div>
+                            <div class="sequence-duration">105 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Création d'images</div>
+                            <div class="sequence-duration">120 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Production audio et vidéo</div>
+                            <div class="sequence-duration">90 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Projet créatif intégré</div>
+                            <div class="sequence-duration">105 minutes</div>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="sequence-navigation">
+            <a href="outils_3_overview.html" class="btn btn-secondary nav-btn">
+                <span>←</span> Module 3 : Outils IA
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Module 4 sur 8</div>
+                <div style="font-weight: 600; color: var(--text-primary);">IA Générative</div>
+            </div>
+            <a href="generative_4_texte_scripts_1.html" class="btn btn-primary nav-btn">
+                Première séquence <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 IA Academy. Formation complète à l'intelligence artificielle pour débutants - Module 4 : IA Générative.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('theme', newTheme);
+                }
+            } catch (error) {
+                console.warn('Error toggling theme:', error);
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            try {
+                let savedTheme = 'light';
+                if (typeof(Storage) !== "undefined") {
+                    savedTheme = localStorage.getItem('theme') || 'light';
+                }
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                console.warn('Error loading theme:', error);
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', loadTheme);
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards for animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.objective-card, .program-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

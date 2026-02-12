@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midjourney - Maîtrise Autonome | Module 4 - IA Academy</title>
+    <style>
+        /* CSS Variables for Theme System */
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --primary-color: #818cf8;
+            --secondary-color: #06b6d4;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --pattern-opacity: 0.02;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle - Fixed */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            font-size: 12px;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '>';
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--accent-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Example Cards */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            background: var(--glass-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Parameter Grid */
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .parameter-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .parameter-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .parameter-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .parameter-example {
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .parameter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_images_2.html" class="breadcrumb-link">Images professionnelles</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Midjourney - Maîtrise autonome</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🎨</span>
+                        <span>Micro-séquence 2A</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>40-50 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>📈</span>
+                        <span>Intermédiaire à Avancé</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">🎨 Midjourney - Maîtrise Autonome</h1>
+                <p class="lesson-description">
+                    Découvrez les secrets de Midjourney pour créer des images professionnelles époustouflantes. Du prompting avancé aux workflows créatifs, maîtrisez l'outil qui révolutionne la création visuelle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Pourquoi Midjourney ?</h2>
+                    <div class="section-content">
+                        <p>Midjourney s'est imposé comme <strong>l'outil de référence</strong> pour la génération d'images IA grâce à sa qualité artistique exceptionnelle et sa communauté créative dynamique. Cette micro-séquence vous permettra de passer du niveau débutant à utilisateur autonome.</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Objectifs de cette micro-séquence
+                            </div>
+                            <ul>
+                                <li><strong>Maîtriser le prompting avancé</strong> avec paramètres, styles et compositions</li>
+                                <li><strong>Créer des séries cohérentes</strong> pour votre branding personnel ou professionnel</li>
+                                <li><strong>Optimiser vos workflows créatifs</strong> avec les techniques de variation et retouche</li>
+                                <li><strong>Développer votre œil artistique</strong> pour des créations professionnelles</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interface et Navigation -->
+                <section class="section">
+                    <h2 class="section-title">🗂️ Interface et Navigation</h2>
+                    <div class="section-content">
+                        <p>Avant de plonger dans les techniques avancées, assurons-nous que vous maîtrisez parfaitement l'interface Discord de Midjourney.</p>
+                        
+                        <h3>Commandes Essentielles</h3>
+                        <div class="parameter-grid">
+                            <div class="parameter-card">
+                                <div class="parameter-name">🎨 /imagine</div>
+                                <div class="parameter-description">Commande principale pour générer des images</div>
+                                <div class="parameter-example">/imagine prompt: un chat astronaute --v 6</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🔄 /settings</div>
+                                <div class="parameter-description">Configurez vos préférences par défaut</div>
+                                <div class="parameter-example">Version, mode, qualité...</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">ℹ️ /info</div>
+                                <div class="parameter-description">Vérifiez votre abonnement et usage</div>
+                                <div class="parameter-example">Fast time remaining, jobs in progress</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🖼️ /describe</div>
+                                <div class="parameter-description">Analysez une image pour obtenir des prompts</div>
+                                <div class="parameter-example">Uploadez une image pour reverse engineering</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prompting Avancé -->
+                <section class="section">
+                    <h2 class="section-title">⚡ Prompting Avancé</h2>
+                    <div class="section-content">
+                        <p>La différence entre un utilisateur amateur et expert de Midjourney réside dans la <strong>précision et la sophistication des prompts</strong>.</p>
+                        
+                        <h3>Structure d'un Prompt Professionnel</h3>
+                        <div class="code-block">📸 [SUJET PRINCIPAL] + 🎭 [STYLE/AMBIANCE] + 📐 [COMPOSITION] + 🎨 [DÉTAILS TECHNIQUES] + ⚙️ [PARAMÈTRES]</div>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>✅</span>
+                                <span>Exemple : Portrait Corporate Professionnel</span>
+                            </div>
+                            <div class="code-block">professional headshot of a confident business woman, elegant smile, sitting at a modern office desk, natural lighting through large windows, shallow depth of field, shot with Sony a7R IV, 85mm lens, corporate photography style --ar 3:4 --v 6 --style raw</div>
+                        </div>
+                        
+                        <h3>Techniques de Prompting Avancées</h3>
+                        
+                        <h4>1. Weighting (Pondération)</h4>
+                        <p>Contrôlez l'importance relative des éléments :</p>
+                        <div class="code-block">golden hour sunset::2 mountain landscape::1 minimalist composition::0.5</div>
+                        
+                        <h4>2. Negative Prompting</h4>
+                        <p>Excluez des éléments indésirables :</p>
+                        <div class="code-block">beautiful landscape --no people, cars, buildings, text</div>
+                        
+                        <h4>3. Multi-prompts</h4>
+                        <p>Combinez plusieurs concepts :</p>
+                        <div class="code-block">cyberpunk cityscape:: steampunk machinery:: neon lighting --blend</div>
+                    </div>
+                </section>
+
+                <!-- Paramètres Essentiels -->
+                <section class="section">
+                    <h2 class="section-title">⚙️ Paramètres Essentiels</h2>
+                    <div class="section-content">
+                        <p>La maîtrise des paramètres vous permet un contrôle précis sur le rendu final.</p>
+                        
+                        <div class="parameter-grid">
+                            <div class="parameter-card">
+                                <div class="parameter-name">📐 --aspect-ratio (--ar)</div>
+                                <div class="parameter-description">Définit les proportions de l'image</div>
+                                <div class="parameter-example">--ar 16:9 (paysage)
+--ar 3:4 (portrait)
+--ar 1:1 (carré)</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🎭 --style</div>
+                                <div class="parameter-description">Ajuste le style artistique</div>
+                                <div class="parameter-example">--style raw (réaliste)
+--style expressive (artistique)
+--style cute (kawaii)</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🎨 --stylize (--s)</div>
+                                <div class="parameter-description">Contrôle l'interprétation artistique</div>
+                                <div class="parameter-example">--s 0 (très fidèle)
+--s 100 (équilibré)
+--s 1000 (très stylisé)</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🎲 --chaos</div>
+                                <div class="parameter-description">Ajoute de la variété et créativité</div>
+                                <div class="parameter-example">--chaos 0 (prévisible)
+--chaos 50 (équilibré)
+--chaos 100 (imprévisible)</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🌱 --seed</div>
+                                <div class="parameter-description">Reproduit exactement le même résultat</div>
+                                <div class="parameter-example">--seed 12345
+(pour reproduire une image)</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">💎 --quality (--q)</div>
+                                <div class="parameter-description">Ajuste le niveau de détail</div>
+                                <div class="parameter-example">--q 0.25 (rapide)
+--q 1 (standard)
+--q 2 (maximum détail)</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Styles et Références -->
+                <section class="section">
+                    <h2 class="section-title">🎨 Styles et Références Artistiques</h2>
+                    <div class="section-content">
+                        <p>Midjourney excelle dans la reproduction et l'interprétation de styles artistiques. Voici vos références essentielles :</p>
+                        
+                        <h3>Styles Photographiques</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📸</span>
+                                <span>Photographie Portrait</span>
+                            </div>
+                            <ul>
+                                <li><strong>Corporate photography</strong> - Photos professionnelles d'entreprise</li>
+                                <li><strong>Editorial photography</strong> - Style magazine haut de gamme</li>
+                                <li><strong>Environmental portrait</strong> - Sujet dans son environnement</li>
+                                <li><strong>Studio lighting</strong> - Éclairage contrôlé et professionnel</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>Styles Artistiques Classiques</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🖼️</span>
+                                <span>Mouvements Artistiques</span>
+                            </div>
+                            <ul>
+                                <li><strong>Art nouveau</strong> - Lignes organiques, motifs floraux</li>
+                                <li><strong>Bauhaus</strong> - Design fonctionnel, géométrique</li>
+                                <li><strong>Impressionism</strong> - Lumière naturelle, coups de pinceau visibles</li>
+                                <li><strong>Minimalism</strong> - Simplicité, espaces négatifs</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>Styles Contemporains</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🌟</span>
+                                <span>Tendances Actuelles</span>
+                            </div>
+                            <ul>
+                                <li><strong>Glassmorphism</strong> - Effets de verre translucide</li>
+                                <li><strong>Neumorphism</strong> - Design doux et tactile</li>
+                                <li><strong>Cyberpunk</strong> - Futurisme urbain, néons</li>
+                                <li><strong>Cottagecore</strong> - Esthétique rurale romantique</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Créer des Séries Cohérentes -->
+                <section class="section">
+                    <h2 class="section-title">🔗 Créer des Séries Cohérentes</h2>
+                    <div class="section-content">
+                        <p>Pour votre branding ou vos projets professionnels, la <strong>cohérence visuelle</strong> est cruciale.</p>
+                        
+                        <h3>Techniques de Cohérence</h3>
+                        
+                        <h4>1. Utilisation du Seed</h4>
+                        <p>Reproduisez la composition tout en variant le contenu :</p>
+                        <div class="code-block">businessman in suit --seed 12345 --ar 1:1
+businesswoman in suit --seed 12345 --ar 1:1
+business team meeting --seed 12345 --ar 1:1</div>
+                        
+                        <h4>2. Style Reference</h4>
+                        <p>Maintenez un style constant avec --sref :</p>
+                        <div class="code-block">modern office space --sref [URL_IMAGE_STYLE]
+coworking area --sref [URL_IMAGE_STYLE]
+meeting room --sref [URL_IMAGE_STYLE]</div>
+                        
+                        <h4>3. Palette de Couleurs Fixe</h4>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🎨</span>
+                                <span>Workflow Palette Cohérente</span>
+                            </div>
+                            <ol>
+                                <li>Définissez votre palette : "corporate blue and white color scheme"</li>
+                                <li>Intégrez dans chaque prompt : "...in corporate blue and white color scheme"</li>
+                                <li>Utilisez des références colorimétriques : "Pantone 286 blue, clean white"</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🔧 Exercice Pratique : Série Corporate
+                            </div>
+                            <p><strong>Mission :</strong> Créez une série de 4 images pour une entreprise tech :</p>
+                            <ol>
+                                <li>Portrait du CEO</li>
+                                <li>Équipe en réunion</li>
+                                <li>Bureau moderne</li>
+                                <li>Produit technologique</li>
+                            </ol>
+                            <p><strong>Contraintes :</strong> Même style, même palette de couleurs, même lighting mood</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Techniques de Variation -->
+                <section class="section">
+                    <h2 class="section-title">🔄 Techniques de Variation et Retouche</h2>
+                    <div class="section-content">
+                        <p>Optimisez vos créations avec les outils de variation et d'amélioration de Midjourney.</p>
+                        
+                        <h3>Boutons de Variation</h3>
+                        <div class="parameter-grid">
+                            <div class="parameter-card">
+                                <div class="parameter-name">🔄 V1, V2, V3, V4</div>
+                                <div class="parameter-description">Variations d'une image spécifique</div>
+                                <div class="parameter-example">Garde la composition, change les détails</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🔍 U1, U2, U3, U4</div>
+                                <div class="parameter-description">Upscale (agrandir) une image</div>
+                                <div class="parameter-example">Résolution supérieure avec plus de détails</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🔄 Vary (Strong)</div>
+                                <div class="parameter-description">Variation importante de l'image</div>
+                                <div class="parameter-example">Change composition et éléments</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🔄 Vary (Subtle)</div>
+                                <div class="parameter-description">Variation légère de l'image</div>
+                                <div class="parameter-example">Ajustements fins et nuances</div>
+                            </div>
+                        </div>
+                        
+                        <h3>Techniques Avancées de Retouche</h3>
+                        
+                        <h4>Inpainting (Modify with Prompt)</h4>
+                        <p>Modifiez des parties spécifiques de votre image :</p>
+                        <ol>
+                            <li>Upscalez votre image</li>
+                            <li>Cliquez sur "Vary (Region)"</li>
+                            <li>Sélectionnez la zone à modifier</li>
+                            <li>Ajoutez votre prompt de modification</li>
+                        </ol>
+                        
+                        <h4>Remix Mode</h4>
+                        <p>Activé dans /settings, permet de modifier le prompt lors des variations.</p>
+                        <div class="code-block">Image originale : "cat in a garden"
+Remix V1 : "dog in a garden" (garde la composition, change l'animal)</div>
+                    </div>
+                </section>
+
+                <!-- Quiz Interactif -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Quiz de Validation</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quel paramètre utiliseriez-vous pour créer une série d'images avec la même composition mais différents sujets ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> --chaos 100
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>B)</span> --stylize 1000
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>C)</span> --seed [même numéro]
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> --quality 2
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback1">
+                            <strong>✅ Correct !</strong> Le paramètre --seed avec le même numéro reproduit la même composition de base, permettant de créer des séries cohérentes en changeant seulement le sujet principal du prompt.
+                        </div>
+                    </div>
+
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Pour obtenir un style photographique très réaliste, quelle combinaison est optimale ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>A)</span> --style raw --stylize 0
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>B)</span> --style expressive --stylize 1000
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>C)</span> --chaos 100 --quality 0.25
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> --style cute --stylize 500
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback2">
+                            <strong>✅ Parfait !</strong> --style raw minimise l'interprétation artistique, et --stylize 0 élimine la stylisation pour un rendu très fidèle et réaliste.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Workflow Créatif -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Intégration dans votre Workflow Créatif</h2>
+                    <div class="section-content">
+                        <h3>Workflow Professionnel en 5 Étapes</h3>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📋</span>
+                                <span>Méthodologie Professionnelle</span>
+                            </div>
+                            <ol>
+                                <li><strong>Briefing créatif</strong> - Définir objectifs, audience, contraintes</li>
+                                <li><strong>Recherche et références</strong> - Collecter inspirations et styles</li>
+                                <li><strong>Génération itérative</strong> - Tests prompts, variations, ajustements</li>
+                                <li><strong>Sélection et optimisation</strong> - Upscale, retouches, cohérence</li>
+                                <li><strong>Post-production</strong> - Finalisation dans Photoshop si nécessaire</li>
+                            </ol>
+                        </div>
+                        
+                        <h3>Organisation et Archivage</h3>
+                        <p>Développez un système d'organisation efficace :</p>
+                        <ul>
+                            <li><strong>Naming convention</strong> : [Projet]_[Style]_[Version]_[Date]</li>
+                            <li><strong>Sauvegarde prompts</strong> : Notion ou Google Docs avec métadonnées</li>
+                            <li><strong>Library de references</strong> : Pinterest ou Milanote pour inspirations</li>
+                            <li><strong>Version control</strong> : Gardez trace des évolutions et décisions</li>
+                        </ul>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Challenge Final
+                            </div>
+                            <p><strong>Créez votre premier projet professionnel :</strong></p>
+                            <ul>
+                                <li>Choisissez un brief (personnel branding, produit, événement...)</li>
+                                <li>Définissez votre palette et style guide</li>
+                                <li>Générez 3-5 images cohérentes</li>
+                                <li>Documentez votre process et prompts utilisés</li>
+                                <li>Partagez sur Discord pour feedback communautaire</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ressources et Aller Plus Loin -->
+                <section class="section">
+                    <h2 class="section-title">📚 Ressources et Pour Aller Plus Loin</h2>
+                    <div class="section-content">
+                        <h3>Ressources Fournies</h3>
+                        <div class="parameter-grid">
+                            <div class="parameter-card">
+                                <div class="parameter-name">🎥 Masterclass (25min)</div>
+                                <div class="parameter-description">"Midjourney de débutant à expert"</div>
+                                <div class="parameter-example">Démonstration live des techniques avancées</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">📋 Cheat Sheet</div>
+                                <div class="parameter-description">"50 prompts qui fonctionnent"</div>
+                                <div class="parameter-example">Templates prêts à utiliser et personnaliser</div>
+                            </div>
+                            <div class="parameter-card">
+                                <div class="parameter-name">🖼️ Galerie Inspiration</div>
+                                <div class="parameter-description">100 créations analysées</div>
+                                <div class="parameter-example">Prompts + analyses de chaque image</div>
+                            </div>
+                        </div>
+                        
+                        <h3>Communauté et Support</h3>
+                        <ul>
+                            <li><strong>Discord IA Academy</strong> - Canal #midjourney-masters</li>
+                            <li><strong>Sessions live</strong> - Q&A hebdomadaires</li>
+                            <li><strong>Galerie étudiants</strong> - Partagez vos créations</li>
+                            <li><strong>Défis créatifs</strong> - Challenges mensuels</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>📊 Votre Progression</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>🎯 Micro-séquence</span>
+                            <span style="font-weight: 600; color: var(--primary-color);">2A/4</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>⏰ Durée</span>
+                            <span>40-50 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>📈 Niveau</span>
+                            <span>Intermédiaire+</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Card -->
+                <div class="sidebar-card">
+                    <h4>🛠️ Outils Nécessaires</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.9rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Midjourney</strong><br>
+                            <span style="color: var(--text-secondary);">Abonnement requis (Basic min.)</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Discord</strong><br>
+                            <span style="color: var(--text-secondary);">Serveur Midjourney</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Navigateur</strong><br>
+                            <span style="color: var(--text-secondary);">Pour références et inspiration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference -->
+                <div class="sidebar-card">
+                    <h4>⚡ Aide-Mémoire Rapide</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.85rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Portrait Pro</strong><br>
+                            <code style="color: var(--text-secondary);">--ar 3:4 --style raw --s 0</code>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Paysage</strong><br>
+                            <code style="color: var(--text-secondary);">--ar 16:9 --v 6</code>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Série cohérente</strong><br>
+                            <code style="color: var(--text-secondary);">--seed [même #]</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="sidebar-card">
+                    <h4>💡 Conseil du Formateur</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--primary-color);">Pratiquez immédiatement !</strong><br>
+                        Ouvrez Discord et testez chaque technique pendant que vous lisez. La muscle memory est cruciale pour Midjourney.
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="lesson-navigation">
+            <a href="generative_4_images_2.html" class="btn btn-secondary">
+                <span>←</span> Vue d'ensemble Images
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Micro-séquence 2A</div>
+                <div style="font-weight: 600; color: var(--text-primary);">Midjourney - Maîtrise Autonome</div>
+            </div>
+            <a href="generative_4_dalle_alternatives_2b.html" class="btn btn-primary">
+                DALL-E & Alternatives <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections in this quiz
+            const quiz = element.closest('.quiz-container');
+            const options = quiz.querySelectorAll('.quiz-option');
+            const feedback = quiz.querySelector('.quiz-feedback');
+            
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selection and correctness classes
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Show feedback
+            feedback.classList.add('show');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Progress tracking (could be expanded)
+        let progressData = JSON.parse(localStorage.getItem('ia-academy-progress') || '{}');
+        progressData.midjourney_2a = {
+            started: new Date().toISOString(),
+            status: 'in-progress'
+        };
+        localStorage.setItem('ia-academy-progress', JSON.stringify(progressData));
+    </script>
+</body>
+</html>

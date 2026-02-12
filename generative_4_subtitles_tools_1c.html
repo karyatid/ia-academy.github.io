@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outils IA sous-titres : De zéro à pro en 20min - IA Academy</title>
+    <style>
+        /* Enhanced CSS Variables for consistent theming */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(148, 163, 184, 0.2);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            
+            --pattern-opacity: 0.03;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: var(--transition);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Dynamic Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-icon {
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            position: relative;
+        }
+
+        [data-theme="dark"] .theme-toggle-icon {
+            transform: translateX(23px);
+        }
+
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tools Comparison Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            font-size: 1.5rem;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .tool-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .tool-badge.premium {
+            background: var(--warning-color);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-pros {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tool-pros li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--success-color);
+        }
+
+        /* Prompt Code Blocks */
+        .prompt-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .prompt-label {
+            position: absolute;
+            top: -10px;
+            left: 1rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--bg-primary);
+        }
+
+        /* Platform Comparison */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .platform-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .platform-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-specs {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Results Tracking */
+        .results-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.1rem;
+        }
+
+        /* Exercise Section */
+        .exercise-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exercise-intro {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-counter {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .exercise-step {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Enhanced Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">← Dashboard</a>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-icon">
+                            🌙
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+            →
+            <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+            →
+            <span class="breadcrumb-current">Outils IA sous-titres : De zéro à pro</span>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        🎯 Micro-séquence 1C
+                    </div>
+                    <div class="lesson-badge">
+                        ⏱️ 20 min
+                    </div>
+                    <div class="lesson-badge">
+                        🔧 Multi-Outils IA
+                    </div>
+                </div>
+                <h1 class="lesson-title">Outils IA sous-titres : De zéro à pro en 20min</h1>
+                <p class="lesson-description">
+                    Maîtrisez la création de sous-titres professionnels en 5min au lieu de 2h manuelles avec la stack d'outils IA : Whisper + ChatGPT + CapCut/Descript.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="main-layout">
+            <div class="main-content">
+                
+                <!-- 🚀 Objectif de cette micro-séquence -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🚀 Objectif de cette micro-séquence
+                    </h2>
+                    
+                    <div class="interactive-box">
+                        <div class="interactive-title">🎯 Défi productivité</div>
+                        <p><strong>Challenge :</strong> Transformer 2h de sous-titrage manuel en 5 minutes automatisées avec des résultats de qualité professionnelle.</p>
+                        <p><strong>Métrique de réussite :</strong> Sous-titres synchronisés, stylisés et optimisés pour 3 plateformes différentes en moins de 20 minutes.</p>
+                    </div>
+
+                    <div class="section-content">
+                        <h3>🎯 Vidéo test que vous allez sous-titrer :</h3>
+                        <div class="prompt-block">
+                            <div class="prompt-label">Vidéo d'exemple</div>
+                            "Vidéo de 60 secondes : présentation de votre activité de coaching ou service (vous pouvez utiliser une vidéo existante ou en créer une courte avec votre téléphone)"
+                        </div>
+
+                        <h3>📊 Résultats attendus à la fin :</h3>
+                        <ul>
+                            <li>✅ <strong>Transcription automatique</strong> précise en moins d'1 minute</li>
+                            <li>✅ <strong>3 styles de sous-titres</strong> : TikTok, YouTube, LinkedIn</li>
+                            <li>✅ <strong>Synchronisation parfaite</strong> avec timing optimal</li>
+                            <li>✅ <strong>Sous-titres créatifs</strong> avec emojis et couleurs</li>
+                            <li>✅ <strong>Version multilingue</strong> (français + anglais minimum)</li>
+                        </ul>
+
+                        <h3>🏆 Comparaison avant/après :</h3>
+                        <div class="results-box">
+                            <div class="metric-item">
+                                <span class="metric-label">Temps méthode manuelle</span>
+                                <span class="metric-value">~2 heures</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Temps avec IA</span>
+                                <span class="metric-value">~5 minutes</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Gain de productivité</span>
+                                <span class="metric-value">24x plus rapide</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Qualité finale</span>
+                                <span class="metric-value">Professionnelle</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 🔧 Prérequis techniques -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🔧 Stack d'outils recommandée
+                    </h2>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <span class="tool-icon">🎤</span>
+                                <span class="tool-name">Whisper AI</span>
+                                <span class="tool-badge">Gratuit</span>
+                            </div>
+                            <div class="tool-description">
+                                Transcription automatique ultra-précise par OpenAI. Le meilleur pour la reconnaissance vocale.
+                            </div>
+                            <ul class="tool-pros">
+                                <li>✅ 95%+ de précision</li>
+                                <li>✅ 100+ langues supportées</li>
+                                <li>✅ Gratuit via navigateur</li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <span class="tool-icon">🎬</span>
+                                <span class="tool-name">Descript</span>
+                                <span class="tool-badge premium">Freemium</span>
+                            </div>
+                            <div class="tool-description">
+                                Solution tout-en-un : transcription + édition + sous-titres. Interface intuitive.
+                            </div>
+                            <ul class="tool-pros">
+                                <li>✅ Édition par texte</li>
+                                <li>✅ Sous-titres automatiques</li>
+                                <li>✅ Export multi-formats</li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <span class="tool-icon">✂️</span>
+                                <span class="tool-name">CapCut</span>
+                                <span class="tool-badge">Gratuit</span>
+                            </div>
+                            <div class="tool-description">
+                                Éditeur mobile/desktop avec IA intégrée. Parfait pour sous-titres créatifs TikTok.
+                            </div>
+                            <ul class="tool-pros">
+                                <li>✅ Templates sous-titres</li>
+                                <li>✅ Animations automatiques</li>
+                                <li>✅ Export direct réseaux</li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <span class="tool-icon">🌐</span>
+                                <span class="tool-name">Kapwing</span>
+                                <span class="tool-badge premium">Freemium</span>
+                            </div>
+                            <div class="tool-description">
+                                Éditeur en ligne avec sous-titrage IA. Idéal pour débutants et collaboration.
+                            </div>
+                            <ul class="tool-pros">
+                                <li>✅ Interface simple</li>
+                                <li>✅ Collaboration temps réel</li>
+                                <li>✅ Templates professionnels</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <h3>⚙️ Configuration recommandée :</h3>
+                        <ul>
+                            <li><strong>Principal :</strong> Descript ou CapCut selon votre préférence interface</li>
+                            <li><strong>Backup :</strong> Whisper AI pour transcription pure si besoin</li>
+                            <li><strong>Mobile :</strong> CapCut app pour édition rapide sur téléphone</li>
+                            <li><strong>Collaboratif :</strong> Kapwing si travail en équipe</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">💡 Stratégie multi-outils</div>
+                            <p>Nous utiliserons 2 outils maximum par exercice pour éviter la complexité. L'objectif est la rapidité et l'efficacité, pas la perfection technique.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 💪 Exercice pratique guidé -->
+                <section class="section">
+                    <div class="exercise-container">
+                        <h2 class="exercise-title">
+                            💪 Exercice pratique guidé
+                        </h2>
+                        
+                        <div class="exercise-intro">
+                            <h3>🎯 Contexte et objectifs de ces exercices</h3>
+                            <p><strong>Situation :</strong> Vous avez une vidéo de présentation de 60 secondes à sous-titrer pour la diffuser sur TikTok, YouTube et LinkedIn. Chaque plateforme a ses spécificités techniques et esthétiques.</p>
+                            
+                            <p><strong>Enjeu :</strong> Les sous-titres augmentent l'engagement de 12% en moyenne et rendent vos contenus accessibles. Ils sont devenus indispensables, surtout sur mobile où 85% des vidéos sont regardées sans son.</p>
+                            
+                            <p><strong>Méthodologie :</strong> Approche progressive du simple au complexe : transcription → optimisation → stylisation → adaptation → traduction. Chaque étape apporte une valeur ajoutée mesurable.</p>
+
+                            <p><strong>Résultat final :</strong> Une vidéo déclinée en 3 versions optimisées + version multilingue, prête pour diffusion multi-plateforme.</p>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">1</div>
+                                Transcription automatique ultra-rapide
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Générez une transcription automatique précise de votre vidéo en moins d'1 minute avec Descript ou CapCut. L'objectif est d'obtenir une base textuelle propre.</p>
+                                
+                                <p><strong>Méthode Descript :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Process Descript</div>
+                                    <button class="copy-btn" onclick="copyPrompt('descript')">📋 Copier</button>
+                                    <div id="prompt-descript">1. Créer nouveau projet → Importer votre vidéo
+2. Attendre transcription automatique (30-60 secondes)
+3. Corriger les erreurs éventuelles dans l'éditeur texte
+4. Exporter → Sous-titres → Format SRT ou VTT
+5. Vérifier timing et synchronisation</div>
+                                </div>
+
+                                <p><strong>Alternative CapCut :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Process CapCut</div>
+                                    <button class="copy-btn" onclick="copyPrompt('capcut')">📋 Copier</button>
+                                    <div id="prompt-capcut">1. Nouveau projet → Importer vidéo
+2. Texte → Sous-titres automatiques → Générer
+3. Choisir langue (français) → Confirmer
+4. Réviser transcription dans l'éditeur
+5. Ajuster timing si nécessaire</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Transcription complète avec timing automatique, précision >90%, prête pour optimisation. Temps total : 2-3 minutes maximum.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">2</div>
+                                Optimisation par plateforme
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Adaptez vos sous-titres aux spécificités techniques de chaque plateforme. Chaque réseau social a ses contraintes et ses bonnes pratiques.</p>
+
+                                <div class="platform-grid">
+                                    <div class="platform-card">
+                                        <div class="platform-icon">📱</div>
+                                        <div class="platform-name">TikTok</div>
+                                        <div class="platform-specs">
+                                            Max 2 lignes<br>
+                                            32 caractères/ligne<br>
+                                            Police large, contrastée<br>
+                                            Position centre-bas
+                                        </div>
+                                    </div>
+                                    <div class="platform-card">
+                                        <div class="platform-icon">📺</div>
+                                        <div class="platform-name">YouTube</div>
+                                        <div class="platform-specs">
+                                            Max 2 lignes<br>
+                                            40 caractères/ligne<br>
+                                            Police classique<br>
+                                            Position bas centré
+                                        </div>
+                                    </div>
+                                    <div class="platform-card">
+                                        <div class="platform-icon">💼</div>
+                                        <div class="platform-name">LinkedIn</div>
+                                        <div class="platform-specs">
+                                            Max 2 lignes<br>
+                                            35 caractères/ligne<br>
+                                            Style professionnel<br>
+                                            Pas d'emojis
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p><strong>Prompt d'optimisation avec ChatGPT :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt optimisation</div>
+                                    <button class="copy-btn" onclick="copyPrompt('2')">📋 Copier</button>
+                                    <div id="prompt-2">Optimise cette transcription pour des sous-titres [PLATEFORME].
+
+TRANSCRIPTION : [Coller votre transcription]
+
+CONTRAINTES [PLATEFORME] :
+- TikTok : 2 lignes max, 32 caractères/ligne, langage décontracté, emojis autorisés
+- YouTube : 2 lignes max, 40 caractères/ligne, lisibilité optimale
+- LinkedIn : 2 lignes max, 35 caractères/ligne, ton professionnel, pas d'emojis
+
+OPTIMISATIONS REQUISES :
+1. Découper en segments de lecture naturelle (2-3 secondes)
+2. Respecter les pauses respiratoires
+3. Éviter coupures en milieu de mots
+4. Synchroniser avec rythme de parole
+5. Ajouter timing [00:01 - 00:03] pour chaque segment
+
+FORMAT SORTIE :
+[00:01 - 00:03] Première ligne
+                Deuxième ligne
+
+[00:04 - 00:06] Ligne suivante
+                Suite du texte</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> 3 versions optimisées de vos sous-titres, chacune adaptée aux contraintes spécifiques de TikTok, YouTube et LinkedIn.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">3</div>
+                                Stylisation créative et visuelle
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Transformez vos sous-titres basiques en éléments visuels engageants avec couleurs, emojis et animations. L'objectif est de maximiser l'impact visuel.</p>
+
+                                <p><strong>Styles créatifs par plateforme :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Templates de style</div>
+                                    <button class="copy-btn" onclick="copyPrompt('styles')">📋 Copier</button>
+                                    <div id="prompt-styles">TIKTOK STYLE :
+- Fond coloré semi-transparent
+- Police : Bold, sans-serif, grande taille
+- Couleurs : Blanc avec contour noir épais
+- Emojis : 1-2 par phrase pour accent
+- Animation : Apparition mot par mot
+
+YOUTUBE STYLE :
+- Fond : Bandeau noir transparent 40%
+- Police : Arial/Helvetica, taille moyenne
+- Couleurs : Blanc ou jaune sur fond sombre
+- Sobriété : Pas d'animation excessive
+- Position : Bas centré, marge sécurité
+
+LINKEDIN STYLE :
+- Fond : Transparent ou bandeau discret
+- Police : Professionnel (Arial, Calibri)
+- Couleurs : Blanc/noir selon contraste
+- Mise en forme : Propre, lisible
+- Aucun emoji ou effet fantaisiste</div>
+                                </div>
+
+                                <p><strong>Méthode CapCut pour stylisation :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Stylisation CapCut</div>
+                                    <button class="copy-btn" onclick="copyPrompt('style-capcut')">📋 Copier</button>
+                                    <div id="prompt-style-capcut">1. Sélectionner vos sous-titres → Style
+2. TikTok : Template "Pop" ou "Neon" 
+3. YouTube : Template "Clean" ou "Classic"
+4. LinkedIn : Template "Minimal" ou "Professional"
+5. Personnaliser couleurs selon votre branding
+6. Tester lisibilité avec aperçu
+7. Ajuster position selon plateforme</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Sous-titres stylisés et animés, optimisés visuellement pour chaque plateforme, avec impact maximum sur l'engagement.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">4</div>
+                                Synchronisation et timing précis
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Peaufinez la synchronisation pour une expérience de lecture fluide. Le timing parfait fait la différence entre sous-titres amateurs et professionnels.</p>
+
+                                <p><strong>Règles de timing professionnel :</strong></p>
+                                <ul>
+                                    <li><strong>Durée minimale :</strong> 1.5 secondes (temps de lecture confortable)</li>
+                                    <li><strong>Durée maximale :</strong> 6 secondes (éviter fatigue visuelle)</li>
+                                    <li><strong>Anticipation :</strong> Commencer 0.2 sec avant la parole</li>
+                                    <li><strong>Prolongation :</strong> Finir 0.3 sec après la parole</li>
+                                    <li><strong>Pauses :</strong> Laisser 0.5 sec entre segments</li>
+                                </ul>
+
+                                <p><strong>Méthode de vérification timing :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Checklist timing</div>
+                                    <button class="copy-btn" onclick="copyPrompt('timing')">📋 Copier</button>
+                                    <div id="prompt-timing">VÉRIFICATIONS OBLIGATOIRES :
+
+1. LECTURE VOCALE : Lire à voix haute en même temps que vidéo
+   → Si décalage = ajuster timing
+
+2. TEST VITESSE : Vitesse lecture normale = 200 mots/minute
+   → Si trop rapide = rallonger durée
+
+3. TRANSITIONS : Vérifier fluidité entre segments
+   → Pas de coupures abruptes
+
+4. SYNCHRONISATION ÉMOTIONS : Sous-titres = tonalité parole
+   → Points d'exclamation, pauses, rythme
+
+5. TEST PLATEFORME : Prévisualiser sur mobile/desktop
+   → Lisibilité selon format</div>
+                                </div>
+
+                                <p><strong>Résultat attendu :</strong> Synchronisation parfaite avec parole, timing naturel et fluide, expérience de lecture optimale pour l'audience.</p>
+                            </div>
+                        </div>
+
+                        <div class="exercise-step">
+                            <div class="step-title">
+                                <div class="step-counter">5</div>
+                                Traduction multilingue automatisée
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Action :</strong> Créez des versions dans d'autres langues pour élargir votre audience. L'automatisation permet de générer rapidement des sous-titres multilingues de qualité.</p>
+
+                                <p><strong>Prompt ChatGPT pour traduction optimisée :</strong></p>
+                                <div class="prompt-block">
+                                    <div class="prompt-label">Prompt traduction</div>
+                                    <button class="copy-btn" onclick="copyPrompt('5')">📋 Copier</button>
+                                    <div id="prompt-5">Traduis ces sous-titres en [LANGUE CIBLE] en conservant timing et contraintes.
+
+SOUS-TITRES ORIGINAUX (FR) :
+[Coller vos sous-titres avec timing]
+
+CONTRAINTES TRADUCTION :
+1. TIMING : Conserver exactement mêmes intervals
+2. LONGUEUR : Respecter limites caractères par ligne
+3. SENS : Adapter expressions culturelles si nécessaire
+4. SYNCHRONISATION : Traduire le sens, pas mot-à-mot
+5. NATUREL : Que ça sonne fluide dans langue cible
+
+LANGUES PRIORITAIRES :
+- Anglais (international)
+- Espagnol (Amérique latine) 
+- Allemand (Europe)
+- Portugais (Brésil)
+
+FORMAT SORTIE : Identique à l'original avec traductions
+
+EXEMPLE :
+[00:01 - 00:03] Hello everyone
+                Welcome to my channel</div>
+                                </div>
+
+                                <p><strong>Alternative outils automatiques :</strong></p>
+                                <ul>
+                                    <li><strong>Descript :</strong> Fonction traduction intégrée (payant)</li>
+                                    <li><strong>YouTube Studio :</strong> Traduction automatique gratuite</li>
+                                    <li><strong>Kapwing :</strong> Sous-titres multilingues en un clic</li>
+                                    <li><strong>Google Translate :</strong> Backup pour vérifications</li>
+                                </ul>
+
+                                <p><strong>Résultat attendu :</strong> Versions traduites en 2-3 langues principales, timing conservé, qualité linguistique vérifiée, prêtes pour audience internationale.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 📊 Validation des résultats -->
+                <section class="section">
+                    <h2 class="section-title">
+                        📊 Validation des résultats
+                    </h2>
+                    
+                    <div class="section-content">
+                        <h3>📏 Checklist qualité finale :</h3>
+                        <div class="results-box">
+                            <div class="metric-item">
+                                <span class="metric-label">Temps total process</span>
+                                <span class="metric-value">~20 min</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Versions créées</span>
+                                <span class="metric-value">6 variations</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Plateformes couvertes</span>
+                                <span class="metric-value">3 réseaux</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Langues disponibles</span>
+                                <span class="metric-value">2-3 langues</span>
+                            </div>
+                        </div>
+
+                        <h3>🏆 Éléments à vérifier :</h3>
+                        <ul>
+                            <li>✅ <strong>Transcription précise :</strong> >90% de précision, corrections manuelles faites</li>
+                            <li>✅ <strong>Adaptation plateforme :</strong> 3 versions respectant contraintes techniques</li>
+                            <li>✅ <strong>Style professionnel :</strong> Lisibilité, couleurs, animations appropriées</li>
+                            <li>✅ <strong>Timing parfait :</strong> Synchronisation naturelle, pauses respectées</li>
+                            <li>✅ <strong>Versions multilingues :</strong> Traductions de qualité, timing conservé</li>
+                            <li>✅ <strong>Prêt diffusion :</strong> Exports dans formats natifs de chaque plateforme</li>
+                        </ul>
+
+                        <h3>💡 Applications immédiates :</h3>
+                        <ul>
+                            <li><strong>Contenu éducatif :</strong> Cours en ligne accessibles multilingues</li>
+                            <li><strong>Marketing digital :</strong> Campagnes vidéo multi-plateformes</li>
+                            <li><strong>Communication corporate :</strong> Messages dirigeants sous-titrés</li>
+                            <li><strong>Personal branding :</strong> Contenus accessibles et professionnels</li>
+                            <li><strong>Événements :</strong> Lives, webinaires, conférences sous-titrés</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🚀 Prochaine étape</div>
+                            <p><strong>Automatisation :</strong> Créez un template de process avec vos outils préférés. Objectif : sous-titrer n'importe quelle vidéo en moins de 10 minutes.</p>
+                            <p><strong>Scaling :</strong> Batch processing pour sous-titrer plusieurs vidéos d'un coup. Pensez série de contenus ou campagne marketing !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="generative_4_scripts_claude_1b.html" class="btn btn-secondary">← Micro-séquence 1B</a>
+                    <a href="generative_4_midjourney_debutant_2a.html" class="btn btn-primary">Séquence 2 : Images →</a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🕐 Suivi de session</h3>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="global-progress"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0% terminé</div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">🎯 Objectif session</div>
+                    <p>Maîtriser le sous-titrage IA multi-plateforme en 20 minutes pour un gain de productivité x24.</p>
+                </div>
+
+                <div class="results-box">
+                    <div class="interactive-title">📊 Vos métriques</div>
+                    <div class="metric-item">
+                        <span class="metric-label">Temps écoulé</span>
+                        <span class="metric-value" id="elapsed-time">00:00</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Outils maîtrisés</span>
+                        <span class="metric-value" id="tools-mastered">0/4</span>
+                    </div>
+                </div>
+
+                <div class="tools-grid" style="grid-template-columns: 1fr;">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <span class="tool-icon">⚡</span>
+                            <span class="tool-name">Gain productivité</span>
+                        </div>
+                        <div class="tool-description">
+                            <strong>2h → 5min</strong><br>
+                            Économie de temps massive pour des résultats équivalents ou supérieurs
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">💪 Actions post-session</div>
+                    <ul style="font-size: 0.9rem; margin: 0; padding-left: 1rem;">
+                        <li>Tester sur 3 vidéos existantes</li>
+                        <li>Créer templates par plateforme</li>
+                        <li>Automatiser le workflow</li>
+                        <li>Passer à la séquence images</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // Variables globales
+        let globalStartTime = null;
+        let toolsMastered = 0;
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.querySelector('.theme-toggle-icon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.querySelector('.theme-toggle-icon');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            }
+            
+            // Start global timer
+            if (!globalStartTime) {
+                globalStartTime = Date.now();
+                updateGlobalTimer();
+            }
+        });
+
+        function masterTool() {
+            toolsMastered++;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (toolsMastered / 4) * 100;
+            document.getElementById('global-progress').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = Math.round(progress) + '% terminé';
+            document.getElementById('tools-mastered').textContent = toolsMastered + '/4';
+        }
+
+        function updateGlobalTimer() {
+            setInterval(() => {
+                if (globalStartTime) {
+                    const elapsed = Date.now() - globalStartTime;
+                    const minutes = Math.floor(elapsed / 60000);
+                    const seconds = Math.floor((elapsed % 60000) / 1000);
+                    document.getElementById('elapsed-time').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        // Copy prompt functionality
+        function copyPrompt(promptNumber) {
+            const promptId = `prompt-${promptNumber}`;
+            const promptElement = document.getElementById(promptId);
+            const text = promptElement.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const copyBtn = promptElement.parentElement.querySelector('.copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Copié !';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Erreur lors de la copie:', err);
+            });
+        }
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Auto-save progress
+        let progressTimer;
+        window.addEventListener('scroll', function() {
+            clearTimeout(progressTimer);
+            progressTimer = setTimeout(function() {
+                const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                if (scrollPercent > 0) {
+                    localStorage.setItem('micro_sequence_1c_progress', scrollPercent);
+                }
+                
+                // Auto-complete tools based on scroll
+                if (scrollPercent > 25 && toolsMastered < 1) {
+                    toolsMastered = 1;
+                    updateProgress();
+                } else if (scrollPercent > 50 && toolsMastered < 2) {
+                    toolsMastered = 2;
+                    updateProgress();
+                } else if (scrollPercent > 75 && toolsMastered < 3) {
+                    toolsMastered = 3;
+                    updateProgress();
+                } else if (scrollPercent > 90 && toolsMastered < 4) {
+                    toolsMastered = 4;
+                    updateProgress();
+                }
+            }, 1000);
+        });
+
+        // Load saved progress
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedProgress = localStorage.getItem('micro_sequence_1c_progress');
+            if (savedProgress && savedProgress > 25) {
+                const tools = Math.floor(savedProgress / 25);
+                toolsMastered = Math.min(tools, 4);
+                updateProgress();
+            }
+        });
+    </script>
+</body>
+</html>

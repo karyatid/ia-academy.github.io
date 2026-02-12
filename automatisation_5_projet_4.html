@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 4: Projet d'automatisation personnalisé | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            content: '🌙';
+            left: auto;
+            right: 4px;
+        }
+
+        [data-theme="dark"] .theme-toggle::after {
+            left: 27px;
+            background: var(--secondary-color);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(-2px);
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-badge.final {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tips and Notes */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .success-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Step-by-step boxes */
+        .step-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--secondary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+            margin-left: 1rem;
+        }
+
+        /* Project selection cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            border-color: var(--primary-color);
+        }
+
+        .project-card.selected {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .project-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-complexity {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .complexity-easy {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .complexity-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+        }
+
+        .complexity-hard {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error-color);
+        }
+
+        /* Planning timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--primary-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+
+        .timeline-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checklist-checkbox.checked {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .checklist-checkbox.checked::before {
+            content: '✓';
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .checklist-text {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .checklist-item.completed .checklist-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Progress tracker */
+        .progress-tracker {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Feedback and presentation section */
+        .presentation-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .presentation-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .presentation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .presentation-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Circle */
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            list-style: none;
+        }
+
+        .module-nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .module-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .module-nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .module-nav-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .module-nav-link.completed {
+            color: var(--success-color);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .nav-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        /* Lesson Navigation at bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 1rem;
+            }
+
+            .timeline::before {
+                left: 0.5rem;
+            }
+
+            .timeline-item::before {
+                left: -0.25rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Module 5</span>
+                    </div>
+                    <div class="lesson-badge final">
+                        <span>🎯</span>
+                        <span>Séquence Finale</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>80 minutes</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Projet d'automatisation personnalisé</h1>
+                <p class="lesson-description">
+                    C'est le moment de passer à l'action ! Concevez, développez et présentez votre propre système d'automatisation intelligent. De l'idée à la réalisation, créez une solution qui transformera réellement votre quotidien professionnel.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Votre défi final d'automatisation</h2>
+                    <div class="section-content">
+                        <p>Félicitations ! Vous avez maintenant toutes les clés pour créer des automatisations intelligentes. Cette séquence finale est entièrement consacrée à la réalisation de votre propre projet d'automatisation, en appliquant concrètement tout ce que vous avez appris.</p>
+                        
+                        <div class="success-box">
+                            <div class="success-title">
+                                <span>🎯</span>
+                                <span>Votre mission</span>
+                            </div>
+                            <p>Créer un système d'automatisation intelligent qui résout un problème réel de votre environnement professionnel. Vous repartirez avec une solution fonctionnelle, documentée et présentée professionnellement.</p>
+                        </div>
+                        
+                        <p><strong>Ce que vous allez accomplir en 80 minutes :</strong></p>
+                        <ul>
+                            <li>Sélectionner et concevoir votre projet d'automatisation personnel</li>
+                            <li>Développer le workflow complet avec accompagnement en temps réel</li>
+                            <li>Tester, débugger et optimiser votre solution</li>
+                            <li>Documenter votre réalisation pour la maintenance future</li>
+                            <li>Présenter votre projet et recevoir des feedback constructifs</li>
+                        </ul>
+
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>💡</span>
+                                <span>Approche pédagogique</span>
+                            </div>
+                            <p>Cette séquence suit une méthodologie projet éprouvée : <strong>Conception → Développement → Tests → Documentation → Présentation</strong>. Vous serez accompagné à chaque étape avec des conseils pratiques et du support en temps réel.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Conception du projet -->
+                <section class="section">
+                    <h2 class="section-title">🎨 Conception de votre projet</h2>
+                    <div class="section-content">
+                        
+                        <h3>Sélection d'un processus personnel à automatiser</h3>
+                        <p>Pour maximiser l'impact et l'engagement, choisissez un processus que vous vivez réellement. Voici une sélection de projets testés et approuvés :</p>
+
+                        <div class="project-grid">
+                            <div class="project-card" onclick="selectProject(this)">
+                                <div class="project-icon">📧</div>
+                                <div class="project-title">Gestionnaire d'emails intelligent</div>
+                                <div class="project-description">Tri automatique, réponses IA et escalade selon l'urgence</div>
+                                <div class="project-complexity complexity-easy">Facile</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this)">
+                                <div class="project-icon">📊</div>
+                                <div class="project-title">Tableau de bord commercial automatisé</div>
+                                <div class="project-description">Collecte multi-sources, analyse IA et rapport hebdomadaire</div>
+                                <div class="project-complexity complexity-medium">Moyen</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this)">
+                                <div class="project-icon">🎓</div>
+                                <div class="project-title">Assistant de formation en ligne</div>
+                                <div class="project-description">Onboarding automatisé avec IA adaptative et suivi personnalisé</div>
+                                <div class="project-complexity complexity-medium">Moyen</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this)">
+                                <div class="project-icon">🏠</div>
+                                <div class="project-title">Gestionnaire immobilier intelligent</div>
+                                <div class="project-description">Veille automatisée, analyse de biens et alertes personnalisées</div>
+                                <div class="project-complexity complexity-hard">Avancé</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this)">
+                                <div class="project-icon">💼</div>
+                                <div class="project-title">Optimiseur de productivité</div>
+                                <div class="project-description">Analyse du temps, suggestions IA et workflow d'amélioration</div>
+                                <div class="project-complexity complexity-medium">Moyen</div>
+                            </div>
+
+                            <div class="project-card" onclick="selectProject(this)">
+                                <div class="project-icon">🎨</div>
+                                <div class="project-title">Studio créatif automatisé</div>
+                                <div class="project-description">Génération de contenu multimédia avec pipeline de publication</div>
+                                <div class="project-complexity complexity-hard">Avancé</div>
+                            </div>
+                        </div>
+
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>✨</span>
+                                <span>Votre projet personnalisé</span>
+                            </div>
+                            <p>Vous avez une idée spécifique ? Parfait ! L'accompagnement s'adapte à votre vision. L'important est de choisir un projet qui vous motive et répond à un vrai besoin.</p>
+                        </div>
+
+                        <h3>Définition des entrées, traitements et sorties</h3>
+                        <p>Une fois votre projet choisi, structurez-le selon ce framework éprouvé :</p>
+
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Entrées (Inputs)</div>
+                            <p><strong>Questions clés :</strong> Quels sont les déclencheurs ? D'où viennent les données ? Quelle fréquence ?</p>
+                            <p><strong>Exemples :</strong> Emails, formulaires, fichiers cloud, APIs, webhooks, planning</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Traitements (Processing)</div>
+                            <p><strong>Questions clés :</strong> Quelles transformations ? Quelle logique métier ? Quand utiliser l'IA ?</p>
+                            <p><strong>Exemples :</strong> Analyse de sentiment, extraction de données, calculs, routage, enrichissement</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Sorties (Outputs)</div>
+                            <p><strong>Questions clés :</strong> Qui reçoit quoi ? Sous quel format ? À quelle fréquence ?</p>
+                            <p><strong>Exemples :</strong> Notifications, rapports, mises à jour CRM, publications automatiques</p>
+                        </div>
+
+                        <h3>Choix de la plateforme</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🤔</span>
+                                <span>Zapier vs Make.com vs Hybride : Comment choisir ?</span>
+                            </div>
+                            
+                            <h4>Choisissez Zapier si :</h4>
+                            <ul>
+                                <li>Workflow linéaire simple (1 trigger → 2-3 actions)</li>
+                                <li>Intégrations classiques (Gmail, Slack, Google Sheets)</li>
+                                <li>Budget confortable (>50€/mois)</li>
+                                <li>Besoin de simplicité et fiabilité</li>
+                            </ul>
+
+                            <h4>Choisissez Make.com si :</h4>
+                            <ul>
+                                <li>Logique complexe avec conditions multiples</li>
+                                <li>Traitement de listes ou données en batch</li>
+                                <li>Budget serré (<30€/mois)</li>
+                                <li>Confort avec l'interface visuelle</li>
+                            </ul>
+
+                            <h4>Approche hybride si :</h4>
+                            <ul>
+                                <li>Projet complexe nécessitant les forces des deux</li>
+                                <li>Expérimentation de différentes approches</li>
+                                <li>Migration progressive d'une plateforme à l'autre</li>
+                            </ul>
+                        </div>
+
+                        <h3>Planning d'implémentation et tests</h3>
+                        <p>Pour optimiser vos 80 minutes, suivez cette timeline recommandée :</p>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">0-15 min</div>
+                                <div class="timeline-title">Conception et planification</div>
+                                <div class="timeline-description">Finaliser le choix du projet, définir l'architecture, choisir les outils</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">15-50 min</div>
+                                <div class="timeline-title">Développement guidé</div>
+                                <div class="timeline-description">Configuration des modules, tests en temps réel, debugging</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">50-65 min</div>
+                                <div class="timeline-title">Optimisation et documentation</div>
+                                <div class="timeline-description">Peaufinage, gestion d'erreurs, documentation pour la maintenance</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">65-80 min</div>
+                                <div class="timeline-title">Présentation et feedback</div>
+                                <div class="timeline-description">Démonstration 5 min, retours du groupe, plan d'évolution</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Développement guidé -->
+                <section class="section">
+                    <h2 class="section-title">⚙️ Développement guidé step-by-step</h2>
+                    <div class="section-content">
+                        
+                        <h3>Configuration avec accompagnement</h3>
+                        <p>Cette phase est le cœur de votre apprentissage. Vous développez en autonomie avec support immédiat en cas de blocage.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                <span>Méthodologie de développement</span>
+                            </div>
+                            <ol>
+                                <li><strong>Start Small :</strong> Commencez par le trigger et une action simple</li>
+                                <li><strong>Test Early :</strong> Testez chaque étape avant d'ajouter la suivante</li>
+                                <li><strong>Debug Fast :</strong> Identifiez et résolvez les problèmes immédiatement</li>
+                                <li><strong>Iterate Quickly :</strong> Améliorez par petites touches successives</li>
+                            </ol>
+                        </div>
+
+                        <h3>Checklist de développement</h3>
+                        <p>Suivez cette checklist pour assurer la qualité de votre automation :</p>
+
+                        <ul class="checklist">
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>Trigger configuré :</strong> Le déclencheur fonctionne et capture les bonnes données
+                                </div>
+                            </li>
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>Premier test réussi :</strong> Le workflow s'exécute de bout en bout sans erreur
+                                </div>
+                            </li>
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>IA intégrée :</strong> L'intelligence artificielle apporte une vraie valeur ajoutée
+                                </div>
+                            </li>
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>Logique testée :</strong> Les conditions et routages fonctionnent dans tous les cas
+                                </div>
+                            </li>
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>Actions finales :</strong> Les sorties arrivent aux bonnes destinations dans le bon format
+                                </div>
+                            </li>
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>Gestion d'erreurs :</strong> Le workflow gère gracieusement les cas d'échec
+                                </div>
+                            </li>
+                            <li class="checklist-item">
+                                <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                                <div class="checklist-text">
+                                    <strong>Performance optimisée :</strong> Le workflow est rapide et économique
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="progress-tracker">
+                            <div class="progress-header">
+                                <div class="progress-title">Progression du développement</div>
+                                <div class="progress-percentage">0%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="development-progress"></div>
+                            </div>
+                        </div>
+
+                        <h3>Tests et debugging en temps réel</h3>
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>🔧</span>
+                                <span>Stratégies de debugging efficaces</span>
+                            </div>
+                            <ul>
+                                <li><strong>Données de test :</strong> Préparez des échantillons représentatifs</li>
+                                <li><strong>Logs détaillés :</strong> Activez le logging maximum pendant le développement</li>
+                                <li><strong>Tests isolés :</strong> Testez chaque module individuellement</li>
+                                <li><strong>Breakpoints :</strong> Utilisez des modules de pause pour inspecter les données</li>
+                                <li><strong>Rollback rapide :</strong> Gardez une version fonctionnelle de sauvegarde</li>
+                            </ul>
+                        </div>
+
+                        <h3>Optimisation des performances et coûts</h3>
+                        <p>Assurez-vous que votre automation est durable et économique :</p>
+
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Optimisation des appels IA</div>
+                            <p>Limitez les tokens, utilisez le cache, regroupez les requêtes similaires</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Fréquence d'exécution</div>
+                            <p>Trouvez le bon équilibre entre réactivité et consommation de resources</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Monitoring et alertes</div>
+                            <p>Configurez des notifications pour surveiller la santé de votre automation</p>
+                        </div>
+
+                        <h3>Documentation pour maintenance future</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>📚</span>
+                                <span>Template de documentation</span>
+                            </div>
+                            <p><strong>Votre documentation doit inclure :</strong></p>
+                            <ul>
+                                <li><strong>Objectif :</strong> Problème résolu et bénéfices attendus</li>
+                                <li><strong>Architecture :</strong> Schéma du workflow avec explications</li>
+                                <li><strong>Configuration :</strong> Paramètres importants et clés API</li>
+                                <li><strong>Maintenance :</strong> Que surveiller, quand intervenir</li>
+                                <li><strong>Évolutions :</strong> Améliorations possibles et roadmap</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Présentation et feedback -->
+                <section class="section">
+                    <h2 class="section-title">🎤 Présentation et feedback collectif</h2>
+                    <div class="section-content">
+                        
+                        <div class="presentation-box">
+                            <div class="presentation-icon">🎯</div>
+                            <div class="presentation-title">Votre moment de gloire !</div>
+                            <div class="presentation-description">
+                                Chaque participant dispose de 5 minutes pour présenter sa réalisation au groupe et recevoir des retours constructifs.
+                            </div>
+                        </div>
+
+                        <h3>Démonstration de 5 minutes par participant</h3>
+                        <p>Structure recommandée pour votre présentation :</p>
+
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Contexte (1 min)</div>
+                            <p>Quel problème avez-vous choisi de résoudre et pourquoi ?</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Solution (2 min)</div>
+                            <p>Comment votre automation fonctionne-t-elle ? Démonstration live.</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Défis et apprentissages (1 min)</div>
+                            <p>Quelles difficultés avez-vous rencontrées ? Comment les avez-vous surmontées ?</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Impact et évolution (1 min)</div>
+                            <p>Quel gain espérez-vous ? Quelles améliorations envisagez-vous ?</p>
+                        </div>
+
+                        <h3>Partage des défis rencontrés et solutions</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🤝</span>
+                                <span>Apprentissage collectif</span>
+                            </div>
+                            <p>Cette phase de partage est cruciale pour l'apprentissage de tous. Chaque défi rencontré et résolu devient une ressource pour le groupe entier.</p>
+                            
+                            <h4>Types de retours encouragés :</h4>
+                            <ul>
+                                <li><strong>Techniques :</strong> Solutions alternatives, optimisations possibles</li>
+                                <li><strong>Fonctionnels :</strong> Autres cas d'usage, extensions envisageables</li>
+                                <li><strong>Stratégiques :</strong> ROI potentiel, impact organisationnel</li>
+                                <li><strong>Créatifs :</strong> Idées d'amélioration, innovations possibles</li>
+                            </ul>
+                        </div>
+
+                        <h3>Plan d'évolution post-formation</h3>
+                        <p>Votre projet ne s'arrête pas ici ! Planifiez son évolution :</p>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">Semaine 1</div>
+                                <div class="timeline-title">Mise en production</div>
+                                <div class="timeline-description">Déploiement avec données réelles et monitoring actif</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Mois 1</div>
+                                <div class="timeline-title">Optimisation</div>
+                                <div class="timeline-description">Ajustements basés sur l'usage réel et feedback utilisateurs</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Mois 2-3</div>
+                                <div class="timeline-title">Extension</div>
+                                <div class="timeline-description">Nouvelles fonctionnalités et intégrations supplémentaires</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Mois 6</div>
+                                <div class="timeline-title">Évangélisation</div>
+                                <div class="timeline-description">Partage des résultats et formation d'autres équipes</div>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <div class="success-title">
+                                <span>🎊</span>
+                                <span>Félicitations !</span>
+                            </div>
+                            <p>Vous avez terminé le Module 5 et maîtrisez maintenant l'automatisation no-code avec l'IA. Vous repartez avec une solution concrète et les compétences pour créer de nombreuses autres automatisations. Bravo !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz final -->
+                <section class="section">
+                    <div class="quiz-container">
+                        <h2 class="quiz-title">
+                            <span>🏆</span>
+                            Quiz final : Maîtrisez-vous l'automatisation intelligente ?
+                        </h2>
+                        
+                        <div class="quiz-question">
+                            Quelle est la différence principale entre un projet d'automatisation réussi et un projet qui échoue ?
+                        </div>
+                        
+                        <ul class="quiz-options">
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                La complexité technique du workflow développé
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                Le choix entre Zapier et Make.com comme plateforme
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, true)">
+                                L'adéquation entre le problème résolu et un besoin réel de l'utilisateur
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                Le budget alloué aux abonnements et APIs
+                            </li>
+                        </ul>
+                        
+                        <div class="quiz-feedback">
+                            <p></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                        <span>></span>
+                        <a href="automatisation_5_overview.html" class="breadcrumb-link">Module 5: Automatisation</a>
+                        <span>></span>
+                        <span class="breadcrumb-current">Projet personnalisé</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="automatisation_5_make_3.html" class="btn btn-secondary">
+                            <span>←</span> Séquence 3: Make.com
+                        </a>
+                        <a href="casusage_6_overview.html" class="btn btn-primary">
+                            Module 6: Cas d'usage métier <span>→</span>
+                        </a>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🎊 Module terminé !</h3>
+                    <div class="progress-circle">
+                        <span class="progress-text">✓</span>
+                    </div>
+                    <div style="text-align: center; color: var(--primary-color); font-size: 0.9rem; font-weight: 600;">
+                        Module 5 complété avec succès
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="module-nav">
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_overview.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Vue d'ensemble</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_introduction_1.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Introduction et stratégie</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_zapier_2.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Zapier et workflows IA</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_make_3.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Make.com avancé</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_projet_4.html" class="module-nav-link active">
+                                <div class="nav-icon current">✓</div>
+                                <span>Projet personnalisé</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Achievements -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🏆 Compétences acquises</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(99, 102, 241, 0.1); border-radius: 6px; color: var(--primary-color);">
+                            <strong>✓ Audit d'automatisation :</strong> Identifier les opportunités
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(99, 102, 241, 0.1); border-radius: 6px; color: var(--primary-color);">
+                            <strong>✓ Workflows IA :</strong> Zapier et Make.com maîtrisés
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(99, 102, 241, 0.1); border-radius: 6px; color: var(--primary-color);">
+                            <strong>✓ Projet complet :</strong> Solution fonctionnelle créée
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Next Module -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🚀 Module suivant</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Découvrez comment appliquer l'IA dans des contextes métier spécifiques : éducation, marketing, productivité.
+                    </p>
+                    <a href="casusage_6_overview.html" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        Module 6: Cas d'usage
+                    </a>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Project selection functionality
+        function selectProject(element) {
+            // Remove previous selections
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Mark selected project
+            element.classList.add('selected');
+            
+            // Show success message
+            const successBox = document.querySelector('.success-box');
+            if (successBox) {
+                successBox.style.background = 'rgba(16, 185, 129, 0.1)';
+                successBox.style.borderColor = 'var(--success-color)';
+                setTimeout(() => {
+                    successBox.style.background = '';
+                    successBox.style.borderColor = '';
+                }, 2000);
+            }
+        }
+
+        // Checklist functionality
+        function toggleCheckbox(element) {
+            element.classList.toggle('checked');
+            const item = element.closest('.checklist-item');
+            item.classList.toggle('completed');
+            
+            // Update progress
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist-checkbox').length;
+            const checked = document.querySelectorAll('.checklist-checkbox.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            const progressFill = document.getElementById('development-progress');
+            const progressText = document.querySelector('.progress-percentage');
+            
+            if (progressFill && progressText) {
+                progressFill.style.width = percentage + '%';
+                progressText.textContent = percentage + '%';
+            }
+        }
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            element.classList.add('selected');
+            
+            // Show correct/incorrect state
+            if (isCorrect) {
+                element.classList.add('correct');
+                showFeedback('Excellent ! La clé du succès d\'une automation réside dans sa capacité à résoudre un vrai problème utilisateur. Peu importe la sophistication technique, si l\'automation n\'apporte pas de valeur concrète, elle ne sera pas adoptée. C\'est pourquoi nous commençons toujours par l\'audit des besoins réels.', true);
+            } else {
+                element.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(option => {
+                    if (option.onclick.toString().includes('true')) {
+                        option.classList.add('correct');
+                    }
+                });
+                showFeedback('Pas exactement. Bien que la technique soit importante, le facteur déterminant est l\'adéquation entre la solution et le besoin réel. Une automation simple qui résout vraiment un problème aura plus d\'impact qu\'un workflow complexe qui ne répond à aucun besoin concret.', false);
+            }
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.querySelector('.quiz-feedback');
+            const feedbackText = feedback.querySelector('p');
+            
+            feedbackText.textContent = message;
+            feedback.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            // Mark entire module as completed
+            progress.modules[moduleNumber].completed = true;
+            progress.modules[moduleNumber].completedAt = new Date().toISOString();
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence and module as completed
+            markSequenceCompleted(5, 4);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

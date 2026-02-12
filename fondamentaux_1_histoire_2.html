@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histoire et évolution de l'IA | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+            transform: translateY(-1px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item::after {
+            content: "›";
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-item:last-child::after {
+            display: none;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Timeline specific styles */
+        .timeline-container {
+            margin: 2rem 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 100%;
+        }
+
+        .timeline-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+            border-color: var(--primary-color);
+        }
+
+        .timeline-title {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .timeline-item.expanded .timeline-details {
+            max-height: 500px;
+        }
+
+        .timeline-events {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .timeline-event {
+            background: rgba(99, 102, 241, 0.05);
+            border-left: 3px solid var(--accent-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .timeline-event h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-event p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Quiz styles */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-question {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+            
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+            
+        }
+
+        /* Takeaways section */
+        .takeaways-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .takeaway-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .takeaway-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .takeaway-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .takeaway-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .takeaway-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Compact Sidebar for Learning */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .progress-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .outline {
+            list-style: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .outline-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .outline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .outline-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .outline-item a:hover,
+        .outline-item.current a {
+            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Lesson Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+            gap: 2rem;
+        }
+
+        /* Enhanced Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .takeaways-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="fondamentaux_1_overview.html" class="breadcrumb-link">Module 1: Fondamentaux de l'IA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Histoire et évolution</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📚</span>
+                        <span>Module 1 - Séquence 2</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>50 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Débutant</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Histoire et évolution de l'IA</h1>
+                <p class="lesson-description">
+                    Découvrez les moments clés qui ont façonné l'intelligence artificielle, des premiers concepts aux révolutions contemporaines
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section" id="intro">
+                    <h2 class="section-title">🕰️ Voyage dans le temps de l'IA</h2>
+                    <div class="section-content">
+                        <p>L'intelligence artificielle n'est pas née d'hier ! Son histoire s'étend sur plus de 70 ans, jalonnée de rêves audacieux, d'échecs cuisants et de révolutions inattendues. Comprendre cette évolution nous aide à mieux saisir où nous en sommes aujourd'hui et vers quoi nous nous dirigeons.</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Pourquoi cette histoire compte-t-elle ?</div>
+                            <ul>
+                                <li>Elle démystifie les cycles d'espoir et de déception</li>
+                                <li>Elle explique pourquoi certaines approches dominent aujourd'hui</li>
+                                <li>Elle nous prépare aux futures évolutions</li>
+                                <li>Elle nous aide à distinguer les vraies révolutions du marketing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Timeline -->
+                <section class="section" id="timeline">
+                    <h2 class="section-title">📅 Chronologie Interactive</h2>
+                    <div class="timeline-container">
+                        <div class="timeline">
+                            <!-- Era 1: Origins -->
+                            <div class="timeline-item" onclick="expandTimelineItem(this)">
+                                <h3 class="timeline-title">🌱 Les Origines Pionnières <span style="color: var(--accent-color); font-size: 0.9em; font-weight: 500;">(1950-1980)</span></h3>
+                                <p class="timeline-description">
+                                    L'ère des visionnaires qui ont posé les bases théoriques de l'IA. Une période d'optimisme débordant où l'on pensait créer des machines intelligentes en quelques décennies.
+                                </p>
+                                <div class="timeline-details">
+                                    <div class="timeline-events">
+                                        <div class="timeline-event">
+                                            <h4>1950 - Test de Turing</h4>
+                                            <p>Alan Turing propose son célèbre test pour évaluer l'intelligence d'une machine. Question fondamentale : "Une machine peut-elle penser ?"</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>1956 - Conférence de Dartmouth</h4>
+                                            <p>Naissance officielle du terme "Intelligence Artificielle" lors de cette conférence historique. Les participants pensent résoudre l'IA en un été !</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>1957 - Le Perceptron</h4>
+                                            <p>Frank Rosenblatt invente le premier réseau de neurones artificiel. L'ancêtre de tous nos réseaux de neurones modernes.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>1960s-70s - Systèmes experts</h4>
+                                            <p>Développement des premiers systèmes experts capables de raisonner dans des domaines spécialisés comme la médecine.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Era 2: AI Winter -->
+                            <div class="timeline-item" onclick="expandTimelineItem(this)">
+                                <h3 class="timeline-title">❄️ L'Hiver de l'IA <span style="color: var(--accent-color); font-size: 0.9em; font-weight: 500;">(1980-1990)</span></h3>
+                                <p class="timeline-description">
+                                    Les limitations des approches symboliques deviennent évidentes. Les financements se tarissent et l'IA entre dans une période de désillusion.
+                                </p>
+                                <div class="timeline-details">
+                                    <div class="timeline-events">
+                                        <div class="timeline-event">
+                                            <h4>1969 - Critique de Minsky & Papert</h4>
+                                            <p>Leur livre "Perceptrons" démontre les limitations mathématiques des réseaux de neurones simples, refroidissant l'enthousiasme.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>1980s - Échec des systèmes experts</h4>
+                                            <p>Les systèmes experts se révèlent fragiles et difficiles à maintenir. Les entreprises abandonnent massivement ces projets.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>Réduction des financements</h4>
+                                            <p>Les agences gouvernementales et les entreprises coupent drastiquement les budgets de recherche en IA.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Era 3: Renaissance -->
+                            <div class="timeline-item" onclick="expandTimelineItem(this)">
+                                <h3 class="timeline-title">🌅 La Renaissance <span style="color: var(--accent-color); font-size: 0.9em; font-weight: 500;">(1990-2010)</span></h3>
+                                <p class="timeline-description">
+                                    L'émergence du Machine Learning et l'explosion des données redonnent vie à l'IA. L'approche statistique remplace peu à peu la logique symbolique.
+                                </p>
+                                <div class="timeline-details">
+                                    <div class="timeline-events">
+                                        <div class="timeline-event">
+                                            <h4>1997 - Deep Blue bat Kasparov</h4>
+                                            <p>L'ordinateur d'IBM devient le premier à battre un champion du monde d'échecs. Un moment symbolique fort.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>Explosion d'Internet</h4>
+                                            <p>Le web génère des quantités massives de données, carburant essentiel pour les algorithmes d'apprentissage.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>2000s - Machine Learning</h4>
+                                            <p>Les algorithmes statistiques (SVM, Random Forest) montrent leur efficacité sur des problèmes réels.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>2006 - Deep Learning</h4>
+                                            <p>Geoffrey Hinton relance les réseaux de neurones profonds avec de nouvelles techniques d'entraînement.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Era 4: Current Era -->
+                            <div class="timeline-item" onclick="expandTimelineItem(this)">
+                                <h3 class="timeline-title">🚀 L'Ère Actuelle <span style="color: var(--accent-color); font-size: 0.9em; font-weight: 500;">(2010-2024)</span></h3>
+                                <p class="timeline-description">
+                                    La révolution du Deep Learning transforme complètement le paysage. L'IA devient accessible au grand public et transforme de nombreux secteurs.
+                                </p>
+                                <div class="timeline-details">
+                                    <div class="timeline-events">
+                                        <div class="timeline-event">
+                                            <h4>2012 - ImageNet et AlexNet</h4>
+                                            <p>Révolution dans la reconnaissance d'images. Les réseaux de neurones profonds surpassent toutes les méthodes précédentes.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>2016 - AlphaGo bat le champion de Go</h4>
+                                            <p>Exploit jugé impossible 10 ans plus tôt. DeepMind combine Deep Learning et recherche arborescente.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>2017 - Architecture Transformer</h4>
+                                            <p>L'article "Attention is All You Need" révolutionne le traitement du langage naturel. Base de tous les LLM actuels.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>2022 - ChatGPT et démocratisation</h4>
+                                            <p>OpenAI rend l'IA conversationnelle accessible à tous. Plus de 100 millions d'utilisateurs en 2 mois.</p>
+                                        </div>
+                                        <div class="timeline-event">
+                                            <h4>2023-2024 - IA générative mainstream</h4>
+                                            <p>DALL-E, Midjourney, Claude, Gemini... L'IA générative transforme la créativité et le travail de millions de personnes.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interactive Quiz -->
+                <section class="section" id="quiz">
+                    <h2 class="section-title">🧠 Quiz : Testez vos connaissances</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quel événement marque la naissance officielle du terme "Intelligence Artificielle" ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                <span>A)</span> Le test de Turing en 1950
+                            </div>
+                            <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                <span>B)</span> La conférence de Dartmouth en 1956
+                            </div>
+                            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                <span>C)</span> L'invention du Perceptron en 1957
+                            </div>
+                            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                <span>D)</span> La victoire de Deep Blue en 1997
+                            </div>
+                        </div>
+                        <div class="quiz-feedback correct">
+                            ✅ Excellent ! La conférence de Dartmouth en 1956 est effectivement considérée comme l'acte de naissance de l'IA en tant que discipline scientifique.
+                        </div>
+                        <div class="quiz-feedback incorrect">
+                            ❌ Pas tout à fait. La bonne réponse est B) La conférence de Dartmouth en 1956, où le terme "Intelligence Artificielle" a été officiellement proposé.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Key Takeaways -->
+                <section class="section" id="takeaways">
+                    <h2 class="section-title">💡 Points clés à retenir</h2>
+                    <div class="takeaways-grid">
+                        <div class="takeaway-item">
+                            <h4>🔄 Les cycles d'innovation</h4>
+                            <p>L'IA suit des cycles d'optimisme et de déception. Comprendre cette histoire nous aide à garder une perspective réaliste sur les promesses actuelles.</p>
+                        </div>
+                        
+                        <div class="takeaway-item">
+                            <h4>📊 L'importance des données</h4>
+                            <p>La renaissance actuelle de l'IA repose sur trois piliers : plus de données, plus de puissance de calcul, et de meilleurs algorithmes. Plus de données = de meilleures performances.</p>
+                        </div>
+                        
+                        <div class="takeaway-item">
+                            <h4>🚀 De l'expert au grand public</h4>
+                            <p>Nous vivons actuellement la démocratisation de l'IA. Ce qui était réservé aux laboratoires devient accessible à tous via des interfaces simples.</p>
+                        </div>
+                        
+                        <div class="takeaway-item">
+                            <h4>🎯 L'importance des applications pratiques</h4>
+                            <p>Les succès durables de l'IA viennent d'applications concrètes qui résolvent de vrais problèmes, pas de démonstrations spectaculaires.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="fondamentaux_1_introduction_1.html" class="btn btn-secondary">
+                        <span>←</span> Séquence 1
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Module 1 - Séquence 2</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Histoire et évolution de l'IA</div>
+                    </div>
+                    <a href="fondamentaux_1_types_safari_3.html" class="btn btn-primary">
+                        Séquence 3 <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">📋 Plan de la séquence</h3>
+                
+                <div class="progress-section">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%" id="progressBar"></div>
+                    </div>
+                    <div class="progress-text">Progression: <span id="progressText">0%</span></div>
+                </div>
+
+                <ul class="outline">
+                    <li class="outline-item current">
+                        <a href="#intro">🕰️ Introduction historique</a>
+                    </li>
+                    <li class="outline-item">
+                        <a href="#timeline">📅 Chronologie interactive</a>
+                    </li>
+                    <li class="outline-item">
+                        <a href="#quiz">🧠 Quiz de connaissances</a>
+                    </li>
+                    <li class="outline-item">
+                        <a href="#takeaways">💡 Points clés</a>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-primary);">⏱️ Temps estimé</h4>
+                    <div style="display: grid; gap: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        <div>📖 Lecture : 15 min</div>
+                        <div>🎮 Interactions : 20 min</div>
+                        <div>🧠 Quiz : 10 min</div>
+                        <div>💭 Réflexion : 5 min</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('theme', newTheme);
+                }
+            } catch (error) {
+                console.warn('Error toggling theme:', error);
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            try {
+                let savedTheme = 'light';
+                if (typeof(Storage) !== "undefined") {
+                    savedTheme = localStorage.getItem('theme') || 'light';
+                }
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                console.warn('Error loading theme:', error);
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Timeline expansion
+        function expandTimelineItem(item) {
+            const isExpanded = item.classList.contains('expanded');
+            
+            // Close all items
+            document.querySelectorAll('.timeline-item').forEach(i => {
+                i.classList.remove('expanded');
+            });
+            
+            // Open clicked item if it wasn't already open
+            if (!isExpanded) {
+                item.classList.add('expanded');
+            }
+        }
+
+        // Quiz functionality
+        function selectQuizOption(option, isCorrect) {
+            // Remove previous selections
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Hide previous feedback
+            document.querySelectorAll('.quiz-feedback').forEach(feedback => {
+                feedback.style.display = 'none';
+            });
+            
+            // Mark selected option
+            option.classList.add('selected');
+            
+            // Show result after a small delay
+            setTimeout(() => {
+                if (isCorrect) {
+                    option.classList.add('correct');
+                    document.querySelector('.quiz-feedback.correct').style.display = 'block';
+                } else {
+                    option.classList.add('incorrect');
+                    document.querySelector('.quiz-feedback.incorrect').style.display = 'block';
+                    // Also highlight the correct answer
+                    document.querySelectorAll('.quiz-option')[1].classList.add('correct');
+                }
+            }, 300);
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const sections = document.querySelectorAll('.section');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            let visibleSections = 0;
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.5) {
+                    visibleSections++;
+                }
+            });
+            
+            const progress = Math.min((visibleSections / sections.length) * 100, 100);
+            progressBar.style.width = progress + '%';
+            progressText.textContent = Math.round(progress) + '%';
+        }
+
+        // Save progress function
+        function markSequenceCompleted() {
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+                    
+                    if (!progress.modules) progress.modules = {};
+                    if (!progress.modules['1']) progress.modules['1'] = {};
+                    
+                    progress.modules['1']['2'] = {
+                        completed: true,
+                        completedAt: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('formation_progress', JSON.stringify(progress));
+                }
+            } catch (error) {
+                console.warn('Error saving progress:', error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            markSequenceCompleted();
+            
+            // Progress tracking on scroll
+            window.addEventListener('scroll', updateProgress);
+            updateProgress();
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

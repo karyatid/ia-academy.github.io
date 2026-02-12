@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Learning Avancé - Séquence 1B | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            position: relative;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            position: absolute;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Navigation */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-indicator {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 66%;
+            transition: width 0.3s ease;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .toc-link.active {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Platform Cards */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .platform-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .platform-card:hover::before {
+            left: 0;
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .platform-info h3 {
+            color: var(--text-primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .platform-type {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .platform-features {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .platform-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .platform-features li:last-child {
+            border-bottom: none;
+        }
+
+        .platform-pricing {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .price-tag {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Navigation Buttons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="casusage_6_overview.html" class="breadcrumb-link">Module 6: Cas d'Usage Métier</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Séquence 1B : Adaptive Learning</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        🎓 Séquence 1B
+                    </div>
+                    <div class="lesson-badge">
+                        ⏱️ 20 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        🏢 Plateformes Enterprise
+                    </div>
+                </div>
+                <h1 class="lesson-title">Adaptive Learning Avancé</h1>
+                <p class="lesson-description">
+                    Découvrez les plateformes d'apprentissage adaptatif de niveau institutionnel. Analysez Smart Sparrow, Knewton et McGraw-Hill ALEKS pour comprendre quand investir dans ces solutions d'entreprise.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Adaptive Learning : Le Niveau Supérieur</h2>
+                    <div class="section-content">
+                        <p>Si les outils accessibles de la séquence 1 permettent de créer du contenu personnalisé, les plateformes d'adaptive learning vont beaucoup plus loin : elles ajustent en temps réel le parcours d'apprentissage selon les performances de chaque apprenant.</p>
+                        
+                        <p>Ces solutions s'adressent principalement aux :</p>
+                        <ul>
+                            <li><strong>Universités et grandes écoles</strong> avec des milliers d'étudiants</li>
+                            <li><strong>Organismes de formation</strong> professionnelle à grande échelle</li>
+                            <li><strong>Entreprises</strong> avec des besoins de formation récurrents</li>
+                            <li><strong>Éditeurs éducatifs</strong> développant des parcours adaptatifs</li>
+                        </ul>
+
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Important à retenir</div>
+                            <p>Ces plateformes requièrent un <strong>investissement significatif</strong> (50k€-500k€/an) et une équipe technique dédiée. Elles ne sont pas adaptées aux formateurs indépendants ou petites structures.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Qu'est-ce que l'adaptive learning -->
+                <section class="section" id="adaptive-learning">
+                    <h2 class="section-title">🧠 Qu'est-ce que l'Adaptive Learning ?</h2>
+                    <div class="section-content">
+                        <div class="definition-box">
+                            <div class="definition-title">📖 Définition</div>
+                            <p><strong>L'Adaptive Learning</strong> utilise l'IA et les algorithmes d'apprentissage automatique pour personnaliser en temps réel le contenu, la séquence et le rythme d'apprentissage selon les performances, les préférences et les objectifs de chaque apprenant.</p>
+                        </div>
+
+                        <h3>Technologies clés de l'adaptive learning</h3>
+                        <ul>
+                            <li><strong>Machine Learning</strong> : Analyse des patterns d'apprentissage pour prédire et ajuster</li>
+                            <li><strong>Learning Analytics</strong> : Collecte et analyse massive de données comportementales</li>
+                            <li><strong>Knowledge Mapping</strong> : Cartographie des concepts et prérequis</li>
+                            <li><strong>Algorithmes prédictifs</strong> : Anticipation des difficultés et besoins</li>
+                        </ul>
+
+                        <h3>Différence avec les outils classiques</h3>
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>Outils classiques :</strong> "Si l'apprenant échoue au quiz, lui proposer des ressources supplémentaires"</p>
+                            <p><strong>Adaptive Learning :</strong> "Analyser en temps réel 47 variables comportementales, prédire la probabilité d'échec 3 chapitres à l'avance, ajuster automatiquement la difficulté et la modalité de présentation"</p>
+                        </div>
+
+                        <h3>Capacités avancées typiques</h3>
+                        <ul>
+                            <li><strong>Micro-adaptations continues</strong> : Ajustement après chaque interaction</li>
+                            <li><strong>Prédiction de performance</strong> : Estimation de réussite aux examens</li>
+                            <li><strong>Optimisation du temps</strong> : Chemin d'apprentissage le plus efficace</li>
+                            <li><strong>Détection émotionnelle</strong> : Analyse de la frustration et motivation</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Plateformes leaders -->
+                <section class="section" id="plateformes-leaders">
+                    <h2 class="section-title">🏆 Plateformes Leaders du Marché</h2>
+                    <div class="section-content">
+                        <p>Analysons les trois principales plateformes d'adaptive learning utilisées par les institutions éducatives mondiales.</p>
+
+                        <div class="platforms-grid">
+                            <div class="platform-card">
+                                <div class="platform-header">
+                                    <div class="platform-logo">SS</div>
+                                    <div class="platform-info">
+                                        <h3>Smart Sparrow</h3>
+                                        <div class="platform-type">Plateforme Adaptive Complète</div>
+                                    </div>
+                                </div>
+                                <ul class="platform-features">
+                                    <li>✅ Création de contenus adaptatifs interactifs</li>
+                                    <li>✅ Analytics avancés en temps réel</li>
+                                    <li>✅ Simulations et labs virtuels</li>
+                                    <li>✅ API et intégrations LMS</li>
+                                    <li>✅ Support des STEM complexes</li>
+                                </ul>
+                                <div class="platform-pricing">
+                                    <div class="price-tag">Sur devis</div>
+                                    <div class="price-note">À partir de 50k€/an pour 1000+ étudiants</div>
+                                </div>
+                            </div>
+
+                            <div class="platform-card">
+                                <div class="platform-header">
+                                    <div class="platform-logo">K</div>
+                                    <div class="platform-info">
+                                        <h3>Knewton Alta</h3>
+                                        <div class="platform-type">Moteur Adaptatif Mature</div>
+                                    </div>
+                                </div>
+                                <ul class="platform-features">
+                                    <li>✅ IA propriétaire depuis 2008</li>
+                                    <li>✅ Courses clés en main (maths, sciences)</li>
+                                    <li>✅ Prédictions précises de performance</li>
+                                    <li>✅ Intégration LMS native</li>
+                                    <li>✅ Utilisé par 13M+ étudiants</li>
+                                </ul>
+                                <div class="platform-pricing">
+                                    <div class="price-tag">$25-99/étudiant/semestre</div>
+                                    <div class="price-note">License institutionnelle négociable</div>
+                                </div>
+                            </div>
+
+                            <div class="platform-card">
+                                <div class="platform-header">
+                                    <div class="platform-logo">MH</div>
+                                    <div class="platform-info">
+                                        <h3>McGraw-Hill ALEKS</h3>
+                                        <div class="platform-type">Référence Mathématiques</div>
+                                    </div>
+                                </div>
+                                <ul class="platform-features">
+                                    <li>✅ Spécialisé mathématiques et sciences</li>
+                                    <li>✅ Assessment adaptatif poussé</li>
+                                    <li>✅ Knowledge maps détaillées</li>
+                                    <li>✅ 25+ ans de R&D</li>
+                                    <li>✅ Preuves académiques solides</li>
+                                </ul>
+                                <div class="platform-pricing">
+                                    <div class="price-tag">$120/étudiant/an</div>
+                                    <div class="price-note">Licences volume disponibles</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Autres acteurs notables</h3>
+                        <ul>
+                            <li><strong>Carnegie Learning</strong> : Spécialisé en mathématiques K-12, avec tuteur intelligent MATHia</li>
+                            <li><strong>Realizeit</strong> : Plateforme irlandaise, forte en analytics et parcours adaptatifs</li>
+                            <li><strong>Area9 Lyceum</strong> : Rhizome Learning, adaptive learning basé sur les neurosciences</li>
+                            <li><strong>Cogbooks</strong> : Solution britannique, focus sur l'enseignement supérieur</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Cas d'usage institutionnels -->
+                <section class="section" id="cas-usage-institutionnels">
+                    <h2 class="section-title">🏛️ Cas d'Usage Institutionnels</h2>
+                    <div class="section-content">
+                        <p>Découvrons comment les institutions éducatives utilisent concrètement ces plateformes d'adaptive learning.</p>
+
+                        <h3>🎓 Arizona State University + Knewton</h3>
+                        <div class="example-box">
+                            <div class="example-title">📊 Résultats mesurés</div>
+                            <p><strong>Contexte :</strong> 25,000 étudiants en mathématiques de base<br>
+                            <strong>Solution :</strong> Knewton pour parcours adaptatifs personnalisés<br>
+                            <strong>Résultats :</strong> +17% de taux de réussite, -56% de temps d'apprentissage moyen</p>
+                        </div>
+
+                        <h3>🏥 École de Médecine de Harvard + Smart Sparrow</h3>
+                        <div class="example-box">
+                            <div class="example-title">📊 Innovation pédagogique</div>
+                            <p><strong>Contexte :</strong> Formation en diagnostic médical<br>
+                            <strong>Solution :</strong> Patients virtuels adaptatifs avec Smart Sparrow<br>
+                            <strong>Résultats :</strong> +89% d'engagement, diagnostic précis en -40% de temps</p>
+                        </div>
+
+                        <h3>🔬 MIT + ALEKS</h3>
+                        <div class="example-box">
+                            <div class="example-title">📊 Sciences exactes</div>
+                            <p><strong>Contexte :</strong> Cours de chimie et physique de première année<br>
+                            <strong>Solution :</strong> Assessment adaptatif ALEKS pour prérequis<br>
+                            <strong>Résultats :</strong> Identification précise des lacunes, +34% de rétention</p>
+                        </div>
+
+                        <h3>Domaines d'application privilégiés</h3>
+                        <ul>
+                            <li><strong>STEM (Sciences, Technologies, Ingénierie, Mathématiques) :</strong> Concepts hiérarchiques avec prérequis clairs</li>
+                            <li><strong>Langues étrangères :</strong> Progression adaptative selon les difficultés individuelles</li>
+                            <li><strong>Formation médicale :</strong> Patients virtuels et cas cliniques adaptatifs</li>
+                            <li><strong>Préparation aux certifications :</strong> Optimisation du temps de révision</li>
+                            <li><strong>Formation corporate :</strong> Compliance et onboarding à grande échelle</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Indicateurs de succès typiques</div>
+                            <ul>
+                                <li><strong>Efficacité :</strong> 20-50% de réduction du temps d'apprentissage</li>
+                                <li><strong>Rétention :</strong> +15-30% de taux de completion des cours</li>
+                                <li><strong>Performance :</strong> +10-25% aux évaluations finales</li>
+                                <li><strong>Engagement :</strong> +40-80% de temps passé sur la plateforme</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Critères de choix -->
+                <section class="section" id="criteres-choix">
+                    <h2 class="section-title">⚖️ Critères de Choix et ROI</h2>
+                    <div class="section-content">
+                        <p>Comment évaluer si votre organisation est prête pour l'adaptive learning et choisir la bonne plateforme ?</p>
+
+                        <h3>📊 Pré-requis organisationnels</h3>
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <h4>✅ Votre organisation EST prête si :</h4>
+                            <ul style="color: var(--success-color);">
+                                <li><strong>Volume :</strong> 500+ apprenants par an minimum</li>
+                                <li><strong>Contenu structuré :</strong> Domaines avec prérequis clairs (STEM, langues, etc.)</li>
+                                <li><strong>Équipe technique :</strong> 1-2 personnes dédiées à l'intégration</li>
+                                <li><strong>Budget :</strong> 50k€-500k€/an selon la taille</li>
+                                <li><strong>Données :</strong> Capacité à analyser et exploiter les analytics</li>
+                            </ul>
+
+                            <h4>❌ Ce N'EST PAS adapté si :</h4>
+                            <ul style="color: var(--error-color);">
+                                <li><strong>Formation ponctuelle :</strong> Formations one-shot ou événementielles</li>
+                                <li><strong>Contenu créatif :</strong> Domaines subjectifs sans progression linéaire</li>
+                                <li><strong>Petit volume :</strong> Moins de 200 apprenants/an</li>
+                                <li><strong>Budget limité :</strong> Moins de 30k€/an disponible</li>
+                                <li><strong>Résistance au changement :</strong> Équipes non prêtes pour la transformation</li>
+                            </ul>
+                        </div>
+
+                        <h3>💰 Calcul du ROI</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">📈 Modèle de calcul ROI simplifié</div>
+                            <p><strong>Économies annuelles :</strong></p>
+                            <ul>
+                                <li>Temps formateurs économisé : 30-50% → 150k€/an</li>
+                                <li>Réduction échecs/redoublements : 20% → 200k€/an</li>
+                                <li>Efficacité apprentissage : 25% → 100k€/an</li>
+                                <li>Support technique réduit : 40% → 50k€/an</li>
+                            </ul>
+                            <p><strong>Total économies :</strong> 500k€/an<br>
+                            <strong>Investissement :</strong> 200k€/an (plateforme + intégration)<br>
+                            <strong>ROI :</strong> 150% dès la première année</p>
+                        </div>
+
+                        <h3>🔍 Critères de sélection de plateforme</h3>
+                        <ul>
+                            <li><strong>Domaine de spécialisation :</strong> ALEKS pour maths, Smart Sparrow pour simulations, Knewton pour généraliste</li>
+                            <li><strong>Intégration existant :</strong> Compatibilité avec votre LMS actuel (Moodle, Canvas, Blackboard)</li>
+                            <li><strong>Langues supportées :</strong> Crucial pour les institutions internationales</li>
+                            <li><strong>Analytics et reporting :</strong> Niveau de détail nécessaire pour vos équipes</li>
+                            <li><strong>Support et formation :</strong> Accompagnement pendant la mise en œuvre</li>
+                            <li><strong>Évolutivité :</strong> Capacité à grandir avec vos besoins</li>
+                        </ul>
+
+                        <h3>⏱️ Timeline d'implémentation typique</h3>
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>Phase 1 (3 mois) :</strong> Audit, sélection plateforme, négociation contrat<br>
+                            <strong>Phase 2 (6 mois) :</strong> Intégration technique, migration contenu, formation équipes<br>
+                            <strong>Phase 3 (3 mois) :</strong> Pilote sur 1-2 cours, ajustements, validation<br>
+                            <strong>Phase 4 (6 mois) :</strong> Déploiement progressif, changement management<br>
+                            <strong>Total :</strong> 18 mois pour un déploiement complet</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz de validation -->
+                <div class="quiz-section">
+                    <h2 class="quiz-title">🧠 Quiz de Validation des Connaissances</h2>
+                    
+                    <div class="quiz-question">
+                        <div class="question-text">1. Quelle est la principale différence entre les outils IA accessibles et l'adaptive learning ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) L'adaptive learning coûte plus cher
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) L'adaptive learning ajuste le parcours en temps réel selon 40+ variables comportementales
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) L'adaptive learning ne fonctionne que pour les mathématiques
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) L'adaptive learning remplace complètement les formateurs
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">2. Quel est le volume minimum d'apprenants recommandé pour justifier un investissement en adaptive learning ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) 50 apprenants par an
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                B) 200 apprenants par an
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                C) 500 apprenants par an
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) 2000 apprenants par an
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">3. Quels sont les domaines les plus adaptés à l'adaptive learning ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                A) Arts créatifs et littérature uniquement
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                B) STEM, langues et formation médicale avec prérequis clairs
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                C) Formations de management et leadership
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                D) Tous les domaines sans exception
+                            </div>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="casusage_6_education_1.html" class="btn btn-secondary">
+                        ← Séquence 1A : IA Éducation Accessible
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 1B sur 3</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Adaptive Learning Avancé</div>
+                    </div>
+                    <a href="casusage_6_roadmap_3.html" class="btn btn-primary">
+                        Séquence 1C : Roadmap & Stratégie →
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">📍 Séquence 1 : IA et Éducation</h3>
+                <div class="progress-indicator">
+                    <div class="progress-fill"></div>
+                </div>
+                <div style="text-align: center; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                    Séquence 1B : Adaptive Learning Avancé
+                </div>
+                <ul class="toc-list">
+                    <li class="toc-item">
+                        <a href="#adaptive-learning" class="toc-link">Qu'est-ce que l'Adaptive Learning ?</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#plateformes-leaders" class="toc-link">Plateformes leaders du marché</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#cas-usage-institutionnels" class="toc-link">Cas d'usage institutionnels</a>
+                    </li>
+                    <li class="toc-item">
+                        <a href="#criteres-choix" class="toc-link">Critères de choix et ROI</a>
+                    </li>
+                </ul>
+                
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.75rem;">📋 Autres séquences</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="casusage_6_education_1.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                                1A. Outils Accessibles
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="casusage_6_roadmap_3.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                                1C. Roadmap & Stratégie
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(optionElement, isCorrect) {
+            const question = optionElement.closest('.quiz-question');
+            const options = question.querySelectorAll('.quiz-option');
+            const feedback = question.querySelector('.quiz-feedback');
+            
+            // Reset all options
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            optionElement.classList.add('selected');
+            
+            // Show correct answer and feedback
+            if (isCorrect) {
+                optionElement.classList.add('correct');
+                feedback.className = 'quiz-feedback success';
+                feedback.textContent = '✅ Correct ! L\'adaptive learning utilise effectivement des dizaines de variables pour personnaliser l\'apprentissage.';
+            } else {
+                optionElement.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.className = 'quiz-feedback error';
+                feedback.textContent = '❌ Incorrect. La bonne réponse est mise en évidence ci-dessus.';
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Table of contents active link handling
+        function updateActiveLink() {
+            const links = document.querySelectorAll('.toc-link');
+            const sections = document.querySelectorAll('.section');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    currentSection = section.id;
+                }
+            });
+            
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(6, '1B');
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Update active link on scroll
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+        });
+    </script>
+</body>
+</html>

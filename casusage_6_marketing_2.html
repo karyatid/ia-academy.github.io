@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 2: IA et Marketing - Module 6 | IA Academy</title>
+    <style>
+        /* CSS Variables for Theme Management */
+        :root[data-theme="light"] {
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.1);
+            --pattern-opacity: 0.02;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #818cf8;
+            --secondary-color: #22d3ee;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glow: 0 0 20px rgba(129, 140, 248, 0.3);
+            --pattern-opacity: 0.03;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: var(--pattern-opacity);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '🌙';
+            position: absolute;
+            right: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle .toggle-slider {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle .toggle-slider {
+            transform: translateX(23px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar with Course Progress */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-list {
+            list-style: none;
+        }
+
+        .sequence-item {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Example Box for Practical Applications */
+        .example-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tool recommendation boxes */
+        .tool-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ROI Calculator Styling */
+        .roi-calculator {
+            background: var(--bg-secondary);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .calculator-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .roi-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Quiz Styling */
+        .quiz-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-submit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-submit:hover {
+            background: var(--accent-color);
+        }
+
+        .quiz-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Lesson Navigation at Bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Case Study Styling */
+        .case-study {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .case-study-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Glossaire interactif */
+        .glossary-term {
+            color: var(--primary-color);
+            cursor: pointer;
+            border-bottom: 1px dotted var(--primary-color);
+            position: relative;
+        }
+
+        .glossary-popup {
+            position: absolute;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            max-width: 300px;
+            display: none;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
+        }
+
+        .glossary-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--border-color);
+        }
+
+        .starter-pack {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            border: 2px solid var(--success-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .starter-pack-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-prompt {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .hands-on-exercise {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 2px solid var(--warning-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .step-by-step {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="dashboard.html" class="breadcrumb-link">Accueil</a>
+                <span>→</span>
+                <a href="casusage_6_overview.html" class="breadcrumb-link">Module 6</a>
+                <span>→</span>
+                <span class="breadcrumb-current">IA et Marketing</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📊</span>
+                        Module 6 - Séquence 2
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        75 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        Niveau Intermédiaire
+                    </div>
+                </div>
+                <h1 class="lesson-title">IA et Marketing : Comment Attirer Plus de Clients Facilement</h1>
+                <p class="lesson-description">
+                    Découvrez comment l'intelligence artificielle vous aide à créer du contenu qui marche, trouver de nouveaux clients et vendre plus - même si vous n'y connaissez rien au marketing !
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Introduction</h2>
+                    <div class="section-content">
+                        <p>Le marketing traverse une révolution majeure. Les marques qui intègrent intelligemment l'IA dans leur stratégie obtiennent des résultats spectaculaires : +300% d'engagement, -60% de coûts d'acquisition, et des taux de conversion qui explosent.</p>
+                        
+                        <p>Dans cette séquence intensive de 75 minutes, nous allons explorer :</p>
+                        <ul>
+                            <li><strong>Création de contenu automatisée</strong> pour tous vos canaux marketing</li>
+                            <li><strong>Optimisation de campagnes publicitaires</strong> avec l'IA prédictive</li>
+                            <li><strong>Analyse de données clients</strong> et segmentation intelligente</li>
+                            <li><strong>Personnalisation à grande échelle</strong> de l'expérience client</li>
+                            <li><strong>Cas pratique</strong> : audit IA d'une stratégie marketing réelle</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Ce que vous allez maîtriser</div>
+                            <p>À la fin de cette séquence, vous saurez identifier <strong>3 "Quick Wins" IA</strong> dans votre stratégie marketing actuelle, avec un calcul de ROI précis et un plan d'implémentation sur 6 mois.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Démarrer Gratuit -->
+                <section class="section" id="demarrer-gratuit">
+                    <h2 class="section-title">🆓 Démarrer Gratuit (Aucune Expérience Requise)</h2>
+                    <div class="section-content">
+                        <p>Avant d'aller plus loin, voici vos outils gratuits pour commencer immédiatement :</p>
+                        
+                        <div class="starter-pack">
+                            <div class="starter-pack-title">🚀 Votre Kit de Démarrage IA Gratuit</div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">🤖 ChatGPT (Gratuit)</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Créer posts, emails, publicités</p>
+                                    <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">100% Gratuit</span>
+                                </div>
+                                
+                                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">🎨 Canva Magic Write</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Visuels + textes automatiques</p>
+                                    <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">Plan Gratuit OK</span>
+                                </div>
+                                
+                                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">📊 Google/Meta Smart Ads</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Optimisation automatique incluse</p>
+                                    <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">Inclus dans les plateformes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hands-on-exercise">
+                            <div class="exercise-title">🚀 Exercice : Créez Votre Premier Post IA (15 minutes)</div>
+                            <p><strong>Objectif :</strong> Créer un post LinkedIn professionnel pour votre activité</p>
+                            
+                            <div class="step-by-step">
+                                <h4>📋 Guide Pas-à-Pas :</h4>
+                                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                    <span class="step-number">1</span>
+                                    <span>Ouvrez ChatGPT (chat.openai.com) - gratuit</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                    <span class="step-number">2</span>
+                                    <span>Copiez le prompt ci-dessous</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                    <span class="step-number">3</span>
+                                    <span>Remplacez [VOTRE SECTEUR] et [VOTRE ACTUALITÉ]</span>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <span class="step-number">4</span>
+                                    <span>Collez dans ChatGPT et validez</span>
+                                </div>
+                            </div>
+                            
+                            <p><strong>🎯 Template ChatGPT Prêt à Utiliser :</strong></p>
+                            <div class="copy-prompt">
+                                <button class="copy-btn" onclick="copyPrompt('prompt1')">📋 Copier</button>
+Crée un post LinkedIn pour [VOTRE SECTEUR] qui annonce [VOTRE ACTUALITÉ].
+
+Exemple : Crée un post LinkedIn pour un consultant en organisation qui annonce le lancement de sa formation en ligne.
+
+Style : Professionnel mais accessible, avec émojis
+Structure : 
+- Phrase d'accroche qui interpelle
+- 3 bénéfices concrets
+- Call-to-action clair
+- Hashtags pertinents
+
+Maximum 150 mots.
+                            </div>
+                            
+                            <div class="checklist">
+                                <h4>✅ Checklist de Validation :</h4>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check1">
+                                    <label for="check1">Le post interpelle dès la première ligne</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check2">
+                                    <label for="check2">Les bénéfices sont concrets et mesurables</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check3">
+                                    <label for="check3">L'action à faire est claire (commentaire, DM, lien...)</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check4">
+                                    <label for="check4">Le ton correspond à votre personnalité</label>
+                                </div>
+                            </div>
+                            
+                            <p style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                                <strong>💡 Astuce Pro :</strong> Si le premier résultat ne vous plaît pas, demandez à ChatGPT : "Peux-tu me donner 3 versions différentes ?" Vous aurez 3 styles à tester !
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Création de contenu marketing automatisée -->
+                <section class="section" id="creation-contenu">
+                    <h2 class="section-title">✍️ Comment l'IA Crée Votre Contenu Marketing</h2>
+                    <div class="section-content">
+                        <p>L'IA peut écrire vos posts, emails et publicités en quelques secondes. Plus besoin de passer des heures à chercher quoi dire !</p>
+
+                        <h3>🎯 Un Message, Plein de Versions Différentes</h3>
+                        <p>L'IA prend votre idée principale et la transforme pour chaque 
+                        <span class="glossary-term" onmouseover="showGlossary(this, 'Les différents endroits où vous parlez à vos clients : Facebook, LinkedIn, emails, Google...')">canal de communication</span> :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemple concret : Vous lancez un nouveau service</div>
+                            <p><strong>Votre idée :</strong> "Je lance des consultations en ligne pour aider les entrepreneurs"</p>
+                            
+                            <p><strong>L'IA crée automatiquement :</strong></p>
+                            <ul>
+                                <li><strong>Pour LinkedIn :</strong> "🚀 Entrepreneurs, gagnez 5h/semaine avec mes consultations stratégiques en ligne"</li>
+                                <li><strong>Pour Instagram :</strong> "✨ Ton business mérite mieux ! Consultation perso en ligne 👆"</li>
+                                <li><strong>Pour un email :</strong> "Bonjour Marie, j'ai une solution pour ton défi de croissance..."</li>
+                                <li><strong>Pour Google Ads :</strong> "Consultation Business En Ligne - 1ère Séance Gratuite"</li>
+                            </ul>
+                            
+                            <div class="copy-prompt" style="margin-top: 1rem;">
+                                <button class="copy-btn" onclick="copyPrompt('prompt2')">📋 Copier ce template</button>
+Prends cette idée : "[VOTRE IDÉE PRINCIPALE]"
+
+Crée-moi 4 versions :
+1. Post LinkedIn professionnel (avec émojis)
+2. Story Instagram décontractée 
+3. Email personnalisé à un client type
+4. Titre Google Ads percutant
+
+Pour chaque version, adapte le style et la longueur.
+                            </div>
+                        </div>
+
+                        <h3>📝 L'IA Optimise Pour Être Trouvé sur Google</h3>
+                        <p>Plus besoin d'être expert en <span class="glossary-term" onmouseover="showGlossary(this, 'SEO = Techniques pour apparaître en haut des résultats Google')">SEO</span> ! L'IA trouve les bons mots-clés et structure votre contenu :</p>
+                        <ul>
+                            <li><strong>Trouve les mots que tapent vos clients</strong> dans Google</li>
+                            <li><strong>Écrit des titres qui donnent envie de cliquer</strong></li>
+                            <li><strong>Structure vos textes</strong> comme Google les aime</li>
+                            <li><strong>Suggère des questions</strong> que se posent vos prospects</li>
+                        </ul>
+
+                        <div class="hands-on-exercise">
+                            <div class="exercise-title">🎯 Template Magique : Article de Blog SEO</div>
+                            <div class="copy-prompt">
+                                <button class="copy-btn" onclick="copyPrompt('prompt3')">📋 Copier</button>
+Écris un article de blog de 800 mots sur "[VOTRE SUJET]" optimisé pour Google.
+
+Structure :
+- Titre accrocheur avec le mot-clé principal
+- Introduction qui pose le problème
+- 5 sections avec sous-titres H2
+- Conseils pratiques et actionables
+- Conclusion avec call-to-action
+
+Style : Expert mais accessible, comme si tu expliquais à un ami.
+Inclus des mots-clés naturellement sans sur-optimiser.
+                            </div>
+                        </div>
+
+                        <h3>🎨 Parler Différemment à Chaque Type de Client</h3>
+                        <p>L'IA adapte automatiquement votre message selon qui va le lire :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎭 Même Produit, Messages Différents</div>
+                            <p><strong>Votre formation en gestion du temps :</strong></p>
+                            <ul>
+                                <li><strong>Pour un PDG :</strong> "Optimisez votre ROI temps avec des méthodes data-driven"</li>
+                                <li><strong>Pour un freelance :</strong> "Libérez-vous des tâches admin pour vous concentrer sur vos clients"</li>
+                                <li><strong>Pour un parent :</strong> "Conciliez travail et famille grâce à une organisation au top"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comment l'IA améliore vos publicités -->
+                <section class="section" id="optimisation-campagnes">
+                    <h2 class="section-title">📈 Comment l'IA Améliore Vos Publicités</h2>
+                    <div class="section-content">
+                        <p>Même si vous n'y connaissez rien en pub, l'IA peut vous aider à toucher plus de monde pour moins cher !</p>
+
+                        <h3>🎯 L'IA Trouve Vos Clients Idéaux</h3>
+                        <p>L'IA regarde qui achète chez vous et trouve des gens similaires automatiquement :</p>
+                        
+                        <div class="case-study">
+                            <div class="case-study-title">📊 Exemple Réel : Boutique Vêtements en Ligne</div>
+                            <p><strong>Avant l'IA :</strong> Pub pour "femmes 25-45 ans qui aiment la mode"</p>
+                            <p><strong>Avec l'IA :</strong> "Femmes qui achètent du bio, suivent 3+ comptes mode, commandent le weekend"</p>
+                            
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value">-65%</div>
+                                    <div class="metric-label">Coût par client</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">+180%</div>
+                                    <div class="metric-label">Taux d'achat</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">+320%</div>
+                                    <div class="metric-label">Valeur des commandes</div>
+                                </div>
+                            </div>
+                            
+                            <p><strong>Secret :</strong> L'IA a analysé les 1000 meilleures clientes et trouvé des patterns invisibles à l'œil nu</p>
+                        </div>
+
+                        <h3>🤖 L'IA Gère Votre Budget Automatiquement</h3>
+                        <p>Plus besoin de surveiller vos pubs 24h/24. L'IA optimise en temps réel :</p>
+                        <ul>
+                            <li><strong>Augmente le budget</strong> quand ça marche bien</li>
+                            <li><strong>Baisse le budget</strong> quand ça marche mal</li>
+                            <li><strong>Diffuse aux bonnes heures</strong> quand vos clients sont connectés</li>
+                            <li><strong>Adapte selon l'appareil</strong> (mobile vs ordinateur)</li>
+                        </ul>
+
+                        <div class="starter-pack">
+                            <div class="starter-pack-title">🆓 Comment Activer l'IA sur Vos Pubs (Gratuit)</div>
+                            
+                            <div class="step-by-step">
+                                <h4>Facebook/Instagram Ads :</h4>
+                                <div style="margin-bottom: 0.5rem;">✅ Choisir "Optimisation pour Conversions"</div>
+                                <div style="margin-bottom: 0.5rem;">✅ Activer "Budget Optimal" (CBO)</div>
+                                <div style="margin-bottom: 1rem;">✅ Sélectionner "Audience Étendue"</div>
+                                
+                                <h4>Google Ads :</h4>
+                                <div style="margin-bottom: 0.5rem;">✅ Enchères "Maximiser les conversions"</div>
+                                <div style="margin-bottom: 0.5rem;">✅ Extensions automatiques activées</div>
+                                <div>✅ Audiences "In-Market" suggérées</div>
+                            </div>
+                        </div>
+
+                        <h3>🧪 L'IA Teste Tout Pour Vous</h3>
+                        <p>Au lieu de tester une pub à la fois, l'IA teste 50 versions en même temps :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">⚡ Workflow Automatique</div>
+                            <p><strong>Vous :</strong> Donnez une idée de pub + quelques visuels<br>
+                            <strong>L'IA :</strong> Crée 50 combinaisons (titres × textes × images)<br>
+                            <strong>L'IA :</strong> Les teste avec un petit budget<br>
+                            <strong>L'IA :</strong> Met tout l'argent sur les 3 meilleures<br>
+                            <strong>Résultat :</strong> Performance × 3 sans effort de votre part</p>
+                        </div>
+                        
+                        <div class="hands-on-exercise">
+                            <div class="exercise-title">🎯 Template : Pub Facebook qui Marche</div>
+                            <div class="copy-prompt">
+                                <button class="copy-btn" onclick="copyPrompt('prompt4')">📋 Copier</button>
+Crée-moi 5 versions de pub Facebook pour [VOTRE OFFRE].
+
+Public cible : [VOTRE CLIENT TYPE]
+
+Pour chaque version, donne-moi :
+- Un titre accrocheur (25 caractères max)
+- Un texte principal (100 mots max)
+- Un call-to-action
+
+Style : Direct, bénéfice clair, urgence subtile
+Évite : Promesses trop belles, jargon technique
+
+Exemple d'offre : Formation Excel pour entrepreneurs
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analyse de données clients -->
+                <section class="section" id="analyse-donnees">
+                    <h2 class="section-title">🔍 Analyse de Données Clients</h2>
+                    <div class="section-content">
+                        <p>L'IA transforme vos données clients en insights actionnables pour optimiser votre stratégie marketing.</p>
+
+                        <h3>📊 Segmentation automatique et affinement des personas</h3>
+                        <p>L'IA identifie automatiquement des segments clients que vous n'auriez jamais vus :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Exemple : Segmentation IA avancée</div>
+                            <p><strong>Segments découverts par IA :</strong></p>
+                            <ul>
+                                <li><strong>"Power Users Nocturnes" :</strong> 12% de la base, 40% du CA, actifs 20h-2h</li>
+                                <li><strong>"Price Sensitive Champions" :</strong> Attendent les promos mais rachètent × 3</li>
+                                <li><strong>"Social Influencers" :</strong> Peu d'achats mais génèrent 25% du trafic référent</li>
+                            </ul>
+                        </div>
+
+                        <h3>💬 Analyse de sentiment sur les réseaux sociaux</h3>
+                        <p>L'IA surveille en permanence votre e-réputation et celle de vos concurrents :</p>
+                        <ul>
+                            <li><strong>Monitoring automatique</strong> : Mentions, hashtags, commentaires</li>
+                            <li><strong>Score de sentiment</strong> : Positif/négatif/neutre avec évolution</li>
+                            <li><strong>Détection de crises</strong> : Alertes en temps réel sur les bad buzz</li>
+                            <li><strong>Benchmark concurrentiel</strong> : Position relative sur le marché</li>
+                        </ul>
+
+                        <h3>🔮 Prédiction de churn et actions de rétention</h3>
+                        <p>L'IA prédit quels clients risquent de partir et suggère des actions :</p>
+                        
+                        <div class="case-study">
+                            <div class="case-study-title">🚨 Prévention Churn : SaaS B2B</div>
+                            <p><strong>Signaux d'alerte IA :</strong> Baisse connexions (-30%), non-utilisation fonctionnalités clés, pas de contact équipe depuis 15j</p>
+                            
+                            <p><strong>Actions automatiques :</strong></p>
+                            <ul>
+                                <li>Email personnalisé du Customer Success avec tips d'usage</li>
+                                <li>Proposition demo exclusive des nouvelles fonctionnalités</li>
+                                <li>Mise en contact avec un peer qui a résolu le même challenge</li>
+                            </ul>
+                            
+                            <p><strong>Résultat :</strong> Réduction du churn de 40% et augmentation de l'engagement de 85%</p>
+                        </div>
+
+                        <h3>🏆 Scoring de leads et priorisation commerciale</h3>
+                        <p>L'IA score automatiquement tous vos leads pour optimiser l'effort commercial :</p>
+                        
+                        <div class="tool-box">
+                            <div class="tool-title">⚡ Scoring IA en Action</div>
+                            <ul>
+                                <li><strong>Lead Score A+ (9-10) :</strong> Contact immédiat par le top closer</li>
+                                <li><strong>Lead Score B (7-8) :</strong> Séquence email nurturing personnalisée</li>
+                                <li><strong>Lead Score C (5-6) :</strong> Retargeting publicitaire ciblé</li>
+                                <li><strong>Lead Score D (1-4) :</strong> Base newsletter avec contenu éducatif</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Personnalisation de l'expérience client -->
+                <section class="section" id="personnalisation">
+                    <h2 class="section-title">🎨 Personnalisation de l'Expérience Client</h2>
+                    <div class="section-content">
+                        <p>L'IA permet de créer une expérience unique pour chaque client, en temps réel et à grande échelle.</p>
+
+                        <h3>🛍️ Recommandations produits intelligentes</h3>
+                        <p>L'IA analyse les comportements pour proposer des produits avec une précision chirurgicale :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">🎯 Moteur de Recommandation Avancé</div>
+                            <p><strong>Analyse multifactorielle :</strong></p>
+                            <ul>
+                                <li><strong>Historique d'achats :</strong> Patterns et préférences</li>
+                                <li><strong>Comportement web :</strong> Pages vues, temps passé, parcours</li>
+                                <li><strong>Saisonnalité :</strong> Tendances calendaires personnelles</li>
+                                <li><strong>Social proof :</strong> "Clients similaires ont aussi acheté"</li>
+                                <li><strong>Prix psychologique :</strong> Zone de confort tarifaire</li>
+                            </ul>
+                        </div>
+
+                        <h3>📧 Emails marketing personnalisés à grande échelle</h3>
+                        <p>L'IA crée des emails uniques pour chaque destinataire :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">📬 Email Hyper-Personnalisé</div>
+                            <p><strong>Éléments dynamiques :</strong></p>
+                            <ul>
+                                <li><strong>Objet :</strong> "Marie, votre style bohème a inspiré cette collection !"</li>
+                                <li><strong>Produits :</strong> Sélection basée sur l'historique + tendances actuelles</li>
+                                <li><strong>Prix :</strong> Adaptation selon le budget habituel</li>
+                                <li><strong>Timing :</strong> Envoi à l'heure optimale pour Marie (19h30)</li>
+                                <li><strong>CTA :</strong> "Découvrir ma sélection" (langage préférentiel détecté)</li>
+                            </ul>
+                        </div>
+
+                        <h3>🤖 Chatbots de qualification et support</h3>
+                        <p>Les chatbots IA révolutionnent l'expérience client en première ligne :</p>
+                        <ul>
+                            <li><strong>Qualification intelligente :</strong> Questions adaptatives selon les réponses</li>
+                            <li><strong>Résolution autonome :</strong> 70% des problèmes résolus sans human</li>
+                            <li><strong>Escalade intelligente :</strong> Transfert au bon expert selon le contexte</li>
+                            <li><strong>Apprentissage continu :</strong> Amélioration basée sur les interactions</li>
+                        </ul>
+
+                        <h3>💰 Pricing dynamique et optimisation</h3>
+                        <p>L'IA ajuste les prix en temps réel pour maximiser profit et satisfaction :</p>
+                        
+                        <div class="case-study">
+                            <div class="case-study-title">💡 Dynamic Pricing : Travel Tech</div>
+                            <p><strong>Variables analysées :</strong> Demande, concurrence, météo, événements locaux, profil client</p>
+                            
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value">+23%</div>
+                                    <div class="metric-label">Marge moyenne</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">+15%</div>
+                                    <div class="metric-label">Taux de conversion</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">-8%</div>
+                                    <div class="metric-label">Réclamations prix</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Calculateur ROI Marketing IA -->
+                <section class="section" id="calculateur-roi">
+                    <h2 class="section-title">💰 Calculateur ROI Marketing IA</h2>
+                    <div class="section-content">
+                        <p>Estimez rapidement le retour sur investissement de l'IA dans votre stratégie marketing :</p>
+                        
+                        <div class="roi-calculator">
+                            <div class="calculator-title">🧮 Calculateur ROI Marketing IA</div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Budget marketing mensuel actuel (€)</label>
+                                <input type="number" class="input-field" id="budget" placeholder="Ex: 10000">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Nombre de leads générés par mois</label>
+                                <input type="number" class="input-field" id="leads" placeholder="Ex: 500">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Taux de conversion actuel (%)</label>
+                                <input type="number" class="input-field" id="conversion" placeholder="Ex: 3">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Valeur moyenne client (€)</label>
+                                <input type="number" class="input-field" id="valeur-client" placeholder="Ex: 800">
+                            </div>
+                            
+                            <button class="calculate-btn" onclick="calculateROI()">Calculer le ROI IA</button>
+                            
+                            <div class="roi-result" id="roi-result">
+                                <h4>🎯 Projection avec IA Marketing :</h4>
+                                <div id="roi-details"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cas pratique guidé -->
+                <section class="section" id="cas-pratique">
+                    <h2 class="section-title">🔬 Cas Pratique : Audit IA Marketing</h2>
+                    <div class="section-content">
+                        <p>Mettons en pratique ! Suivez cette méthodologie pour auditer votre stratégie marketing actuelle et identifier vos 3 Quick Wins IA.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Objectif Pratique</div>
+                            <p><strong>Livrable :</strong> Plan d'action IA personnalisé avec :</p>
+                            <ul>
+                                <li>3 Quick Wins identifiés avec impact estimé</li>
+                                <li>Calcul ROI sur 6 mois</li>
+                                <li>Roadmap d'implémentation étape par étape</li>
+                                <li>Budget prévisionnel et ressources nécessaires</li>
+                            </ul>
+                        </div>
+
+                        <h3>📋 Étape 1 : Audit de l'existant (15 minutes)</h3>
+                        <p><strong>Analysez votre situation actuelle :</strong></p>
+                        
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>✅ Checklist d'audit :</strong></p>
+                            <ul style="margin: 0;">
+                                <li>Volume de contenu créé par mois (posts, emails, ads...)</li>
+                                <li>Temps moyen de création par contenu</li>
+                                <li>Performance actuelle des campagnes (CTR, CPC, conversion)</li>
+                                <li>Degré de personnalisation client (basic/avancé)</li>
+                                <li>Processus d'analyse des données clients</li>
+                            </ul>
+                        </div>
+
+                        <h3>🎯 Étape 2 : Identification des opportunities (10 minutes)</h3>
+                        <p><strong>Matrice des Quick Wins IA :</strong></p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">⚡ Top 3 des Quick Wins Universels</div>
+                            <p><strong>1. Génération de contenu IA :</strong><br>
+                            • Impact : -70% temps de création<br>
+                            • Investissement : 20€/mois (ChatGPT Plus)<br>
+                            • ROI : 300% en 3 mois</p>
+                            
+                            <p><strong>2. Optimisation A/B testing automatique :</strong><br>
+                            • Impact : +40% performance campagnes<br>
+                            • Investissement : Configuration Smart Bidding<br>
+                            • ROI : 150% en 2 mois</p>
+                            
+                            <p><strong>3. Personalisation email marketing :</strong><br>
+                            • Impact : +85% engagement, +35% conversion<br>
+                            • Investissement : 99€/mois (Mailchimp AI)<br>
+                            • ROI : 250% en 4 mois</p>
+                        </div>
+
+                        <h3>🚀 Étape 3 : Plan d'implémentation (10 minutes)</h3>
+                        <p><strong>Roadmap sur 6 mois :</strong></p>
+                        
+                        <div class="tool-box">
+                            <div class="tool-title">📅 Timeline Recommandée</div>
+                            <p><strong>Mois 1-2 : Quick Win #1</strong><br>
+                            Mise en place génération contenu IA + formation équipe</p>
+                            
+                            <p><strong>Mois 3-4 : Quick Win #2</strong><br>
+                            Optimisation campagnes + A/B testing automatique</p>
+                            
+                            <p><strong>Mois 5-6 : Quick Win #3</strong><br>
+                            Personnalisation avancée + analyse prédictive</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz d'évaluation -->
+                <section class="section" id="quiz">
+                    <h2 class="section-title">🧠 Quiz d'Évaluation</h2>
+                    <div class="section-content">
+                        <p>Testez vos connaissances sur l'IA marketing avec ce quiz interactif :</p>
+                        
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                1. Quel est le principal avantage de l'IA dans la création de contenu marketing ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    A) Réduire les coûts de création
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    B) Créer du contenu plus créatif
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                    C) Personnaliser à grande échelle et adapter aux différents canaux
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    D) Remplacer complètement les humains
+                                </div>
+                            </div>
+                            <button class="quiz-submit" onclick="submitQuiz(1)">Valider la réponse</button>
+                            <div class="quiz-result" id="quiz-result-1"></div>
+                        </div>
+
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                2. Dans une stratégie de pricing dynamique IA, quels facteurs sont analysés ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    A) Uniquement le prix des concurrents
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                    C) Demande, concurrence, profil client, contexte externe
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    B) Seulement l'historique des ventes
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    D) Les coûts de production uniquement
+                                </div>
+                            </div>
+                            <button class="quiz-submit" onclick="submitQuiz(2)">Valider la réponse</button>
+                            <div class="quiz-result" id="quiz-result-2"></div>
+                        </div>
+
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                3. Quel est le premier Quick Win à implémenter dans une stratégie IA marketing ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    A) Chatbot avancé avec IA conversationnelle
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                    B) Génération de contenu IA pour réseaux sociaux et emails
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    C) Système de recommandation produits complexe
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    D) Analyse prédictive de churn clients
+                                </div>
+                            </div>
+                            <button class="quiz-submit" onclick="submitQuiz(3)">Valider la réponse</button>
+                            <div class="quiz-result" id="quiz-result-3"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="casusage_6_education_1.html" class="btn btn-secondary">
+                        <span>←</span> Séquence précédente
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 2 sur 4</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">IA et Marketing</div>
+                    </div>
+                    <a href="casusage_6_productivite_3.html" class="btn btn-primary">
+                        Séquence suivante <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                <ul class="sequence-list">
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Vue d'ensemble</div>
+                            <div class="sequence-duration">5 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">IA et éducation</div>
+                            <div class="sequence-duration">70 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item current">
+                        <div class="sequence-icon current">2</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">IA et marketing</div>
+                            <div class="sequence-duration">75 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item locked">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">IA et productivité</div>
+                            <div class="sequence-duration">75 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item locked">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Stratégie d'implémentation</div>
+                            <div class="sequence-duration">70 minutes</div>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 IA Academy. Formation complète à l'intelligence artificielle pour débutants - Module 6 : Cas d'Usage Métier.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            } catch (error) {
+                console.log('Theme toggle error:', error);
+            }
+        }
+
+        // Glossaire interactif
+        function showGlossary(element, definition) {
+            // Supprimer les popups existants
+            const existingPopups = document.querySelectorAll('.glossary-popup');
+            existingPopups.forEach(popup => popup.remove());
+            
+            // Créer le nouveau popup
+            const popup = document.createElement('div');
+            popup.className = 'glossary-popup';
+            popup.innerHTML = definition;
+            popup.style.display = 'block';
+            
+            element.appendChild(popup);
+            
+            // Masquer après 3 secondes
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.remove();
+                }
+            }, 3000);
+        }
+
+        // Fonction pour copier les prompts
+        function copyPrompt(promptId) {
+            try {
+                const promptElement = document.querySelector(`[onclick="copyPrompt('${promptId}')"]`).parentNode;
+                const promptText = promptElement.textContent.replace('📋 Copier', '').replace('📋 Copier ce template', '').trim();
+                
+                // Utiliser l'API Clipboard si disponible
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(promptText).then(() => {
+                        showCopyFeedback(promptElement.querySelector('.copy-btn'));
+                    }).catch(() => {
+                        fallbackCopy(promptText);
+                    });
+                } else {
+                    fallbackCopy(promptText);
+                }
+            } catch (error) {
+                console.log('Copy error:', error);
+            }
+        }
+
+        // Fallback pour navigateurs plus anciens
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopyFeedback(event.target);
+            } catch (error) {
+                console.log('Fallback copy error:', error);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Feedback visuel pour la copie
+        function showCopyFeedback(button) {
+            const originalText = button.textContent;
+            button.textContent = '✅ Copié !';
+            button.style.background = 'var(--success-color)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'var(--primary-color)';
+            }, 2000);
+        }
+
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                console.log('Theme loading error:', error);
+            }
+        });
+
+        // ROI Calculator Function
+        function calculateROI() {
+            try {
+                const budget = parseFloat(document.getElementById('budget').value) || 0;
+                const leads = parseFloat(document.getElementById('leads').value) || 0;
+                const conversion = parseFloat(document.getElementById('conversion').value) || 0;
+                const valeurClient = parseFloat(document.getElementById('valeur-client').value) || 0;
+
+                if (budget === 0 || leads === 0 || conversion === 0 || valeurClient === 0) {
+                    alert('Veuillez remplir tous les champs pour calculer le ROI');
+                    return;
+                }
+
+                // Calculs de base
+                const clientsActuels = leads * (conversion / 100);
+                const caActuel = clientsActuels * valeurClient;
+                const coutAcquisition = budget / clientsActuels;
+
+                // Projections avec IA (améliorations moyennes documentées)
+                const ameliorationLeads = 1.4; // +40% leads grâce à la création de contenu optimisée
+                const ameliorationConversion = 1.35; // +35% conversion grâce à la personnalisation
+                const reductionCouts = 0.7; // -30% coûts grâce à l'optimisation des campagnes
+
+                const nouveauxLeads = leads * ameliorationLeads;
+                const nouveauTauxConversion = conversion * ameliorationConversion;
+                const nouveauxClients = nouveauxLeads * (nouveauTauxConversion / 100);
+                const nouveauCA = nouveauxClients * valeurClient;
+                const nouveauCoutAcquisition = (budget * reductionCouts) / nouveauxClients;
+
+                // Coût IA estimé (outils + implémentation)
+                const coutIA = 500; // 500€/mois pour outils IA marketing complets
+                const budgetTotal = budget + coutIA;
+                const roiNet = ((nouveauCA - budgetTotal) / budgetTotal) * 100;
+
+                // Affichage des résultats
+                const resultDiv = document.getElementById('roi-result');
+                const detailsDiv = document.getElementById('roi-details');
+                
+                detailsDiv.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-primary); padding: 1rem; border-radius: 8px;">
+                            <h5 style="color: var(--text-muted); margin-bottom: 0.5rem;">AVANT IA</h5>
+                            <div><strong>${leads}</strong> leads/mois</div>
+                            <div><strong>${conversion}%</strong> conversion</div>
+                            <div><strong>${clientsActuels.toFixed(0)}</strong> clients</div>
+                            <div><strong>${caActuel.toLocaleString()}€</strong> CA/mois</div>
+                        </div>
+                        <div style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; border: 2px solid var(--success-color);">
+                            <h5 style="color: var(--success-color); margin-bottom: 0.5rem;">AVEC IA</h5>
+                            <div><strong>${nouveauxLeads.toFixed(0)}</strong> leads/mois</div>
+                            <div><strong>${nouveauTauxConversion.toFixed(1)}%</strong> conversion</div>
+                            <div><strong>${nouveauxClients.toFixed(0)}</strong> clients</div>
+                            <div><strong>${nouveauCA.toLocaleString()}€</strong> CA/mois</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <div style="font-size: 1.2rem; color: var(--success-color); font-weight: 600;">
+                            ROI Net IA : +${roiNet.toFixed(0)}% (+${(nouveauCA - caActuel).toLocaleString()}€/mois)
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                            Retour sur investissement en ${Math.ceil(coutIA / (nouveauCA - caActuel))} mois
+                        </div>
+                    </div>
+                `;
+                
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                console.log('Calculation error:', error);
+                alert('Erreur lors du calcul. Veuillez vérifier vos données.');
+            }
+        }
+
+        // Quiz Functions
+        function selectQuizOption(option, isCorrect) {
+            // Remove previous selections
+            const options = option.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            option.classList.add('selected');
+            option.setAttribute('data-correct', isCorrect);
+        }
+
+        function submitQuiz(questionNumber) {
+            try {
+                const selectedOption = document.querySelector(`#quiz-result-${questionNumber}`).parentNode.querySelector('.quiz-option.selected');
+                const resultDiv = document.getElementById(`quiz-result-${questionNumber}`);
+                
+                if (!selectedOption) {
+                    alert('Veuillez sélectionner une réponse');
+                    return;
+                }
+                
+                const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
+                const options = selectedOption.parentNode.querySelectorAll('.quiz-option');
+                
+                // Show correct/incorrect styling
+                options.forEach(option => {
+                    if (option.getAttribute('data-correct') === 'true') {
+                        option.classList.add('correct');
+                    } else if (option.classList.contains('selected') && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Show result
+                if (isCorrect) {
+                    resultDiv.innerHTML = `
+                        <div style="color: var(--success-color); font-weight: 600;">
+                            ✅ Correct ! L'IA permet effectivement la personnalisation à grande échelle.
+                        </div>
+                    `;
+                    resultDiv.style.background = 'rgba(16, 185, 129, 0.1)';
+                } else {
+                    resultDiv.innerHTML = `
+                        <div style="color: var(--error-color); font-weight: 600;">
+                            ❌ Incorrect. La bonne réponse est mise en évidence ci-dessus.
+                        </div>
+                    `;
+                    resultDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                }
+                
+                resultDiv.style.display = 'block';
+                
+                // Disable submit button
+                const submitBtn = resultDiv.parentNode.querySelector('.quiz-submit');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Réponse validée';
+            } catch (error) {
+                console.log('Quiz error:', error);
+            }
+        }
+
+        // Add smooth scroll for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

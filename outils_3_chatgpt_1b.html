@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT - Paramètres et optimisation | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle-button::after {
+            content: '☀️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(23px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::after {
+            content: '🌙';
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs for Better Navigation */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '→';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Micro-séquence Navigation */
+        .micro-sequence-nav {
+            background: var(--card-bg);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .micro-nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .micro-nav-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .micro-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+        }
+
+        .micro-nav.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .micro-nav.completed {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .micro-nav:hover:not(.current):not(.disabled) {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .micro-nav.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Sidebar for Learning Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Validation Quiz Section */
+        .validation-section {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .validation-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--warning-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-number {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+        }
+
+        .quiz-option.selected {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(251, 191, 36, 0.1));
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Resources Section */
+        .resources-section {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .resources-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .resource-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .resource-content {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .resource-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Navigation Controls */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Buttons with Enhanced Interactions */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Tips and Warnings */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Sequence List for Sidebar */
+        .sequence-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .micro-nav-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="outils_3_overview.html" class="breadcrumb-link">Module 3: Outils IA Populaires</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">ChatGPT - Paramètres et optimisation</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Micro-séquence Navigation -->
+    <div class="micro-sequence-nav">
+        <div class="container">
+            <div class="micro-nav-container">
+                <span class="micro-nav-label">Séquence 1 :</span>
+                <a href="outils_3_chatgpt_1a.html" class="micro-nav completed">1A</a>
+                <a href="outils_3_chatgpt_1b.html" class="micro-nav current">1B</a>
+                <a href="outils_3_chatgpt_1c.html" class="micro-nav disabled">1C</a>
+                <a href="outils_3_chatgpt_1d.html" class="micro-nav disabled">1D</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Micro-séquence 1B</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>20 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Intermédiaire</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">ChatGPT - Paramètres et optimisation</h1>
+                <p class="lesson-description">
+                    Maîtrisez les paramètres avancés de ChatGPT et apprenez à optimiser vos conversations. 
+                    Découvrez les techniques pour gérer les limites de tokens et exploiter les plugins.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Objectifs de cette micro-séquence</h2>
+                    <div class="section-content">
+                        <p>À la fin de cette micro-séquence, vous serez capable de :</p>
+                        <ul>
+                            <li><strong>Maîtriser les paramètres avancés</strong> comme la température et les tokens</li>
+                            <li><strong>Optimiser vos conversations longues</strong> et gérer la mémoire contextuelle</li>
+                            <li><strong>Gérer intelligemment</strong> les limites de tokens</li>
+                            <li><strong>Exploiter les plugins</strong> pour étendre les capacités de ChatGPT</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Paramètres avancés -->
+                <section class="section">
+                    <h2 class="section-title">🌡️ Paramètres avancés : température et tokens</h2>
+                    
+                    <div class="section-content">
+                        <p>Les paramètres avancés vous permettent de fine-tuner le comportement de ChatGPT selon vos besoins précis. Bien maîtrisés, ils transforment l'expérience utilisateur en vous donnant un contrôle précis sur le style et la nature des réponses.</p>
+
+                        <h3>La température : équilibre créativité vs précision</h3>
+                        <p>La température est probablement le paramètre le plus impactant. Elle détermine la "créativité" ou la "variabilité" des réponses. Une température basse privilégie la cohérence et la précision, tandis qu'une température élevée favorise l'originalité et la diversité.</p>
+                        
+                        <ul>
+                            <li><strong>0.0 - 0.3 (Précision maximale) :</strong> Parfait pour les faits, traductions, analyses techniques</li>
+                            <li><strong>0.4 - 0.6 (Équilibre optimal) :</strong> Usage général, rédaction professionnelle, conseils</li>
+                            <li><strong>0.7 - 1.0 (Créativité élevée) :</strong> Idéal pour brainstorming, écriture créative, innovation</li>
+                        </ul>
+                        
+                        <h3>Gestion intelligente des tokens</h3>
+                        <p>Comprendre les tokens vous permet d'optimiser vos coûts (pour l'API) et de mieux gérer les limitations de contexte. Un token correspond approximativement à 4 caractères en français, ou à un mot court en anglais.</p>
+                        
+                        <p>La stratégie optimale consiste à équilibrer la précision de vos prompts avec la concision. Des prompts trop courts manquent de contexte, des prompts trop longs gaspillent des tokens et peuvent diluer l'attention du modèle.</p>
+                        
+                        <ul>
+                            <li><strong>Max tokens :</strong> Limite la longueur des réponses - utile pour des formats contraints</li>
+                            <li><strong>Comptage précis :</strong> Utilisez des outils comme tokenizer.ai pour mesurer</li>
+                            <li><strong>Optimisation continue :</strong> Surveillez votre usage via le dashboard OpenAI</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🧪 Expérimentation pratique</div>
+                            <p><strong>Testez l'impact de la température :</strong></p>
+                            <ol>
+                                <li><strong>Question factuelle :</strong> "Explique la photosynthèse" (température 0.1)</li>
+                                <li><strong>Tâche créative :</strong> "Écris un poème sur l'hiver" (température 0.8)</li>
+                                <li><strong>Comparaison :</strong> Posez la même question créative avec température 0.2</li>
+                                <li><strong>Analyse :</strong> Observez les différences de style, vocabulaire et approche</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gestion des limites de tokens -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Gestion intelligente des limites de tokens</h2>
+                    
+                    <div class="section-content">
+                        <p>Les tokens représentent la "mémoire de travail" de ChatGPT. Comprendre et optimiser leur utilisation transforme votre approche, particulièrement pour les tâches complexes nécessitant beaucoup de contexte.</p>
+
+                        <p>Chaque modèle a ses propres limites : GPT-3.5 gère environ 16 000 tokens, GPT-4 jusqu'à 32 000, et GPT-4 Turbo impressionnants 128 000 tokens. Pour vous donner une idée, cette page entière représente environ 4 000 tokens.</p>
+
+                        <h3>Stratégies d'optimisation efficaces</h3>
+                        <p>L'art de la gestion des tokens consiste à transmettre le maximum d'information utile dans l'espace disponible, tout en gardant la conversation fluide et naturelle.</p>
+
+                        <ul>
+                            <li><strong>Prompts concis mais précis :</strong> Éliminez les formules de politesse inutiles, mais gardez tous les détails pertinents</li>
+                            <li><strong>Segmentation intelligente :</strong> Divisez les gros documents en sections logiques plutôt que de tout envoyer d'un coup</li>
+                            <li><strong>Résumés itératifs :</strong> Faites synthétiser progressivement plutôt que d'accumuler</li>
+                            <li><strong>Contexte sélectif :</strong> Ne gardez que les informations directement pertinentes à votre question actuelle</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">🎯 Technique du "Résumé en cascade"</div>
+                            <p>Pour traiter de très longs documents :</p>
+                            <ol>
+                                <li><strong>Divisez</strong> votre document en sections de 3-4 pages maximum</li>
+                                <li><strong>Demandez un résumé</strong> détaillé de chaque section avec les points clés</li>
+                                <li><strong>Combinez les résumés</strong> en un seul document</li>
+                                <li><strong>Demandez un résumé final</strong> ou une analyse globale du document complet</li>
+                            </ol>
+                            <p>Cette méthode préserve les nuances importantes tout en restant dans les limites techniques.</p>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">💡 Astuce d'expert</div>
+                            <p>Utilisez la commande "Continue" quand ChatGPT s'arrête en plein milieu d'une réponse. C'est souvent plus efficace que de redemander depuis le début.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Conversations longues et mémoire contextuelle -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Maîtriser les conversations longues</h2>
+                    
+                    <div class="section-content">
+                        <p>Les conversations longues sont où ChatGPT révèle sa vraie puissance. Contrairement aux interactions ponctuelles, elles permettent de construire progressivement une compréhension nuancée et d'approfondir les sujets complexes.</p>
+
+                        <p>La clé est de traiter votre conversation comme un projet collaboratif : vous apportez les informations et le contexte, ChatGPT apporte l'analyse et les suggestions. Cette synergie s'améliore au fil des échanges.</p>
+
+                        <h3>Optimiser la mémoire contextuelle</h3>
+                        <p>ChatGPT se souvient de tout dans une conversation, mais son attention peut se disperser dans les discussions très longues. Votre rôle est de maintenir la focale sur l'essentiel.</p>
+
+                        <ul>
+                            <li><strong>Récapitulatifs stratégiques :</strong> "Avant de continuer, résume les 3 décisions principales qu'on vient de prendre"</li>
+                            <li><strong>Points de repère :</strong> Numérotez les étapes importantes et référez-vous-y explicitement</li>
+                            <li><strong>Références directes :</strong> "Comme tu l'as suggéré dans ta deuxième proposition..." maintient la cohérence</li>
+                            <li><strong>Nouvelle conversation :</strong> Démarrez fresh quand le contexte devient trop chargé ou confus</li>
+                        </ul>
+
+                        <h3>Maintenir l'efficacité sur la durée</h3>
+                        <p>Les longues conversations demandent une gestion active pour éviter les dérives et maintenir la productivité. Voici des techniques éprouvées pour garder le cap.</p>
+
+                        <ul>
+                            <li><strong>Checkpoints réguliers :</strong> Faites des bilans d'étape pour consolider les acquis</li>
+                            <li><strong>Objectifs visibles :</strong> Rappelez régulièrement l'objectif global du projet</li>
+                            <li><strong>Documentation externe :</strong> Sortez les informations importantes de la conversation (notes, fichiers)</li>
+                            <li><strong>Sessions dédiées :</strong> Une conversation = un projet ou un sujet principal</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🧪 Test de mémoire contextuelle</div>
+                            <p><strong>Expérimentez les limites :</strong></p>
+                            <ol>
+                                <li>Démarrez avec 5 informations personnelles spécifiques</li>
+                                <li>Engagez 15-20 échanges sur des sujets variés</li>
+                                <li>Demandez : "Peux-tu me rappeler les 5 informations que j'ai partagées au début ?"</li>
+                                <li>Analysez ce qui est retenu, oublié, ou déformé</li>
+                                <li>Adaptez votre stratégie en conséquence</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Plugins et extensions -->
+                <section class="section">
+                    <h2 class="section-title">🔌 Exploiter les plugins et extensions</h2>
+                    
+                    <div class="section-content">
+                        <p>Les plugins transforment ChatGPT de simple conversationnel en véritable couteau suisse numérique. Ils ajoutent des capacités spécialisées : accès web, calculs avancés, génération d'images, et bien plus.</p>
+
+                        <p>Chaque plugin répond à une limitation spécifique de ChatGPT de base. Web Browsing lui donne accès aux informations actuelles, Code Interpreter lui permet d'exécuter du code, DALL-E ajoute la création visuelle. Combinés intelligemment, ils créent des workflows puissants.</p>
+
+                        <h3>Plugins officiels essentiels</h3>
+                        <p>OpenAI propose plusieurs plugins intégrés qui couvrent les besoins les plus fréquents. Maîtriser ces outils de base vous donne déjà un avantage considérable.</p>
+
+                        <ul>
+                            <li><strong>Web Browsing :</strong> Recherches actuelles, vérification de faits, analyse de sites web en temps réel</li>
+                            <li><strong>Code Interpreter :</strong> Analyses de données, calculs complexes, génération de graphiques, traitement de fichiers</li>
+                            <li><strong>DALL-E 3 :</strong> Création d'images sur mesure directement intégrée à la conversation</li>
+                            <li><strong>Plugins tiers :</strong> Intégrations spécialisées selon vos besoins (Zapier, Canva, etc.)</li>
+                        </ul>
+
+                        <h3>Extensions navigateur complémentaires</h3>
+                        <p>L'écosystème d'extensions enrichit encore l'expérience ChatGPT. Ces outils comblent les gaps d'usage et améliorent l'intégration dans votre workflow quotidien.</p>
+
+                        <ul>
+                            <li><strong>ChatGPT Writer :</strong> Assistant de rédaction intégré à tous vos sites web</li>
+                            <li><strong>WebChatGPT :</strong> Recherche web directement depuis l'interface ChatGPT</li>
+                            <li><strong>Voice Control :</strong> Interaction vocale fluide, idéale pour la mobilité</li>
+                            <li><strong>ChatGPT Prompt Genius :</strong> Bibliothèque de prompts prêts à l'emploi</li>
+                        </ul>
+
+                        <div class="tip-box">
+                            <div class="tip-title">⚡ Workflow de plugins combinés</div>
+                            <p><strong>Exemple puissant :</strong> Web Browsing pour rechercher les dernières tendances de votre secteur → Code Interpreter pour analyser les données collectées → DALL-E pour créer une infographie des résultats. Trois plugins, un résultat professionnel complet.</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Challenge multi-plugins</div>
+                            <p><strong>Créez un rapport de veille complet :</strong></p>
+                            <ol>
+                                <li>Web Browsing : Recherchez les 5 dernières news de votre secteur</li>
+                                <li>Code Interpreter : Analysez les tendances et créez un graphique</li>
+                                <li>DALL-E : Générez une illustration pour accompagner le rapport</li>
+                                <li>Assemblage : Demandez un rapport structuré intégrant tout</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Validation Quiz -->
+                <section class="validation-section">
+                    <h2 class="validation-title">✅ Validation des acquis</h2>
+                    
+                    <div class="quiz-question">
+                        <div class="question-number">Question 1/3</div>
+                        <div class="question-text">Qu'est-ce que la "température" en paramètres ChatGPT et quand l'ajuster ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">La température contrôle la vitesse de réponse de ChatGPT</div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">La température contrôle l'équilibre entre créativité et précision des réponses</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">La température détermine le nombre de tokens utilisés</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">La température n'a aucun impact significatif</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-number">Question 2/3</div>
+                        <div class="question-text">Quelle est la meilleure technique pour traiter un document de 50 pages avec ChatGPT ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">Copier-coller tout le document d'un coup</div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">Utiliser la technique du "Résumé en cascade" en divisant par sections</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Demander seulement un résumé général sans détails</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">ChatGPT ne peut pas traiter les longs documents</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-number">Question 3/3</div>
+                        <div class="question-text">Comment maintenir l'efficacité dans une conversation longue avec ChatGPT ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">Éviter de faire des résumés pour ne pas perdre de temps</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Changer de sujet régulièrement pour maintenir l'attention</div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">Faire des checkpoints réguliers et récapituler les décisions importantes</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Redémarrer une nouvelle conversation toutes les 5 minutes</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="checkAnswers()" id="checkBtn">Vérifier mes réponses</button>
+                        <div id="quizResult" style="margin-top: 1rem; display: none;"></div>
+                    </div>
+                </section>
+
+                <!-- Resources Section -->
+                <section class="resources-section">
+                    <h2 class="resources-title">📚 Ressources complémentaires</h2>
+                    
+                    <div class="resource-item">
+                        <div class="resource-icon">🧮</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://platform.openai.com/tokenizer" target="_blank" class="resource-link">OpenAI Tokenizer</a>
+                            </div>
+                            <div class="resource-description">Outil officiel pour compter les tokens de vos prompts</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">📖</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-openai-api" target="_blank" class="resource-link">Guide officiel prompt engineering</a>
+                            </div>
+                            <div class="resource-description">Bonnes pratiques d'OpenAI pour optimiser vos prompts</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">🔌</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://chrome.google.com/webstore/detail/chatgpt-writer-email-writ/pdnenlnelpdomajfejgapbdpmjkfpjkp" target="_blank" class="resource-link">ChatGPT Writer (Extension Chrome)</a>
+                            </div>
+                            <div class="resource-description">Assistant de rédaction intégré à tous vos sites web</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">🎙️</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://chrome.google.com/webstore/detail/voice-control-for-chatgpt/eollffkcakegifhacjnlnegohfdlidhn" target="_blank" class="resource-link">Voice Control for ChatGPT</a>
+                            </div>
+                            <div class="resource-description">Interaction vocale fluide avec ChatGPT</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">🛠️</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://platform.openai.com/docs/guides/production-best-practices" target="_blank" class="resource-link">Best practices API OpenAI</a>
+                            </div>
+                            <div class="resource-description">Guide pour une utilisation optimisée de l'API</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="outils_3_chatgpt_1a.html" class="btn btn-secondary">
+                        <span>←</span> Micro-séquence 1A
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Micro-séquence 1B sur 4</div>
+                        <div class="nav-title">Paramètres et optimisation</div>
+                    </div>
+                    <a href="outils_3_chatgpt_1c.html" class="btn btn-primary">
+                        Micro-séquence 1C <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 12.5%;"></div>
+                    </div>
+                    <div class="progress-text">Micro-séquence 1B - Module 3</div>
+                </div>
+
+                <!-- Micro-séquences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🔗 Séquence ChatGPT</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1A</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Découverte & interfaces</div>
+                                <div class="sequence-duration">25 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item current">
+                            <div class="sequence-icon current">1B</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Paramètres & optimisation</div>
+                                <div class="sequence-duration">20 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">1C</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Agents personnalisés</div>
+                                <div class="sequence-duration">30 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">1D</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Intégration workflow</div>
+                                <div class="sequence-duration">15 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">⚡ Actions rapides</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="https://platform.openai.com/tokenizer" target="_blank" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            🧮 Tokenizer OpenAI
+                        </a>
+                        <a href="#" class="btn btn-secondary" style="font-size: 0.9rem;" onclick="markCompleted()">
+                            ✅ Marquer comme terminé
+                        </a>
+                        <a href="ressources_outils.html" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            📚 Voir toutes les ressources
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        let selectedAnswers = {};
+        let correctAnswers = {1: 2, 2: 2, 3: 3}; // Index des bonnes réponses (1-based)
+
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Find question number
+            const questionElement = element.closest('.quiz-question');
+            const questionNumber = questionElement.querySelector('.question-number').textContent.split('/')[0].replace('Question ', '');
+            
+            // Remove previous selections for this question
+            questionElement.querySelectorAll('.quiz-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Mark this option as selected
+            element.classList.add('selected');
+            
+            // Store the selection
+            const optionIndex = Array.from(questionElement.querySelectorAll('.quiz-option')).indexOf(element) + 1;
+            selectedAnswers[questionNumber] = optionIndex;
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            
+            // Check each answer and apply visual feedback
+            document.querySelectorAll('.quiz-question').forEach((questionElement, index) => {
+                const questionNumber = index + 1;
+                const options = questionElement.querySelectorAll('.quiz-option');
+                const userAnswer = selectedAnswers[questionNumber];
+                const correctAnswer = correctAnswers[questionNumber];
+                
+                options.forEach((option, optionIndex) => {
+                    option.classList.remove('correct', 'incorrect');
+                    
+                    if (optionIndex + 1 === correctAnswer) {
+                        option.classList.add('correct');
+                    } else if (optionIndex + 1 === userAnswer && userAnswer !== correctAnswer) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            });
+            
+            // Show result
+            const resultElement = document.getElementById('quizResult');
+            const percentage = Math.round((score / total) * 100);
+            
+            let message = '';
+            let emoji = '';
+            
+            if (percentage >= 80) {
+                emoji = '🎉';
+                message = 'Excellent ! Vous maîtrisez parfaitement l\'optimisation de ChatGPT.';
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                message = 'Bien joué ! Quelques points à revoir mais vous progressez bien.';
+            } else {
+                emoji = '📚';
+                message = 'Il serait bon de relire la séquence pour consolider vos acquis.';
+            }
+            
+            resultElement.innerHTML = `
+                <div style="padding: 1rem; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border-color);">
+                    <div style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                        ${emoji} Score : ${score}/${total} (${percentage}%)
+                    </div>
+                    <div style="color: var(--text-secondary);">${message}</div>
+                </div>
+            `;
+            resultElement.style.display = 'block';
+            
+            // Disable quiz after check
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('checkBtn').textContent = 'Quiz terminé';
+        }
+
+        // Mark sequence as completed
+        function markCompleted() {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[3]) progress.modules[3] = {};
+            if (!progress.modules[3]['chatgpt']) progress.modules[3]['chatgpt'] = {};
+            
+            progress.modules[3]['chatgpt']['1b'] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+            
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = '12.5%';
+            
+            // Enable next micro-sequence
+            const nextBtn = document.querySelector('a[href="outils_3_chatgpt_1c.html"]');
+            if (nextBtn) {
+                nextBtn.classList.remove('disabled');
+            }
+            
+            // Show confirmation
+            alert('Micro-séquence 1B terminée ! 🎉\nVous pouvez maintenant passer à la micro-séquence 1C.');
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

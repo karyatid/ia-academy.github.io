@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 2: Zapier et workflows IA | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            content: '🌙';
+            left: auto;
+            right: 4px;
+        }
+
+        [data-theme="dark"] .theme-toggle::after {
+            left: 27px;
+            background: var(--secondary-color);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(-2px);
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tips and Notes */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Step-by-step boxes */
+        .step-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--secondary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+            margin-left: 1rem;
+        }
+
+        /* Pricing tables */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .pricing-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .pricing-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pricing-features li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Workflow demonstration */
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .workflow-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .workflow-content h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+
+        .workflow-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Circle */
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) 144deg, var(--bg-tertiary) 144deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            list-style: none;
+        }
+
+        .module-nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .module-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .module-nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .module-nav-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .module-nav-link.completed {
+            color: var(--success-color);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .nav-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        /* Lesson Navigation at bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="dashboard.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Module 5</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Séquence 2</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>90 minutes</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Zapier et workflows IA</h1>
+                <p class="lesson-description">
+                    Maîtrisez Zapier pour créer vos premiers workflows intelligents. Découvrez comment intégrer l'IA dans vos automatisations et créez un système complet d'onboarding client automatisé.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">⚡ Bienvenue dans l'univers Zapier</h2>
+                    <div class="section-content">
+                        <p>Zapier est la plateforme d'automatisation no-code la plus populaire au monde, avec plus de 6000 applications connectées. Dans cette séquence, vous allez apprendre à créer des workflows intelligents qui combinent la simplicité de Zapier avec la puissance de l'IA.</p>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🔗</span>
+                                <span>Qu'est-ce qu'un Zap ?</span>
+                            </div>
+                            <p>Un Zap est un workflow automatisé qui connecte vos applications favorites. Il se compose d'un <strong>Trigger</strong> (déclencheur) qui lance le processus et d'une ou plusieurs <strong>Actions</strong> qui s'exécutent automatiquement.</p>
+                        </div>
+                        
+                        <p><strong>Ce que vous allez accomplir dans cette séquence :</strong></p>
+                        <ul>
+                            <li>Maîtriser l'interface Zapier et ses concepts fondamentaux</li>
+                            <li>Intégrer l'IA (OpenAI, Claude) dans vos workflows</li>
+                            <li>Créer des automatisations pratiques pour votre quotidien</li>
+                            <li>Développer un système complet d'onboarding client avec IA</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Maîtrise de Zapier -->
+                <section class="section">
+                    <h2 class="section-title">🎮 Maîtrise de Zapier : Interface et concepts</h2>
+                    <div class="section-content">
+                        
+                        <h3>Interface et concepts fondamentaux</h3>
+                        <p>Zapier repose sur trois concepts clés qu'il est essentiel de comprendre :</p>
+                        
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Triggers (Déclencheurs)</div>
+                            <p>L'événement qui démarre votre automatisation. Exemples : nouveau email, formulaire soumis, fichier ajouté à un dossier, nouveau contact CRM.</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Actions</div>
+                            <p>Ce qui se passe après le déclenchement. Exemples : envoyer un email, créer une tâche, ajouter une ligne dans un tableur, publier sur les réseaux sociaux.</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Zaps</div>
+                            <p>Le workflow complet qui combine un trigger et une ou plusieurs actions. Un Zap peut être simple (1 trigger + 1 action) ou complexe (1 trigger + plusieurs actions avec conditions).</p>
+                        </div>
+
+                        <h3>Configuration de votre premier Zap simple</h3>
+                        <p>Commençons par un exemple concret pour comprendre le processus :</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                <span>Exemple : Sauvegarde automatique des pièces jointes Gmail</span>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">📧</div>
+                                <div class="workflow-content">
+                                    <h4>Trigger : Nouveau email Gmail avec pièce jointe</h4>
+                                    <p>Zapier surveille votre boîte Gmail et se déclenche à chaque nouvel email contenant une pièce jointe.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">💾</div>
+                                <div class="workflow-content">
+                                    <h4>Action : Sauvegarder la pièce jointe sur Google Drive</h4>
+                                    <p>Automatiquement, la pièce jointe est téléchargée et sauvegardée dans un dossier spécifique de votre Google Drive.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Gestion des erreurs et monitoring</h3>
+                        <p>Zapier offre des outils puissants pour suivre et gérer vos automatisations :</p>
+
+                        <h4>📊 Tableau de bord des Zaps</h4>
+                        <ul>
+                            <li><strong>Statut en temps réel :</strong> Actif, en pause, en erreur</li>
+                            <li><strong>Historique d'exécution :</strong> Succès, échecs, détails des erreurs</li>
+                            <li><strong>Utilisation des tâches :</strong> Suivi de votre quota mensuel</li>
+                        </ul>
+
+                        <h4>🔧 Système de retry automatique</h4>
+                        <ul>
+                            <li>Zapier réessaie automatiquement en cas d'échec temporaire</li>
+                            <li>Notifications par email en cas d'erreur persistante</li>
+                            <li>Logs détaillés pour identifier les problèmes</li>
+                        </ul>
+
+                        <h3>Plans et limitations : gratuit vs payant</h3>
+                        <p>Il est crucial de comprendre les différences entre les plans pour choisir celui qui convient à vos besoins :</p>
+
+                        <div class="pricing-grid">
+                            <div class="pricing-card">
+                                <div class="pricing-title">Gratuit</div>
+                                <div class="pricing-price">0€/mois</div>
+                                <ul class="pricing-features">
+                                    <li>100 tâches/mois</li>
+                                    <li>5 Zaps maximum</li>
+                                    <li>Intégrations de base</li>
+                                    <li>Pas d'intégration IA</li>
+                                </ul>
+                            </div>
+                            <div class="pricing-card">
+                                <div class="pricing-title">Starter</div>
+                                <div class="pricing-price">20€/mois</div>
+                                <ul class="pricing-features">
+                                    <li>750 tâches/mois</li>
+                                    <li>Zaps illimités</li>
+                                    <li>OpenAI inclus</li>
+                                    <li>Support email</li>
+                                </ul>
+                            </div>
+                            <div class="pricing-card">
+                                <div class="pricing-title">Professional</div>
+                                <div class="pricing-price">49€/mois</div>
+                                <ul class="pricing-features">
+                                    <li>2000 tâches/mois</li>
+                                    <li>Filtres et chemins</li>
+                                    <li>Webhooks</li>
+                                    <li>Formatters avancés</li>
+                                </ul>
+                            </div>
+                            <div class="pricing-card">
+                                <div class="pricing-title">Team</div>
+                                <div class="pricing-price">69€/mois</div>
+                                <ul class="pricing-features">
+                                    <li>50000 tâches/mois</li>
+                                    <li>Partage équipe</li>
+                                    <li>Statistiques avancées</li>
+                                    <li>Support prioritaire</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>💡</span>
+                                <span>Conseil stratégique</span>
+                            </div>
+                            <p>Commencez avec le plan gratuit pour apprendre, puis passez au plan Starter dès que vous voulez intégrer l'IA. Le plan Professional devient intéressant quand vous automatisez des processus complexes avec des conditions.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Intégration IA dans Zapier -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Intégration IA dans Zapier</h2>
+                    <div class="section-content">
+                        <p>L'intégration de l'IA dans Zapier transforme les automatisations simples en workflows intelligents capables de comprendre, analyser et prendre des décisions.</p>
+
+                        <h3>OpenAI connector : automatisation avec ChatGPT</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🤖</span>
+                                <span>OpenAI App dans Zapier</span>
+                            </div>
+                            <p><strong>Actions disponibles :</strong></p>
+                            <ul>
+                                <li><strong>Send Prompt :</strong> Envoyer un prompt à GPT et récupérer la réponse</li>
+                                <li><strong>Send Chat Message :</strong> Conversation avec contexte et historique</li>
+                                <li><strong>Generate Image :</strong> Création d'images avec DALL-E</li>
+                            </ul>
+                            <p><strong>Configuration :</strong> Vous avez besoin d'une clé API OpenAI (incluse dans les plans payants Zapier).</p>
+                        </div>
+
+                        <h3>Claude API : intégration Anthropic</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🧠</span>
+                                <span>Claude via Webhooks</span>
+                            </div>
+                            <p>Claude n'ayant pas d'app native Zapier, on utilise les webhooks :</p>
+                            <ul>
+                                <li><strong>Webhook by Zapier :</strong> App pour requêtes HTTP personnalisées</li>
+                                <li><strong>URL API Claude :</strong> https://api.anthropic.com/v1/messages</li>
+                                <li><strong>Headers :</strong> Authorization avec votre clé API Anthropic</li>
+                                <li><strong>Body :</strong> JSON avec le modèle et le prompt</li>
+                            </ul>
+                        </div>
+
+                        <h3>Webhook + IA : solutions personnalisées</h3>
+                        <p>Les webhooks vous permettent de connecter n'importe quelle API IA à Zapier :</p>
+
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Configuration du Webhook</div>
+                            <p>Utilisez l'app "Webhooks by Zapier" avec l'action "POST" pour envoyer des données à une API externe.</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Authentification</div>
+                            <p>Ajoutez vos clés API dans les headers : Authorization: Bearer YOUR_API_KEY</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Formatage des données</div>
+                            <p>Utilisez les Formatters Zapier pour préparer les données au bon format JSON.</p>
+                        </div>
+
+                        <h3>Formatter : transformation de données avec IA</h3>
+                        <p>Les Formatters Zapier permettent de traiter et transformer les données avant de les envoyer à l'IA :</p>
+
+                        <h4>🔧 Types de formatage utiles</h4>
+                        <ul>
+                            <li><strong>Text Formatter :</strong> Nettoyer, extraire, reformater du texte</li>
+                            <li><strong>Date/Time Formatter :</strong> Convertir les dates en format lisible par l'IA</li>
+                            <li><strong>Utilities :</strong> Générer des ID uniques, faire des calculs</li>
+                            <li><strong>Code by Zapier :</strong> JavaScript personnalisé pour transformations complexes</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Workflows IA pratiques -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Workflows IA pratiques</h2>
+                    <div class="section-content">
+                        <p>Voici quatre workflows concrets que vous pouvez implémenter dès aujourd'hui pour améliorer votre productivité :</p>
+
+                        <h3>1. Analyse automatique d'emails entrants</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📧</span>
+                                <span>Smart Email Triage</span>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">📧</div>
+                                <div class="workflow-content">
+                                    <h4>Trigger : Nouveau email Gmail</h4>
+                                    <p>Zapier surveille votre boîte de réception en continu.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🤖</div>
+                                <div class="workflow-content">
+                                    <h4>IA : Analyse du contenu</h4>
+                                    <p>GPT analyse l'email et détermine : urgence (1-5), sentiment (positif/négatif/neutre), catégorie (support/commercial/personnel).</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">📂</div>
+                                <div class="workflow-content">
+                                    <h4>Actions : Tri automatique</h4>
+                                    <p>Email classé dans le bon dossier, label de priorité ajouté, notification Slack si urgent.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>2. Génération de réponses clients personnalisées</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                <span>Smart Customer Response</span>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🎫</div>
+                                <div class="workflow-content">
+                                    <h4>Trigger : Nouveau ticket support</h4>
+                                    <p>Un client soumet une demande via votre formulaire de contact.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🧠</div>
+                                <div class="workflow-content">
+                                    <h4>IA : Analyse et génération</h4>
+                                    <p>L'IA analyse le problème, consulte votre base de connaissances et génère une réponse personnalisée.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">✉️</div>
+                                <div class="workflow-content">
+                                    <h4>Actions : Réponse automatique</h4>
+                                    <p>Email envoyé au client, ticket mis à jour, escalade vers un humain si nécessaire.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>3. Résumé automatique de réunions</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📝</span>
+                                <span>Meeting Intelligence</span>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🎥</div>
+                                <div class="workflow-content">
+                                    <h4>Trigger : Fin de réunion Zoom</h4>
+                                    <p>Zapier détecte la fin d'une réunion et récupère l'enregistrement.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🎙️</div>
+                                <div class="workflow-content">
+                                    <h4>IA : Transcription et résumé</h4>
+                                    <p>L'audio est transcrit puis l'IA génère un résumé avec les points clés et actions à faire.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">💬</div>
+                                <div class="workflow-content">
+                                    <h4>Actions : Distribution</h4>
+                                    <p>Résumé publié sur Slack, envoyé par email aux participants, tâches créées dans votre outil de gestion de projet.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>4. Veille automatisée avec analyse de sentiment</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>👁️</span>
+                                <span>Smart Brand Monitoring</span>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🔍</div>
+                                <div class="workflow-content">
+                                    <h4>Trigger : Nouvelle mention sur les réseaux</h4>
+                                    <p>Zapier surveille Twitter, LinkedIn, Reddit pour les mentions de votre marque.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🧠</div>
+                                <div class="workflow-content">
+                                    <h4>IA : Analyse de sentiment</h4>
+                                    <p>L'IA évalue le sentiment (positif/négatif/neutre), l'importance et le niveau d'influence de l'auteur.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-step">
+                                <div class="workflow-icon">🚨</div>
+                                <div class="workflow-content">
+                                    <h4>Actions : Réaction adaptée</h4>
+                                    <p>Alerte immédiate si sentiment négatif, archivage si neutre, notification équipe marketing si positif et influent.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier pratique -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Atelier pratique : Onboarding client intelligent</h2>
+                    <div class="section-content">
+                        <p>Maintenant, passons à la pratique ! Nous allons créer ensemble un workflow complet d'onboarding client qui combine plusieurs technologies IA.</p>
+
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🎯</span>
+                                <span>Objectif de l'atelier</span>
+                            </div>
+                            <p>Créer un système qui automatise l'accueil des nouveaux clients : de la soumission du formulaire jusqu'à l'envoi d'un email personnalisé et la création du dossier CRM, en passant par une analyse IA du profil client.</p>
+                        </div>
+
+                        <h3>Étape 1 : Configuration du trigger</h3>
+                        <div class="step-box">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Nouveau formulaire soumis</div>
+                            <p><strong>Application :</strong> Google Forms ou Typeform</p>
+                            <p><strong>Trigger :</strong> "New Form Response"</p>
+                            <p><strong>Données récupérées :</strong> Nom, email, entreprise, secteur d'activité, besoins, budget</p>
+                        </div>
+
+                        <h3>Étape 2 : Analyse IA du profil client</h3>
+                        <div class="step-box">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Enrichissement intelligent</div>
+                            <p><strong>Application :</strong> OpenAI</p>
+                            <p><strong>Prompt :</strong> "Analyse ce profil client et détermine : niveau de priorité (1-5), segment client (startup/PME/enterprise), opportunités de vente, recommandations personnalisées."</p>
+                            <p><strong>Données d'entrée :</strong> Toutes les réponses du formulaire</p>
+                        </div>
+
+                        <h3>Étape 3 : Enrichissement CRM</h3>
+                        <div class="step-box">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Création du contact</div>
+                            <p><strong>Application :</strong> HubSpot, Pipedrive ou Airtable</p>
+                            <p><strong>Action :</strong> "Create Contact"</p>
+                            <p><strong>Données :</strong> Informations du formulaire + analyse IA (segment, priorité, notes)</p>
+                        </div>
+
+                        <h3>Étape 4 : Email personnalisé</h3>
+                        <div class="step-box">
+                            <div class="step-number">4</div>
+                            <div class="step-title">Génération d'email adapté</div>
+                            <p><strong>Application :</strong> OpenAI puis Gmail</p>
+                            <p><strong>Prompt :</strong> "Génère un email de bienvenue personnalisé pour ce nouveau client, en tenant compte de son secteur d'activité et ses besoins spécifiques."</p>
+                            <p><strong>Action finale :</strong> Envoi automatique de l'email généré</p>
+                        </div>
+
+                        <h3>Tests et debugging</h3>
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>🔧</span>
+                                <span>Conseils pour le debugging</span>
+                            </div>
+                            <ul>
+                                <li><strong>Test mode :</strong> Utilisez le mode test de Zapier avant d'activer</li>
+                                <li><strong>Logs détaillés :</strong> Vérifiez chaque étape dans l'historique d'exécution</li>
+                                <li><strong>Données d'exemple :</strong> Créez des données de test cohérentes</li>
+                                <li><strong>Gestion d'erreurs :</strong> Prévoyez des fallbacks si l'IA ne répond pas</li>
+                            </ul>
+                        </div>
+
+                        <h3>Optimisation et monitoring</h3>
+                        <p>Une fois votre Zap fonctionnel, surveillez ses performances :</p>
+                        <ul>
+                            <li><strong>Taux de succès :</strong> Visez 95%+ d'exécutions réussies</li>
+                            <li><strong>Temps d'exécution :</strong> Un Zap doit s'exécuter en moins de 2 minutes</li>
+                            <li><strong>Coût par exécution :</strong> Optimisez les appels IA pour réduire les coûts</li>
+                            <li><strong>Qualité des outputs :</strong> Vérifiez régulièrement la pertinence des réponses IA</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Quiz interactif -->
+                <section class="section">
+                    <div class="quiz-container">
+                        <h2 class="quiz-title">
+                            <span>🧠</span>
+                            Quiz : Maîtrisez-vous Zapier et l'IA ?
+                        </h2>
+                        
+                        <div class="quiz-question">
+                            Quelle est la principale limitation du plan gratuit de Zapier pour les workflows IA ?
+                        </div>
+                        
+                        <ul class="quiz-options">
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                On ne peut créer que 5 Zaps maximum
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, true)">
+                                L'intégration OpenAI n'est pas disponible sur le plan gratuit
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                Les webhooks ne fonctionnent pas
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                Il n'y a que 100 applications disponibles
+                            </li>
+                        </ul>
+                        
+                        <div class="quiz-feedback">
+                            <p></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <div class="breadcrumb">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                        <span>></span>
+                        <a href="automatisation_5_overview.html" class="breadcrumb-link">Module 5: Automatisation</a>
+                        <span>></span>
+                        <span class="breadcrumb-current">Zapier et workflows IA</span>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="automatisation_5_introduction_1.html" class="btn btn-secondary">
+                            <span>←</span> Séquence 1: Introduction
+                        </a>
+                        <a href="automatisation_5_make_3.html" class="btn btn-primary">
+                            Séquence 3: Make.com avancé <span>→</span>
+                        </a>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Progression</h3>
+                    <div class="progress-circle">
+                        <span class="progress-text">3/5</span>
+                    </div>
+                    <div style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        Séquence 2 sur 4 (+ overview)
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="module-nav">
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_overview.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Vue d'ensemble</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_introduction_1.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Introduction et stratégie</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_zapier_2.html" class="module-nav-link active">
+                                <div class="nav-icon current">2</div>
+                                <span>Zapier et workflows IA</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_make_3.html" class="module-nav-link">
+                                <div class="nav-icon locked">3</div>
+                                <span>Make.com avancé</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_projet_4.html" class="module-nav-link">
+                                <div class="nav-icon locked">4</div>
+                                <span>Projet personnalisé</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">💡 Points clés</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>⚡ Trigger + Action :</strong> La base de tout Zap réussi
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>🧠 IA intégrée :</strong> OpenAI natif, Claude via webhooks
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>🔧 Debugging :</strong> Logs détaillés pour résoudre les problèmes
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🚀 Prochaines étapes</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Dans la séquence suivante, vous découvrirez Make.com pour créer des automatisations encore plus puissantes avec logiques complexes.
+                    </p>
+                    <a href="automatisation_5_make_3.html" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        Continuer
+                    </a>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            element.classList.add('selected');
+            
+            // Show correct/incorrect state
+            if (isCorrect) {
+                element.classList.add('correct');
+                showFeedback('Correct ! L\'intégration OpenAI nécessite au minimum le plan Starter (20€/mois). Le plan gratuit limite l\'accès aux intégrations IA natives, mais vous pouvez toujours utiliser des webhooks pour connecter des APIs IA externes.', true);
+            } else {
+                element.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(option => {
+                    if (option.onclick.toString().includes('true')) {
+                        option.classList.add('correct');
+                    }
+                });
+                showFeedback('Pas tout à fait. Bien que le plan gratuit ait effectivement certaines limitations, la principale contrainte pour les workflows IA est l\'absence d\'accès à l\'intégration OpenAI native, qui nécessite au minimum le plan Starter.', false);
+            }
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.querySelector('.quiz-feedback');
+            const feedbackText = feedback.querySelector('p');
+            
+            feedbackText.textContent = message;
+            feedback.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(5, 2);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

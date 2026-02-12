@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio IA Professional - Micro-séquence 3A | IA Academy</title>
+    <style>
+        :root {
+            /* Mode sombre par défaut */
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a3e;
+            --bg-tertiary: #2d2d5f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8d4;
+            --text-muted: #8888aa;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --accent-color: #0891b2;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-tertiary: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '🌙';
+            position: absolute;
+            left: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle::after {
+            content: '☀️';
+            position: absolute;
+            right: 6px;
+            font-size: 14px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        [data-theme="light"] .theme-toggle::before {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            opacity: 1;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            position: relative;
+        }
+
+        [data-theme="light"] .theme-toggle-button {
+            transform: translateX(25px);
+            background: var(--primary-color);
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .section-content ul {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Interactive Boxes */
+        .interactive-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .interactive-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+        }
+
+        .tool-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .tool-features li {
+            padding: 0.25rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Practical Examples */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        /* Warning and Success Boxes */
+        .warning-box, .success-box, .info-box {
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border-left-color: #f59e0b;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
+        }
+
+        .warning-title, .success-title, .info-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-option:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quiz-option.correct {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .quiz-option.incorrect {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .quiz-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result.correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-color);
+        }
+
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .sequence-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sequence-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sequence-item:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .sequence-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .sequence-item:hover .sequence-duration {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="dashboard.html" class="logo">
+                    🧠 IA Academy
+                </a>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_audio_video_sync_3.html" class="breadcrumb-link">Audio/Vidéo + Synchronisation</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Audio IA Professional</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🎵</span>
+                        <span>Micro-séquence 3A</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>35-40 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>📈</span>
+                        <span>Intermédiaire</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">🎵 Audio IA Professional</h1>
+                <p class="lesson-description">
+                    Maîtrisez la création audio avec l'intelligence artificielle : synthèse vocale réaliste, clonage de voix, génération musicale et effets sonores. Créez du contenu audio professionnel en quelques clics !
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 L'audio IA : Une révolution créative</h2>
+                    <div class="section-content">
+                        <p>L'intelligence artificielle transforme radicalement la production audio. Plus besoin d'enregistrer en studio ou d'engager des comédiens : créez des voix-off professionnelles, clonez votre propre voix et générez de la musique originale en quelques minutes !</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Ce que vous allez maîtriser
+                            </div>
+                            <ul>
+                                <li><strong>Synthèse vocale ultra-réaliste</strong> avec ElevenLabs et Murf</li>
+                                <li><strong>Clonage de voix éthique</strong> pour votre personal branding</li>
+                                <li><strong>Génération musicale automatique</strong> avec Suno et AIVA</li>
+                                <li><strong>Création d'ambiances sonores</strong> pour vos contenus</li>
+                                <li><strong>Workflow professionnel</strong> de production audio IA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Synthèse Vocale -->
+                <section class="section">
+                    <h2 class="section-title">🗣️ Synthèse Vocale Réaliste</h2>
+                    <div class="section-content">
+                        <p>La synthèse vocale IA a atteint un niveau de réalisme impressionnant. Découvrez les outils leaders du marché :</p>
+                        
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎙️</div>
+                                    <div class="tool-name">ElevenLabs</div>
+                                </div>
+                                <div class="tool-description">
+                                    L'outil de référence pour la synthèse vocale ultra-réaliste. Qualité studio garantie !
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Voix naturelles et expressives</li>
+                                    <li>Clonage de voix en 3 minutes</li>
+                                    <li>Contrôle des émotions</li>
+                                    <li>29 langues supportées</li>
+                                    <li>API pour l'automatisation</li>
+                                </ul>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎬</div>
+                                    <div class="tool-name">Murf</div>
+                                </div>
+                                <div class="tool-description">
+                                    Parfait pour les créateurs de contenu, avec une interface simplifiée et des voix commerciales.
+                                </div>
+                                <ul class="tool-features">
+                                    <li>130+ voix professionnelles</li>
+                                    <li>Synchronisation automatique</li>
+                                    <li>Collaboration en équipe</li>
+                                    <li>Templates prêts à l'emploi</li>
+                                    <li>Intégration video facile</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>🛠️ Workflow ElevenLabs - Étape par étape</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>⚡</span>
+                                <span>Création d'une voix-off en 5 minutes</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+1. Inscription sur ElevenLabs (3 essais gratuits/mois)
+2. Sélection d'une voix dans la bibliothèque
+3. Paramétrage : Stabilité (75%) + Clarté (85%)
+4. Copier-coller votre script (max 2500 caractères)
+5. Génération et téléchargement MP3/WAV
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">⚖️ Éthique du clonage vocal</div>
+                            <p>Le clonage de voix est une technologie puissante qui doit être utilisée de manière responsable. <strong>Règles d'or :</strong></p>
+                            <ul>
+                                <li>Clonez uniquement votre propre voix ou avec autorisation écrite</li>
+                                <li>Mentionnez l'usage d'IA quand c'est pertinent</li>
+                                <li>Respectez les lois sur l'usurpation d'identité</li>
+                                <li>Utilisez pour créer, pas pour tromper</li>
+                            </ul>
+                        </div>
+
+                        <h3>🎙️ Exercice Principal : Podcast LinkedIn Professionnel</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Challenge : Introduction podcast "Talents & Innovation"
+                            </div>
+                            <p><strong>Contexte :</strong> Vous êtes expert RH et vous lancez votre podcast LinkedIn "Talents & Innovation". Créez l'introduction de votre premier épisode sur "Les soft skills incontournables en 2024".</p>
+                            
+                            <p><strong>Objectif :</strong> Script de 90-120 secondes + audio ElevenLabs avec voix féminine française</p>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span>📝</span>
+                                    <span>Pitch de votre podcast</span>
+                                </div>
+                                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                    <strong>Nom :</strong> Sarah Dubois<br>
+                                    <strong>Expertise :</strong> 10 ans en recrutement et développement RH<br>
+                                    <strong>Podcast :</strong> "Talents & Innovation" - Les clés RH de demain<br>
+                                    <strong>Episode 1 :</strong> "Les 5 soft skills qui révolutionnent le recrutement en 2024"<br>
+                                    <strong>Audience :</strong> RH, managers, chercheurs d'emploi<br>
+                                    <strong>Ton :</strong> Expert mais accessible, inspirant
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 1rem; margin: 1.5rem 0;">
+                                <button class="btn btn-secondary" onclick="showHint()" id="hint-btn">💡 Indice</button>
+                                <button class="btn btn-primary" onclick="showSolution()" id="solution-btn">✨ Solution</button>
+                            </div>
+
+                            <div id="hint-content" style="display: none; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                                <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">💡 Indice pour créer votre script</div>
+                                <p>Utilisez une IA de type <strong>ChatGPT ou Claude</strong> pour écrire votre texte ! Ces outils excellents pour :</p>
+                                <ul>
+                                    <li>Structurer votre discours de manière professionnelle</li>
+                                    <li>Adapter le ton à votre audience LinkedIn</li>
+                                    <li>Respecter la durée demandée (90-120 secondes)</li>
+                                    <li>Créer un script naturel et engageant</li>
+                                </ul>
+                                <p>💪 <strong>Conseil :</strong> Donnez un contexte précis et demandez un format "prêt à lire" !</p>
+                            </div>
+
+                            <div id="solution-content" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                                <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">✨ Solution complète</div>
+                                
+                                <h4>📝 Exemple de prompt ChatGPT :</h4>
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[CONTEXTE] Tu es Sarah Dubois, experte RH avec 10 ans d'expérience en recrutement. Tu lances ton podcast LinkedIn "Talents & Innovation".
+
+[TÂCHE] Rédige l'introduction du premier épisode sur "Les 5 soft skills qui révolutionnent le recrutement en 2024".
+
+[STRUCTURE OBLIGATOIRE]
+1. Accueil chaleureux (15 sec)
+2. Présentation personnelle crédible (20 sec) 
+3. Concept du podcast + valeur pour l'audience (25 sec)
+4. Teaser épisode - 5 soft skills sans les révéler (20 sec)
+5. Call-to-action LinkedIn naturel (10 sec)
+
+[CONTRAINTES]
+- 90-120 secondes maximum
+- Ton : Expert mais accessible, inspirant
+- Éviter le jargon RH complexe
+- Inclure "Talents & Innovation" et "LinkedIn"
+- Créer de la curiosité pour les 5 soft skills
+
+[FORMAT] Script prêt à lire avec [PAUSE] indiquées
+                                </div>
+
+                                <h4>🔧 Configuration ElevenLabs - Étapes détaillées :</h4>
+                                <p><strong>Étape 1 : Sélection de la voix</strong></p>
+                                <div class="code-block">
+Voix recommandée : "Alice" (française, féminine, professionnelle)
+Ou "Charlotte" (française, chaleureuse, pour coaching)
+
+Catégorie : French → Female → Professional tone
+</div>
+
+                                <p><strong>Étape 2 : Paramètres audio optimaux</strong></p>
+                                <div class="code-block">
+Stability (Stabilité) : 75% 
+→ Voix constante, idéal pour podcast
+
+Clarity + Style Enhancement : 85%
+→ Voix claire et naturelle
+
+Speed : 0% (vitesse normale)
+→ Tempo professionnel pour LinkedIn
+</div>
+
+                                <p><strong>Étape 3 : Optimisations finales</strong></p>
+                                <div class="code-block">
+✓ Utilisez les [PAUSE] de votre script ChatGPT
+✓ Ajoutez des virgules pour les respirations naturelles  
+✓ Testez 2-3 générations et choisissez la meilleure
+✓ Format : MP3 128kbps (optimal LinkedIn)
+✓ Exportez en mono pour réduire la taille
+</div>
+                            </div>
+                        </div>
+
+                        <h3>📱 Mini-exercice Bonus : Message WhatsApp Business</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>⚡</span>
+                                <span>Challenge rapide (10 minutes)</span>
+                            </div>
+                            <p><strong>Contexte :</strong> Vous êtes coach en développement personnel. Créez un message d'accueil automatique WhatsApp Business de 30 secondes maximum.</p>
+                            
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[TEMPLATE MESSAGE WHATSAPP BUSINESS]
+
+Bonjour et merci pour votre message ! 
+
+Je suis [VOTRE NOM], coach en développement personnel. 
+
+Je vous recontacte dans les 24h pour échanger sur vos objectifs.
+
+En attendant, téléchargez mon guide gratuit "3 habitudes qui changent tout" sur mon site.
+
+À très bientôt !
+[VOTRE NOM]
+                            </div>
+                            
+                            <p><strong>Paramètres ElevenLabs conseillés :</strong> Voix française chaleureuse, Stabilité 80%, Clarté 75%</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Génération Musicale -->
+                <section class="section">
+                    <h2 class="section-title">🎶 Génération Musicale & Effets</h2>
+                    <div class="section-content">
+                        <p>Créez des bandes sonores originales, des jingles et des ambiances personnalisées pour vos contenus :</p>
+                        
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎵</div>
+                                    <div class="tool-name">Suno AI</div>
+                                </div>
+                                <div class="tool-description">
+                                    Générez des chansons complètes avec paroles et mélodie à partir d'une simple description.
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Chansons complètes (2-4 minutes)</li>
+                                    <li>Tous styles musicaux</li>
+                                    <li>Génération de paroles automatique</li>
+                                    <li>Qualité radio</li>
+                                    <li>Utilisation commerciale autorisée</li>
+                                </ul>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎼</div>
+                                    <div class="tool-name">AIVA</div>
+                                </div>
+                                <div class="tool-description">
+                                    Compositeur IA spécialisé dans la musique instrumentale et les bandes sonores.
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Musique classique et moderne</li>
+                                    <li>Bandes sonores cinéma</li>
+                                    <li>Personnalisation avancée</li>
+                                    <li>Export MIDI + audio</li>
+                                    <li>Droits d'auteur simplifiés</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>🎬 Cas d'usage créatifs</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>💡</span>
+                                <span>Prompts musicaux efficaces</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[SUNO AI - Exemples de prompts]
+
+🎯 Intro YouTube Tech : "Upbeat electronic intro, 15 seconds, tech vibes, energetic, modern synths"
+
+🎯 Podcast Background : "Calm ambient background music, soft piano, minimal, 3 minutes loop"
+
+🎯 Publicité Dynamique : "Commercial jingle, happy, memorable melody, 30 seconds, corporate style"
+
+🎯 Ambiance Méditation : "Peaceful nature sounds with soft synthesizers, relaxing, 10 minutes"
+                            </div>
+                        </div>
+
+                        <h3>🎵 Cas d'usage : Signature Audio Personnelle</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Créez votre identité sonore unique
+                            </div>
+                            <p><strong>Concept :</strong> Une signature audio de 10 secondes qui vous représente, utilisable sur tous vos contenus pour créer une reconnaissance immédiate.</p>
+                            
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span>🎼</span>
+                                    <span>Template signature audio pro</span>
+                                </div>
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[PROMPT SUNO AI - SIGNATURE AUDIO]
+
+"Professional audio signature, 10 seconds, [VOTRE SECTEUR], memorable melody, uplifting, modern sound, perfect for personal branding"
+
+Exemples par secteur :
+• Coach : "inspiring, motivational, warm tones"
+• Tech : "innovative, digital, futuristic sounds" 
+• Santé : "calming, trustworthy, gentle melody"
+• Finance : "confident, stable, sophisticated"
+• Créatif : "artistic, unique, expressive sounds"
+                                </div>
+                            </div>
+
+                            <p><strong>Utilisations de votre signature :</strong></p>
+                            <ul>
+                                <li><strong>Intro/outro</strong> de toutes vos vidéos</li>
+                                <li><strong>Transition</strong> dans vos présentations</li>
+                                <li><strong>Notification</strong> personnalisée (téléphone/PC)</li>
+                                <li><strong>Attente téléphonique</strong> professionnelle</li>
+                                <li><strong>Signature email</strong> en version audio</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-title">🎪 Astuce pro : Layering audio</div>
+                            <p>Combinez plusieurs éléments pour un résultat professionnel :</p>
+                            <ul>
+                                <li><strong>Base :</strong> Musique de fond générée par AIVA</li>
+                                <li><strong>Voix :</strong> Narration créée avec ElevenLabs</li>
+                                <li><strong>Effets :</strong> Sons d'ambiance de Freesound.org</li>
+                                <li><strong>Assemblage :</strong> Audacity ou Reaper (gratuits)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Interactif -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Quiz : Testez vos connaissances</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quel est l'avantage principal d'ElevenLabs par rapport aux autres outils de synthèse vocale ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-answer="wrong">
+                                <span>A)</span> Il est entièrement gratuit
+                            </div>
+                            <div class="quiz-option" data-answer="wrong">
+                                <span>B)</span> Il ne fonctionne qu'en anglais
+                            </div>
+                            <div class="quiz-option" data-answer="correct">
+                                <span>C)</span> Il offre une qualité ultra-réaliste et le clonage de voix
+                            </div>
+                            <div class="quiz-option" data-answer="wrong">
+                                <span>D)</span> Il génère uniquement de la musique
+                            </div>
+                        </div>
+                        <div class="quiz-result">
+                            <span class="result-text"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Récapitulatif et Next Steps -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Récapitulatif de vos créations</h2>
+                    <div class="section-content">
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Bilan de la micro-séquence 3A
+                            </div>
+                            <p><strong>Félicitations !</strong> Vous maîtrisez maintenant la création audio IA professionnelle. Voici ce que vous avez accompli :</p>
+                            
+                            <h3>✅ Vos créations audio :</h3>
+                            <ol>
+                                <li><strong>Introduction podcast LinkedIn</strong> (90-120 sec) - Script ChatGPT + Voix ElevenLabs</li>
+                                <li><strong>Message WhatsApp Business</strong> (30 sec) - Accueil automatique professionnel</li>
+                                <li><strong>Signature audio personnelle</strong> (10 sec) - Identité sonore unique</li>
+                            </ol>
+
+                            <h3>🛠️ Compétences acquises :</h3>
+                            <ul>
+                                <li>Configuration optimale ElevenLabs (stabilité, clarté, voix française)</li>
+                                <li>Génération musicale avec Suno AI (prompts efficaces)</li>
+                                <li>Workflow professionnel texte → audio → export</li>
+                                <li>Adaptation du ton selon le contexte (LinkedIn vs WhatsApp)</li>
+                                <li>Respect de l'éthique du clonage vocal</li>
+                            </ul>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span>📚</span>
+                                    <span>Checklist qualité audio IA</span>
+                                </div>
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+✅ Script adapté à l'oral (phrases courtes, pauses)
+✅ Voix cohérente avec votre image de marque  
+✅ Paramètres optimisés (Stabilité 75-80%, Clarté 85%)
+✅ Format audio adapté (MP3 pour web, WAV pour montage)
+✅ Test d'écoute sur différents appareils
+✅ Respect des durées cibles (30s, 90s, etc.)
+✅ Sauvegarde des paramètres pour cohérence future
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <div class="success-title">🎉 Prochaine étape</div>
+                            <p>Vous êtes maintenant prêt pour la <strong>micro-séquence 3B : Création Vidéo IA</strong> ! Nous allons apprendre à transformer vos scripts en vidéos avec RunwayML et Pika Labs.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="generative_4_images_2.html" class="btn btn-secondary">
+                        <span>←</span> Séquence 2 : Images
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Micro-séquence 3A sur 3</div>
+                        <div class="nav-title">Audio IA Professional</div>
+                    </div>
+                    <a href="generative_4_video_3b.html" class="btn btn-primary">
+                        Micro-séquence 3B <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 62.5%;"></div>
+                    </div>
+                    <div class="progress-text">Micro-séquence 3A - Module 4</div>
+                </div>
+
+                <!-- Micro-séquences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🎵 Séquence Audio/Vidéo</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon current">3A</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Audio IA Professional</div>
+                                <div class="sequence-duration">35-40 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">3B</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Création Vidéo IA</div>
+                                <div class="sequence-duration">35-40 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">3C</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Synchronisation & Post-prod</div>
+                                <div class="sequence-duration">25-30 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Ressources -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📚 Ressources</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">📹</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Demo audio (10min)</div>
+                                <div class="sequence-duration">Voix naturelle vs IA</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">⚙️</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Setup guide</div>
+                                <div class="sequence-duration">Configuration optimale</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">🎵</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Banque de voix</div>
+                                <div class="sequence-duration">50+ voix testées</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load theme preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Copy function
+        function copyText(button) {
+            const codeBlock = button.nextElementSibling || button.parentElement.querySelector('.code-block');
+            const text = codeBlock.textContent.replace('📋 Copier', '').trim();
+            
+            navigator.clipboard.writeText(text).then(function() {
+                button.textContent = '✅ Copié !';
+                setTimeout(function() {
+                    button.textContent = '📋 Copier';
+                }, 2000);
+            });
+        }
+
+        // Show hint function for podcast exercise
+        function showHint() {
+            const hintContent = document.getElementById('hint-content');
+            const hintBtn = document.getElementById('hint-btn');
+            
+            if (!hintContent || !hintBtn) {
+                console.log('Éléments hint non trouvés');
+                return;
+            }
+            
+            if (hintContent.style.display === 'none' || hintContent.style.display === '') {
+                hintContent.style.display = 'block';
+                hintBtn.textContent = '🙈 Masquer l\'indice';
+                hintBtn.classList.remove('btn-secondary');
+                hintBtn.classList.add('btn-primary');
+            } else {
+                hintContent.style.display = 'none';
+                hintBtn.textContent = '💡 Indice';
+                hintBtn.classList.remove('btn-primary');
+                hintBtn.classList.add('btn-secondary');
+            }
+        }
+
+        // Show solution function for podcast exercise  
+        function showSolution() {
+            const solutionContent = document.getElementById('solution-content');
+            const solutionBtn = document.getElementById('solution-btn');
+            
+            if (!solutionContent || !solutionBtn) {
+                console.log('Éléments solution non trouvés');
+                return;
+            }
+            
+            if (solutionContent.style.display === 'none' || solutionContent.style.display === '') {
+                solutionContent.style.display = 'block';
+                solutionBtn.textContent = '🙈 Masquer la solution';
+                solutionBtn.classList.remove('btn-primary');
+                solutionBtn.classList.add('btn-secondary');
+            } else {
+                solutionContent.style.display = 'none';
+                solutionBtn.textContent = '✨ Solution';
+                solutionBtn.classList.remove('btn-secondary');
+                solutionBtn.classList.add('btn-primary');
+            }
+        }
+
+        // Quiz functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            const quizResult = document.querySelector('.quiz-result');
+            const resultText = document.querySelector('.result-text');
+
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove previous selections
+                    quizOptions.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                    });
+
+                    // Check answer
+                    const isCorrect = this.getAttribute('data-answer') === 'correct';
+                    
+                    if (isCorrect) {
+                        this.classList.add('correct');
+                        resultText.textContent = '🎉 Excellent ! ElevenLabs se distingue effectivement par sa qualité ultra-réaliste et ses capacités de clonage vocal.';
+                        quizResult.className = 'quiz-result show correct';
+                    } else {
+                        this.classList.add('incorrect');
+                        // Show correct answer
+                        document.querySelector('[data-answer="correct"]').classList.add('correct');
+                        resultText.textContent = '❌ Pas tout à fait. La bonne réponse est C : ElevenLabs offre une qualité ultra-réaliste et le clonage de voix.';
+                        quizResult.className = 'quiz-result show incorrect';
+                    }
+                });
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

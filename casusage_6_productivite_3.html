@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 3: IA et Productivité - Module 6 | IA Academy</title>
+    <style>
+        /* CSS Variables for Theme Management */
+        :root[data-theme="light"] {
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.1);
+            --pattern-opacity: 0.02;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #818cf8;
+            --secondary-color: #22d3ee;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glow: 0 0 20px rgba(129, 140, 248, 0.3);
+            --pattern-opacity: 0.03;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: var(--pattern-opacity);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '🌙';
+            position: absolute;
+            right: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle .toggle-slider {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle .toggle-slider {
+            transform: translateX(23px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar with Course Progress */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-list {
+            list-style: none;
+        }
+
+        .sequence-item {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Example Box for Practical Applications */
+        .example-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tool recommendation boxes */
+        .tool-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Glossaire interactif */
+        .glossary-term {
+            color: var(--primary-color);
+            cursor: pointer;
+            border-bottom: 1px dotted var(--primary-color);
+            position: relative;
+        }
+
+        .glossary-popup {
+            position: absolute;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            max-width: 300px;
+            display: none;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
+        }
+
+        .glossary-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--border-color);
+        }
+
+        .starter-pack {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            border: 2px solid var(--success-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .starter-pack-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-prompt {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .hands-on-exercise {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 2px solid var(--warning-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .step-by-step {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        /* ROI Calculator Styling */
+        .roi-calculator {
+            background: var(--bg-secondary);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .calculator-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .roi-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Quiz Styling */
+        .quiz-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-submit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-submit:hover {
+            background: var(--accent-color);
+        }
+
+        .quiz-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Case Study Styling */
+        .case-study {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .case-study-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Lesson Navigation at Bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="dashboard.html" class="breadcrumb-link">Accueil</a>
+                <span>→</span>
+                <a href="casusage_6_overview.html" class="breadcrumb-link">Module 6</a>
+                <span>→</span>
+                <span class="breadcrumb-current">IA et Productivité</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚡</span>
+                        Module 6 - Séquence 3
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        75 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        Niveau Intermédiaire
+                    </div>
+                </div>
+                <h1 class="lesson-title">IA et Productivité : Automatiser Pour Mieux Performer</h1>
+                <p class="lesson-description">
+                    Transformez votre façon de travailler ! Découvrez comment l'IA peut automatiser vos tâches répétitives, optimiser vos processus et vous faire gagner des heures précieuses chaque semaine.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Introduction</h2>
+                    <div class="section-content">
+                        <p>Imaginez gagner 10 heures par semaine en automatisant vos tâches les plus répétitives. Pas de la science-fiction, mais la réalité de milliers d'entreprises qui utilisent déjà l'IA pour booster leur productivité !</p>
+                        
+                        <p>Dans cette séquence pratique de 75 minutes, nous allons explorer :</p>
+                        <ul>
+                            <li><strong>Automatisation intelligente</strong> de vos tâches administratives</li>
+                            <li><strong>Support client augmenté</strong> avec des chatbots efficaces</li>
+                            <li><strong>Analyse de données simplifiée</strong> pour prendre de meilleures décisions</li>
+                            <li><strong>Gestion documentaire révolutionnée</strong> avec la recherche sémantique</li>
+                            <li><strong>Cas pratique</strong> : audit de vos processus actuels</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Résultat concret</div>
+                            <p>À la fin de cette séquence, vous aurez identifié <strong>5 tâches à automatiser immédiatement</strong> avec un calcul précis du temps économisé et les outils gratuits pour commencer dès aujourd'hui.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Démarrer Gratuit -->
+                <section class="section" id="demarrer-gratuit">
+                    <h2 class="section-title">🆓 Vos Outils Productivité Gratuits</h2>
+                    <div class="section-content">
+                        <p>Commencez immédiatement avec ces outils gratuits qui peuvent déjà transformer votre quotidien :</p>
+                        
+                        <div class="starter-pack">
+                            <div class="starter-pack-title">⚡ Kit de Démarrage Productivité IA</div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">🤖 ChatGPT (Gratuit)</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Automatiser emails, rapports, analyses</p>
+                                    <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">100% Gratuit</span>
+                                </div>
+                                
+                                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">📧 Gmail Smart Compose</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Emails automatiques intelligents</p>
+                                    <span style="background: var(--success-color); color: white; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">Inclus Gmail</span>
+                                </div>
+                                
+                                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">⚙️ Microsoft Power Automate</h4>
+                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Automatisation entre applications</p>
+                                    <span style="background: var(--warning-color); color: white; padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">Plan gratuit limité</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hands-on-exercise">
+                            <div class="exercise-title">🎯 Exercice : Automatisez Votre Première Tâche (20 minutes)</div>
+                            <p><strong>Objectif :</strong> Créer un template email automatique pour une tâche répétitive</p>
+                            
+                            <div class="step-by-step">
+                                <h4>📋 Guide Pas-à-Pas :</h4>
+                                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                    <span class="step-number">1</span>
+                                    <span>Identifiez un email que vous envoyez souvent</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                    <span class="step-number">2</span>
+                                    <span>Ouvrez ChatGPT (gratuit)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                    <span class="step-number">3</span>
+                                    <span>Utilisez le prompt ci-dessous</span>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <span class="step-number">4</span>
+                                    <span>Sauvegardez le template généré</span>
+                                </div>
+                            </div>
+                            
+                            <p><strong>🎯 Template ChatGPT Productivité :</strong></p>
+                            <div class="copy-prompt">
+                                <button class="copy-btn" onclick="copyPrompt('prompt1')">📋 Copier</button>
+Crée-moi un template d'email professionnel pour [SITUATION RÉPÉTITIVE].
+
+Exemple : Crée-moi un template d'email professionnel pour relancer un client qui n'a pas répondu à un devis.
+
+Style : Poli mais ferme, personnalisable
+Structure :
+- Objet percutant
+- Rappel du contexte
+- Relance courtoise  
+- Nouvelle proposition de valeur
+- Call-to-action clair
+
+Le template doit contenir des [CHAMPS VARIABLES] que je peux personnaliser facilement.
+                            </div>
+                            
+                            <div class="checklist">
+                                <h4>✅ Checklist Template Email :</h4>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check1">
+                                    <label for="check1">L'objet donne envie d'ouvrir l'email</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check2">
+                                    <label for="check2">Le contexte est rappelé clairement</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check3">
+                                    <label for="check3">Les champs variables sont bien identifiés</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check4">
+                                    <label for="check4">L'action attendue est évidente</label>
+                                </div>
+                            </div>
+                            
+                            <p style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                                <strong>💡 Gain estimé :</strong> 5 minutes par email × 10 emails/semaine = <strong>50 minutes économisées</strong> chaque semaine !
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Automatisation intelligente -->
+                <section class="section" id="automatisation-intelligente">
+                    <h2 class="section-title">🤖 Automatisation Intelligente de Vos Tâches</h2>
+                    <div class="section-content">
+                        <p>L'IA ne se contente pas d'automatiser : elle apprend et s'améliore pour gérer des tâches de plus en plus complexes.</p>
+
+                        <h3>📋 Gestion Administrative Automatisée</h3>
+                        <p>L'IA peut prendre en charge vos 
+                        <span class="glossary-term" onmouseover="showGlossary(this, 'Tâches répétitives et chronophages : emails, rapports, saisie de données, planification...')">tâches administratives</span> 
+                        les plus chronophages :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemples concrets d'automatisation</div>
+                            <ul>
+                                <li><strong>Gestion emails :</strong> Tri automatique, réponses types, relances clients</li>
+                                <li><strong>Rapports :</strong> Génération automatique avec données mises à jour</li>
+                                <li><strong>Saisie de données :</strong> Extraction automatique depuis documents</li>
+                                <li><strong>Planification :</strong> Organisation de réunions selon disponibilités</li>
+                                <li><strong>Facturation :</strong> Génération et envoi automatique</li>
+                            </ul>
+                            
+                            <div class="copy-prompt" style="margin-top: 1rem;">
+                                <button class="copy-btn" onclick="copyPrompt('prompt2')">📋 Copier ce template</button>
+Analyse cette tâche répétitive : "[DÉCRIVEZ VOTRE TÂCHE]"
+
+Propose-moi :
+1. Un processus d'automatisation étape par étape
+2. Les outils gratuits/peu chers à utiliser
+3. Le temps que je vais économiser
+4. Les risques à éviter
+
+Exemple de tâche : "Chaque lundi, je dois envoyer un rapport hebdomadaire de ventes à mon équipe avec les chiffres de la semaine précédente"
+                            </div>
+                        </div>
+
+                        <h3>📂 Gestion Documentaire Révolutionnée</h3>
+                        <p>Fini les recherches interminables dans vos dossiers ! L'IA comprend le contenu de vos documents :</p>
+                        <ul>
+                            <li><strong>Recherche sémantique :</strong> Trouvez par le sens, pas par les mots exacts</li>
+                            <li><strong>Classification automatique :</strong> Rangement intelligent de vos fichiers</li>
+                            <li><strong>Résumés automatiques :</strong> L'essentiel de vos documents longs</li>
+                            <li><strong>Extraction d'informations :</strong> Données clés automatiquement extraites</li>
+                        </ul>
+
+                        <div class="case-study">
+                            <div class="case-study-title">📊 Exemple Réel : Cabinet d'Avocats</div>
+                            <p><strong>Avant l'IA :</strong> 2h/jour pour retrouver des précédents juridiques dans 5000 dossiers</p>
+                            <p><strong>Avec l'IA :</strong> Recherche en langage naturel "Cas de divorce avec garde alternée et pension"</p>
+                            
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value">-85%</div>
+                                    <div class="metric-label">Temps de recherche</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">+200%</div>
+                                    <div class="metric-label">Précision des résultats</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">10h</div>
+                                    <div class="metric-label">Économisées/semaine</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>📊 Optimisation de Ressources</h3>
+                        <p>L'IA analyse vos patterns de travail pour optimiser votre organisation :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">⚡ Optimisations Automatiques</div>
+                            <ul>
+                                <li><strong>Planification intelligente :</strong> Réunions aux créneaux optimaux</li>
+                                <li><strong>Allocation de tâches :</strong> Qui fait quoi selon les compétences</li>
+                                <li><strong>Détection de surcharge :</strong> Alertes avant le burn-out</li>
+                                <li><strong>Prédiction de délais :</strong> Estimation réaliste des projets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Support client augmenté -->
+                <section class="section" id="support-client">
+                    <h2 class="section-title">💬 Support Client Augmenté</h2>
+                    <div class="section-content">
+                        <p>Transformez votre relation client avec une IA qui comprend, répond et escalade intelligemment.</p>
+
+                        <h3>🤖 Chatbots Intelligents (Pas les Robots Stupides !)</h3>
+                        <p>Les nouveaux 
+                        <span class="glossary-term" onmouseover="showGlossary(this, 'Programme qui dialogue automatiquement avec vos clients, mais en comprenant vraiment leurs questions')">chatbots IA</span> 
+                        comprennent le contexte et résolvent vraiment les problèmes :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">🎯 Chatbot Moderne vs Ancien</div>
+                            <p><strong>Client :</strong> "Ma commande n'est toujours pas arrivée et j'en ai besoin pour demain"</p>
+                            
+                            <p><strong>❌ Ancien chatbot :</strong><br>
+                            "Je ne comprends pas votre demande. Tapez 1 pour les commandes, 2 pour les livraisons..."</p>
+                            
+                            <p><strong>✅ Chatbot IA moderne :</strong><br>
+                            "Je comprends votre urgence ! Puis-je avoir votre numéro de commande pour vérifier le statut de livraison et voir comment accélérer la livraison ?"</p>
+                        </div>
+
+                        <h3>📋 Analyse et Routage Automatique</h3>
+                        <p>L'IA trie et dirige automatiquement vos demandes clients :</p>
+                        <ul>
+                            <li><strong>Classification automatique :</strong> Urgence, type de problème, département</li>
+                            <li><strong>Escalade intelligente :</strong> Vers le bon expert au bon moment</li>
+                            <li><strong>Priorisation :</strong> Clients VIP et situations critiques en premier</li>
+                            <li><strong>Suggestions de réponse :</strong> Templates personnalisés pour vos agents</li>
+                        </ul>
+
+                        <div class="hands-on-exercise">
+                            <div class="exercise-title">🚀 Template : Chatbot Simple mais Efficace</div>
+                            <div class="copy-prompt">
+                                <button class="copy-btn" onclick="copyPrompt('prompt3')">📋 Copier</button>
+Tu es l'assistant IA de [VOTRE ENTREPRISE/SERVICE].
+
+Votre spécialité : [VOTRE DOMAINE]
+Votre style : Professionnel mais humain, résolution de problèmes
+
+Instructions :
+1. Identifiez rapidement le besoin du client
+2. Donnez une réponse utile et précise
+3. Si vous ne savez pas : "Je vais vous mettre en contact avec [EXPERT]"
+4. Toujours proposer une action concrète
+5. Demandez si il faut autre chose
+
+Exemple première interaction :
+"Bonjour ! Je suis l'assistant IA de [ENTREPRISE]. Comment puis-je vous aider aujourd'hui ? 😊"
+                            </div>
+                        </div>
+
+                        <h3>📚 Base de Connaissances Auto-Alimentée</h3>
+                        <p>L'IA apprend de chaque interaction pour améliorer les réponses futures :</p>
+                        
+                        <div class="case-study">
+                            <div class="case-study-title">💡 E-commerce : Support Client IA</div>
+                            <p><strong>Mise en place :</strong> 3 semaines de formation sur 1000 tickets existants</p>
+                            
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value">75%</div>
+                                    <div class="metric-label">Problèmes résolus automatiquement</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">-60%</div>
+                                    <div class="metric-label">Temps de réponse</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">+40%</div>
+                                    <div class="metric-label">Satisfaction client</div>
+                                </div>
+                            </div>
+                            
+                            <p><strong>Secret :</strong> L'IA a identifié que 80% des questions portaient sur 20 problèmes récurrents facilement solutionnables</p>
+                        </div>
+
+                        <h3>🔮 Prédiction de Satisfaction</h3>
+                        <p>L'IA prédit les clients à risque avant qu'ils partent :</p>
+                        
+                        <div class="tool-box">
+                            <div class="tool-title">⚠️ Signaux d'Alerte IA</div>
+                            <ul>
+                                <li><strong>Ton des messages :</strong> Détection de frustration croissante</li>
+                                <li><strong>Fréquence de contact :</strong> Trop de demandes = problème récurrent</li>
+                                <li><strong>Type de problèmes :</strong> Escalade vers des sujets plus graves</li>
+                                <li><strong>Temps de résolution :</strong> Problèmes qui traînent</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analyse et aide à la décision -->
+                <section class="section" id="analyse-decision">
+                    <h2 class="section-title">📊 Analyse de Données Simplifiée</h2>
+                    <div class="section-content">
+                        <p>Plus besoin d'être un expert en analyse ! L'IA transforme vos données en insights actionnables automatiquement.</p>
+
+                        <h3>📈 Tableaux de Bord Intelligents</h3>
+                        <p>L'IA analyse vos données et vous dit ce qui compte vraiment :</p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">🎯 Dashboard IA vs Traditionnel</div>
+                            <p><strong>❌ Dashboard traditionnel :</strong><br>
+                            50 graphiques, 200 métriques, vous ne savez pas par où commencer</p>
+                            
+                            <p><strong>✅ Dashboard IA :</strong><br>
+                            "🚨 Alerte : Vos ventes B2B chutent de 15% ce mois. Principale cause : 3 gros clients ont réduit leurs commandes. Action recommandée : Contact commercial prioritaire."</p>
+                        </div>
+
+                        <h3>🔮 Prédictions et Recommandations</h3>
+                        <p>L'IA anticipe les tendances et vous suggère des actions :</p>
+                        <ul>
+                            <li><strong>Prévisions de ventes :</strong> Anticipez les variations saisonnières</li>
+                            <li><strong>Détection d'anomalies :</strong> Repérez les problèmes avant qu'ils s'aggravent</li>
+                            <li><strong>Optimisation des prix :</strong> Le bon prix au bon moment</li>
+                            <li><strong>Gestion des stocks :</strong> Ni rupture ni surstock</li>
+                        </ul>
+
+                        <div class="hands-on-exercise">
+                            <div class="exercise-title">📊 Template : Analyse de Données Simple</div>
+                            <div class="copy-prompt">
+                                <button class="copy-btn" onclick="copyPrompt('prompt4')">📋 Copier</button>
+Analyse ces données : [COLLEZ VOS DONNÉES]
+
+Format d'analyse souhaité :
+1. 🎯 INSIGHT PRINCIPAL (1 phrase choc)
+2. 📊 3 POINTS CLÉS à retenir  
+3. ⚠️ ALERTES (ce qui doit vous inquiéter)
+4. 💡 RECOMMANDATIONS (actions concrètes)
+5. 🔮 PRÉDICTION (tendance probable)
+
+Style : Business simple, pas de jargon technique
+Focus : Actions pratiques que je peux faire cette semaine
+
+Exemple de données : Ventes par mois, trafic site web, conversions, etc.
+                            </div>
+                        </div>
+
+                        <h3>🎯 Détection de Patterns Cachés</h3>
+                        <p>L'IA trouve des corrélations que vous n'auriez jamais vues :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">🔍 Découvertes IA Surprenantes</div>
+                            <ul>
+                                <li><strong>E-commerce :</strong> "Les clients qui achètent le mardi convertissent 40% mieux"</li>
+                                <li><strong>SaaS :</strong> "Les utilisateurs qui activent 3 fonctionnalités en 48h ne partent jamais"</li>
+                                <li><strong>Formation :</strong> "Les vidéos de 7 minutes génèrent 3× plus d'engagement"</li>
+                                <li><strong>Consulting :</strong> "Les devis envoyés avant 10h ont 60% plus de chances d'être signés"</li>
+                            </ul>
+                        </div>
+
+                        <h3>💼 Simulation de Scénarios</h3>
+                        <p>L'IA teste vos décisions avant que vous les preniez :</p>
+                        
+                        <div class="case-study">
+                            <div class="case-study-title">🎮 Simulation : Nouveau Produit</div>
+                            <p><strong>Question :</strong> "Si je lance ce produit à 99€, combien vais-je vendre ?"</p>
+                            
+                            <p><strong>Analyse IA :</strong></p>
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value">250</div>
+                                    <div class="metric-label">Ventes estimées/mois</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">89€</div>
+                                    <div class="metric-label">Prix optimal suggéré</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">+15%</div>
+                                    <div class="metric-label">Revenus avec prix optimal</div>
+                                </div>
+                            </div>
+                            
+                            <p><strong>Recommandation :</strong> "Prix à 89€ + offre de lancement = +32% de revenus vs plan initial"</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Calculateur de Productivité -->
+                <section class="section" id="calculateur-productivite">
+                    <h2 class="section-title">⏱️ Calculateur Productivité IA</h2>
+                    <div class="section-content">
+                        <p>Estimez combien de temps et d'argent vous pouvez économiser en automatisant vos tâches :</p>
+                        
+                        <div class="roi-calculator">
+                            <div class="calculator-title">⚡ Calculateur Gain de Productivité</div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Votre salaire horaire ou taux journalier (€)</label>
+                                <input type="number" class="input-field" id="salaire-horaire" placeholder="Ex: 25">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Heures de tâches répétitives par semaine</label>
+                                <input type="number" class="input-field" id="heures-repetitives" placeholder="Ex: 10">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Pourcentage de tâches automatisables (%)</label>
+                                <input type="number" class="input-field" id="pourcentage-auto" placeholder="Ex: 70" value="70">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">Coût mensuel des outils IA (€)</label>
+                                <input type="number" class="input-field" id="cout-outils" placeholder="Ex: 50" value="50">
+                            </div>
+                            
+                            <button class="calculate-btn" onclick="calculateProductivity()">Calculer mon Gain</button>
+                            
+                            <div class="roi-result" id="productivity-result">
+                                <h4>🎯 Votre Gain de Productivité :</h4>
+                                <div id="productivity-details"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cas pratique : Audit de processus -->
+                <section class="section" id="cas-pratique">
+                    <h2 class="section-title">🔍 Cas Pratique : Audit de Vos Processus</h2>
+                    <div class="section-content">
+                        <p>Passons à l'action ! Suivez cette méthode pour identifier vos goulots d'étranglement et concevoir vos premières automatisations.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Objectif Pratique</div>
+                            <p><strong>Livrable :</strong> Plan d'automatisation personnalisé avec :</p>
+                            <ul>
+                                <li>5 tâches prioritaires à automatiser</li>
+                                <li>Temps économisé par semaine</li>
+                                <li>Outils gratuits pour commencer</li>
+                                <li>Plan d'implémentation sur 30 jours</li>
+                            </ul>
+                        </div>
+
+                        <h3>📋 Étape 1 : Cartographie de Vos Tâches (15 minutes)</h3>
+                        <p><strong>Listez vos tâches quotidiennes :</strong></p>
+                        
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>✅ Grille d'Analyse :</strong></p>
+                            <ul style="margin: 0;">
+                                <li>Tâche répétitive (oui/non)</li>
+                                <li>Temps passé par semaine</li>
+                                <li>Niveau de complexité (1-5)</li>
+                                <li>Impact si mal fait (1-5)</li>
+                                <li>Potentiel d'automatisation (1-5)</li>
+                            </ul>
+                        </div>
+
+                        <h3>🎯 Étape 2 : Matrice de Priorisation (10 minutes)</h3>
+                        <p><strong>Classez vos tâches par priorité d'automatisation :</strong></p>
+                        
+                        <div class="example-box">
+                            <div class="example-title">⚡ Top 5 des Tâches à Automatiser en Premier</div>
+                            <p><strong>1. Emails répétitifs :</strong><br>
+                            • Impact : -80% temps de rédaction<br>
+                            • Difficulté : Facile<br>
+                            • ROI : Immédiat</p>
+                            
+                            <p><strong>2. Rapports de routine :</strong><br>
+                            • Impact : -90% temps de création<br>
+                            • Difficulté : Moyenne<br>
+                            • ROI : 1 semaine</p>
+                            
+                            <p><strong>3. Saisie de données :</strong><br>
+                            • Impact : -70% temps + erreurs<br>
+                            • Difficulté : Facile<br>
+                            • ROI : Immédiat</p>
+                            
+                            <p><strong>4. Planification réunions :</strong><br>
+                            • Impact : -60% allers-retours<br>
+                            • Difficulté : Moyenne<br>
+                            • ROI : 2 semaines</p>
+                            
+                            <p><strong>5. Veille concurrentielle :</strong><br>
+                            • Impact : -85% temps de recherche<br>
+                            • Difficulté : Facile<br>
+                            • ROI : 1 semaine</p>
+                        </div>
+
+                        <h3>🚀 Étape 3 : Plan d'Action 30 Jours (10 minutes)</h3>
+                        <p><strong>Votre roadmap d'automatisation :</strong></p>
+                        
+                        <div class="tool-box">
+                            <div class="tool-title">📅 Planning Recommandé</div>
+                            <p><strong>Semaine 1 : Quick Win #1</strong><br>
+                            Automatisation emails + templates ChatGPT</p>
+                            
+                            <p><strong>Semaine 2 : Quick Win #2</strong><br>
+                            Automatisation rapports + dashboard simple</p>
+                            
+                            <p><strong>Semaine 3 : Processus moyen</strong><br>
+                            Automatisation saisie données + outils no-code</p>
+                            
+                            <p><strong>Semaine 4 : Optimisation</strong><br>
+                            Tests, ajustements et formation équipe</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz d'évaluation -->
+                <section class="section" id="quiz">
+                    <h2 class="section-title">🧠 Quiz d'Évaluation</h2>
+                    <div class="section-content">
+                        <p>Testez vos connaissances sur l'IA productivité avec ce quiz interactif :</p>
+                        
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                1. Quel est le premier critère pour choisir une tâche à automatiser ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    A) La complexité technique de l'automatisation
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                    B) La fréquence de répétition et le temps passé
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    C) Le coût des outils d'automatisation
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    D) L'impact sur les autres processus
+                                </div>
+                            </div>
+                            <button class="quiz-submit" onclick="submitQuiz(1)">Valider la réponse</button>
+                            <div class="quiz-result" id="quiz-result-1"></div>
+                        </div>
+
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                2. Que peut faire un chatbot IA moderne par rapport à un chatbot traditionnel ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    A) Seulement répondre aux questions pré-programmées
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                    C) Comprendre le contexte et escalader intelligemment
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    B) Uniquement diriger vers un menu d'options
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    D) Juste collecter les coordonnées des clients
+                                </div>
+                            </div>
+                            <button class="quiz-submit" onclick="submitQuiz(2)">Valider la réponse</button>
+                            <div class="quiz-result" id="quiz-result-2"></div>
+                        </div>
+
+                        <div class="quiz-container">
+                            <div class="quiz-question">
+                                3. Quel est l'avantage principal d'un dashboard IA par rapport à un tableau de bord classique ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    A) Il affiche plus de graphiques colorés
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    B) Il coûte moins cher à développer
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                    C) Il analyse les données et suggère des actions concrètes
+                                </div>
+                                <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                    D) Il se met à jour plus rapidement
+                                </div>
+                            </div>
+                            <button class="quiz-submit" onclick="submitQuiz(3)">Valider la réponse</button>
+                            <div class="quiz-result" id="quiz-result-3"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="casusage_6_marketing_2.html" class="btn btn-secondary">
+                        <span>←</span> Séquence précédente
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 3 sur 4</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">IA et Productivité</div>
+                    </div>
+                    <a href="casusage_6_etude_cas_4.html" class="btn btn-primary">
+                        Séquence suivante <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                <ul class="sequence-list">
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Vue d'ensemble</div>
+                            <div class="sequence-duration">5 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">IA et éducation</div>
+                            <div class="sequence-duration">70 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">IA et marketing</div>
+                            <div class="sequence-duration">75 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item current">
+                        <div class="sequence-icon current">3</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">IA et productivité</div>
+                            <div class="sequence-duration">75 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item locked">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Stratégie d'implémentation</div>
+                            <div class="sequence-duration">70 minutes</div>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 IA Academy. Formation complète à l'intelligence artificielle pour débutants - Module 6 : Cas d'Usage Métier.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            } catch (error) {
+                console.log('Theme toggle error:', error);
+            }
+        }
+
+        // Glossaire interactif
+        function showGlossary(element, definition) {
+            // Supprimer les popups existants
+            const existingPopups = document.querySelectorAll('.glossary-popup');
+            existingPopups.forEach(popup => popup.remove());
+            
+            // Créer le nouveau popup
+            const popup = document.createElement('div');
+            popup.className = 'glossary-popup';
+            popup.innerHTML = definition;
+            popup.style.display = 'block';
+            
+            element.appendChild(popup);
+            
+            // Masquer après 3 secondes
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.remove();
+                }
+            }, 3000);
+        }
+
+        // Fonction pour copier les prompts
+        function copyPrompt(promptId) {
+            try {
+                const promptElement = document.querySelector(`[onclick="copyPrompt('${promptId}')"]`).parentNode;
+                const promptText = promptElement.textContent.replace('📋 Copier', '').replace('📋 Copier ce template', '').trim();
+                
+                // Utiliser l'API Clipboard si disponible
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(promptText).then(() => {
+                        showCopyFeedback(promptElement.querySelector('.copy-btn'));
+                    }).catch(() => {
+                        fallbackCopy(promptText);
+                    });
+                } else {
+                    fallbackCopy(promptText);
+                }
+            } catch (error) {
+                console.log('Copy error:', error);
+            }
+        }
+
+        // Fallback pour navigateurs plus anciens
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopyFeedback(event.target);
+            } catch (error) {
+                console.log('Fallback copy error:', error);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Feedback visuel pour la copie
+        function showCopyFeedback(button) {
+            const originalText = button.textContent;
+            button.textContent = '✅ Copié !';
+            button.style.background = 'var(--success-color)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'var(--primary-color)';
+            }, 2000);
+        }
+
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                console.log('Theme loading error:', error);
+            }
+        });
+
+        // Calculateur de Productivité
+        function calculateProductivity() {
+            try {
+                const salaireHoraire = parseFloat(document.getElementById('salaire-horaire').value) || 0;
+                const heuresRepetitives = parseFloat(document.getElementById('heures-repetitives').value) || 0;
+                const pourcentageAuto = parseFloat(document.getElementById('pourcentage-auto').value) || 0;
+                const coutOutils = parseFloat(document.getElementById('cout-outils').value) || 0;
+
+                if (salaireHoraire === 0 || heuresRepetitives === 0) {
+                    alert('Veuillez remplir au moins le salaire horaire et les heures répétitives');
+                    return;
+                }
+
+                // Calculs
+                const heuresEconomisees = heuresRepetitives * (pourcentageAuto / 100);
+                const gainHebdomadaire = heuresEconomisees * salaireHoraire;
+                const gainMensuel = gainHebdomadaire * 4.33; // Moyenne semaines par mois
+                const gainAnnuel = gainMensuel * 12;
+                const coutAnnuelOutils = coutOutils * 12;
+                const gainNet = gainAnnuel - coutAnnuelOutils;
+                const roiMensuel = ((gainMensuel - coutOutils) / coutOutils) * 100;
+
+                // Affichage des résultats
+                const resultDiv = document.getElementById('productivity-result');
+                const detailsDiv = document.getElementById('productivity-details');
+                
+                detailsDiv.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <div style="background: var(--bg-primary); padding: 1rem; border-radius: 8px;">
+                            <h5 style="color: var(--text-muted); margin-bottom: 0.5rem;">TEMPS ÉCONOMISÉ</h5>
+                            <div><strong>${heuresEconomisees.toFixed(1)}h</strong> par semaine</div>
+                            <div><strong>${(heuresEconomisees * 4.33).toFixed(0)}h</strong> par mois</div>
+                            <div><strong>${(heuresEconomisees * 52).toFixed(0)}h</strong> par an</div>
+                        </div>
+                        <div style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; border: 2px solid var(--success-color);">
+                            <h5 style="color: var(--success-color); margin-bottom: 0.5rem;">GAIN FINANCIER</h5>
+                            <div><strong>${gainHebdomadaire.toFixed(0)}€</strong> par semaine</div>
+                            <div><strong>${gainMensuel.toFixed(0)}€</strong> par mois</div>
+                            <div><strong>${gainAnnuel.toLocaleString()}€</strong> par an</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <div style="font-size: 1.2rem; color: var(--success-color); font-weight: 600;">
+                            ROI Net : ${gainNet.toLocaleString()}€/an (${roiMensuel.toFixed(0)}% ROI mensuel)
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                            Équivalent à ${Math.round(heuresEconomisees * 52 / 8)} jours de travail économisés par an !
+                        </div>
+                    </div>
+                `;
+                
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                console.log('Calculation error:', error);
+                alert('Erreur lors du calcul. Veuillez vérifier vos données.');
+            }
+        }
+
+        // Quiz Functions
+        function selectQuizOption(option, isCorrect) {
+            // Remove previous selections
+            const options = option.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            option.classList.add('selected');
+            option.setAttribute('data-correct', isCorrect);
+        }
+
+        function submitQuiz(questionNumber) {
+            try {
+                const selectedOption = document.querySelector(`#quiz-result-${questionNumber}`).parentNode.querySelector('.quiz-option.selected');
+                const resultDiv = document.getElementById(`quiz-result-${questionNumber}`);
+                
+                if (!selectedOption) {
+                    alert('Veuillez sélectionner une réponse');
+                    return;
+                }
+                
+                const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
+                const options = selectedOption.parentNode.querySelectorAll('.quiz-option');
+                
+                // Show correct/incorrect styling
+                options.forEach(option => {
+                    if (option.getAttribute('data-correct') === 'true') {
+                        option.classList.add('correct');
+                    } else if (option.classList.contains('selected') && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Show result
+                if (isCorrect) {
+                    resultDiv.innerHTML = `
+                        <div style="color: var(--success-color); font-weight: 600;">
+                            ✅ Correct ! La fréquence et le temps passé sont les critères prioritaires.
+                        </div>
+                    `;
+                    resultDiv.style.background = 'rgba(16, 185, 129, 0.1)';
+                } else {
+                    resultDiv.innerHTML = `
+                        <div style="color: var(--error-color); font-weight: 600;">
+                            ❌ Incorrect. La bonne réponse est mise en évidence ci-dessus.
+                        </div>
+                    `;
+                    resultDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                }
+                
+                resultDiv.style.display = 'block';
+                
+                // Disable submit button
+                const submitBtn = resultDiv.parentNode.querySelector('.quiz-submit');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Réponse validée';
+            } catch (error) {
+                console.log('Quiz error:', error);
+            }
+        }
+
+        // Add smooth scroll for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

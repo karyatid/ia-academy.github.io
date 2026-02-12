@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 2: Biais et Discrimination - Module 7 | IA Academy</title>
+    <style>
+        /* CSS Variables for Theme */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #4338ca;
+            --secondary-color: #0891b2;
+            --accent-color: #7c3aed;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(30, 41, 59, 0.1);
+            --shadow: 0 8px 32px rgba(30, 41, 59, 0.1);
+            --glow: 0 0 20px rgba(67, 56, 202, 0.2);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Dynamic Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .theme-toggle::before {
+            content: '🌙';
+            left: 26px;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            transform: translateX(25px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Example Box for Practical Applications */
+        .example-box {
+            background: linear-gradient(45deg, rgba(251, 146, 60, 0.1), rgba(245, 101, 101, 0.1));
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box for Important Notes */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.1), rgba(220, 38, 127, 0.1));
+            border: 1px solid rgba(245, 101, 101, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Case Study Box */
+        .case-study-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .case-study-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border-color: #10b981;
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.1), rgba(220, 38, 127, 0.1));
+            border-color: #ef4444;
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .quiz-feedback.incorrect {
+            background: linear-gradient(45deg, rgba(245, 101, 101, 0.1), rgba(220, 38, 127, 0.1));
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        /* Sidebar for Learning Progress */
+        .sidebar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            background: var(--bg-secondary);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 40%;
+            border-radius: 4px;
+            transition: all 0.5s ease;
+        }
+
+        .sequence-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--primary-color);
+        }
+
+        .sequence-item.completed {
+            background: var(--glass-bg);
+        }
+
+        .sequence-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: #10b981;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Navigation Buttons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="dashboard.html" class="breadcrumb-link">🏠 Accueil</a>
+                <span>›</span>
+                <a href="ethique_7_overview.html" class="breadcrumb-link">Module 7: Éthique et IA</a>
+                <span>›</span>
+                <span class="breadcrumb-current">Séquence 2: Biais et Discrimination</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📊</span>
+                        Module 7
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        60 minutes
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        Niveau: Intermédiaire
+                    </div>
+                </div>
+                <h1 class="lesson-title">⚖️ Biais, Discrimination et Fairness</h1>
+                <p class="lesson-description">
+                    Apprenez à identifier, comprendre et corriger les biais algorithmiques qui peuvent conduire à des discriminations. Une compétence essentielle pour développer et utiliser l'IA de manière responsable.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Introduction</h2>
+                    <div class="section-content">
+                        <p>Les algorithmes d'IA, malgré leur sophistication, peuvent perpétuer et amplifier des biais humains présents dans les données d'entraînement. Ces biais peuvent conduire à des discriminations systémiques avec des conséquences réelles sur la vie des personnes.</p>
+                        
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Pourquoi c'est crucial</div>
+                            <p>Des algorithmes biaisés prennent des millions de décisions chaque jour : qui obtient un prêt, qui est convoqué pour un entretien, qui bénéficie d'une libération conditionnelle. Comprendre et corriger ces biais n'est pas qu'une question éthique, c'est une obligation légale et business.</p>
+                        </div>
+                        
+                        <p><strong>À la fin de cette séquence, vous saurez :</strong></p>
+                        <ul>
+                            <li>Identifier les 4 grands types de biais algorithmiques</li>
+                            <li>Analyser des cas réels de discrimination par l'IA</li>
+                            <li>Utiliser des techniques de détection de biais</li>
+                            <li>Appliquer des métriques de fairness à vos projets</li>
+                            <li>Mettre en place un protocole de vigilance anti-biais</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Types de biais algorithmiques -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Types de Biais Algorithmiques</h2>
+                    <div class="section-content">
+                        <p>Les biais algorithmiques ne sont pas des "bugs" accidentels mais des reflets systémiques de nos sociétés. Comprendre leur origine est la première étape pour les corriger.</p>
+
+                        <h3>1. Biais de représentation</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">📊 Définition</div>
+                            <p><strong>Biais de représentation :</strong> Les données d'entraînement ne reflètent pas fidèlement la diversité de la population réelle sur laquelle l'algorithme sera appliqué.</p>
+                        </div>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemple concret</div>
+                            <p><strong>Reconnaissance vocale :</strong> Un système entraîné principalement sur des voix masculines américaines aura des performances dégradées pour les femmes, les accents non-américains, ou les langues minoritaires.</p>
+                            <p><strong>Impact :</strong> Exclusion numérique, services moins accessibles pour certaines populations.</p>
+                        </div>
+
+                        <h3>2. Biais de mesure</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">📏 Définition</div>
+                            <p><strong>Biais de mesure :</strong> Les variables utilisées pour mesurer un phénomène sont inadéquates ou ne capturent qu'une partie de la réalité complexe.</p>
+                        </div>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemple concret</div>
+                            <p><strong>Évaluation de performance :</strong> Mesurer la "performance" d'un enseignant uniquement par les notes de ses élèves ignore le contexte socio-économique, la diversité des apprenants, et de nombreux facteurs externes.</p>
+                            <p><strong>Impact :</strong> Décisions RH injustes, démotivation des professionnels dans des contextes difficiles.</p>
+                        </div>
+
+                        <h3>3. Biais d'évaluation</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">🎯 Définition</div>
+                            <p><strong>Biais d'évaluation :</strong> Les critères de "succès" de l'algorithme sont eux-mêmes biaisés ou ne reflètent pas les objectifs réels d'équité.</p>
+                        </div>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemple concret</div>
+                            <p><strong>Optimisation publicitaire :</strong> Un algorithme optimisé pour maximiser les clics peut systématiquement favoriser certains profils démographiques, créant une bulle filter discriminatoire.</p>
+                            <p><strong>Impact :</strong> Inégalités d'accès à l'information, renforcement de stéréotypes.</p>
+                        </div>
+
+                        <h3>4. Biais d'agrégation</h3>
+                        <div class="definition-box">
+                            <div class="definition-title">🌐 Définition</div>
+                            <p><strong>Biais d'agrégation :</strong> Un modèle unique est appliqué à des populations diverses alors que des modèles différenciés seraient plus appropriés.</p>
+                        </div>
+                        
+                        <div class="example-box">
+                            <div class="example-title">💡 Exemple concret</div>
+                            <p><strong>Diagnostic médical :</strong> Un algorithme de détection de mélanome entraîné principalement sur des peaux claires sera moins efficace sur les peaux foncées, où le cancer se présente différemment.</p>
+                            <p><strong>Impact :</strong> Inégalités de santé, retards de diagnostic potentiellement mortels.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cas d'étude de discriminations -->
+                <section class="section">
+                    <h2 class="section-title">📋 Cas d'Étude : Discriminations Réelles</h2>
+                    <div class="section-content">
+                        <p>Analysons des cas documentés où l'IA a créé ou amplifié des discriminations, pour comprendre les mécanismes en jeu et les leçons à en tirer.</p>
+
+                        <div class="case-study-box">
+                            <div class="case-study-title">📊 Cas 1 : Amazon et le recrutement biaisé</div>
+                            <h4>Le contexte</h4>
+                            <p>En 2018, Amazon abandonne son système de recrutement automatisé après avoir découvert qu'il discriminait systématiquement les candidatures féminines.</p>
+                            
+                            <h4>Le mécanisme de biais</h4>
+                            <ul>
+                                <li><strong>Données d'entraînement :</strong> 10 ans de CV soumis à Amazon, majoritairement masculins</li>
+                                <li><strong>Apprentissage biaisé :</strong> L'IA associe "compétence" avec des profils historiquement masculins</li>
+                                <li><strong>Cercle vicieux :</strong> Plus l'IA rejette de femmes, plus le déséquilibre s'accentue</li>
+                            </ul>
+                            
+                            <h4>Les leçons</h4>
+                            <p><strong>Leçon clé :</strong> Les données historiques ne sont pas neutres - elles reflètent les inégalités passées. Un algorithme "objectif" peut perpétuer ces inégalités à grande échelle.</p>
+                        </div>
+
+                        <div class="case-study-box">
+                            <div class="case-study-title">⚖️ Cas 2 : COMPAS et la justice prédictive</div>
+                            <h4>Le contexte</h4>
+                            <p>COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) est utilisé par de nombreux tribunaux américains pour évaluer le risque de récidive.</p>
+                            
+                            <h4>Le problème identifié</h4>
+                            <ul>
+                                <li><strong>Discrimination raciale :</strong> Les défendeurs noirs sont 45% plus susceptibles d'être classés "à haut risque"</li>
+                                <li><strong>Prophétie auto-réalisatrice :</strong> Les décisions basées sur ces scores influencent les conditions de libération</li>
+                                <li><strong>Opacité :</strong> L'algorithme propriétaire ne peut être audité publiquement</li>
+                            </ul>
+                            
+                            <h4>Les implications</h4>
+                            <p><strong>Question fondamentale :</strong> Peut-on accepter qu'un algorithme opaque influence des décisions de justice ? Comment concilier efficacité prédictive et équité ?</p>
+                        </div>
+
+                        <div class="case-study-box">
+                            <div class="case-study-title">💳 Cas 3 : Discrimination dans le crédit</div>
+                            <h4>Le contexte</h4>
+                            <p>De nombreuses banques utilisent des algorithmes pour évaluer les demandes de crédit, avec des résultats parfois discriminatoires.</p>
+                            
+                            <h4>Le mécanisme subtil</h4>
+                            <ul>
+                                <li><strong>Variables proxy :</strong> Code postal, nom, école fréquentée servent d'indicateurs indirects de race/origine</li>
+                                <li><strong>Corrélations historiques :</strong> L'IA reproduit des patterns de redlining (discrimination géographique)</li>
+                                <li><strong>Cercle de pauvreté :</strong> Moins d'accès au crédit → moins d'opportunités → confirmation du "risque"</li>
+                            </ul>
+                            
+                            <h4>La complexité</h4>
+                            <p><strong>Dilemme :</strong> Comment être équitable sans ignorer les vraies corrélations économiques ? Où tracer la ligne entre gestion du risque et discrimination ?</p>
+                        </div>
+
+                        <div class="case-study-box">
+                            <div class="case-study-title">📱 Cas 4 : Reconnaissance faciale inégalitaire</div>
+                            <h4>Les faits</h4>
+                            <p>Une étude du MIT en 2018 révèle des différences majeures de performance selon le genre et la couleur de peau :</p>
+                            <ul>
+                                <li><strong>Hommes blancs :</strong> 0.8% d'erreur</li>
+                                <li><strong>Femmes noires :</strong> 34.7% d'erreur</li>
+                            </ul>
+                            
+                            <h4>Les conséquences réelles</h4>
+                            <ul>
+                                <li><strong>Sécurité :</strong> Contrôles d'accès moins fiables pour certaines populations</li>
+                                <li><strong>Police prédictive :</strong> Risques d'interpellations erronées</li>
+                                <li><strong>Commerce :</strong> Expériences dégradées dans les magasins</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Techniques de détection et correction -->
+                <section class="section">
+                    <h2 class="section-title">🔍 Techniques de Détection et Correction</h2>
+                    <div class="section-content">
+                        <p>Détecter les biais n'est que la première étape. Voici une boîte à outils pratique pour auditer et corriger vos systèmes IA.</p>
+
+                        <h3>Audit algorithmique et testing</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">🛠️ Protocole d'audit en 5 étapes</div>
+                            <ol>
+                                <li><strong>Audit des données :</strong> Analysez la représentativité de vos données d'entraînement</li>
+                                <li><strong>Test de parité :</strong> Comparez les performances sur différents groupes démographiques</li>
+                                <li><strong>Analyse des corrélations :</strong> Identifiez les variables proxy qui masquent des discriminations</li>
+                                <li><strong>Test d'adversité :</strong> Soumettez des cas limites pour révéler les failles</li>
+                                <li><strong>Monitoring continu :</strong> Surveillez les dérives en production</li>
+                            </ol>
+                        </div>
+
+                        <h3>Métriques de fairness et trade-offs</h3>
+                        <p>Il existe plusieurs définitions mathématiques de l'équité, souvent incompatibles entre elles :</p>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">📐 Métriques principales</div>
+                            <ul>
+                                <li><strong>Parité démographique :</strong> Taux de sélection identiques entre groupes</li>
+                                <li><strong>Égalité des chances :</strong> Taux de vrais positifs égaux</li>
+                                <li><strong>Parité prédictive :</strong> Précision égale des prédictions positives</li>
+                                <li><strong>Fairness individuelle :</strong> Individus similaires traités de manière similaire</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Le paradoxe de l'équité</div>
+                            <p><strong>Impossibilité mathématique :</strong> Il est généralement impossible de satisfaire simultanément toutes les métriques de fairness. Vous devez choisir quelle définition de l'équité prioriser selon votre contexte.</p>
+                        </div>
+
+                        <h3>Techniques de débiaisage</h3>
+                        
+                        <h4>Pre-processing (avant l'entraînement)</h4>
+                        <ul>
+                            <li><strong>Rééchantillonnage :</strong> Équilibrer les données d'entraînement</li>
+                            <li><strong>Génération synthétique :</strong> Créer des données pour les groupes sous-représentés</li>
+                            <li><strong>Suppression d'attributs :</strong> Retirer les variables sensibles</li>
+                            <li><strong>Transformation des données :</strong> Modifier les données pour réduire les corrélations problématiques</li>
+                        </ul>
+
+                        <h4>In-processing (pendant l'entraînement)</h4>
+                        <ul>
+                            <li><strong>Contraintes d'équité :</strong> Intégrer des objectifs de fairness dans la fonction de coût</li>
+                            <li><strong>Adversarial debiasing :</strong> Entraîner simultanément un détecteur de biais</li>
+                            <li><strong>Multi-objective optimization :</strong> Optimiser performance ET équité</li>
+                        </ul>
+
+                        <h4>Post-processing (après l'entraînement)</h4>
+                        <ul>
+                            <li><strong>Calibration par groupe :</strong> Ajuster les seuils de décision par population</li>
+                            <li><strong>Quota systems :</strong> Garantir des taux de sélection équitables</li>
+                            <li><strong>Rejection sampling :</strong> Filtrer les décisions biaisées</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Quelle approche choisir ?</div>
+                            <ul>
+                                <li><strong>Pre-processing :</strong> Idéal quand vous contrôlez les données</li>
+                                <li><strong>In-processing :</strong> Le plus efficace mais nécessite expertise technique</li>
+                                <li><strong>Post-processing :</strong> Solution rapide pour systèmes existants</li>
+                            </ul>
+                            <p><strong>Recommandation :</strong> Combinez plusieurs approches pour une protection robuste.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz interactif -->
+                <section class="quiz-section">
+                    <h2 class="section-title">🧠 Quiz : Détection de Biais</h2>
+                    <div class="section-content">
+                        <div class="quiz-question">
+                            <div class="question-title">Question 1: Un algorithme de recrutement rejette 80% des CV féminins contre 20% des CV masculins pour des postes techniques. De quel type de biais s'agit-il principalement ?</div>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="a">
+                                    <span>Biais de mesure - les critères d'évaluation sont inadéquats</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="b">
+                                    <span>Biais de représentation - les données d'entraînement manquent de diversité</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="c">
+                                    <span>Biais d'évaluation - la métrique de succès est discriminatoire</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="d">
+                                    <span>Biais d'agrégation - un seul modèle pour des populations différentes</span>
+                                </label>
+                            </div>
+                            <div class="quiz-feedback" id="feedback1">
+                                <p id="feedback1-text"></p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-question">
+                            <div class="question-title">Question 2: Quelle est la principale limite des techniques de post-processing pour corriger les biais ?</div>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="a">
+                                    <span>Elles sont techniquement trop complexes à implémenter</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="b">
+                                    <span>Elles peuvent corriger les symptômes sans traiter la cause racine</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="c">
+                                    <span>Elles nécessitent de refaire complètement l'entraînement</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="d">
+                                    <span>Elles ne fonctionnent que sur de petits datasets</span>
+                                </label>
+                            </div>
+                            <div class="quiz-feedback" id="feedback2">
+                                <p id="feedback2-text"></p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-question">
+                            <div class="question-title">Question 3: Pourquoi est-il généralement impossible de satisfaire simultanément toutes les métriques de fairness ?</div>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="a">
+                                    <span>C'est un problème technique qui sera résolu avec plus de puissance de calcul</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="b">
+                                    <span>Les métriques sont mathématiquement incompatibles entre elles</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="c">
+                                    <span>Il manque encore de la recherche dans ce domaine</span>
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="d">
+                                    <span>Cela dépend uniquement de la qualité des données</span>
+                                </label>
+                            </div>
+                            <div class="quiz-feedback" id="feedback3">
+                                <p id="feedback3-text"></p>
+                            </div>
+                        </div>
+
+                        <div class="quiz-buttons">
+                            <button class="btn btn-primary" onclick="checkQuiz()">Vérifier mes réponses</button>
+                            <button class="btn btn-secondary" onclick="resetQuiz()" style="display: none;" id="resetBtn">Recommencer</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier pratique -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Atelier Pratique : Analyse de Biais</h2>
+                    <div class="section-content">
+                        <p>Mettons en pratique vos nouvelles connaissances avec un exercice d'analyse d'un outil IA que vous utilisez.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Exercice : Audit d'un outil IA</div>
+                            <p><strong>Durée :</strong> 20 minutes</p>
+                            <p><strong>Objectif :</strong> Analyser un outil IA de votre choix pour identifier les biais potentiels</p>
+                            
+                            <h4>Étape 1 : Sélection de l'outil (3 min)</h4>
+                            <p>Choisissez un outil IA que vous utilisez régulièrement :</p>
+                            <ul>
+                                <li>Assistant conversationnel (ChatGPT, Claude, etc.)</li>
+                                <li>Outil de génération d'images (DALL-E, Midjourney, etc.)</li>
+                                <li>Système de recommandation (Netflix, LinkedIn, etc.)</li>
+                                <li>Outil de recrutement ou RH</li>
+                            </ul>
+
+                            <h4>Étape 2 : Grille d'analyse (10 min)</h4>
+                            <p>Posez-vous ces questions critiques :</p>
+                            <ol>
+                                <li><strong>Représentativité :</strong> Sur quelles données cet outil a-t-il été entraîné ? Quelles populations pourraient être sous-représentées ?</li>
+                                <li><strong>Variables utilisées :</strong> Quelles informations l'outil utilise-t-il pour ses décisions ? Y a-t-il des variables proxy problématiques ?</li>
+                                <li><strong>Groupes impactés :</strong> Quels groupes pourraient être systématiquement désavantagés ?</li>
+                                <li><strong>Transparence :</strong> Pouvez-vous comprendre pourquoi l'outil a pris cette décision ?</li>
+                                <li><strong>Recours :</strong> Existe-t-il un moyen de contester ou corriger une décision ?</li>
+                            </ol>
+
+                            <h4>Étape 3 : Test pratique (5 min)</h4>
+                            <p>Testez votre outil avec des variations :</p>
+                            <ul>
+                                <li><strong>Noms différents :</strong> Testez avec des prénoms de différentes origines</li>
+                                <li><strong>Contextes variés :</strong> Modifiez légèrement le contexte et observez les changements</li>
+                                <li><strong>Perspectives multiples :</strong> Demandez le même contenu sous différents angles</li>
+                            </ul>
+
+                            <h4>Étape 4 : Plan d'action (2 min)</h4>
+                            <p>Rédigez 3 recommandations concrètes pour un usage plus équitable de cet outil dans votre contexte.</p>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-title">📝 Template de rapport d'audit</div>
+                            <p><strong>Outil analysé :</strong> [Nom de l'outil]</p>
+                            <p><strong>Biais potentiels identifiés :</strong></p>
+                            <ul>
+                                <li>Biais 1 : [Description + impact]</li>
+                                <li>Biais 2 : [Description + impact]</li>
+                                <li>Biais 3 : [Description + impact]</li>
+                            </ul>
+                            <p><strong>Mesures correctives proposées :</strong></p>
+                            <ol>
+                                <li>[Action concrète 1]</li>
+                                <li>[Action concrète 2]</li>
+                                <li>[Action concrète 3]</li>
+                            </ol>
+                            <p><strong>Protocole de vigilance :</strong> [Comment surveiller ces biais à l'avenir]</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Protocole de vigilance -->
+                <section class="section">
+                    <h2 class="section-title">🛡️ Protocole de Vigilance Anti-Biais</h2>
+                    <div class="section-content">
+                        <p>Développez une culture de vigilance permanente pour prévenir les discriminations algorithmiques dans votre organisation.</p>
+
+                        <div class="definition-box">
+                            <div class="definition-title">✅ Checklist avant déploiement IA</div>
+                            <ul>
+                                <li>✅ <strong>Audit de représentativité :</strong> Les données reflètent-elles la diversité du public cible ?</li>
+                                <li>✅ <strong>Test multi-groupes :</strong> Performance vérifiée sur tous les segments de population ?</li>
+                                <li>✅ <strong>Variables proxy :</strong> Aucune variable ne sert d'indicateur indirect de caractéristiques protégées ?</li>
+                                <li>✅ <strong>Transparence :</strong> Les décisions peuvent-elles être expliquées aux utilisateurs ?</li>
+                                <li>✅ <strong>Recours :</strong> Existe-t-il un processus de contestation humaine ?</li>
+                                <li>✅ <strong>Monitoring :</strong> Des alertes sont-elles configurées pour détecter les dérives ?</li>
+                            </ul>
+                        </div>
+
+                        <h3>Mise en place d'un comité d'éthique IA</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">👥 Composition recommandée</div>
+                            <ul>
+                                <li><strong>Expert technique :</strong> Data scientist ou ingénieur IA</li>
+                                <li><strong>Juriste :</strong> Spécialiste protection des données et non-discrimination</li>
+                                <li><strong>Représentant métier :</strong> Utilisateur final du système</li>
+                                <li><strong>Représentant des utilisateurs :</strong> Défense des intérêts des personnes impactées</li>
+                                <li><strong>Éthicien ou sociologue :</strong> Analyse des impacts sociétaux</li>
+                            </ul>
+                        </div>
+
+                        <h3>Indicateurs de suivi</h3>
+                        <div class="example-box">
+                            <div class="example-title">📊 Dashboard anti-biais</div>
+                            <p><strong>Métriques à suivre en temps réel :</strong></p>
+                            <ul>
+                                <li><strong>Taux de faux positifs/négatifs</strong> par groupe démographique</li>
+                                <li><strong>Distribution des décisions</strong> : qui est accepté/rejeté ?</li>
+                                <li><strong>Évolution temporelle</strong> : les écarts se creusent-ils ?</li>
+                                <li><strong>Retours utilisateurs</strong> : plaintes pour discrimination</li>
+                                <li><strong>Audit externes</strong> : évaluations indépendantes périodiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Synthèse et points clés -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Points Clés à Retenir</h2>
+                    <div class="section-content">
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Messages essentiels</div>
+                            <ul>
+                                <li><strong>Les biais ne sont pas des bugs :</strong> Ils reflètent des inégalités systémiques réelles</li>
+                                <li><strong>La neutralité n'existe pas :</strong> Ne pas agir contre les biais, c'est les perpétuer</li>
+                                <li><strong>Équité = compromis :</strong> Choisir consciemment quelle définition de l'équité prioriser</li>
+                                <li><strong>Vigilance permanente :</strong> Les biais peuvent émerger après le déploiement</li>
+                                <li><strong>Responsabilité collective :</strong> Téchs, managers, juristes, et société civile doivent collaborer</li>
+                            </ul>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🚀 Prochaines étapes</div>
+                            <ol>
+                                <li>Auditez un outil IA que vous utilisez avec la grille d'analyse</li>
+                                <li>Sensibilisez votre équipe aux 4 types de biais</li>
+                                <li>Intégrez une checklist anti-biais dans vos processus</li>
+                                <li>Établissez un protocole de monitoring des performances par groupe</li>
+                                <li>Préparez-vous aux obligations légales émergentes (AI Act)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Progression</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 66%;"></div>
+                </div>
+                <ul class="sequence-list">
+                    <li class="sequence-item completed">
+                        <div class="sequence-icon completed">✓</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Enjeux éthiques fondamentaux</div>
+                            <div class="sequence-duration">60 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item current">
+                        <div class="sequence-icon">2</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Biais et discrimination</div>
+                            <div class="sequence-duration">60 min</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon">3</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Futur et IA responsable</div>
+                            <div class="sequence-duration">55 min</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem;">📚 Ressources</h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li><a href="ressources_bibliotheque.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">📖 Articles de référence</a></li>
+                        <li><a href="ressources_outils.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">🛠️ Outils d'audit</a></li>
+                        <li><a href="ressources_forum.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">💬 Forum de discussion</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="lesson-navigation">
+            <a href="ethique_7_enjeux_1.html" class="btn btn-secondary">← Séquence 1: Enjeux éthiques</a>
+            <a href="ethique_7_futur_3.html" class="btn btn-primary">Séquence 3: Futur et IA responsable →</a>
+        </nav>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Quiz functionality
+        const quizAnswers = {
+            q1: 'b', // Biais de représentation
+            q2: 'b', // Post-processing limite
+            q3: 'b'  // Incompatibilité mathématique
+        };
+
+        const quizExplanations = {
+            q1: {
+                correct: "✅ Correct ! Il s'agit bien d'un biais de représentation. Les données d'entraînement (CV historiques) sous-représentent les femmes dans les postes techniques, ce qui apprend à l'algorithme que 'masculin' = 'compétent' pour ces postes.",
+                incorrect: "❌ Pas tout à fait. Ce cas illustre un biais de représentation : les données d'entraînement manquent de diversité (peu de CV féminins dans l'historique). L'algorithme apprend donc que 'masculin' = 'qualifié' pour les postes techniques."
+            },
+            q2: {
+                correct: "✅ Exact ! Le post-processing peut masquer les symptômes (égaliser les taux de sélection) sans corriger la cause profonde (biais dans les données ou l'algorithme). C'est comme peindre sur de la rouille.",
+                incorrect: "❌ La principale limite du post-processing est qu'il corrige les symptômes sans traiter la cause racine. Il peut égaliser les résultats en surface tout en laissant les biais fondamentaux intacts."
+            },
+            q3: {
+                correct: "✅ Parfait ! C'est un théorème mathématique : on ne peut pas simultanément avoir une égalité de traitement ET d'égalité de résultats quand les groupes ont des distributions différentes. Il faut choisir quelle équité prioriser.",
+                incorrect: "❌ Il s'agit d'une impossibilité mathématique fondamentale, pas d'un problème technique. Les différentes métriques de fairness sont mutuellement exclusives quand les groupes ont des caractéristiques différentes."
+            }
+        };
+
+        function checkQuiz() {
+            let allAnswered = true;
+            let score = 0;
+            
+            for (let question in quizAnswers) {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                const options = document.querySelectorAll(`input[name="${question}"]`);
+                const feedback = document.getElementById(`feedback${question.charAt(1)}`);
+                const feedbackText = document.getElementById(`feedback${question.charAt(1)}-text`);
+                
+                if (!selectedOption) {
+                    allAnswered = false;
+                    continue;
+                }
+                
+                const isCorrect = selectedOption.value === quizAnswers[question];
+                if (isCorrect) score++;
+                
+                // Style the options
+                options.forEach(option => {
+                    const label = option.parentElement;
+                    label.style.pointerEvents = 'none';
+                    
+                    if (option.value === quizAnswers[question]) {
+                        label.classList.add('correct');
+                    } else if (option.checked && option.value !== quizAnswers[question]) {
+                        label.classList.add('incorrect');
+                    }
+                });
+                
+                // Show feedback
+                feedback.style.display = 'block';
+                feedback.className = `quiz-feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+                feedbackText.textContent = isCorrect ? 
+                    quizExplanations[question].correct : 
+                    quizExplanations[question].incorrect;
+            }
+            
+            if (!allAnswered) {
+                alert('Veuillez répondre à toutes les questions avant de vérifier.');
+                return;
+            }
+            
+            // Show final score
+            const finalMessage = score === 3 ? 
+                "🎉 Parfait ! Vous maîtrisez les concepts de biais algorithmiques." :
+                score === 2 ? 
+                "👍 Bien joué ! Vous avez une bonne compréhension des biais." :
+                "💪 Continue ! Relisez les sections pour mieux comprendre les nuances.";
+            
+            setTimeout(() => {
+                alert(`Score: ${score}/3\n${finalMessage}`);
+            }, 500);
+            
+            document.getElementById('resetBtn').style.display = 'inline-flex';
+            document.querySelector('.btn-primary').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            const options = document.querySelectorAll('.quiz-option');
+            const feedbacks = document.querySelectorAll('.quiz-feedback');
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.pointerEvents = 'auto';
+            });
+            
+            feedbacks.forEach(feedback => {
+                feedback.style.display = 'none';
+                feedback.classList.remove('show', 'correct', 'incorrect');
+            });
+            
+            radioInputs.forEach(input => {
+                input.checked = false;
+            });
+            
+            document.getElementById('resetBtn').style.display = 'none';
+            document.querySelector('.btn-primary').style.display = 'inline-flex';
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '66%';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>

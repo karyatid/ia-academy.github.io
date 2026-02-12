@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création Vidéo IA - Micro-séquence 3B | IA Academy</title>
+    <style>
+        :root {
+            /* Mode sombre par défaut */
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a3e;
+            --bg-tertiary: #2d2d5f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8d4;
+            --text-muted: #8888aa;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="light"] {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --accent-color: #0891b2;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-tertiary: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '🌙';
+            position: absolute;
+            left: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .theme-toggle::after {
+            content: '☀️';
+            position: absolute;
+            right: 6px;
+            font-size: 14px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        [data-theme="light"] .theme-toggle::before {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .theme-toggle::after {
+            opacity: 1;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            position: relative;
+        }
+
+        [data-theme="light"] .theme-toggle-button {
+            transform: translateX(25px);
+            background: var(--primary-color);
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .section-content ul {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Interactive Boxes */
+        .interactive-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .interactive-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+        }
+
+        .tool-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .tool-features li {
+            padding: 0.25rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Practical Examples */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        /* Warning and Success Boxes */
+        .warning-box, .success-box, .info-box {
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border-left-color: #f59e0b;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
+        }
+
+        .warning-title, .success-title, .info-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-option:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quiz-option.correct {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .quiz-option.incorrect {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .quiz-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result.correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-color);
+        }
+
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .sequence-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sequence-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sequence-item:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        .sequence-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon.completed {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .sequence-item:hover .sequence-duration {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        /* Format Grid */
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .format-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .format-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .format-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="dashboard.html" class="logo">
+                    🧠 IA Academy
+                </a>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_audio_video_sync_3.html" class="breadcrumb-link">Audio/Vidéo + Synchronisation</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>›</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Création Vidéo IA</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🎬</span>
+                        <span>Micro-séquence 3B</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>35-40 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>📈</span>
+                        <span>Intermédiaire</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">🎬 Création Vidéo IA</h1>
+                <p class="lesson-description">
+                    Découvrez la révolution de la création vidéo avec l'IA ! Transformez vos idées en vidéos époustouflantes avec RunwayML et Pika Labs. Du text-to-video aux avatars parlants, maîtrisez les outils qui redéfinissent la production audiovisuelle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 La révolution vidéo IA</h2>
+                    <div class="section-content">
+                        <p>L'intelligence artificielle transforme radicalement la création vidéo. Plus besoin de caméras, d'acteurs ou de studios : créez des vidéos professionnelles à partir de simples descriptions textuelles !</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Ce que vous allez maîtriser
+                            </div>
+                            <ul>
+                                <li><strong>Text-to-Video</strong> : Transformer vos scripts en vidéos</li>
+                                <li><strong>Image-to-Video</strong> : Animer vos créations statiques</li>
+                                <li><strong>Avatar parlants</strong> : Créer des présentateurs virtuels</li>
+                                <li><strong>Animations fluides</strong> : Effets et transitions automatiques</li>
+                                <li><strong>Optimisation multi-plateformes</strong> : TikTok, YouTube, LinkedIn</li>
+                            </ul>
+                        </div>
+
+                        <div class="format-grid">
+                            <div class="format-card">
+                                <h4>🎯 TikTok/Reels</h4>
+                                <p>9:16 vertical<br>15-60 secondes<br>Rythme dynamique</p>
+                            </div>
+                            <div class="format-card">
+                                <h4>📺 YouTube</h4>
+                                <p>16:9 horizontal<br>30 sec à 10 min<br>Storytelling</p>
+                            </div>
+                            <div class="format-card">
+                                <h4>💼 LinkedIn</h4>
+                                <p>1:1 carré<br>30-90 secondes<br>Professionnel</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RunwayML -->
+                <section class="section">
+                    <h2 class="section-title">🎮 RunwayML : Le studio virtuel</h2>
+                    <div class="section-content">
+                        <p>RunwayML est la référence mondiale en génération vidéo IA. Cet outil révolutionnaire permet de créer des vidéos à partir de simples descriptions ou d'animer des images statiques.</p>
+                        
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">📝</div>
+                                    <div class="tool-name">Text-to-Video</div>
+                                </div>
+                                <div class="tool-description">
+                                    Créez des vidéos directement à partir de descriptions textuelles
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Vidéos 4 secondes en HD</li>
+                                    <li>Tous styles visuels</li>
+                                    <li>Mouvements réalistes</li>
+                                    <li>Cohérence temporelle</li>
+                                    <li>Export haute qualité</li>
+                                </ul>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🖼️</div>
+                                    <div class="tool-name">Image-to-Video</div>
+                                </div>
+                                <div class="tool-description">
+                                    Animez vos images statiques avec des mouvements naturels
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Animation d'images existantes</li>
+                                    <li>Contrôle des mouvements</li>
+                                    <li>Préservation des détails</li>
+                                    <li>Transitions fluides</li>
+                                    <li>Styles artistiques variés</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>💡 Prompts RunwayML efficaces</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🎯</span>
+                                <span>Exemples de prompts qui fonctionnent</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[RUNWAYML - PROMPTS PROFESSIONNELS]
+
+🎬 Vidéo Corporate :
+"Professional businesswoman in modern office, presenting charts, confident gestures, natural lighting, corporate atmosphere"
+
+🎯 Produit Demo :
+"Sleek smartphone on wooden desk, camera slowly rotating around device, minimalist background, studio lighting"
+
+🌟 Social Media :
+"Young creator in cozy studio, speaking enthusiastically to camera, warm lighting, authentic energy"
+
+💡 Formation/Tuto :
+"Expert explaining concept with hand gestures, whiteboard in background, educational setting, clear presentation"
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">⚡ Optimisation RunwayML</div>
+                            <p><strong>Tips pour de meilleurs résultats :</strong></p>
+                            <ul>
+                                <li>Descriptions claires et précises (pas plus de 200 caractères)</li>
+                                <li>Évitez les mouvements trop complexes</li>
+                                <li>Privilégiez un seul sujet principal par vidéo</li>
+                                <li>Testez différentes variations de prompts</li>
+                                <li>Patience : génération de 90-120 secondes par vidéo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pika Labs -->
+                <section class="section">
+                    <h2 class="section-title">⚡ Pika Labs : Animation & Effets</h2>
+                    <div class="section-content">
+                        <p>Pika Labs excelle dans la création d'animations fluides et d'effets visuels impressionnants. Parfait pour donner vie à vos créations avec style !</p>
+                        
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎭</div>
+                                    <div class="tool-name">Animations créatives</div>
+                                </div>
+                                <div class="tool-description">
+                                    Spécialisé dans les animations originales et les effets visuels
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Effets de particules</li>
+                                    <li>Transformations fluides</li>
+                                    <li>Animations de texte</li>
+                                    <li>Effets de morphing</li>
+                                    <li>Style cartoon/anime</li>
+                                </ul>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎨</div>
+                                    <div class="tool-name">Styles artistiques</div>
+                                </div>
+                                <div class="tool-description">
+                                    Large gamme de styles visuels pour tous types de contenus
+                                </div>
+                                <ul class="tool-features">
+                                    <li>Rendu photoréaliste</li>
+                                    <li>Style dessin animé</li>
+                                    <li>Effet peinture</li>
+                                    <li>Cyberpunk/futuriste</li>
+                                    <li>Minimaliste moderne</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3>🎨 Cas d'usage créatifs Pika Labs</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>✨</span>
+                                <span>Prompts créatifs pour Pika Labs</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[PIKA LABS - ANIMATIONS CRÉATIVES]
+
+🎭 Logo Animation :
+"Company logo materializing with particle effects, glowing elements, modern transition"
+
+🌟 Transition vidéo :
+"Smooth morphing transition between two scenes, flowing movement, cinematic effect"
+
+📱 App Demo :
+"Smartphone interface animations, smooth transitions, modern UI design, interactive elements"
+
+🎯 Explainer Video :
+"Animated icons and graphics explaining process, clean style, educational flow"
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exercice Principal -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Exercice Principal : Vidéo Produit</h2>
+                    <div class="section-content">
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎬 Challenge : Vidéo de présentation produit pour LinkedIn
+                            </div>
+                            <p><strong>Contexte :</strong> Vous lancez une application mobile de méditation appelée "ZenFlow". Créez une vidéo de présentation de 30 secondes pour LinkedIn.</p>
+                            
+                            <p><strong>Objectif :</strong> Vidéo 1:1 (carré) de 30 secondes avec RunwayML</p>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span>📱</span>
+                                    <span>Brief produit ZenFlow</span>
+                                </div>
+                                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                    <strong>Produit :</strong> ZenFlow - App de méditation guidée<br>
+                                    <strong>Cible :</strong> Professionnels stressés, 25-45 ans<br>
+                                    <strong>USP :</strong> Sessions de 5 minutes adaptées aux pauses bureau<br>
+                                    <strong>Ambiance :</strong> Zen, moderne, professionnel<br>
+                                    <strong>Message :</strong> "5 minutes pour retrouver le calme au bureau"
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 1rem; margin: 1.5rem 0;">
+                                <button class="btn btn-secondary" onclick="showVideoHint()" id="video-hint-btn">💡 Indice</button>
+                                <button class="btn btn-primary" onclick="showVideoSolution()" id="video-solution-btn">✨ Solution</button>
+                            </div>
+
+                            <div id="video-hint-content" style="display: none; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                                <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">💡 Conseils pour votre vidéo produit</div>
+                                <p>Pensez à <strong>structurer votre vidéo</strong> en 3 parties :</p>
+                                <ul>
+                                    <li><strong>Problème (0-10s) :</strong> Montrer le stress au bureau</li>
+                                    <li><strong>Solution (10-20s) :</strong> Présenter ZenFlow en action</li>
+                                    <li><strong>Bénéfice (20-30s) :</strong> Résultat zen et productif</li>
+                                </ul>
+                                <p>💡 <strong>Style visuel :</strong> Moderne, épuré, couleurs apaisantes (bleu/vert)</p>
+                            </div>
+
+                            <div id="video-solution-content" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                                <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">✨ Solution RunwayML complète</div>
+                                
+                                <h4>🎬 Scénario vidéo (30 secondes) :</h4>
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+Séquence 1 (0-10s) - Problème :
+"Stressed office worker at desk, overwhelmed by notifications, tense posture, modern office background"
+
+Séquence 2 (10-20s) - Solution :
+"Same person using meditation app on phone, peaceful expression, zen atmosphere, soft lighting"
+
+Séquence 3 (20-30s) - Résultat :
+"Relaxed professional working calmly, smiling, productive energy, plants in background, natural light"
+</div>
+
+                                <h4>⚙️ Paramètres RunwayML recommandés :</h4>
+                                <div class="code-block">
+Format : 1:1 (1024x1024) pour LinkedIn
+Durée : 4 secondes par séquence × 3 = 12 secondes total
+Style : "Professional, modern, clean aesthetic"
+Mouvement : Subtle, natural gestures
+Qualité : HD pour usage professionnel
+</div>
+
+                                <h4>🎨 Post-production rapide :</h4>
+                                <div class="code-block">
+1. Assembler les 3 séquences dans CapCut
+2. Ajouter texte : "ZenFlow - 5 min pour retrouver le calme"
+3. Transition douce entre chaque séquence
+4. Export 1080x1080, 30fps pour LinkedIn
+</div>
+                            </div>
+                        </div>
+
+                        <h3>🎪 Mini-exercice Bonus : Avatar parlant</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🤖</span>
+                                <span>Challenge rapide (15 minutes)</span>
+                            </div>
+                            <p><strong>Objectif :</strong> Créer un avatar parlant pour présenter votre expertise</p>
+                            
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+[PROMPT AVATAR PARLANT - RUNWAYML]
+
+"Professional presenter speaking to camera, confident posture, natural hand gestures, modern studio background, direct eye contact with viewer"
+
++ Ajout audio ElevenLabs avec votre présentation de 30 secondes
++ Synchronisation lip-sync avec CapCut ou Descript
+            </div>
+            
+            <p><strong>Usage :</strong> Intro de formation, message d'accueil site web, présentation automatisée</p>
+        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Interactif -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Quiz : Maîtrisez-vous la vidéo IA ?</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quelle est la principale différence entre RunwayML et Pika Labs ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-answer="wrong">
+                                <span>A)</span> RunwayML est gratuit, Pika Labs est payant
+                            </div>
+                            <div class="quiz-option" data-answer="correct">
+                                <span>B)</span> RunwayML excelle en text-to-video, Pika Labs en animations créatives
+                            </div>
+                            <div class="quiz-option" data-answer="wrong">
+                                <span>C)</span> Pika Labs ne fait que des vidéos courtes
+                            </div>
+                            <div class="quiz-option" data-answer="wrong">
+                                <span>D)</span> RunwayML ne supporte que le format horizontal
+                            </div>
+                        </div>
+                        <div class="quiz-result">
+                            <span class="result-text"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Récapitulatif -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Récapitulatif de vos créations</h2>
+                    <div class="section-content">
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Bilan de la micro-séquence 3B
+                            </div>
+                            <p><strong>Bravo !</strong> Vous maîtrisez maintenant la création vidéo IA. Voici vos nouvelles compétences :</p>
+                            
+                            <h3>✅ Vos créations vidéo :</h3>
+                            <ol>
+                                <li><strong>Vidéo produit LinkedIn</strong> (30 sec) - Présentation ZenFlow avec RunwayML</li>
+                                <li><strong>Avatar parlant</strong> (30 sec) - Présentateur virtuel personnalisé</li>
+                                <li><strong>Animations créatives</strong> - Effets et transitions avec Pika Labs</li>
+                            </ol>
+
+                            <h3>🛠️ Compétences vidéo acquises :</h3>
+                            <ul>
+                                <li>Maîtrise RunwayML (text-to-video, image-to-video)</li>
+                                <li>Animations créatives avec Pika Labs</li>
+                                <li>Optimisation formats multi-plateformes (TikTok, YouTube, LinkedIn)</li>
+                                <li>Création d'avatars parlants synchronisés</li>
+                                <li>Workflow vidéo IA professionnel</li>
+                            </ul>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span>📚</span>
+                                    <span>Checklist qualité vidéo IA</span>
+                                </div>
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+✅ Prompts clairs et précis (max 200 caractères)
+✅ Format adapté à la plateforme cible  
+✅ Durée optimale selon l'usage (15s TikTok, 30s LinkedIn)
+✅ Mouvement naturel et cohérent
+✅ Qualité HD pour usage professionnel
+✅ Test sur différents appareils
+✅ Backup des prompts efficaces pour réutilisation
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <div class="success-title">🎉 Prochaine étape</div>
+                            <p>Vous êtes maintenant prêt pour la <strong>micro-séquence 3C : Synchronisation & Post-Production</strong> ! Nous allons apprendre à assembler audio + vidéo + sous-titres pour un résultat professionnel.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="generative_4_audio_3a.html" class="btn btn-secondary">
+                        <span>←</span> Micro-séquence 3A
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Micro-séquence 3B sur 3</div>
+                        <div class="nav-title">Création Vidéo IA</div>
+                    </div>
+                    <a href="generative_4_sync_3c.html" class="btn btn-primary">
+                        Micro-séquence 3C <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="progress-text">Micro-séquence 3B - Module 4</div>
+                </div>
+
+                <!-- Micro-séquences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🎬 Séquence Audio/Vidéo</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">3A</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Audio IA Professional</div>
+                                <div class="sequence-duration">35-40 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon current">3B</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Création Vidéo IA</div>
+                                <div class="sequence-duration">35-40 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">3C</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Synchronisation & Post-prod</div>
+                                <div class="sequence-duration">25-30 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Ressources -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📚 Ressources</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">🎬</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Tuto montage (15min)</div>
+                                <div class="sequence-duration">Première vidéo IA</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">🛠️</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Outils recommandés</div>
+                                <div class="sequence-duration">CapCut, Canva, Descript</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">📱</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Templates formats</div>
+                                <div class="sequence-duration">TikTok, YouTube, LinkedIn</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load theme preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        });
+
+        // Copy function
+        function copyText(button) {
+            const codeBlock = button.nextElementSibling || button.parentElement.querySelector('.code-block');
+            const text = codeBlock.textContent.replace('📋 Copier', '').trim();
+            
+            navigator.clipboard.writeText(text).then(function() {
+                button.textContent = '✅ Copié !';
+                setTimeout(function() {
+                    button.textContent = '📋 Copier';
+                }, 2000);
+            });
+        }
+
+        // Show video hint function
+        function showVideoHint() {
+            const hintContent = document.getElementById('video-hint-content');
+            const hintBtn = document.getElementById('video-hint-btn');
+            
+            if (!hintContent || !hintBtn) {
+                console.log('Éléments video hint non trouvés');
+                return;
+            }
+            
+            if (hintContent.style.display === 'none' || hintContent.style.display === '') {
+                hintContent.style.display = 'block';
+                hintBtn.textContent = '🙈 Masquer l\'indice';
+                hintBtn.classList.remove('btn-secondary');
+                hintBtn.classList.add('btn-primary');
+            } else {
+                hintContent.style.display = 'none';
+                hintBtn.textContent = '💡 Indice';
+                hintBtn.classList.remove('btn-primary');
+                hintBtn.classList.add('btn-secondary');
+            }
+        }
+
+        // Show video solution function  
+        function showVideoSolution() {
+            const solutionContent = document.getElementById('video-solution-content');
+            const solutionBtn = document.getElementById('video-solution-btn');
+            
+            if (!solutionContent || !solutionBtn) {
+                console.log('Éléments video solution non trouvés');
+                return;
+            }
+            
+            if (solutionContent.style.display === 'none' || solutionContent.style.display === '') {
+                solutionContent.style.display = 'block';
+                solutionBtn.textContent = '🙈 Masquer la solution';
+                solutionBtn.classList.remove('btn-primary');
+                solutionBtn.classList.add('btn-secondary');
+            } else {
+                solutionContent.style.display = 'none';
+                solutionBtn.textContent = '✨ Solution';
+                solutionBtn.classList.remove('btn-secondary');
+                solutionBtn.classList.add('btn-primary');
+            }
+        }
+
+        // Quiz functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            const quizResult = document.querySelector('.quiz-result');
+            const resultText = document.querySelector('.result-text');
+
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove previous selections
+                    quizOptions.forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                    });
+
+                    // Check answer
+                    const isCorrect = this.getAttribute('data-answer') === 'correct';
+                    
+                    if (isCorrect) {
+                        this.classList.add('correct');
+                        resultText.textContent = '🎉 Excellent ! RunwayML est effectivement spécialisé dans le text-to-video professionnel, tandis que Pika Labs excelle dans les animations créatives et effets visuels.';
+                        quizResult.className = 'quiz-result show correct';
+                    } else {
+                        this.classList.add('incorrect');
+                        // Show correct answer
+                        document.querySelector('[data-answer="correct"]').classList.add('correct');
+                        resultText.textContent = '❌ Pas tout à fait. La bonne réponse est B : RunwayML excelle en text-to-video, Pika Labs en animations créatives.';
+                        quizResult.className = 'quiz-result show incorrect';
+                    }
+                });
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types d'IA et Safari IA - Module 1 | IA Academy</title>
+    
+    <style>
+        /* Variables CSS - NeuroDesign Theme */
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --accent-color: #7c3aed;
+            --accent-light: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --background: #ffffff;
+            --background-secondary: #f9fafb;
+            --background-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --border-light: #f3f4f6;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --background: #111827;
+            --background-secondary: #1f2937;
+            --background-tertiary: #374151;
+            --border-color: #374151;
+            --border-light: #4b5563;
+            --glass-bg: rgba(31, 41, 55, 0.8);
+            --glass-border: rgba(75, 85, 99, 0.18);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--background-tertiary);
+            transform: translateX(-2px);
+        }
+
+        .theme-toggle {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--background-tertiary);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs-section {
+            background: var(--background-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+        }
+
+        .breadcrumbs {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb-link:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .main-content {
+            background: var(--background);
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            margin-bottom: 2rem;
+        }
+
+        .lesson-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--background-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1rem;
+        }
+
+        .section-content {
+            background: var(--background);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .section-content ul {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Safari Cards */
+        .safari-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .safari-card {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .safari-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .safari-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .safari-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .safari-icon {
+            font-size: 2rem;
+        }
+
+        .safari-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .safari-category {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .safari-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .safari-example {
+            background: var(--background);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .safari-example-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .safari-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .safari-tag {
+            background: var(--background-tertiary);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+        }
+
+        /* Interactive Quiz */
+        .quiz-container {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            background: var(--background);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+        }
+
+        .quiz-feedback {
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .sequence-list {
+            list-style: none;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .sequence-item:hover {
+            background: var(--background-secondary);
+        }
+
+        .sequence-item.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Navigation */
+        .sequence-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--background-secondary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--background);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background-tertiary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 2rem;
+            }
+
+            .safari-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sequence-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="dashboard.html" class="back-btn">← Dashboard</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs-section">
+        <div class="breadcrumbs">
+            <nav aria-label="Breadcrumb">
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-separator">></li>
+                    <li class="breadcrumb-item">
+                        <a href="fondamentaux_1_overview.html" class="breadcrumb-link">Module 1: Fondamentaux de l'IA</a>
+                    </li>
+                    <li class="breadcrumb-separator">></li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Types d'IA et Safari IA</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-layout">
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Lesson Header -->
+            <header class="lesson-header">
+                <h1 class="lesson-title">Types d'IA et Safari IA</h1>
+                <p class="lesson-subtitle">Panorama des technologies IA et exploration pratique d'outils du quotidien</p>
+                <div class="lesson-meta">
+                    <div class="meta-item">
+                        <span>📚</span>
+                        <span>Séquence 3/4</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>⏱️</span>
+                        <span>85 minutes</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🎯</span>
+                        <span>Pratique</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Objectives Section -->
+            <section class="section">
+                <h2 class="section-title">🎯 Objectifs de cette séquence</h2>
+                <div class="section-content">
+                    <p>À la fin de cette séquence, vous serez capable de :</p>
+                    <ul>
+                        <li>Distinguer les différents types d'IA : Machine Learning, Deep Learning, LLM</li>
+                        <li>Identifier les applications IA dans votre environnement quotidien</li>
+                        <li>Reconnaître la vraie IA du marketing et des fausses promesses</li>
+                        <li>Évaluer le potentiel et les limites des outils IA que vous utilisez</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Types d'IA Section -->
+            <section class="section">
+                <h2 class="section-title">🧠 Panorama des technologies IA</h2>
+                <div class="section-content">
+                    <h3>3.1 Les trois grandes familles d'IA</h3>
+                    
+                    <h4>Machine Learning (ML) - L'apprentissage automatique</h4>
+                    <p>Le Machine Learning permet aux machines d'apprendre des patterns dans les données sans être explicitement programmées pour chaque cas.</p>
+                    
+                    <div style="background: var(--background-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0;">
+                        <h5 style="color: var(--primary-color); margin-bottom: 0.5rem;">🔍 Exemples concrets :</h5>
+                        <ul>
+                            <li><strong>Systèmes de recommandation</strong> : Netflix, Spotify, Amazon</li>
+                            <li><strong>Détection de fraude</strong> : Transactions bancaires suspectes</li>
+                            <li><strong>Prédiction météo</strong> : Analyse de millions de données climatiques</li>
+                        </ul>
+                    </div>
+
+                    <h4>Deep Learning (DL) - L'apprentissage profond</h4>
+                    <p>Une sous-catégorie du ML qui utilise des réseaux de neurones artificiels multicouches pour traiter des données complexes.</p>
+                    
+                    <div style="background: var(--background-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0;">
+                        <h5 style="color: var(--primary-color); margin-bottom: 0.5rem;">🔍 Exemples concrets :</h5>
+                        <ul>
+                            <li><strong>Reconnaissance d'images</strong> : Google Photos, reconnaissance faciale</li>
+                            <li><strong>Conduite autonome</strong> : Tesla, Waymo</li>
+                            <li><strong>Traduction automatique</strong> : Google Translate, DeepL</li>
+                        </ul>
+                    </div>
+
+                    <h4>Large Language Models (LLM) - Les modèles de langage</h4>
+                    <p>Des IA spécialisées dans la compréhension et la génération de texte, entraînées sur d'énormes quantités de données textuelles.</p>
+                    
+                    <div style="background: var(--background-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0;">
+                        <h5 style="color: var(--primary-color); margin-bottom: 0.5rem;">🔍 Exemples concrets :</h5>
+                        <ul>
+                            <li><strong>Assistants conversationnels</strong> : ChatGPT, Claude, Bard</li>
+                            <li><strong>Génération de contenu</strong> : Jasper, Copy.ai</li>
+                            <li><strong>Résumé automatique</strong> : Notion AI, Grammarly</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Safari IA Section -->
+            <section class="section">
+                <h2 class="section-title">🦁 Safari IA : Exploration guidée</h2>
+                <div class="section-content">
+                    <h3>3.2 Découverte des IA de votre quotidien</h3>
+                    <p>Partons ensemble à la découverte des intelligences artificielles qui vous entourent déjà, souvent sans que vous le sachiez !</p>
+                    
+                    <div class="safari-grid">
+                        <!-- Safari 1: Netflix -->
+                        <div class="safari-card">
+                            <div class="safari-header">
+                                <div class="safari-icon">🎬</div>
+                                <div>
+                                    <div class="safari-title">Netflix</div>
+                                    <div class="safari-category">Recommandation</div>
+                                </div>
+                            </div>
+                            <div class="safari-description">
+                                L'algorithme de recommandation de Netflix analyse vos habitudes de visionnage, les notes que vous donnez, et même la façon dont vous naviguez pour vous proposer du contenu personnalisé.
+                            </div>
+                            <div class="safari-example">
+                                <div class="safari-example-title">🎯 Test pratique :</div>
+                                Ouvrez Netflix et observez : les vignettes, l'ordre des contenus, les catégories proposées sont uniques à votre profil !
+                            </div>
+                            <div class="safari-tags">
+                                <span class="safari-tag">Machine Learning</span>
+                                <span class="safari-tag">Filtrage collaboratif</span>
+                                <span class="safari-tag">Analyse comportementale</span>
+                            </div>
+                        </div>
+
+                        <!-- Safari 2: Google Photos -->
+                        <div class="safari-card">
+                            <div class="safari-header">
+                                <div class="safari-icon">📸</div>
+                                <div>
+                                    <div class="safari-title">Google Photos</div>
+                                    <div class="safari-category">Vision par ordinateur</div>
+                                </div>
+                            </div>
+                            <div class="safari-description">
+                                Google Photos utilise la reconnaissance d'images pour identifier automatiquement les personnes, objets, lieux et même créer des albums thématiques.
+                            </div>
+                            <div class="safari-example">
+                                <div class="safari-example-title">🎯 Test pratique :</div>
+                                Tapez "chat", "voiture" ou "plage" dans la barre de recherche - l'IA retrouve vos photos correspondantes !
+                            </div>
+                            <div class="safari-tags">
+                                <span class="safari-tag">Deep Learning</span>
+                                <span class="safari-tag">CNN</span>
+                                <span class="safari-tag">Classification d'images</span>
+                            </div>
+                        </div>
+
+                        <!-- Safari 3: Spotify -->
+                        <div class="safari-card">
+                            <div class="safari-header">
+                                <div class="safari-icon">🎵</div>
+                                <div>
+                                    <div class="safari-title">Spotify</div>
+                                    <div class="safari-category">Audio + ML</div>
+                                </div>
+                            </div>
+                            <div class="safari-description">
+                                Spotify combine analyse audio (tempo, tonalité) et comportement d'écoute pour créer vos playlists "Discover Weekly" et "Daily Mix".
+                            </div>
+                            <div class="safari-example">
+                                <div class="safari-example-title">🎯 Test pratique :</div>
+                                Vérifiez votre "Discover Weekly" - 30 nouvelles chansons chaque lundi, personnalisées selon vos goûts !
+                            </div>
+                            <div class="safari-tags">
+                                <span class="safari-tag">Audio Analysis</span>
+                                <span class="safari-tag">Collaborative Filtering</span>
+                                <span class="safari-tag">NLP</span>
+                            </div>
+                        </div>
+
+                        <!-- Safari 4: Gmail -->
+                        <div class="safari-card">
+                            <div class="safari-header">
+                                <div class="safari-icon">📧</div>
+                                <div>
+                                    <div class="safari-title">Gmail</div>
+                                    <div class="safari-category">Traitement du langage</div>
+                                </div>
+                            </div>
+                            <div class="safari-description">
+                                Gmail utilise l'IA pour filtrer les spams, proposer des réponses automatiques ("Smart Reply") et organiser vos emails par importance.
+                            </div>
+                            <div class="safari-example">
+                                <div class="safari-example-title">🎯 Test pratique :</div>
+                                Observez les suggestions de réponse en bas de vos emails et le tri automatique "Important/Tout" !
+                            </div>
+                            <div class="safari-tags">
+                                <span class="safari-tag">NLP</span>
+                                <span class="safari-tag">Classification</span>
+                                <span class="safari-tag">Génération de texte</span>
+                            </div>
+                        </div>
+
+                        <!-- Safari 5: Waze -->
+                        <div class="safari-card">
+                            <div class="safari-header">
+                                <div class="safari-icon">🗺️</div>
+                                <div>
+                                    <div class="safari-title">Waze</div>
+                                    <div class="safari-category">Prédiction</div>
+                                </div>
+                            </div>
+                            <div class="safari-description">
+                                Waze prédit les embouteillages, calcule les itinéraires optimaux en temps réel et détecte automatiquement les incidents de circulation.
+                            </div>
+                            <div class="safari-example">
+                                <div class="safari-example-title">🎯 Test pratique :</div>
+                                Lancez un trajet et observez comment l'IA recalcule en temps réel selon le trafic !
+                            </div>
+                            <div class="safari-tags">
+                                <span class="safari-tag">Prédiction</span>
+                                <span class="safari-tag">Analyse de données</span>
+                                <span class="safari-tag">Géolocalisation</span>
+                            </div>
+                        </div>
+
+                        <!-- Safari 6: Amazon -->
+                        <div class="safari-card">
+                            <div class="safari-header">
+                                <div class="safari-icon">🛒</div>
+                                <div>
+                                    <div class="safari-title">Amazon</div>
+                                    <div class="safari-category">E-commerce IA</div>
+                                </div>
+                            </div>
+                            <div class="safari-description">
+                                Amazon utilise l'IA pour ses recommandations produits, la gestion des stocks, l'optimisation des prix et même la logistique des entrepôts.
+                            </div>
+                            <div class="safari-example">
+                                <div class="safari-example-title">🎯 Test pratique :</div>
+                                Regardez "Les clients ayant acheté cet article ont également acheté" - c'est de l'IA en action !
+                            </div>
+                            <div class="safari-tags">
+                                <span class="safari-tag">Recommandation</span>
+                                <span class="safari-tag">Pricing dynamique</span>
+                                <span class="safari-tag">Logistique</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz interactif -->
+            <section class="section">
+                <h2 class="section-title">🎮 Exercice : "Est-ce de l'IA ou non ?"</h2>
+                <div class="section-content">
+                    <h3>3.3 Démystification : séparer le vrai du marketing</h3>
+                    <p>Testez votre capacité à identifier la vraie IA des simples automatisations ou du marketing !</p>
+                    
+                    <!-- Quiz 1 -->
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            📱 Une application qui vous rappelle de boire de l'eau toutes les 2 heures
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                <span>🤖</span>
+                                <div>
+                                    <strong>C'est de l'IA</strong><br>
+                                    <small>L'app apprend de mes habitudes</small>
+                                </div>
+                            </div>
+                            <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                <span>⏰</span>
+                                <div>
+                                    <strong>C'est juste une alarme programmée</strong><br>
+                                    <small>Pas d'apprentissage, juste des rappels fixes</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quiz-feedback">
+                            <strong>✅ Correct !</strong> Une simple alarme répétitive n'est pas de l'IA. Pour que ce soit de l'IA, l'app devrait adapter les rappels selon votre activité, la météo, ou vos habitudes de consommation.
+                        </div>
+                    </div>
+
+                    <!-- Quiz 2 -->
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            🎯 LinkedIn qui vous propose des "Personnes que vous pourriez connaître"
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                <span>🧠</span>
+                                <div>
+                                    <strong>C'est de l'IA</strong><br>
+                                    <small>Analyse de réseaux et patterns de connexions</small>
+                                </div>
+                            </div>
+                            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                <span>📞</span>
+                                <div>
+                                    <strong>C'est juste vos contacts téléphoniques</strong><br>
+                                    <small>LinkedIn lit votre carnet d'adresses</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quiz-feedback">
+                            <strong>✅ Correct !</strong> LinkedIn utilise des algorithmes de Machine Learning pour analyser les connexions communes, les entreprises, les localisations et comportements pour prédire qui vous pourriez connaître.
+                        </div>
+                    </div>
+
+                    <!-- Quiz 3 -->
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            🏠 Un thermostat "intelligent" qui maintient 21°C en permanence
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                                <span>🤖</span>
+                                <div>
+                                    <strong>C'est de l'IA</strong><br>
+                                    <small>Il régule automatiquement la température</small>
+                                </div>
+                            </div>
+                            <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                                <span>🌡️</span>
+                                <div>
+                                    <strong>C'est juste un thermostat programmable</strong><br>
+                                    <small>Pas d'apprentissage, juste une consigne fixe</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quiz-feedback">
+                            <strong>✅ Correct !</strong> Maintenir une température fixe n'est pas de l'IA. Un vrai thermostat IA apprendrait vos habitudes, anticiperait vos retours, s'adapterait à la météo et optimiserait la consommation.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Récapitulatif -->
+            <section class="section">
+                <h2 class="section-title">📝 Points clés à retenir</h2>
+                <div class="section-content">
+                    <h3>Ce que vous avez appris aujourd'hui :</h3>
+                    
+                    <div style="background: var(--background-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0;">
+                        <h4 style="color: var(--success-color); margin-bottom: 1rem;">✅ Les 3 familles d'IA :</h4>
+                        <ul>
+                            <li><strong>Machine Learning</strong> : Apprentissage de patterns dans les données</li>
+                            <li><strong>Deep Learning</strong> : Réseaux de neurones pour données complexes</li>
+                            <li><strong>LLM</strong> : Spécialisés dans le langage et la conversation</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: var(--background-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">🦁 Votre Safari IA :</h4>
+                        <ul>
+                            <li>Netflix, Spotify, Google Photos utilisent déjà l'IA pour vous</li>
+                            <li>L'IA est partout mais souvent invisible</li>
+                            <li>Chaque interaction génère des données pour améliorer l'expérience</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: var(--background-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0;">
+                        <h4 style="color: var(--warning-color); margin-bottom: 1rem;">⚠️ Démystification :</h4>
+                        <ul>
+                            <li>Automatisation ≠ Intelligence artificielle</li>
+                            <li>Le marketing abuse souvent du terme "IA"</li>
+                            <li>La vraie IA apprend et s'adapte continuellement</li>
+                        </ul>
+                    </div>
+
+                    <h4>🎯 Prochaine étape :</h4>
+                    <p>Dans la séquence suivante, nous validerons vos connaissances avec un quiz complet et découvrirons comment ces bases vous préparent au Module 2 sur l'art du prompting !</p>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="sequence-navigation">
+                <a href="fondamentaux_1_histoire_2.html" class="nav-btn btn-secondary">
+                    <span>←</span> Séquence 2 : Histoire et évolution
+                </a>
+                <div style="text-align: center;">
+                    <div style="color: var(--text-muted); font-size: 0.9rem;">Module 1 - Séquence 3</div>
+                    <div style="font-weight: 600; color: var(--text-primary);">Types d'IA et Safari IA</div>
+                </div>
+                <a href="fondamentaux_1_quiz_4.html" class="nav-btn btn-primary">
+                    Séquence 4 : Quiz final <span>→</span>
+                </a>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+            <ul class="sequence-list">
+                <li class="sequence-item">
+                    <div class="sequence-icon completed">✓</div>
+                    <div class="sequence-info">
+                        <div class="sequence-title">Vue d'ensemble</div>
+                        <div class="sequence-duration">5 minutes</div>
+                    </div>
+                </li>
+                <li class="sequence-item">
+                    <div class="sequence-icon completed">✓</div>
+                    <div class="sequence-info">
+                        <div class="sequence-title">Introduction à l'IA</div>
+                        <div class="sequence-duration">60 minutes</div>
+                    </div>
+                </li>
+                <li class="sequence-item">
+                    <div class="sequence-icon completed">✓</div>
+                    <div class="sequence-info">
+                        <div class="sequence-title">Histoire et évolution</div>
+                        <div class="sequence-duration">50 minutes</div>
+                    </div>
+                </li>
+                <li class="sequence-item current">
+                    <div class="sequence-icon current">3</div>
+                    <div class="sequence-info">
+                        <div class="sequence-title">Types d'IA et Safari IA</div>
+                        <div class="sequence-duration">85 minutes</div>
+                    </div>
+                </li>
+                <li class="sequence-item">
+                    <div class="sequence-icon locked">🔒</div>
+                    <div class="sequence-info">
+                        <div class="sequence-title">Quiz et démystification</div>
+                        <div class="sequence-duration">45 minutes</div>
+                    </div>
+                </li>
+            </ul>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: var(--background-secondary); border-radius: var(--radius-md);">
+                <h4 style="margin-bottom: 0.5rem; color: var(--text-primary);">🎯 Progression</h4>
+                <div style="background: var(--background-tertiary); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="background: var(--primary-color); height: 100%; width: 75%;"></div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">75% complété</div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                document.getElementById('theme-icon').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('theme', newTheme);
+                }
+            } catch (error) {
+                console.warn('Error toggling theme:', error);
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            try {
+                let savedTheme = 'light';
+                if (typeof(Storage) !== "undefined") {
+                    savedTheme = localStorage.getItem('theme') || 'light';
+                }
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                document.getElementById('theme-icon').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            } catch (error) {
+                console.warn('Error loading theme:', error);
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Quiz functionality
+        function selectQuizOption(element, isCorrect) {
+            const container = element.closest('.quiz-container');
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = container.querySelector('.quiz-feedback');
+            
+            // Remove previous selections
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Show result
+            if (isCorrect) {
+                element.classList.add('correct');
+                feedback.classList.add('show');
+            } else {
+                element.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(opt => {
+                    if (opt !== element) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.classList.add('show');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+        });
+    </script>
+</body>
+</html>

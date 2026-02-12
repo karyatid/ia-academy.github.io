@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz et démystification - Module 1 | IA Academy</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent-color: #06b6d4;
+            --accent-light: #67e8f9;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --background: #ffffff;
+            --background-secondary: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --background-secondary: #1e293b;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(30, 41, 59, 0.1);
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --pattern-opacity: 0.05;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: var(--primary-color);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(24px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--background-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '›';
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            background: var(--background);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+        }
+
+        .quiz-feedback {
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .feedback-status {
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .feedback-status.correct {
+            color: var(--success-color);
+        }
+
+        .feedback-status.incorrect {
+            color: var(--error-color);
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 2rem;
+            background: var(--success-color);
+            color: white;
+            border-radius: var(--radius-lg);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        /* Myth-busting Cards */
+        .myth-card {
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .myth-card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .myth-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .myth-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .myth-icon.false {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .myth-icon.true {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .myth-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .myth-explanation {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Progress Circle */
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success-color) 0deg 360deg, var(--border-color) 360deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--background);
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Module Navigation */
+        .sequence-list {
+            list-style: none;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .sequence-item:hover {
+            background: var(--background-secondary);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Clean Navigation Between Lessons */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: var(--background-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-quiz {
+            background: var(--primary-color);
+            color: white;
+            margin: 0.5rem;
+        }
+
+        .btn-quiz:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-quiz:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .module-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .module-nav-link:hover {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .lesson-meta {
+                gap: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="dashboard.html" class="logo">
+                    <span>🧠</span>
+                    <span>IA Academy</span>
+                </a>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="fondamentaux_1_overview.html" class="breadcrumb-link">Module 1: Fondamentaux de l'IA</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Quiz et démystification</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📚</span>
+                        <span>Module 1 - Séquence 4</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>45 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Validation des acquis</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Quiz et démystification</h1>
+                <p class="lesson-description">
+                    Validez vos connaissances avec un quiz interactif et démystifions ensemble les idées reçues sur l'intelligence artificielle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Quiz Section -->
+                <section class="section">
+                    <h2 class="section-title">🎮 Quiz de validation des acquis</h2>
+                    <div class="section-content">
+                        <p style="margin-bottom: 2rem;">
+                            Testez vos connaissances acquises durant ce module. Ce quiz porte sur les définitions, l'histoire, et les applications de l'IA.
+                        </p>
+
+                        <!-- Question 1 -->
+                        <div class="quiz-container" id="question1">
+                            <div class="quiz-question">
+                                1. Quelle est la principale différence entre l'IA étroite et l'IA générale ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-answer="correct">
+                                    <span>A)</span> L'IA étroite est spécialisée dans une tâche, l'IA générale peut tout faire
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>B)</span> L'IA étroite est plus ancienne que l'IA générale
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>C)</span> L'IA étroite est plus puissante que l'IA générale
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>D)</span> Il n'y a pas de différence significative
+                                </div>
+                            </div>
+                            <div class="quiz-feedback">
+                                <span class="feedback-status"></span> L'IA étroite (ou faible) est conçue pour exceller dans une tâche spécifique, tandis que l'IA générale (ou forte) pourrait théoriquement accomplir n'importe quelle tâche cognitive humaine.
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="quiz-container" id="question2">
+                            <div class="quiz-question">
+                                2. Quand a eu lieu la conférence de Dartmouth, considérée comme la naissance officielle de l'IA ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>A)</span> 1950
+                                </div>
+                                <div class="quiz-option" data-answer="correct">
+                                    <span>B)</span> 1956
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>C)</span> 1960
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>D)</span> 1965
+                                </div>
+                            </div>
+                            <div class="quiz-feedback">
+                                <span class="feedback-status"></span> La conférence de Dartmouth en 1956 a marqué la naissance officielle du domaine de l'intelligence artificielle, avec John McCarthy qui a inventé le terme "intelligence artificielle".
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="quiz-container" id="question3">
+                            <div class="quiz-question">
+                                3. Parmi ces exemples, lequel utilise réellement de l'IA ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>A)</span> Un site web qui change de couleur selon l'heure
+                                </div>
+                                <div class="quiz-option" data-answer="correct">
+                                    <span>B)</span> Netflix qui recommande des films selon vos goûts
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>C)</span> Un calculateur qui fait des additions
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>D)</span> Un feu rouge automatique programmé
+                                </div>
+                            </div>
+                            <div class="quiz-feedback">
+                                <span class="feedback-status"></span> Netflix utilise des algorithmes d'apprentissage automatique pour analyser vos habitudes de visionnage et recommander du contenu personnalisé. Les autres exemples sont de la programmation classique.
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="quiz-container" id="question4">
+                            <div class="quiz-question">
+                                4. Que signifie "LLM" dans le contexte de l'IA moderne ?
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>A)</span> Limited Learning Machine
+                                </div>
+                                <div class="quiz-option" data-answer="correct">
+                                    <span>B)</span> Large Language Model
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>C)</span> Logical Learning Method
+                                </div>
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>D)</span> Linear Learning Model
+                                </div>
+                            </div>
+                            <div class="quiz-feedback">
+                                <span class="feedback-status"></span> LLM signifie "Large Language Model" (Grand Modèle de Langage). Ce sont des modèles d'IA entraînés sur d'énormes quantités de texte, comme GPT-4 ou Claude.
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="quiz-container" id="question5">
+                            <div class="quiz-question">
+                                5. Vrai ou Faux : L'IA actuelle "comprend" vraiment le langage humain comme nous le comprenons.
+                            </div>
+                            <div class="quiz-options">
+                                <div class="quiz-option" data-answer="incorrect">
+                                    <span>A)</span> Vrai
+                                </div>
+                                <div class="quiz-option" data-answer="correct">
+                                    <span>B)</span> Faux
+                                </div>
+                            </div>
+                            <div class="quiz-feedback">
+                                <span class="feedback-status"></span> L'IA actuelle simule la compréhension en trouvant des patterns statistiques dans les données, mais elle ne "comprend" pas au sens humain du terme. C'est une distinction importante à retenir.
+                            </div>
+                        </div>
+
+                        <div class="quiz-result" id="quizResult">
+                            <h3>🎉 Félicitations !</h3>
+                            <p>Vous avez terminé le quiz. Votre score : <span id="finalScore">0</span>/5</p>
+                            <p>Excellentes connaissances sur les fondamentaux de l'IA !</p>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button id="startQuiz" class="btn btn-quiz">Commencer le quiz</button>
+                            <button id="nextQuestion" class="btn btn-quiz" style="display: none;">Question suivante</button>
+                            <button id="showResults" class="btn btn-quiz" style="display: none;">Voir les résultats</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Démystification Section -->
+                <section class="section">
+                    <h2 class="section-title">🔍 Démystification des idées reçues</h2>
+                    <div class="section-content">
+                        <p style="margin-bottom: 2rem;">
+                            Maintenant que vous maîtrisez les bases, démystifions ensemble les principales idées reçues sur l'intelligence artificielle.
+                        </p>
+
+                        <!-- Mythe 1 -->
+                        <div class="myth-card">
+                            <div class="myth-header">
+                                <div class="myth-icon false">❌</div>
+                                <div class="myth-title">"L'IA va remplacer tous les emplois"</div>
+                            </div>
+                            <div class="myth-explanation">
+                                <strong>Réalité :</strong> L'IA transforme les emplois plutôt qu'elle ne les supprime massivement. Elle automatise certaines tâches répétitives, créé de nouveaux métiers, et augmente la productivité humaine. L'histoire technologique montre que l'innovation crée généralement plus d'emplois qu'elle n'en détruit, mais avec une période d'adaptation nécessaire.
+                            </div>
+                        </div>
+
+                        <!-- Mythe 2 -->
+                        <div class="myth-card">
+                            <div class="myth-header">
+                                <div class="myth-icon false">❌</div>
+                                <div class="myth-title">"L'IA est consciente et sensible"</div>
+                            </div>
+                            <div class="myth-explanation">
+                                <strong>Réalité :</strong> L'IA actuelle simule des comportements intelligents sans avoir de conscience ou de sensibilité. Elle traite des patterns dans les données pour donner des réponses cohérentes, mais n'a pas d'expérience subjective, d'émotions ou de conscience de soi. C'est une simulation très sophistiquée, pas une vraie intelligence.
+                            </div>
+                        </div>
+
+                        <!-- Mythe 3 -->
+                        <div class="myth-card">
+                            <div class="myth-header">
+                                <div class="myth-icon false">❌</div>
+                                <div class="myth-title">"L'IA est neutre et objective"</div>
+                            </div>
+                            <div class="myth-explanation">
+                                <strong>Réalité :</strong> L'IA hérite des biais présents dans ses données d'entraînement et peut amplifier les préjugés sociaux. Les algorithmes reflètent les choix de leurs créateurs et les données historiques, qui peuvent contenir des discriminations. Il est crucial de développer une IA responsable et inclusive.
+                            </div>
+                        </div>
+
+                        <!-- Mythe 4 -->
+                        <div class="myth-card">
+                            <div class="myth-header">
+                                <div class="myth-icon false">❌</div>
+                                <div class="myth-title">"L'IA comprend vraiment le langage"</div>
+                            </div>
+                            <div class="myth-explanation">
+                                <strong>Réalité :</strong> L'IA traite le langage de manière statistique en identifiant des patterns, mais ne "comprend" pas au sens humain. Elle prédit le mot suivant le plus probable dans un contexte donné, créant une illusion de compréhension. Cette nuance est importante pour bien utiliser ces outils.
+                            </div>
+                        </div>
+
+                        <!-- Mythe 5 -->
+                        <div class="myth-card">
+                            <div class="myth-header">
+                                <div class="myth-icon false">❌</div>
+                                <div class="myth-title">"L'IA va dominer le monde"</div>
+                            </div>
+                            <div class="myth-explanation">
+                                <strong>Réalité :</strong> Les scénarios catastrophiques relèvent largement de la science-fiction. L'IA actuelle est très spécialisée et contrôlée par l'humain. Les vrais enjeux sont plus prosaïques : emploi, vie privée, biais algorithmiques, et réglementation. Il faut rester vigilant mais sans tomber dans la panique.
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 L'essentiel à retenir</div>
+                            <p>L'IA est un outil puissant mais limité, qui augmente les capacités humaines plutôt qu'elle ne les remplace. Comprendre ses vraies capacités et limitations vous permettra de l'utiliser efficacement dans le module suivant sur l'art du prompting.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Préparation Module 2 -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Prêt pour la suite ?</h2>
+                    <div class="section-content">
+                        <p style="margin-bottom: 1.5rem;">
+                            Félicitations ! Vous maîtrisez maintenant les fondamentaux de l'IA. Dans le Module 2, nous allons apprendre l'art du prompting pour communiquer efficacement avec les IA génératives.
+                        </p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Aperçu du Module 2 : Art du Prompting</div>
+                            <ul style="color: var(--text-secondary); line-height: 1.6;">
+                                <li>Maîtriser la structure d'un prompt efficace</li>
+                                <li>Techniques avancées de prompt engineering</li>
+                                <li>Éviter les erreurs courantes</li>
+                                <li>Créer votre bibliothèque personnelle de prompts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="fondamentaux_1_types_safari_3.html" class="btn btn-secondary">
+                        <span>←</span> Séquence 3 : Types d'IA et Safari
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Module 1 - Séquence 4</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Quiz et démystification</div>
+                    </div>
+                    <a href="prompting_2_overview.html" class="btn btn-primary">
+                        Module 2 : Art du Prompting <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Progression</h3>
+                    <div class="progress-circle">
+                        <span class="progress-text">4/4</span>
+                    </div>
+                    <div style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        Module 1 terminé !
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">✓</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Vue d'ensemble</div>
+                                <div class="sequence-duration">5 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">✓</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Introduction à l'IA</div>
+                                <div class="sequence-duration">60 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">✓</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Histoire et évolution</div>
+                                <div class="sequence-duration">50 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">✓</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Types d'IA et Safari</div>
+                                <div class="sequence-duration">85 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item current">
+                            <div class="sequence-icon current">4</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Quiz et démystification</div>
+                                <div class="sequence-duration">45 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Resources Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📚 Ressources</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="ressources_outils.html" class="module-nav-link">
+                            <span>🛠️</span>
+                            <span>Outils IA</span>
+                        </a>
+                        <a href="ressources_bibliotheque.html" class="module-nav-link">
+                            <span>📖</span>
+                            <span>Bibliothèque</span>
+                        </a>
+                        <a href="projet_brief.html" class="module-nav-link">
+                            <span>🎯</span>
+                            <span>Projet final</span>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+    <script src="js/simple_tracker.js"></script>
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            // ✅ AJOUTEZ CETTE LIGNE pour tracker la visite
+            markSequenceCompleted(1, 'quiz');
+        });
+
+        // Quiz Logic
+        let currentQuestion = 0;
+        let score = 0;
+        let quizStarted = false;
+
+        const questions = document.querySelectorAll('.quiz-container');
+        const startBtn = document.getElementById('startQuiz');
+        const nextBtn = document.getElementById('nextQuestion');
+        const resultsBtn = document.getElementById('showResults');
+        const quizResult = document.getElementById('quizResult');
+
+        // Initially hide all questions
+        questions.forEach(q => q.style.display = 'none');
+
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', nextQuestion);
+        resultsBtn.addEventListener('click', showResults);
+
+        function startQuiz() {
+            quizStarted = true;
+            currentQuestion = 0;
+            score = 0;
+            
+            startBtn.style.display = 'none';
+            questions[0].style.display = 'block';
+            
+            // Add click handlers to options
+            questions.forEach((question, qIndex) => {
+                const options = question.querySelectorAll('.quiz-option');
+                options.forEach(option => {
+                    option.addEventListener('click', () => selectAnswer(option, qIndex));
+                });
+            });
+        }
+
+        function selectAnswer(selectedOption, questionIndex) {
+            const question = questions[questionIndex];
+            const options = question.querySelectorAll('.quiz-option');
+            const feedback = question.querySelector('.quiz-feedback');
+            const feedbackStatus = feedback.querySelector('.feedback-status');
+            
+            // Remove previous selections
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            selectedOption.classList.add('selected');
+            
+            // Check if correct and set feedback
+            if (selectedOption.dataset.answer === 'correct') {
+                selectedOption.classList.add('correct');
+                feedbackStatus.textContent = '✅ Correct !';
+                feedbackStatus.className = 'feedback-status correct';
+                score++;
+            } else {
+                selectedOption.classList.add('incorrect');
+                feedbackStatus.textContent = '❌ Incorrect.';
+                feedbackStatus.className = 'feedback-status incorrect';
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Show feedback
+            feedback.classList.add('show');
+            
+            // Show appropriate button
+            if (questionIndex < questions.length - 1) {
+                nextBtn.style.display = 'inline-flex';
+            } else {
+                resultsBtn.style.display = 'inline-flex';
+            }
+        }
+
+        function nextQuestion() {
+            questions[currentQuestion].style.display = 'none';
+            currentQuestion++;
+            questions[currentQuestion].style.display = 'block';
+            nextBtn.style.display = 'none';
+        }
+
+        function showResults() {
+            questions[currentQuestion].style.display = 'none';
+            document.getElementById('finalScore').textContent = score;
+            quizResult.classList.add('show');
+            resultsBtn.style.display = 'none';
+            
+            // ✅ AJOUTEZ CES LIGNES pour sauvegarder le résultat
+            const percentage = Math.round((score / 5) * 100); // Convertit sur 100
+            saveQuizResult('module1', percentage); // Sauvegarde avec le tracker
+            
+            console.log(`Quiz Module 1 terminé : ${percentage}%`);
+        }
+    </script>
+</body>
+</html>

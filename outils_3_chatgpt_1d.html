@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT - Intégration workflow | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle-button::after {
+            content: '☀️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(23px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::after {
+            content: '🌙';
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs for Better Navigation */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '›';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Micro-séquence Navigation */
+        .micro-sequence-nav {
+            background: var(--card-bg);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .micro-nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .micro-nav-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .micro-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+        }
+
+        .micro-nav.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .micro-nav.completed {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .micro-nav:hover:not(.current):not(.disabled) {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .micro-nav.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Sidebar for Learning Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tips and Warnings */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Toggle Sections avec icônes */
+        .toggle-section {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        .toggle-header {
+            background: var(--bg-tertiary);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toggle-header:hover {
+            background: var(--bg-secondary);
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .toggle-section.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .toggle-section.active .toggle-content {
+            max-height: 2000px;
+        }
+
+        .toggle-inner {
+            padding: 1.5rem;
+        }
+
+        /* Workflow Grid */
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .workflow-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .workflow-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Templates Grid */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .template-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .template-category {
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .template-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .template-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Sequence List for Sidebar */
+        .sequence-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Navigation Controls */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Buttons with Enhanced Interactions */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .micro-nav-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .workflow-grid, .templates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="dashboard.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="outils_3_overview.html" class="breadcrumb-link">Module 3: Outils IA Populaires</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">ChatGPT - Intégration workflow</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Micro-séquence Navigation -->
+    <div class="micro-sequence-nav">
+        <div class="container">
+            <div class="micro-nav-container">
+                <span class="micro-nav-label">Séquence 1 :</span>
+                <a href="outils_3_chatgpt_1a.html" class="micro-nav completed">1A</a>
+                <a href="outils_3_chatgpt_1b.html" class="micro-nav completed">1B</a>
+                <a href="outils_3_chatgpt_1c.html" class="micro-nav completed">1C</a>
+                <a href="outils_3_chatgpt_1d.html" class="micro-nav current">1D</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🔗</span>
+                        <span>Micro-séquence 1D</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>30 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Débutant</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">ChatGPT - Intégration workflow</h1>
+                <p class="lesson-description">
+                    Transformez votre façon de travailler en intégrant intelligemment ChatGPT dans vos processus quotidiens. 
+                    Apprenez à auditer vos tâches, créer des templates métier et développer une stratégie d'implémentation progressive.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Transformer votre workflow avec ChatGPT</h2>
+                    <div class="section-content">
+                        <p>L'intégration réussie de ChatGPT dans votre travail quotidien ne se fait pas au hasard. Elle nécessite une approche méthodique pour identifier les bonnes opportunités, créer des processus reproductibles et développer une stratégie d'adoption progressive.</p>
+
+                        <p>Cette micro-séquence vous guide dans cette transformation, de l'audit initial de vos tâches jusqu'à la mise en place d'un système optimisé qui vous fait gagner du temps au quotidien.</p>
+
+                        <div class="definition-box">
+                            <div class="definition-title">📋 Définition : Workflow IA</div>
+                            <p>Un workflow IA est un processus de travail structuré qui intègre des outils d'intelligence artificielle à des moments clés pour automatiser, accélérer ou améliorer la qualité des tâches habituelles.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Audit des tâches -->
+                <section class="section">
+                    <h2 class="section-title">🔍 Étape 1 : Audit de vos tâches actuelles</h2>
+                    <div class="section-content">
+                        <p>Avant d'intégrer ChatGPT, vous devez comprendre précisément comment vous travaillez actuellement. Cette analyse vous permettra d'identifier les meilleures opportunités d'optimisation.</p>
+
+                        <h3>Méthode d'audit en 3 étapes</h3>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">📝 Étape 1 : Inventaire des tâches</div>
+                            <p>Pendant une semaine, notez toutes vos activités professionnelles avec :</p>
+                            <ul>
+                                <li><strong>Nature de la tâche</strong> : Rédaction, analyse, recherche, communication, etc.</li>
+                                <li><strong>Temps consacré</strong> : Durée réelle de chaque activité</li>
+                                <li><strong>Fréquence</strong> : Quotidienne, hebdomadaire, ponctuelle</li>
+                                <li><strong>Niveau de satisfaction</strong> : Tâche épanouissante ou fastidieuse</li>
+                            </ul>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">⚖️ Étape 2 : Grille de priorisation</div>
+                            <p>Classez chaque tâche selon deux critères :</p>
+                            <ul>
+                                <li><strong>Impact potentiel de l'IA</strong> : Gain de temps et qualité possibles</li>
+                                <li><strong>Facilité d'implémentation</strong> : Complexité technique et organisationnelle</li>
+                            </ul>
+                            <p>Les tâches à fort impact et facile implémentation sont vos "Quick Wins" prioritaires.</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Étape 3 : Identification des patterns</div>
+                            <p>Recherchez les schémas récurrents :</p>
+                            <ul>
+                                <li><strong>Tâches répétitives</strong> : Mêmes actions avec des variables différentes</li>
+                                <li><strong>Goulots d'étranglement</strong> : Activités qui ralentissent vos projets</li>
+                                <li><strong>Tâches chronophages</strong> : Activités à faible valeur ajoutée</li>
+                                <li><strong>Besoins de créativité</strong> : Moments où vous cherchez l'inspiration</li>
+                            </ul>
+                        </div>
+
+                        <h3>Catégories de tâches optimisables</h3>
+                        
+                        <div class="workflow-grid">
+                            <div class="workflow-card">
+                                <div class="workflow-title">📝 Rédaction & Communication</div>
+                                <div class="workflow-description">
+                                    Emails, rapports, présentations, synthèses, propositions commerciales, documentation technique
+                                </div>
+                            </div>
+                            <div class="workflow-card">
+                                <div class="workflow-title">🔍 Recherche & Analyse</div>
+                                <div class="workflow-description">
+                                    Veille sectorielle, étude de marché, analyse de données, benchmark concurrentiel
+                                </div>
+                            </div>
+                            <div class="workflow-card">
+                                <div class="workflow-title">💡 Création & Innovation</div>
+                                <div class="workflow-description">
+                                    Brainstorming, idéation, conception de stratégies, résolution de problèmes créatifs
+                                </div>
+                            </div>
+                            <div class="workflow-card">
+                                <div class="workflow-title">📊 Organisation & Planification</div>
+                                <div class="workflow-description">
+                                    Gestion de projet, planification stratégique, optimisation de processus, prise de décision
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Templates par métier -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Étape 2 : Templates par métier</h2>
+                    <div class="section-content">
+                        <p>Une fois vos tâches identifiées, créez des templates ChatGPT adaptés à votre métier. Ces modèles vous permettront d'obtenir des résultats cohérents et de gagner du temps sur les demandes récurrentes.</p>
+
+                        <h3>Principe des templates efficaces</h3>
+                        <p>Un bon template ChatGPT respecte la structure <strong>RÔLE + CONTEXTE + TÂCHE + FORMAT</strong> :</p>
+
+                        <div class="tip-box">
+                            <div class="tip-title">📋 Structure type d'un template</div>
+                            <p><strong>Tu es [RÔLE]</strong> spécialisé dans [DOMAINE].<br>
+                            <strong>Contexte :</strong> [SITUATION SPÉCIFIQUE]<br>
+                            <strong>Tâche :</strong> [ACTION PRÉCISE À ACCOMPLIR]<br>
+                            <strong>Format :</strong> [STRUCTURE DE RÉPONSE ATTENDUE]</p>
+                        </div>
+
+                        <h3>Templates par métier - Exemples pratiques</h3>
+
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleContent(this)">
+                                <span>💼 Marketing & Communication</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="toggle-inner">
+                                    <div class="templates-grid">
+                                        <div class="template-card">
+                                            <div class="template-category">Contenu Marketing</div>
+                                            <div class="template-name">Post LinkedIn professionnel</div>
+                                            <div class="template-description">
+                                                Tu es un expert en marketing digital. Crée un post LinkedIn de 150 mots sur [SUJET] qui génère de l'engagement, inclut un call-to-action et utilise 3 hashtags pertinents.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Email Marketing</div>
+                                            <div class="template-name">Newsletter engagement</div>
+                                            <div class="template-description">
+                                                Rédige une newsletter de 300 mots sur [ACTUALITÉ ENTREPRISE] avec un ton professionnel mais chaleureux, incluant une accroche, 3 points clés et un CTA.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Stratégie</div>
+                                            <div class="template-name">Analyse concurrentielle</div>
+                                            <div class="template-description">
+                                                Analyse les forces/faiblesses de [CONCURRENT] sur [MARCHÉ]. Fournis un tableau comparatif et 3 opportunités de différenciation pour mon entreprise.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleContent(this)">
+                                <span>👨‍💼 Management & RH</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="toggle-inner">
+                                    <div class="templates-grid">
+                                        <div class="template-card">
+                                            <div class="template-category">Entretiens</div>
+                                            <div class="template-name">Questions d'entretien</div>
+                                            <div class="template-description">
+                                                Crée 10 questions d'entretien pour un poste de [INTITULÉ] avec 3 niveaux : compétences techniques, soft skills et motivation. Inclus les réponses attendues.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Feedback</div>
+                                            <div class="template-name">Entretien d'évaluation</div>
+                                            <div class="template-description">
+                                                Rédige un feedback constructif pour [NOM] sur [PROJET/PÉRIODE]. Inclus 3 points forts, 2 axes d'amélioration et un plan d'action sur 3 mois.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Communication</div>
+                                            <div class="template-name">Annonce changement</div>
+                                            <div class="template-description">
+                                                Rédige une communication interne sur [CHANGEMENT] qui explique les raisons, impacts et bénéfices. Ton bienveillant mais ferme, 250 mots maximum.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleContent(this)">
+                                <span>💻 Tech & Produit</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="toggle-inner">
+                                    <div class="templates-grid">
+                                        <div class="template-card">
+                                            <div class="template-category">Documentation</div>
+                                            <div class="template-name">Documentation API</div>
+                                            <div class="template-description">
+                                                Documente cette fonction [CODE] avec : description, paramètres, valeurs de retour, exemples d'usage et cas d'erreur. Format Markdown.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Tests</div>
+                                            <div class="template-name">Plan de tests</div>
+                                            <div class="template-description">
+                                                Crée un plan de tests pour la fonctionnalité [DESCRIPTION]. Inclus cas nominaux, cas limites et cas d'erreur avec critères d'acceptation.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">User Stories</div>
+                                            <div class="template-name">Spécifications produit</div>
+                                            <div class="template-description">
+                                                Transforme ce besoin [DESCRIPTION] en user stories avec critères d'acceptation, définition of done et estimation de complexité.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleContent(this)">
+                                <span>📊 Finance & Business</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="toggle-inner">
+                                    <div class="templates-grid">
+                                        <div class="template-card">
+                                            <div class="template-category">Analyse</div>
+                                            <div class="template-name">Rapport d'analyse</div>
+                                            <div class="template-description">
+                                                Analyse ces données financières [DONNÉES] et produis un rapport avec tendances, insights clés et 3 recommandations stratégiques.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Prévisions</div>
+                                            <div class="template-name">Business plan</div>
+                                            <div class="template-description">
+                                                Crée un business plan synthétique pour [PROJET] avec marché, concurrence, modèle économique et prévisions sur 3 ans.
+                                            </div>
+                                        </div>
+                                        <div class="template-card">
+                                            <div class="template-category">Présentation</div>
+                                            <div class="template-name">Pitch investisseurs</div>
+                                            <div class="template-description">
+                                                Structure un pitch de 10 slides pour [PROJET] : problème, solution, marché, concurrence, équipe, financements et plan d'action.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Personnalisation de vos templates</h3>
+                        <p>Adaptez ces exemples à votre contexte spécifique :</p>
+                        <ul>
+                            <li><strong>Ton et style</strong> : Formel, décontracté, technique selon votre culture d'entreprise</li>
+                            <li><strong>Contraintes spécifiques</strong> : Longueur, format, délais, budgets</li>
+                            <li><strong>Terminologie métier</strong> : Jargon et expressions de votre secteur</li>
+                            <li><strong>Niveau de détail</strong> : Synthèse exécutive ou analyse approfondie</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Stratégie d'implémentation -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Étape 3 : Stratégie d'implémentation progressive</h2>
+                    <div class="section-content">
+                        <p>L'adoption de ChatGPT dans votre workflow doit être progressive et mesurée. Une approche trop brutale risque de créer de la résistance et des erreurs. Voici une méthode éprouvée pour réussir cette transformation.</p>
+
+                        <h3>Méthode des 4 phases</h3>
+
+                        <div class="workflow-grid">
+                            <div class="workflow-card">
+                                <div class="workflow-title">🚶 Phase 1 : Exploration (2 semaines)</div>
+                                <div class="workflow-description">
+                                    <strong>Objectif :</strong> Familiarisation sans pression<br>
+                                    • Tester ChatGPT sur 2-3 tâches non critiques<br>
+                                    • Identifier 1-2 Quick Wins évidents<br>
+                                    • Créer vos premiers templates simples
+                                </div>
+                            </div>
+                            <div class="workflow-card">
+                                <div class="workflow-title">🏃 Phase 2 : Intégration (1 mois)</div>
+                                <div class="workflow-description">
+                                    <strong>Objectif :</strong> Adoption de routines quotidiennes<br>
+                                    • Implémenter ChatGPT sur 3-5 tâches régulières<br>
+                                    • Affiner vos templates selon les résultats<br>
+                                    • Mesurer les gains de temps réels
+                                </div>
+                            </div>
+                            <div class="workflow-card">
+                                <div class="workflow-title">⚡ Phase 3 : Optimisation (2 mois)</div>
+                                <div class="workflow-description">
+                                    <strong>Objectif :</strong> Workflow hybride IA/humain<br>
+                                    • Combiner ChatGPT avec d'autres outils<br>
+                                    • Automatiser les tâches les plus répétitives<br>
+                                    • Former vos collègues aux bonnes pratiques
+                                </div>
+                            </div>
+                            <div class="workflow-card">
+                                <div class="workflow-title">🎯 Phase 4 : Maîtrise (en continu)</div>
+                                <div class="workflow-description">
+                                    <strong>Objectif :</strong> Expert IA dans votre domaine<br>
+                                    • Créer des workflows complexes multi-étapes<br>
+                                    • Innover avec de nouveaux use cases<br>
+                                    • Partager votre expertise en interne
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Indicateurs de réussite à suivre</h3>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">📈 Métriques quantitatives</div>
+                            <ul>
+                                <li><strong>Temps économisé</strong> : Mesure avant/après sur tâches identiques</li>
+                                <li><strong>Volume traité</strong> : Augmentation de votre capacité de production</li>
+                                <li><strong>Fréquence d'usage</strong> : Nombre d'interactions ChatGPT par jour/semaine</li>
+                                <li><strong>Taux d'adoption</strong> : Pourcentage de tâches éligibles effectivement optimisées</li>
+                            </ul>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">⭐ Métriques qualitatives</div>
+                            <ul>
+                                <li><strong>Satisfaction personnelle</strong> : Réduction du stress, plus de temps pour l'essentiel</li>
+                                <li><strong>Qualité des livrables</strong> : Amélioration perçue par vos clients/collègues</li>
+                                <li><strong>Créativité</strong> : Nouvelles idées et approches découvertes</li>
+                                <li><strong>Confiance</strong> : Autonomie croissante avec les outils IA</li>
+                            </ul>
+                        </div>
+
+                        <h3>Pièges à éviter</h3>
+                        
+                        <div class="tip-box">
+                            <div class="tip-title">⚠️ Erreurs fréquentes d'implémentation</div>
+                            <ul>
+                                <li><strong>Tout automatiser d'un coup</strong> : Commencez petit et progressif</li>
+                                <li><strong>Négliger la vérification</strong> : ChatGPT n'est pas infaillible, gardez un regard critique</li>
+                                <li><strong>Copier-coller sans adapter</strong> : Personnalisez toujours les templates selon votre contexte</li>
+                                <li><strong>Ignorer la confidentialité</strong> : Attention aux données sensibles dans vos prompts</li>
+                                <li><strong>Ne pas former l'équipe</strong> : Le changement doit être collectif pour être efficace</li>
+                            </ul>
+                        </div>
+
+                        <h3>Plan d'action personnel</h3>
+                        <p>Pour terminer cette micro-séquence, définissez votre plan d'action immédiat :</p>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">📝 Exercice pratique - Vos 3 prochaines actions</div>
+                            <ol>
+                                <li><strong>Cette semaine :</strong> Choisissez UNE tâche récurrente et créez votre premier template ChatGPT</li>
+                                <li><strong>D'ici 15 jours :</strong> Testez ce template 5 fois et affinez-le selon les résultats</li>
+                                <li><strong>Dans 1 mois :</strong> Identifiez 2 nouvelles tâches à optimiser et calculez votre temps économisé</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Résumé et points clés -->
+                <section class="section">
+                    <h2 class="section-title">✅ Points clés à retenir</h2>
+                    <div class="section-content">
+                        <div class="tip-box">
+                            <div class="tip-title">🎯 Les essentiels de l'intégration workflow</div>
+                            <ul>
+                                <li><strong>Auditez avant d'optimiser</strong> : Comprenez vos tâches actuelles pour identifier les meilleures opportunités</li>
+                                <li><strong>Créez des templates structurés</strong> : Utilisez la méthode RÔLE + CONTEXTE + TÂCHE + FORMAT</li>
+                                <li><strong>Adoptez une approche progressive</strong> : 4 phases d'implémentation sur 3-4 mois</li>
+                                <li><strong>Mesurez vos résultats</strong> : Indicateurs quantitatifs et qualitatifs pour valider l'efficacité</li>
+                                <li><strong>Restez critique et adaptable</strong> : L'IA assiste, ne remplace pas votre expertise métier</li>
+                            </ul>
+                        </div>
+
+                        <p>Vous avez maintenant toutes les clés pour transformer votre façon de travailler avec ChatGPT. L'intégration réussie demande de la patience et de la pratique, mais les gains en productivité et satisfaction professionnelle en valent largement l'investissement.</p>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="outils_3_chatgpt_1c.html" class="btn btn-secondary">
+                        <span>←</span> Micro-séquence 1C
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Micro-séquence 1D sur 4</div>
+                        <div class="nav-title">Intégration workflow</div>
+                    </div>
+                    <a href="outils_3_claude_2.html" class="btn btn-primary">
+                        Séquence 2 <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%;"></div>
+                    </div>
+                    <div class="progress-text">Micro-séquence 1D - Module 3</div>
+                </div>
+
+                <!-- Micro-séquences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🔗 Séquence ChatGPT</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1A</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Découverte & interfaces</div>
+                                <div class="sequence-duration">25 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1B</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Paramètres & optimisation</div>
+                                <div class="sequence-duration">20 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1C</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Agents personnalisés</div>
+                                <div class="sequence-duration">30 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item current">
+                            <div class="sequence-icon current">1D</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Intégration workflow</div>
+                                <div class="sequence-duration">30 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">⚡ Actions rapides</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="https://chat.openai.com" target="_blank" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            🤖 Ouvrir ChatGPT
+                        </a>
+                        <a href="#" class="btn btn-secondary" style="font-size: 0.9rem;" onclick="markCompleted()">
+                            ✅ Marquer comme terminé
+                        </a>
+                        <a href="ressources_outils.html" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            📚 Voir toutes les ressources
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Toggle content function
+        function toggleContent(header) {
+            const section = header.parentElement;
+            section.classList.toggle('active');
+        }
+
+        // Mark sequence as completed
+        function markCompleted() {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[3]) progress.modules[3] = {};
+            if (!progress.modules[3]['chatgpt']) progress.modules[3]['chatgpt'] = {};
+            
+            progress.modules[3]['chatgpt']['1d'] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+            
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = '25%';
+            
+            // Show confirmation
+            alert('Micro-séquence 1D terminée ! 🎉\nVous pouvez maintenant passer à la séquence 2 : Claude et alternatives !');
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
