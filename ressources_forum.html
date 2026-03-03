@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communauté Discord | IA Academy</title>
+    <style>
+        :root {
+            /* Light theme colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            
+            /* Brand colors */
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --discord-color: #5865F2;
+            
+            /* Effects */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --discord-glow: 0 0 20px rgba(88, 101, 242, 0.3);
+            --pattern-opacity: 0.03;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --pattern-opacity: 0.05;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                linear-gradient(90deg, transparent 24%, rgba(88, 101, 242, var(--pattern-opacity)) 25%, rgba(88, 101, 242, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(88, 101, 242, var(--pattern-opacity)) 75%, rgba(88, 101, 242, var(--pattern-opacity)) 76%, transparent 77%),
+                linear-gradient(0deg, transparent 24%, rgba(88, 101, 242, var(--pattern-opacity)) 25%, rgba(88, 101, 242, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(88, 101, 242, var(--pattern-opacity)) 75%, rgba(88, 101, 242, var(--pattern-opacity)) 76%, transparent 77%);
+            background-size: 60px 60px;
+            z-index: -1;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--discord-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle {
+            width: 60px;
+            height: 30px;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-toggle-button {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(45deg, var(--primary-color), var(--discord-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(28px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--discord-color), var(--primary-color));
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2), transparent),
+                        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Discord Button Special */
+        .btn-discord {
+            background: var(--discord-color);
+            color: white;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 8px 30px rgba(88, 101, 242, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-discord::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .btn-discord:hover::before {
+            left: 100%;
+        }
+
+        .btn-discord:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.6);
+        }
+
+        .discord-icon {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: var(--glass-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--discord-glow);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--discord-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .stat-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        /* Channels Section */
+        .channels-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--discord-color), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Channel Cards */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .channel-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--discord-color), var(--primary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .channel-card:hover::before {
+            opacity: 1;
+        }
+
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .channel-icon {
+            font-size: 2.5rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .channel-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .channel-type {
+            color: var(--discord-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .channel-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .channel-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .channel-features h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .channel-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .channel-features li {
+            color: var(--text-secondary);
+            padding: 0.25rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .channel-features li::before {
+            content: '🔸';
+            position: absolute;
+            left: 0;
+        }
+
+        .channel-activity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .activity-stat {
+            text-align: center;
+        }
+
+        .activity-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--discord-color);
+        }
+
+        .activity-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Guidelines Section */
+        .guidelines-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 4rem;
+        }
+
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .guideline-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .guideline-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .guideline-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .guideline-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            margin-bottom: 4rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--discord-color), var(--primary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .author-role {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--discord-color), var(--primary-color));
+            color: white;
+            padding: 4rem 0;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary-white {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-white:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-bottom: 4rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--glass-bg);
+        }
+
+        .faq-question h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .faq-toggle {
+            color: var(--discord-color);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 2rem 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--discord-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--discord-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .channels-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .guidelines-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--discord-color), var(--primary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <a href="index.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Communauté Discord</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    💬 LIVE • +2500 membres connectés
+                </div>
+                <h1 class="hero-title">Rejoignez la Communauté IA</h1>
+                <p class="hero-subtitle">
+                    Échangez avec des passionnés d'IA, partagez vos créations, obtenez de l'aide en temps réel 
+                    et restez à la pointe des dernières innovations sur notre serveur Discord actif 24h/24.
+                </p>
+                <div class="hero-cta">
+                    <a href="#" onclick="openDiscord()" class="btn-discord">
+                        <span class="discord-icon">💬</span>
+                        Rejoindre Discord Maintenant
+                    </a>
+                    <a href="#channels" class="btn-secondary-white">
+                        Découvrir les canaux
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">2,847</div>
+                    <div class="stat-label">Membres Actifs</div>
+                    <div class="stat-description">Passionnés d'IA de tous niveaux</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Canaux Spécialisés</div>
+                    <div class="stat-description">Organisés par thématiques</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Actif</div>
+                    <div class="stat-description">Entraide communautaire</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Projets Partagés</div>
+                    <div class="stat-description">Créations et réalisations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Satisfaction</div>
+                    <div class="stat-description">Retours positifs membres</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Discord Channels -->
+            <section class="channels-section" id="channels">
+                <div class="section-header">
+                    <h2 class="section-title">🗂️ Canaux Discord Organisés</h2>
+                    <p class="section-description">
+                        Chaque canal a sa spécialité pour vous aider à trouver rapidement l'information ou l'aide dont vous avez besoin.
+                    </p>
+                </div>
+
+                <div class="channels-grid">
+                    <!-- Canal Général -->
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <div class="channel-icon">👋</div>
+                            <div class="channel-info">
+                                <h3>Accueil & Présentations</h3>
+                                <span class="channel-type">#general</span>
+                            </div>
+                        </div>
+                        <p class="channel-description">
+                            Présentez-vous, faites connaissance avec la communauté et découvrez l'actualité IA du jour. Point de départ idéal pour les nouveaux membres.
+                        </p>
+                        <div class="channel-features">
+                            <h4>Ce que vous y trouvez</h4>
+                            <ul>
+                                <li>Présentations des nouveaux membres</li>
+                                <li>Actualités IA quotidiennes</li>
+                                <li>Discussions générales sur l'IA</li>
+                                <li>Annonces communautaires</li>
+                            </ul>
+                        </div>
+                        <div class="channel-activity">
+                            <div class="activity-stat">
+                                <div class="activity-number">150+</div>
+                                <div class="activity-label">Messages/jour</div>
+                            </div>
+                            <div class="activity-stat">
+                                <div class="activity-number">12</div>
+                                <div class="activity-label">Nouveaux/semaine</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canal Questions -->
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <div class="channel-icon">🙋</div>
+                            <div class="channel-info">
+                                <h3>Questions & Entraide</h3>
+                                <span class="channel-type">#questions-aide</span>
+                            </div>
+                        </div>
+                        <p class="channel-description">
+                            Posez toutes vos questions sur la formation, les outils IA ou les techniques. Réponses rapides garanties de la communauté et des formateurs.
+                        </p>
+                        <div class="channel-features">
+                            <h4>Support disponible</h4>
+                            <ul>
+                                <li>Questions techniques sur les outils</li>
+                                <li>Aide sur les exercices de formation</li>
+                                <li>Conseils d'optimisation</li>
+                                <li>Debugging de prompts</li>
+                            </ul>
+                        </div>
+                        <div class="channel-activity">
+                            <div class="activity-stat">
+                                <div class="activity-number">95%</div>
+                                <div class="activity-label">Questions résolues</div>
+                            </div>
+                            <div class="activity-stat">
+                                <div class="activity-number">< 2h</div>
+                                <div class="activity-label">Temps de réponse</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canal Projets -->
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <div class="channel-icon">🎨</div>
+                            <div class="channel-info">
+                                <h3>Projets & Créations</h3>
+                                <span class="channel-type">#showcase-projets</span>
+                            </div>
+                        </div>
+                        <p class="channel-description">
+                            Partagez vos créations IA, inspirez-vous des réalisations des autres membres et recevez des feedbacks constructifs de la communauté.
+                        </p>
+                        <div class="channel-features">
+                            <h4>Partagez vos réussites</h4>
+                            <ul>
+                                <li>Images générées (Midjourney, DALL-E...)</li>
+                                <li>Contenus créés avec ChatGPT/Claude</li>
+                                <li>Workflows d'automatisation</li>
+                                <li>Projets complets multimodaux</li>
+                            </ul>
+                        </div>
+                        <div class="channel-activity">
+                            <div class="activity-stat">
+                                <div class="activity-number">50+</div>
+                                <div class="activity-label">Créations/semaine</div>
+                            </div>
+                            <div class="activity-stat">
+                                <div class="activity-number">4.8⭐</div>
+                                <div class="activity-label">Note qualité</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canal Module 4 -->
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <div class="channel-icon">🎬</div>
+                            <div class="channel-info">
+                                <h3>Module 4 - IA Générative</h3>
+                                <span class="channel-type">#module4-avance</span>
+                            </div>
+                        </div>
+                        <p class="channel-description">
+                            Canal dédié aux apprenants du Module 4. Échanges avancés sur la création multimédia, scripts, sous-titres et projets créatifs.
+                        </p>
+                        <div class="channel-features">
+                            <h4>Thématiques spécialisées</h4>
+                            <ul>
+                                <li>Scripts viraux et storytelling IA</li>
+                                <li>Synchronisation audio/vidéo</li>
+                                <li>Workflows créatifs avancés</li>
+                                <li>Portfolio professionnel</li>
+                            </ul>
+                        </div>
+                        <div class="channel-activity">
+                            <div class="activity-stat">
+                                <div class="activity-number">85%</div>
+                                <div class="activity-label">Taux de réussite</div>
+                            </div>
+                            <div class="activity-stat">
+                                <div class="activity-number">320</div>
+                                <div class="activity-label">Membres actifs</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canal Veille -->
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <div class="channel-icon">📡</div>
+                            <div class="channel-info">
+                                <h3>Veille & Innovations</h3>
+                                <span class="channel-type">#veille-ia</span>
+                            </div>
+                        </div>
+                        <p class="channel-description">
+                            Restez à la pointe des dernières innovations IA : nouveaux outils, mises à jour, recherches et tendances du secteur.
+                        </p>
+                        <div class="channel-features">
+                            <h4>Actualités en continu</h4>
+                            <ul>
+                                <li>Nouveaux outils et mises à jour</li>
+                                <li>Papers de recherche vulgarisés</li>
+                                <li>Annonces des grands acteurs IA</li>
+                                <li>Analyses de tendances</li>
+                            </ul>
+                        </div>
+                        <div class="channel-activity">
+                            <div class="activity-stat">
+                                <div class="activity-number">15</div>
+                                <div class="activity-label">News/jour</div>
+                            </div>
+                            <div class="activity-stat">
+                                <div class="activity-number">100%</div>
+                                <div class="activity-label">Sources vérifiées</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canal Business -->
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <div class="channel-icon">💼</div>
+                            <div class="channel-info">
+                                <h3>IA & Business</h3>
+                                <span class="channel-type">#ia-business</span>
+                            </div>
+                        </div>
+                        <p class="channel-description">
+                            Discussions sur l'intégration de l'IA en entreprise : ROI, cas d'usage, stratégies d'implémentation et retours d'expérience professionnels.
+                        </p>
+                        <div class="channel-features">
+                            <h4>Focus professionnel</h4>
+                            <ul>
+                                <li>Cas d'usage en entreprise</li>
+                                <li>Calculs de ROI et métriques</li>
+                                <li>Stratégies d'adoption IA</li>
+                                <li>Networking professionnel</li>
+                            </ul>
+                        </div>
+                        <div class="channel-activity">
+                            <div class="activity-stat">
+                                <div class="activity-number">65%</div>
+                                <div class="activity-label">Membres pros</div>
+                            </div>
+                            <div class="activity-stat">
+                                <div class="activity-number">250+</div>
+                                <div class="activity-label">Cas partagés</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Guidelines -->
+            <section class="guidelines-section">
+                <div class="section-header">
+                    <h2 class="section-title">📜 Règles de la Communauté</h2>
+                    <p class="section-description">
+                        Quelques règles simples pour maintenir un environnement bienveillant et productif pour tous.
+                    </p>
+                </div>
+
+                <div class="guidelines-grid">
+                    <div class="guideline-card">
+                        <div class="guideline-icon">🤝</div>
+                        <h3 class="guideline-title">Respect & Bienveillance</h3>
+                        <p class="guideline-text">
+                            Traitez tous les membres avec respect. Pas de harcèlement, spam ou contenu inapproprié. 
+                            Nous sommes tous là pour apprendre ensemble.
+                        </p>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">💡</div>
+                        <h3 class="guideline-title">Partage Constructif</h3>
+                        <p class="guideline-text">
+                            Partagez vos connaissances, posez des questions pertinentes et donnez des feedbacks constructifs. 
+                            Évitez les débats stériles.
+                        </p>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">📍</div>
+                        <h3 class="guideline-title">Bon Canal, Bon Message</h3>
+                        <p class="guideline-text">
+                            Utilisez le bon canal pour vos messages. Questions dans #questions-aide, créations dans #showcase-projets, etc.
+                        </p>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">🚫</div>
+                        <h3 class="guideline-title">Pas de Pub</h3>
+                        <p class="guideline-text">
+                            Pas de promotion de produits/services non liés à l'IA ou à la formation. 
+                            Les liens affiliés doivent être déclarés.
+                        </p>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">🔍</div>
+                        <h3 class="guideline-title">Recherche d'Abord</h3>
+                        <p class="guideline-text">
+                            Avant de poser une question, utilisez la fonction recherche Discord. 
+                            La réponse a peut-être déjà été donnée.
+                        </p>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">⚖️</div>
+                        <h3 class="guideline-title">Usage Éthique de l'IA</h3>
+                        <p class="guideline-text">
+                            Promouvons un usage responsable et éthique de l'IA. 
+                            Pas de contenu généré pour tromper ou nuire.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="testimonials-section">
+                <div class="section-header">
+                    <h2 class="section-title">💬 Ce Que Disent Nos Membres</h2>
+                    <p class="section-description">
+                        Retours authentiques de membres actifs de notre communauté Discord.
+                    </p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-quote">
+                            "Cette communauté Discord est une mine d'or ! J'ai appris plus en 2 mois d'échanges 
+                            qu'en 6 mois de veille solo. Les membres partagent vraiment leurs meilleures techniques."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">M</div>
+                            <div class="author-info">
+                                <h4>Marie Chen</h4>
+                                <p class="author-role">UX Designer & IA Enthusiast</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <p class="testimonial-quote">
+                            "Le support en temps réel est impressionnant. Quand je bloque sur un prompt ou un workflow, 
+                            j'ai toujours une réponse dans l'heure. C'est comme avoir une équipe d'experts IA à disposition !"
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">J</div>
+                            <div class="author-info">
+                                <h4>Jean Dupont</h4>
+                                <p class="author-role">Consultant Marketing Digital</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <p class="testimonial-quote">
+                            "J'adore le canal #showcase-projets ! C'est ultra motivant de voir les créations des autres 
+                            et de recevoir des feedbacks constructifs. Ça pousse vraiment à se dépasser."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">A</div>
+                            <div class="author-info">
+                                <h4>Alex Rodriguez</h4>
+                                <p class="author-role">Créateur de Contenu</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <p class="testimonial-quote">
+                            "La veille technologique partagée est top niveau. Je suis toujours au courant des dernières 
+                            sorties avant tout le monde grâce au canal #veille-ia. Un vrai avantage concurrentiel !"
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">S</div>
+                            <div class="author-info">
+                                <h4>Sophie Martin</h4>
+                                <p class="author-role">Chef de Projet Tech</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <div class="section-header">
+                    <h2 class="section-title">❓ Questions Fréquentes</h2>
+                    <p class="section-description">
+                        Tout ce que vous devez savoir sur notre communauté Discord.
+                    </p>
+                </div>
+
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h4>Comment rejoindre la communauté Discord ?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Il suffit de cliquer sur le bouton "Rejoindre Discord" en haut de cette page. Vous serez 
+                            automatiquement invité sur notre serveur. Si vous n'avez pas Discord, créez un compte 
+                            gratuit en 2 minutes sur discord.com.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h4>Faut-il être inscrit à la formation pour rejoindre ?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Oui, la communauté Discord est réservée aux apprenants de IA Academy. Vous recevrez 
+                            automatiquement votre invitation Discord après inscription à la formation.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h4>Y a-t-il des horaires de modération ?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Notre équipe de modérateurs est active 16h/24, avec des membres dans différents fuseaux 
+                            horaires. La communauté s'auto-régule aussi très bien grâce aux règles claires et à 
+                            l'ambiance bienveillante.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h4>Puis-je partager mes créations commerciales ?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Absolument ! Le canal #showcase-projets accueille tous types de créations, personnelles 
+                            comme professionnelles. C'est même encouragé pour inspirer les autres membres et 
+                            montrer les applications concrètes de l'IA.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h4>Comment obtenir de l'aide sur Discord ?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Utilisez le canal #questions-aide pour toute question technique ou pédagogique. 
+                            Soyez précis dans votre demande (capturez d'écrans, partagez vos prompts...) pour 
+                            recevoir une aide plus efficace.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <h4>Puis-je inviter des collègues ou amis ?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Seuls les apprenants inscrits à IA Academy peuvent accéder au Discord. Vos collègues 
+                            devront s'inscrire à la formation pour rejoindre la communauté. C'est ce qui maintient 
+                            la qualité des échanges !
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final CTA -->
+            <section class="cta-section">
+                <div class="cta-content">
+                    <h2 class="cta-title">Prêt à Rejoindre la Communauté ?</h2>
+                    <p class="cta-subtitle">
+                        Plus de 2500 passionnés d'IA vous attendent pour partager, apprendre et créer ensemble.
+                        L'entraide, l'inspiration et les nouvelles opportunités n'attendent que vous !
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#" onclick="openDiscord()" class="btn-discord">
+                            <span class="discord-icon">💬</span>
+                            Rejoindre Discord Maintenant
+                        </a>
+                        <a href="index.html" class="btn-secondary-white">
+                            Retour au Dashboard
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>💬 Communauté</h4>
+                    <ul>
+                        <li><a href="#channels">Canaux Discord</a></li>
+                        <li><a href="#guidelines">Règles</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#" onclick="openDiscord()">Rejoindre Discord</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>📚 Ressources</h4>
+                    <ul>
+                        <li><a href="ressources_outils.html">Outils IA</a></li>
+                        <li><a href="ressources_bibliotheque.html">Bibliothèque</a></li>
+                        <li><a href="projet_brief.html">Projets</a></li>
+                        <li><a href="index.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🎯 Formation</h4>
+                    <ul>
+                        <li><a href="fondamentaux_1_overview.html">Fondamentaux IA</a></li>
+                        <li><a href="prompting_2_overview.html">Art du Prompting</a></li>
+                        <li><a href="generative_4_overview.html">IA Générative</a></li>
+                        <li><a href="automatisation_5_overview.html">Automatisation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>💡 Support</h4>
+                    <ul>
+                        <li><a href="#" onclick="openDiscord()">Discord</a></li>
+                        <li><a href="mailto:support@ia-academy.com">Email Support</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="ressources_bibliotheque.html">Guides</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            } catch (error) {
+                console.log('Theme toggle not available');
+            }
+        }
+
+        // Load saved theme
+        try {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (error) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        // FAQ Toggle Function
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Open Discord (placeholder function)
+        function openDiscord() {
+            // This would normally open the actual Discord invite link
+            alert('🎉 Fonctionnalité Discord à configurer !\n\nVous devrez remplacer cette fonction par votre vrai lien d\'invitation Discord.\n\nExemple : https://discord.gg/votre-serveur');
+            
+            // Uncomment and replace with your actual Discord invite link:
+            // window.open('https://discord.gg/your-discord-server', '_blank');
+        }
+
+        // Smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Add animation on scroll for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent);
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target + (counter.textContent.includes('+') ? '+' : '') + 
+                                           (counter.textContent.includes('%') ? '%' : '') +
+                                           (counter.textContent.includes('⭐') ? '⭐' : '') +
+                                           (counter.textContent.includes('/') ? counter.textContent.substring(counter.textContent.indexOf('/')) : '') +
+                                           (counter.textContent === '24/7' ? '/7' : '') +
+                                           (counter.textContent === '< 2h' ? 'h' : '');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current);
+                    }
+                }, 20);
+            });
+        }
+
+        // Trigger animation when stats section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.disconnect();
+                }
+            });
+        });
+
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+    </script>
+</body>
+</html>

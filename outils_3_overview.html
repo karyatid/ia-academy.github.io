@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Outils IA Populaires - Vue d'ensemble | IA Academy</title>
+    
+    <style>
+        /* Variables CSS - NeuroDesign Theme */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(6, 182, 212, var(--pattern-opacity)) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Enhanced Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 25px;
+            background: var(--bg-tertiary);
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] .theme-toggle-button {
+            left: 2px;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            left: calc(100% - 23px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Module Header */
+        .module-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 90deg,
+                rgba(255, 255, 255, 0.05) 180deg,
+                transparent 270deg,
+                rgba(255, 255, 255, 0.1));
+            animation: rotate 25s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .module-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .module-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .module-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            padding: 0.75rem 2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .module-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .module-description {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.7;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 0 4rem 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 1.8rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-color)10, var(--accent-color)10);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Enhanced Sidebar */
+        .sidebar {
+            padding: 0;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-list {
+            list-style: none;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .sequence-item:hover {
+            background: var(--glass-bg);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(135deg, var(--primary-color)15, var(--accent-color)10);
+            border: 1px solid var(--primary-color)30;
+        }
+
+        .sequence-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .sequence-icon.overview {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Navigation */
+        .module-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .module-title {
+                font-size: 2.5rem;
+            }
+
+            .module-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .module-navigation {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">IA Academy</a>
+                
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="container">
+        <div class="breadcrumbs">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>/</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Module 3: Outils IA Populaires</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Module Header -->
+    <section class="module-header">
+        <div class="container">
+            <div class="module-header-content">
+                <div class="module-meta">
+                    <div class="module-badge">
+                        <span>🛠️</span>
+                        <span>Module 3 • 6 heures</span>
+                    </div>
+                </div>
+                <h1 class="module-title">Outils IA Populaires</h1>
+                <p class="module-description">
+                    Maîtrisez les principaux outils IA du marché et optimisez votre workflow quotidien avec les bonnes technologies.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="content-grid">
+            <main class="main-content">
+                <!-- Pourquoi ce module -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Pourquoi ce module ?</h2>
+                    <div class="section-content">
+                        <p>Face à l'explosion du nombre d'outils IA disponibles, il devient crucial de savoir naviguer dans cet écosystème pour choisir les bonnes solutions selon vos besoins spécifiques.</p>
+                        
+                        <div class="highlight-box">
+                            <div class="highlight-title">
+                                <span>💡</span>
+                                <span>Ce que vous allez découvrir</span>
+                            </div>
+                            <p>Ce module vous donne les clés pour devenir autonome dans l'utilisation des outils IA leaders du marché. Vous apprendrez à les configurer, les personnaliser et les intégrer efficacement dans votre routine de travail pour maximiser votre productivité.</p>
+                        </div>
+                        
+                        <p><strong>À la fin de ce module, vous serez capable de :</strong></p>
+                        <ul>
+                            <li>Utiliser efficacement ChatGPT, Claude, Gemini et leurs fonctionnalités avancées</li>
+                            <li>Sélectionner l'outil optimal selon le type de tâche et le contexte</li>
+                            <li>Configurer et personnaliser les outils selon vos besoins spécifiques</li>
+                            <li>Optimiser votre workflow quotidien avec une boîte à outils IA cohérente</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Objectifs pédagogiques -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Objectifs pédagogiques</h2>
+                    <div class="section-content">
+                        <p>Ce module vous rend autonome dans l'utilisation pratique des outils IA. Nos objectifs sont clairs et mesurables :</p>
+                        
+                        <ul>
+                            <li><strong>Maîtriser les outils leaders</strong> : Interface complète de ChatGPT, Claude, Gemini et leurs spécificités</li>
+                            <li><strong>Comparer et choisir</strong> : Identifier les forces et faiblesses de chaque outil pour optimiser vos choix</li>
+                            <li><strong>Personnaliser et configurer</strong> : Créer des GPTs personnalisés et adapter les outils à vos besoins</li>
+                            <li><strong>Intégrer dans votre workflow</strong> : Construire un écosystème IA cohérent et efficace</li>
+                            <li><strong>Évaluer les nouveaux outils</strong> : Développer une méthodologie pour tester et adopter de nouveaux outils IA</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Vue d'ensemble des séquences -->
+                <section class="section">
+                    <h2 class="section-title">🗺️ Votre parcours d'apprentissage</h2>
+                    <div class="section-content">
+                        <p>Le module est organisé en 4 séquences progressives qui vous mèneront de la découverte à la maîtrise des outils IA :</p>
+                        
+                        <div style="display: grid; gap: 1.5rem; margin-top: 2rem;">
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary-color);">
+                                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">⚡ Séquence 1 : ChatGPT et GPT-4 - Maîtrise complète (90min)</h4>
+                                <p>Découverte approfondie de ChatGPT, de l'interface de base aux GPTs personnalisés et à l'utilisation de l'API.</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--accent-color);">
+                                <h4 style="color: var(--accent-color); margin-bottom: 0.5rem;">🔬 Séquence 2 : Claude et alternatives - Comparaison pratique (75min)</h4>
+                                <p>Exploration de Claude, Gemini, Perplexity et autres alternatives avec tests comparatifs en temps réel.</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success-color);">
+                                <h4 style="color: var(--success-color); margin-bottom: 0.5rem;">🛠️ Séquence 3 : Outils spécialisés - Découverte et test (90min)</h4>
+                                <p>Exploration des outils IA spécialisés pour l'image, le code, la productivité et méthodes d'intégration.</p>
+                            </div>
+                            
+                            <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning-color);">
+                                <h4 style="color: var(--warning-color); margin-bottom: 0.5rem;">⚙️ Séquence 4 : Atelier comparatif et optimisation workflow (105min)</h4>
+                                <p>Atelier pratique pour configurer votre écosystème IA personnel et optimiser votre workflow quotidien.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prérequis -->
+                <section class="section">
+                    <h2 class="section-title">📋 Prérequis et niveau</h2>
+                    <div class="section-content">
+                        <div class="highlight-box">
+                            <div class="highlight-title">
+                                <span>✅</span>
+                                <span>Modules 1 et 2 recommandés</span>
+                            </div>
+                            <p>Pour profiter pleinement de ce module, nous recommandons d'avoir suivi les modules "Fondamentaux de l'IA" et "Art du Prompting" qui vous donneront les bases nécessaires.</p>
+                        </div>
+                        
+                        <h3>Ce que vous devez savoir avant de commencer :</h3>
+                        <ul>
+                            <li><strong>Concepts de base de l'IA</strong> : Compréhension des types d'IA et de leurs applications</li>
+                            <li><strong>Maîtrise du prompting</strong> : Capacité à formuler des prompts efficaces</li>
+                            <li><strong>Navigation web</strong> : Aisance avec l'utilisation d'interfaces web</li>
+                        </ul>
+                        
+                        <h3>Matériel nécessaire :</h3>
+                        <ul>
+                            <li><strong>Ordinateur avec connexion internet</strong> : Pour tester les outils en temps réel</li>
+                            <li><strong>Comptes de test</strong> : Nous vous aiderons à créer des comptes gratuits</li>
+                            <li><strong>Outils d'exercices</strong> : Bloc-notes et logiciels de base pour les ateliers</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item current">
+                            <div class="sequence-icon overview">📋</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Vue d'ensemble</div>
+                                <div class="sequence-duration">5 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">🔒</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">ChatGPT et GPT-4</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">🔒</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Claude et alternatives</div>
+                                <div class="sequence-duration">75 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">🔒</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Outils spécialisés</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">🔒</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Atelier workflow</div>
+                                <div class="sequence-duration">105 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="module-navigation">
+            <a href="prompting_2_quiz_4.html" class="btn btn-secondary">
+                ← Module 2: Art du Prompting
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Module 3 - Outils IA Populaires</div>
+                <div style="font-weight: 600; color: var(--text-primary);">Prêt à explorer les outils IA ?</div>
+            </div>
+            <a href="outils_3_chatgpt_1a.html" class="btn btn-primary">
+                Commencer Séquence 1 →
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 IA Academy. Formation complète à l'intelligence artificielle pour débutants - Module 3: Outils IA Populaires.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('theme', newTheme);
+                }
+            } catch (error) {
+                console.warn('Error toggling theme:', error);
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            try {
+                let savedTheme = 'light';
+                if (typeof(Storage) !== "undefined") {
+                    savedTheme = localStorage.getItem('theme') || 'light';
+                }
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                console.warn('Error loading theme:', error);
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+        });
+
+        // Save progress function
+        function markModuleCompleted(moduleNumber) {
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+                    
+                    if (!progress.modules) progress.modules = {};
+                    progress.modules[moduleNumber] = {
+                        completed: true,
+                        completedAt: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('formation_progress', JSON.stringify(progress));
+                    console.log('Progress saved for module', moduleNumber);
+                }
+            } catch (error) {
+                console.warn('Error saving progress:', error);
+            }
+        }
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply animation to sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

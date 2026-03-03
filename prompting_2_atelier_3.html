@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier pratique et bibliothèque de prompts | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-1px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs for Navigation Context */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '→';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Additional Resources */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Tracking */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        /* Lesson Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(var(--transform-x, 0));
+        }
+
+        .nav-btn:first-child:hover {
+            --transform-x: -5px;
+        }
+
+        .nav-btn:last-child:hover {
+            --transform-x: 5px;
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Practical Example Box */
+        .example-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(249, 115, 22, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Code/Prompt Display */
+        .prompt-box {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .prompt-box::before {
+            content: '💬 Prompt';
+            position: absolute;
+            top: -10px;
+            left: 1rem;
+            background: var(--card-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Atelier Workshop Sections */
+        .workshop-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .workshop-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .workshop-number {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .workshop-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .workshop-duration {
+            background: var(--glass-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Template Cards for Library */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .template-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .template-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .template-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .template-category {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .template-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .template-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Toggle collapsible content */
+        .toggle-section {
+            margin: 2rem 0;
+        }
+
+        .toggle-header {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toggle-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .toggle-icon {
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .toggle-content.active {
+            max-height: 2000px;
+            padding: 1.5rem;
+        }
+
+        .toggle-section.active .toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="prompting_2_overview.html" class="breadcrumb-link">Module 2: Art du Prompting</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Séquence 3: Atelier pratique</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🛠️</span>
+                        <span>Séquence 3 / 4</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>120 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Pratique</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Atelier pratique et bibliothèque de prompts</h1>
+                <p class="lesson-description">
+                    Mettez en pratique vos compétences en créant des prompts optimisés pour 5 cas d'usage concrets et construisez votre bibliothèque personnelle de templates réutilisables.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🎯 Objectifs de cet atelier
+                    </h2>
+                    <div class="section-content">
+                        <p>Durant cette séance pratique intensive de 2 heures, vous allez :</p>
+                        <ul>
+                            <li>Créer des prompts optimisés pour 5 cas d'usage professionnels concrets</li>
+                            <li>Participer à un challenge d'optimisation en temps réel</li>
+                            <li>Construire votre bibliothèque personnelle de templates</li>
+                            <li>Tester et comparer différentes approches de prompting</li>
+                            <li>Développer votre workflow d'optimisation de prompts</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                💡 Philosophie de l'atelier
+                            </div>
+                            <p>Cet atelier suit le principe "Learning by Doing" : 80% de pratique, 20% de théorie. Chaque exercice est conçu pour vous confronter à des situations réelles que vous rencontrerez dans votre usage quotidien de l'IA.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier 1 -->
+                <section class="workshop-section">
+                    <div class="workshop-header">
+                        <div class="workshop-number">1</div>
+                        <div>
+                            <h3 class="workshop-title">Rédaction structurée de prompts</h3>
+                            <span class="workshop-duration">40 minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <p><strong>Objectif :</strong> Créer des prompts optimisés pour 5 cas d'usage professionnels en appliquant la structure CTCEF (Contexte, Tâche, Contraintes, Exemples, Format).</p>
+
+                        <!-- Cas d'usage 1 -->
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleSection(this)">
+                                <span>📧 Cas 1 : Email professionnel de demande</span>
+                                <div class="toggle-icon">+</div>
+                            </div>
+                            <div class="toggle-content">
+                                <p><strong>Situation :</strong> Vous devez écrire un email pour demander un devis à un prestataire externe.</p>
+
+                                <div class="example-box">
+                                    <div class="example-title">
+                                        ❌ Prompt basique (à éviter)
+                                    </div>
+                                    <div class="prompt-box">
+                                        Écris un email pour demander un devis.
+                                    </div>
+                                </div>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">
+                                        ✅ Votre mission
+                                    </div>
+                                    <p>Créez un prompt structuré qui prend en compte :</p>
+                                    <ul>
+                                        <li><strong>Contexte :</strong> Votre entreprise, secteur d'activité, relation avec le prestataire</li>
+                                        <li><strong>Tâche :</strong> Type de prestation, urgence, spécificités</li>
+                                        <li><strong>Contraintes :</strong> Ton, longueur, éléments obligatoires</li>
+                                        <li><strong>Format :</strong> Structure de l'email (objet, corps, signature)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="example-box">
+                                    <div class="example-title">
+                                        💡 Template de base
+                                    </div>
+                                    <div class="prompt-box">
+[CONTEXTE] Tu es [fonction] dans une entreprise [secteur] de [taille].
+[TÂCHE] Rédige un email pour demander un devis pour [prestation spécifique].
+[CONTRAINTES]
+- Ton : [formel/cordial/direct]
+- Longueur : [X mots maximum]
+- Inclure : [éléments spécifiques]
+- Échéance : [délai souhaité]
+[FORMAT]
+- Objet : [structure]
+- Corps : Introduction / Contexte / Demande / Next steps
+- Signature : [style]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cas d'usage 2 -->
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleSection(this)">
+                                <span>📄 Cas 2 : Résumé d'article technique</span>
+                                <div class="toggle-icon">+</div>
+                            </div>
+                            <div class="toggle-content">
+                                <p><strong>Situation :</strong> Vous devez résumer un article de 10 pages sur l'intelligence artificielle pour votre équipe.</p>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">
+                                        🎯 Défis spécifiques
+                                    </div>
+                                    <ul>
+                                        <li>Adapter le niveau technique selon votre audience</li>
+                                        <li>Extraire les insights actionables</li>
+                                        <li>Maintenir la précision tout en simplifiant</li>
+                                        <li>Structurer l'information de manière logique</li>
+                                    </ul>
+                                </div>
+
+                                <div class="example-box">
+                                    <div class="example-title">
+                                        🎯 Points clés à intégrer
+                                    </div>
+                                    <ul>
+                                        <li><strong>Audience :</strong> Niveau technique, attentes, contexte métier</li>
+                                        <li><strong>Longueur :</strong> Contrainte de temps de lecture</li>
+                                        <li><strong>Focus :</strong> Aspects les plus pertinents pour votre équipe</li>
+                                        <li><strong>Action :</strong> Recommandations concrètes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cas d'usage 3 -->
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleSection(this)">
+                                <span>🧠 Cas 3 : Brainstorming créatif</span>
+                                <div class="toggle-icon">+</div>
+                            </div>
+                            <div class="toggle-content">
+                                <p><strong>Situation :</strong> Vous lancez un nouveau produit et cherchez des idées de campagne marketing innovantes.</p>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">
+                                        🎨 Techniques avancées à utiliser
+                                    </div>
+                                    <ul>
+                                        <li><strong>Perspective multiple :</strong> "Propose des idées du point de vue d'un influenceur, d'un CEO, d'un adolescent..."</li>
+                                        <li><strong>Contraintes créatives :</strong> "Avec un budget de 1000€", "Sans utiliser les réseaux sociaux"</li>
+                                        <li><strong>Association d'idées :</strong> "Inspire-toi de [marque/campagne réussie]"</li>
+                                        <li><strong>Format varié :</strong> Demander des formats différents (storytelling, bullet points, mind map...)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cas d'usage 4 -->
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleSection(this)">
+                                <span>📊 Cas 4 : Analyse de données</span>
+                                <div class="toggle-icon">+</div>
+                            </div>
+                            <div class="toggle-content">
+                                <p><strong>Situation :</strong> Vous avez des données de vente mensuelle et devez identifier les tendances et recommandations.</p>
+
+                                <div class="definition-box">
+                                    <div class="definition-title">
+                                        📈 Structure d'analyse recommandée
+                                    </div>
+                                    <ol>
+                                        <li><strong>Contexte des données :</strong> Source, période, méthodologie</li>
+                                        <li><strong>Type d'analyse :</strong> Descriptive, comparative, prédictive</li>
+                                        <li><strong>Niveau de détail :</strong> Vue d'ensemble vs analyse granulaire</li>
+                                        <li><strong>Format de sortie :</strong> Executive summary, tableaux, recommandations</li>
+                                    </ol>
+                                </div>
+
+                                <div class="example-box">
+                                    <div class="example-title">
+                                        🔍 Questions clés à faire poser à l'IA
+                                    </div>
+                                    <ul>
+                                        <li>"Quels sont les patterns saisonniers ?"</li>
+                                        <li>"Quels produits/régions surperforment/sous-performent ?"</li>
+                                        <li>"Quelles corrélations avec les événements externes ?"</li>
+                                        <li>"Quelles actions prioritaires recommander ?"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cas d'usage 5 -->
+                        <div class="toggle-section">
+                            <div class="toggle-header" onclick="toggleSection(this)">
+                                <span>📝 Cas 5 : Rédaction de contenu pédagogique</span>
+                                <div class="toggle-icon">+</div>
+                            </div>
+                            <div class="toggle-content">
+                                <p><strong>Situation :</strong> Vous devez expliquer un concept complexe (blockchain, machine learning, etc.) à une audience non-technique.</p>
+
+                                <div class="interactive-box">
+                                    <div class="interactive-title">
+                                        🎓 Principes pédagogiques à intégrer
+                                    </div>
+                                    <ul>
+                                        <li><strong>Progression :</strong> Du simple vers le complexe</li>
+                                        <li><strong>Analogies :</strong> Comparaisons avec des concepts familiers</li>
+                                        <li><strong>Exemples concrets :</strong> Applications pratiques</li>
+                                        <li><strong>Vérification :</strong> Questions pour tester la compréhension</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier 2 -->
+                <section class="workshop-section">
+                    <div class="workshop-header">
+                        <div class="workshop-number">2</div>
+                        <div>
+                            <h3 class="workshop-title">Challenge d'optimisation en temps réel</h3>
+                            <span class="workshop-duration">30 minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <p><strong>Format :</strong> Compétition collaborative où vous optimisez un prompt "cassé" en équipes.</p>
+
+                        <div class="example-box">
+                            <div class="example-title">
+                                🚨 Prompt à réparer
+                            </div>
+                            <div class="prompt-box">
+"Salut ! Tu peux me faire un truc bien pour mon site web ? C'est pour vendre mes produits, il faut que ce soit cool et que ça donne envie d'acheter. Pas trop long mais pas trop court non plus. Ah et j'aimerais bien que ce soit original, pas comme tout le monde. Tu vois ce que je veux dire ?"
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Mission du challenge
+                            </div>
+                            <p><strong>Temps imparti :</strong> 15 minutes de réécriture + 15 minutes de test et comparaison</p>
+                            <p><strong>Critères d'évaluation :</strong></p>
+                            <ul>
+                                <li>Clarté et précision des instructions</li>
+                                <li>Qualité du résultat obtenu</li>
+                                <li>Réutilisabilité du prompt créé</li>
+                                <li>Créativité de l'approche</li>
+                            </ul>
+                        </div>
+
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                🔧 Checklist d'optimisation
+                            </div>
+                            <ul>
+                                <li>☐ Contexte précis (type d'entreprise, produits, cible)</li>
+                                <li>☐ Tâche claire (format, longueur, ton)</li>
+                                <li>☐ Contraintes définies (mots-clés à inclure/éviter)</li>
+                                <li>☐ Exemples ou références</li>
+                                <li>☐ Format de sortie structuré</li>
+                                <li>☐ Critères de qualité mesurables</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier 3 -->
+                <section class="workshop-section">
+                    <div class="workshop-header">
+                        <div class="workshop-number">3</div>
+                        <div>
+                            <h3 class="workshop-title">Construction de votre bibliothèque personnelle</h3>
+                            <span class="workshop-duration">50 minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <p><strong>Objectif :</strong> Créer un minimum de 15 templates documentés et organisés par catégorie pour vos besoins personnels et professionnels.</p>
+
+                        <!-- Templates par catégorie -->
+                        <h4>📋 Templates par catégorie</h4>
+
+                        <div class="template-grid">
+                            <!-- Productivité -->
+                            <div class="template-card">
+                                <div class="template-category">Productivité</div>
+                                <div class="template-name">Planning optimisé</div>
+                                <div class="template-description">
+                                    Organise ta journée en priorisant les tâches selon [méthode] et en tenant compte de [contraintes personnelles].
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Productivité</div>
+                                <div class="template-name">Synthèse de réunion</div>
+                                <div class="template-description">
+                                    À partir de [notes de réunion], extrais les décisions, actions et deadlines au format structuré.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Productivité</div>
+                                <div class="template-name">Préparation de présentation</div>
+                                <div class="template-description">
+                                    Crée un plan de présentation de [durée] sur [sujet] pour [audience] avec objectif [persuasion/information/formation].
+                                </div>
+                            </div>
+
+                            <!-- Communication -->
+                            <div class="template-card">
+                                <div class="template-category">Communication</div>
+                                <div class="template-name">Email de suivi</div>
+                                <div class="template-description">
+                                    Rédige un email de relance [cordial/ferme] après [situation] en maintenant [relation professionnelle].
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Communication</div>
+                                <div class="template-name">Post réseaux sociaux</div>
+                                <div class="template-description">
+                                    Crée un post [LinkedIn/Twitter/Instagram] sur [sujet] avec ton [professionnel/casual] et call-to-action [spécifique].
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Communication</div>
+                                <div class="template-name">Proposition commerciale</div>
+                                <div class="template-description">
+                                    Structure une proposition pour [type de client] mettant en avant [valeur ajoutée] avec arguments [rationnels/émotionnels].
+                                </div>
+                            </div>
+
+                            <!-- Créativité -->
+                            <div class="template-card">
+                                <div class="template-category">Créativité</div>
+                                <div class="template-name">Idéation produit</div>
+                                <div class="template-description">
+                                    Génère [X] idées de [produit/service] pour [cible] en t'inspirant de [tendances/concurrents] avec contraintes [budget/temps].
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Créativité</div>
+                                <div class="template-name">Storytelling</div>
+                                <div class="template-description">
+                                    Crée une histoire captivante sur [sujet] avec structure [héros/conflit/résolution] pour [audience cible].
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Créativité</div>
+                                <div class="template-name">Nom et slogan</div>
+                                <div class="template-description">
+                                    Propose [X] noms créatifs pour [projet] avec slogans associés, en évoquant [valeurs/bénéfices].
+                                </div>
+                            </div>
+
+                            <!-- Analyse -->
+                            <div class="template-card">
+                                <div class="template-category">Analyse</div>
+                                <div class="template-name">Analyse concurrentielle</div>
+                                <div class="template-description">
+                                    Compare [concurrent 1] vs [concurrent 2] sur [critères] et identifie opportunités de différenciation.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Analyse</div>
+                                <div class="template-name">Diagnostic problème</div>
+                                <div class="template-description">
+                                    Analyse [problématique] selon méthode [5 pourquoi/Ishikawa] et propose solutions priorisées.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Analyse</div>
+                                <div class="template-name">Veille stratégique</div>
+                                <div class="template-description">
+                                    Synthétise les tendances de [secteur] et leur impact sur [entreprise/projet] avec recommandations.
+                                </div>
+                            </div>
+
+                            <!-- Formation -->
+                            <div class="template-card">
+                                <div class="template-category">Formation</div>
+                                <div class="template-name">Quiz de validation</div>
+                                <div class="template-description">
+                                    Crée [X] questions sur [sujet] avec niveaux [débutant/intermédiaire/expert] et corrections détaillées.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Formation</div>
+                                <div class="template-name">Fiche mémo</div>
+                                <div class="template-description">
+                                    Résume [concept] en fiche pratique avec définitions, exemples et erreurs à éviter.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Formation</div>
+                                <div class="template-name">Plan de formation</div>
+                                <div class="template-description">
+                                    Conçois un parcours d'apprentissage de [durée] sur [compétence] avec objectifs et évaluations.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Exercice pratique
+                            </div>
+                            <p><strong>Votre mission :</strong> Choisissez 5 templates parmi ceux proposés et personnalisez-les selon vos besoins spécifiques. Pour chaque template :</p>
+                            <ol>
+                                <li>Adaptez les variables [entre crochets] à votre contexte</li>
+                                <li>Ajoutez des contraintes spécifiques à votre secteur</li>
+                                <li>Testez le prompt et notez les résultats</li>
+                                <li>Documentez les améliorations possibles</li>
+                            </ol>
+                        </div>
+
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                📁 Organisation recommandée
+                            </div>
+                            <p>Créez un document (Notion, Google Doc, etc.) avec cette structure :</p>
+                            <ul>
+                                <li><strong>Index :</strong> Liste tous vos templates par catégorie</li>
+                                <li><strong>Template :</strong> Prompt + variables à personnaliser</li>
+                                <li><strong>Usage :</strong> Contexte d'utilisation optimal</li>
+                                <li><strong>Versions :</strong> Historique des améliorations</li>
+                                <li><strong>Résultats :</strong> Exemples de sorties réussies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Récapitulatif -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🎁 Vos livrables
+                    </h2>
+                    <div class="section-content">
+                        <p>À l'issue de cet atelier, vous repartez avec :</p>
+                        
+                        <div class="template-grid">
+                            <div class="template-card">
+                                <div class="template-category">Livrable</div>
+                                <div class="template-name">5 Prompts optimisés</div>
+                                <div class="template-description">
+                                    Prompts structurés et testés pour vos cas d'usage professionnels prioritaires.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Livrable</div>
+                                <div class="template-name">Bibliothèque de 15+ templates</div>
+                                <div class="template-description">
+                                    Templates documentés et organisés par catégorie, prêts à l'usage.
+                                </div>
+                            </div>
+
+                            <div class="template-card">
+                                <div class="template-category">Livrable</div>
+                                <div class="template-name">Méthodologie d'optimisation</div>
+                                <div class="template-description">
+                                    Processus éprouvé pour améliorer n'importe quel prompt de manière systématique.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Prochaines étapes
+                            </div>
+                            <p>Pour maximiser l'impact de cet atelier :</p>
+                            <ol>
+                                <li><strong>Testez quotidiennement :</strong> Utilisez vos templates dans vos tâches réelles</li>
+                                <li><strong>Itérez régulièrement :</strong> Améliorez vos prompts basés sur les résultats</li>
+                                <li><strong>Partagez et échangez :</strong> Comparez avec d'autres apprenants</li>
+                                <li><strong>Élargissez votre bibliothèque :</strong> Ajoutez de nouveaux templates selon vos besoins</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="prompting_2_techniques_avancees_2.html" class="btn btn-secondary nav-btn">
+                        <span>←</span> Techniques avancées
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 3 / 4</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Atelier pratique</div>
+                    </div>
+                    <a href="prompting_2_quiz_4.html" class="btn btn-primary nav-btn">
+                        Quiz d'évaluation <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>📊 Progression du module</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        <span>Séquence 3/4</span>
+                        <span>75%</span>
+                    </div>
+                </div>
+
+                <!-- Module Overview -->
+                <div class="sidebar-card">
+                    <h4>🗺️ Plan du module</h4>
+                    <div style="space-y: 0.75rem;">
+                        <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--text-secondary); font-size: 0.9rem;">✅ Séquence 1</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">Bases du prompting</div>
+                        </div>
+                        <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--text-secondary); font-size: 0.9rem;">✅ Séquence 2</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">Techniques avancées</div>
+                        </div>
+                        <div style="padding: 0.75rem; background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 8px; border: 1px solid var(--primary-color); margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--primary-color); font-size: 0.9rem;">🔄 Séquence 3</div>
+                            <div style="color: var(--text-primary); font-size: 0.85rem;">Atelier pratique</div>
+                        </div>
+                        <div style="padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px dashed var(--border-color);">
+                            <div style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;">⏳ Séquence 4</div>
+                            <div style="color: var(--text-muted); font-size: 0.85rem;">Quiz d'évaluation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools & Resources -->
+                <div class="sidebar-card">
+                    <h4>🛠️ Outils recommandés</h4>
+                    <div style="space-y: 0.5rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 6px; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <strong>ChatGPT/Claude</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.8rem;">Pour tester vos prompts</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 6px; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <strong>Notion/Google Doc</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.8rem;">Pour votre bibliothèque</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 6px; font-size: 0.9rem;">
+                            <strong>Timer</strong><br>
+                            <span style="color: var(--text-secondary); font-size: 0.8rem;">Pour les challenges chronométrés</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips -->
+                <div class="sidebar-card">
+                    <h4>💡 Conseils pratiques</h4>
+                    <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                        <p style="margin-bottom: 0.75rem;"><strong>Itération :</strong> Un bon prompt naît de plusieurs versions. Ne cherchez pas la perfection du premier coup.</p>
+                        <p style="margin-bottom: 0.75rem;"><strong>Documentation :</strong> Notez pourquoi chaque modification améliore le résultat.</p>
+                        <p><strong>Test réel :</strong> Validez vos prompts sur vos vrais besoins professionnels.</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Toggle collapsible sections
+        function toggleSection(header) {
+            const section = header.parentNode;
+            const content = section.querySelector('.toggle-content');
+            const icon = header.querySelector('.toggle-icon');
+            
+            section.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            if (section.classList.contains('active')) {
+                icon.textContent = '−';
+            } else {
+                icon.textContent = '+';
+            }
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(2, 3);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

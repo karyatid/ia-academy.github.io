@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcours C : Écosystème IA Personnel | Module 8 - IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        .back-btn {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+            background: var(--bg-tertiary);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            padding: 2rem 0 0 0;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            list-style: none;
+        }
+
+        .breadcrumb-item::after {
+            content: '→';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-item:last-child::after {
+            display: none;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Sequence Navigation */
+        .sequences-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary-color);
+        }
+
+        .sequence-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning/Info Boxes */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(45deg, rgba(6, 182, 212, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .success-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .success-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Ecosystem Grid */
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .ecosystem-hub {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .hub-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.3));
+        }
+
+        .hub-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hub-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .ecosystem-node {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ecosystem-node:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            border-color: var(--primary-color);
+        }
+
+        .node-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .node-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .node-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .node-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .node-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .node-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .node-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .node-features li::before {
+            content: '⚡';
+            flex-shrink: 0;
+        }
+
+        /* Productivity Metrics */
+        .productivity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .productivity-card {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .productivity-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .productivity-metric {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .productivity-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .productivity-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Connection Lines */
+        .connections-visual {
+            position: relative;
+            margin: 3rem 0;
+        }
+
+        .connection-map {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .connection-node {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .connection-node:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow);
+        }
+
+        .connection-node::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -1rem;
+            width: 2rem;
+            height: 2px;
+            background: var(--primary-color);
+            transform: translateY(-50%);
+        }
+
+        .connection-node:last-child::after {
+            display: none;
+        }
+
+        /* Health Dashboard */
+        .health-dashboard {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .health-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .health-metric {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .health-score {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .health-score.excellent {
+            color: var(--success-color);
+        }
+
+        .health-score.good {
+            color: var(--accent-color);
+        }
+
+        .health-score.warning {
+            color: var(--warning-color);
+        }
+
+        .health-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success-color), #22c55e);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Navigation */
+        .sequence-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+        }
+
+        .nav-sequence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .ecosystem-grid,
+            .productivity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .connection-map {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .connection-node::after {
+                display: none;
+            }
+
+            .sequence-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .health-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🧠 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="projet_8_overview.html" class="breadcrumb-link">Module 8 : Projet Final</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Parcours C : Écosystème IA Personnel</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📚</span>
+                        <span>Parcours C - Expert</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>4h20 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Niveau Avancé</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">⚡ Écosystème IA Personnel</h1>
+                <p class="lesson-description">
+                    Construisez votre "cerveau IA étendu" : hub personnel avec tous vos outils interconnectés et optimisés pour une productivité décuplée
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                
+                <!-- Vue d'ensemble -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Votre Écosystème IA Final</h2>
+                    <div class="section-content">
+                        <p>
+                            À la fin de ce parcours, vous disposerez d'un <strong>écosystème IA personnel ultra-performant</strong> qui vous assistera dans tous les aspects de votre vie professionnelle et personnelle, avec une intelligence qui apprend et s'adapte continuellement.
+                        </p>
+
+                        <div class="ecosystem-grid">
+                            <div class="ecosystem-hub">
+                                <div class="hub-icon">🧠</div>
+                                <div class="hub-title">Hub Central IA</div>
+                                <div class="hub-description">
+                                    Votre centre de contrôle intelligent qui orchestre tous vos outils et automatisations
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">📊</div>
+                                    <div>
+                                        <div class="node-title">Analytics Personnel</div>
+                                        <div class="node-category">Productivité</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Métriques temps réel de votre efficacité et recommandations d'optimisation
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">🔄</div>
+                                    <div>
+                                        <div class="node-title">Workflows Intelligents</div>
+                                        <div class="node-category">Automatisation</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Automatisations qui s'adaptent à vos habitudes et s'améliorent avec l'usage
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">🤖</div>
+                                    <div>
+                                        <div class="node-title">Assistant Contextuel</div>
+                                        <div class="node-category">Intelligence</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    IA qui comprend votre contexte et anticipe vos besoins avant même que vous les exprimiez
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="productivity-grid">
+                            <div class="productivity-card">
+                                <span class="productivity-metric">+400%</span>
+                                <div class="productivity-label">Efficacité cognitive</div>
+                                <div class="productivity-description">Augmentation mesurable de votre capacité de traitement</div>
+                            </div>
+                            <div class="productivity-card">
+                                <span class="productivity-metric">-80%</span>
+                                <div class="productivity-label">Tâches répétitives</div>
+                                <div class="productivity-description">Automatisation intelligente du travail routinier</div>
+                            </div>
+                            <div class="productivity-card">
+                                <span class="productivity-metric">24/7</span>
+                                <div class="productivity-label">Assistant personnel</div>
+                                <div class="productivity-description">Intelligence disponible en permanence</div>
+                            </div>
+                            <div class="productivity-card">
+                                <span class="productivity-metric">∞</span>
+                                <div class="productivity-label">Apprentissage continu</div>
+                                <div class="productivity-description">Système qui évolue avec vous</div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🔮 Vision : Votre journée avec l'écosystème IA
+                            </div>
+                            <div class="connections-visual">
+                                <div class="connection-map">
+                                    <div class="connection-node">
+                                        <strong>7h00 - Réveil</strong><br>
+                                        L'IA a préparé votre agenda optimisé, briefing personnalisé et suggestions d'amélioration
+                                    </div>
+                                    <div class="connection-node">
+                                        <strong>9h00 - Travail</strong><br>
+                                        Priorisation automatique, réponses suggérées, recherches contextuelles instantanées
+                                    </div>
+                                    <div class="connection-node">
+                                        <strong>18h00 - Bilan</strong><br>
+                                        Analytics de productivité, suggestions d'optimisation, apprentissages capturés
+                                    </div>
+                                </div>
+                            </div>
+                            <p><strong>Résultat :</strong> Une journée où l'IA anticipe vos besoins, élimine les frictions et amplifie vos capacités naturelles !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 1 -->
+                <section class="section" id="sequence-1">
+                    <h2 class="section-title">🏗️ Séquence 1 : Architecture de l'Écosystème (60min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Concevons l'architecture de votre écosystème IA personnel en cartographiant vos besoins et en sélectionnant les technologies les plus adaptées.
+                        </p>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>🎯</span>
+                                <span>Approche personnalisée</span>
+                            </div>
+                            <p>Contrairement aux parcours A et B, ce parcours s'adapte entièrement à <strong>votre profil unique</strong>. Chaque écosystème sera différent selon vos besoins, habitudes et objectifs.</p>
+                        </div>
+
+                        <h3>🔍 Étape 1A : Audit de votre écosystème actuel (20min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📋 Assessment complet de votre setup actuel
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# AUDIT ÉCOSYSTÈME PERSONNEL IA
+
+## 1. CARTOGRAPHIE OUTILS ACTUELS
+**Outils de communication :**
+- Email : [Gmail/Outlook/autre] + extensions utilisées
+- Messagerie : [Slack/Teams/Discord] + bots configurés
+- Calendrier : [Google/Outlook] + intégrations
+- Notes : [Notion/Obsidian/Roam] + workflows
+
+**Outils de productivité :**
+- Gestion tâches : [Todoist/ClickUp/Linear] + automatisations
+- Fichiers : [Drive/Dropbox/OneDrive] + structure
+- Navigateur : Extensions IA installées et utilisées
+- Mobile : Apps IA utilisées quotidiennement
+
+## 2. ANALYSE DE VOS WORKFLOWS
+**Workflow type d'une journée :**
+- Quels sont vos 3 workflows les plus fréquents ?
+- Où perdez-vous le plus de temps actuellement ?
+- Quelles tâches répétitives vous frustrent le plus ?
+- Quels sont vos "context switches" les plus coûteux ?
+
+**Données et contexte :**
+- Où stockez-vous vos informations importantes ?
+- Comment retrouvez-vous une info spécifique ?
+- Quels types de décisions prenez-vous régulièrement ?
+- Avez-vous des rituels de productivité existants ?
+
+## 3. OBJECTIFS ET CONTRAINTES
+**Vision personnelle :**
+- À quoi ressemblerait votre journée parfaite ?
+- Quelles sont vos 3 priorités principales ?
+- Quel temps voulez-vous libérer et pour quoi ?
+- Quels aspects voulez-vous garder "humains" ?
+
+**Contraintes techniques :**
+- Budget mensuel acceptable : [X] €/mois
+- Niveau technique : [débutant/intermédiaire/expert]
+- Temps de setup disponible : [X] heures
+- Résistance au changement : [faible/moyenne/forte]
+                            </div>
+                        </div>
+
+                        <h3>🧠 Étape 1B : Conception de votre Hub Central (25min)</h3>
+                        <div class="ecosystem-grid">
+                            <div class="ecosystem-node" onclick="selectHub('notion')">
+                                <div class="node-header">
+                                    <div class="node-icon">📝</div>
+                                    <div>
+                                        <div class="node-title">Notion + IA</div>
+                                        <div class="node-category">Hub Documentation</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Base de connaissances centralisée avec IA intégrée pour recherche et synthèse
+                                </div>
+                                <div class="node-features">
+                                    <li>Databases interconnectées</li>
+                                    <li>Templates automatisés</li>
+                                    <li>Recherche sémantique</li>
+                                    <li>APIs puissantes</li>
+                                </div>
+                            </div>
+                            <div class="ecosystem-node" onclick="selectHub('obsidian')">
+                                <div class="node-header">
+                                    <div class="node-icon">🧠</div>
+                                    <div>
+                                        <div class="node-title">Obsidian + Plugins IA</div>
+                                        <div class="node-category">Second Cerveau</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Réseau de connaissances avec liens intelligents et plugins IA avancés
+                                </div>
+                                <div class="node-features">
+                                    <li>Graph de connaissances</li>
+                                    <li>Plugins IA natifs</li>
+                                    <li>Markdown + code</li>
+                                    <li>Contrôle total</li>
+                                </div>
+                            </div>
+                            <div class="ecosystem-node" onclick="selectHub('custom')">
+                                <div class="node-header">
+                                    <div class="node-icon">⚡</div>
+                                    <div>
+                                        <div class="node-title">Dashboard Custom</div>
+                                        <div class="node-category">Solution sur mesure</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Interface personnalisée avec Retool/Bubble intégrant tous vos services
+                                </div>
+                                <div class="node-features">
+                                    <li>Interface unique</li>
+                                    <li>Intégrations illimitées</li>
+                                    <li>Métriques temps réel</li>
+                                    <li>Évolutif</li>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>🔗 Étape 1C : Cartographie des interconnexions (15min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🗺️ Template architecture de votre écosystème
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# ARCHITECTURE ÉCOSYSTÈME IA PERSONNEL
+
+## COUCHE 1 : INPUTS (Sources d'information)
+- 📧 Emails (Gmail API + filtrage IA)
+- 📱 Messages (Slack/Teams + bots personnalisés)
+- 🌐 Web (extensions navigateur + capture automatique)
+- 📋 Tâches (Todoist/ClickUp + priorisation IA)
+- 📅 Calendrier (Google Calendar + optimisation IA)
+
+## COUCHE 2 : INTELLIGENCE (Traitement IA)
+- 🧠 Hub Central : [Notion/Obsidian/Custom]
+- 🤖 Assistant Principal : GPT-4 configuré spécialement
+- 🔄 Orchestrateur : Make.com/n8n pour workflows
+- 📊 Analytics : Tracking personnalisé de productivité
+- 🎯 Recommandations : ML pour suggestions contextuelles
+
+## COUCHE 3 : OUTPUTS (Actions et interfaces)
+- 📱 Interface mobile : app/PWA personnalisée
+- 💻 Dashboard desktop : vue unifiée temps réel
+- 🔔 Notifications intelligentes : alertes contextuelles
+- 📤 Actions automatiques : emails, tâches, rappels
+- 📈 Rapports : insights hebdo/mensuel automatiques
+
+## COUCHE 4 : APPRENTISSAGE (Amélioration continue)
+- 📊 Métriques comportementales
+- 🔄 Feedback loops automatiques  
+- 🎯 Optimisation des modèles
+- 🧠 Expansion des connaissances
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 2 -->
+                <section class="section" id="sequence-2">
+                    <h2 class="section-title">🤖 Séquence 2 : Assistant IA Contextuel (70min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Créons votre assistant IA personnel ultra-performant qui comprend votre contexte, vos préférences et anticipe vos besoins.
+                        </p>
+
+                        <h3>🧠 Étape 2A : Configuration de l'IA Maître (30min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎭 Persona et instructions système avancées
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# ASSISTANT IA PERSONNEL - CONFIGURATION MAÎTRE
+
+Tu es [VOTRE NOM] Assistant IA Personnel Ultra-Avancé.
+
+## CONNAISSANCE CONTEXTUELLE
+**Profil utilisateur :**
+- Nom : [VOTRE NOM]
+- Profession : [VOTRE MÉTIER]
+- Objectifs principaux : [VOS 3 OBJECTIFS]
+- Style de travail : [VOTRE STYLE]
+- Contraintes temporelles : [VOS DISPONIBILITÉS]
+
+**Expertise domaines :**
+- [Domaine 1] : niveau expert, préfère approche [X]
+- [Domaine 2] : niveau intermédiaire, besoin guidage
+- [Domaine 3] : débutant, explication simple nécessaire
+
+## FONCTIONS PRINCIPALES
+1. **ASSISTANT COGNITIF**
+   - Synthèse d'informations complexes
+   - Génération d'idées et brainstorming
+   - Aide à la prise de décision structurée
+   - Résolution de problèmes step-by-step
+
+2. **OPTIMISATEUR DE PRODUCTIVITÉ**
+   - Priorisation intelligente des tâches
+   - Planification optimale du temps
+   - Détection des goulots d'étranglement
+   - Suggestions d'amélioration workflow
+
+3. **GESTIONNAIRE DE CONNAISSANCES**
+   - Mémorisation de nos échanges importants
+   - Connexions intelligentes entre idées
+   - Rappels contextuels proactifs
+   - Organisation automatique des informations
+
+## STYLE DE COMMUNICATION
+- Ton : [professionnel/décontracté/adaptable]
+- Niveau détail : [concis/détaillé/selon contexte]
+- Format préféré : [listes/paragraphes/mixte]
+- Proactivité : [suggestions spontanées activées]
+
+## RÈGLES COMPORTEMENTALES
+- TOUJOURS demander clarification si ambiguïté
+- JAMAIS donner de conseils sur [VOS EXCLUSIONS]
+- PRÉFÉRER solutions pratiques vs théoriques
+- INTÉGRER le contexte de nos échanges précédents
+                            </div>
+                        </div>
+
+                        <h3>🔄 Étape 2B : Workflows d'apprentissage automatique (25min)</h3>
+                        <div class="info-box">
+                            <div class="info-title">
+                                <span>🧠</span>
+                                <span>Système d'apprentissage continu</span>
+                            </div>
+                            <p>Votre assistant s'améliore automatiquement en analysant vos interactions, préférences et résultats.</p>
+                        </div>
+
+                        <div class="ecosystem-grid">
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">📊</div>
+                                    <div>
+                                        <div class="node-title">Tracking Interactions</div>
+                                        <div class="node-category">Apprentissage</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Analyse automatique de vos préférences et patterns de comportement
+                                </div>
+                                <div class="node-features">
+                                    <li>Sujets fréquents identifiés</li>
+                                    <li>Style de réponse préféré</li>
+                                    <li>Moments d'efficacité optimale</li>
+                                    <li>Types de tâches récurrentes</li>
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">🎯</div>
+                                    <div>
+                                        <div class="node-title">Feedback Intelligence</div>
+                                        <div class="node-category">Optimisation</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Système de feedback pour améliorer continuellement les réponses
+                                </div>
+                                <div class="node-features">
+                                    <li>Rating automatique des réponses</li>
+                                    <li>Détection des patterns d'échec</li>
+                                    <li>Ajustement des prompts</li>
+                                    <li>A/B testing automatique</li>
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">🔮</div>
+                                    <div>
+                                        <div class="node-title">Prédiction Contextuelle</div>
+                                        <div class="node-category">Anticipation</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Anticipe vos besoins selon le contexte temporel et situationnel
+                                </div>
+                                <div class="node-features">
+                                    <li>Suggestions proactives</li>
+                                    <li>Rappels intelligents</li>
+                                    <li>Préparation automatique</li>
+                                    <li>Alertes contextuelles</li>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>🛠️ Étape 2C : Intégrations et API (15min)</h3>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# INTÉGRATIONS ASSISTANT IA PERSONNEL
+
+## SOURCES DE DONNÉES (Read Access)
+- 📧 Gmail API : emails + contexte + contacts
+- 📅 Google Calendar : événements + disponibilités
+- 📋 Notion API : toutes vos bases de données
+- 💾 Google Drive : documents + métadonnées
+- 🌐 Browser History : sites visités + temps passé
+- 📱 Screen Time APIs : usage apps + patterns
+
+## ACTIONS POSSIBLES (Write Access)  
+- ✉️ Envoi d'emails automatiques (réponses courtes)
+- 📅 Création/modification événements calendrier
+- 📝 Création de notes et tâches
+- 📞 Planification de rappels intelligents
+- 🔔 Notifications push personnalisées
+- 📊 Mise à jour métriques productivité
+
+## TRIGGERS INTELLIGENTS
+- ⏰ Temporels : heure, jour, semaine, mois
+- 📧 Email : réception, mots-clés, expéditeur
+- 📍 Localisation : arrivée/départ lieu
+- 💻 Activité : ouverture app, inactivité
+- 📊 Seuils : métriques productivité
+- 🎯 Événements : deadlines, rendez-vous
+
+## SÉCURITÉ ET CONFIDENTIALITÉ
+- 🔒 Chiffrement end-to-end des données sensibles
+- 🗑️ Purge automatique des anciens logs
+- 🎭 Anonymisation des données d'apprentissage  
+- ⛔ Opt-out possible pour toute fonctionnalité
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 3 -->
+                <section class="section" id="sequence-3">
+                    <h2 class="section-title">📊 Séquence 3 : Dashboard et Métriques (80min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Créons votre tableau de bord personnel avec métriques de productivité temps réel et insights d'amélioration continue.
+                        </p>
+
+                        <h3>📈 Étape 3A : Métriques de productivité IA (30min)</h3>
+                        <div class="health-dashboard">
+                            <div class="interactive-title">
+                                🏥 Health Dashboard - Aperçu de vos métriques
+                            </div>
+                            <div class="health-metrics">
+                                <div class="health-metric">
+                                    <div class="health-score excellent" id="focus-score">87%</div>
+                                    <div class="health-label">Focus Quality</div>
+                                </div>
+                                <div class="health-metric">
+                                    <div class="health-score good" id="efficiency-score">76%</div>
+                                    <div class="health-label">Task Efficiency</div>
+                                </div>
+                                <div class="health-metric">
+                                    <div class="health-score warning" id="balance-score">63%</div>
+                                    <div class="health-label">Work-Life Balance</div>
+                                </div>
+                                <div class="health-metric">
+                                    <div class="health-score excellent" id="learning-score">92%</div>
+                                    <div class="health-label">Learning Rate</div>
+                                </div>
+                                <div class="health-metric">
+                                    <div class="health-score good" id="automation-score">71%</div>
+                                    <div class="health-label">Automation Level</div>
+                                </div>
+                                <div class="health-metric">
+                                    <div class="health-score excellent" id="ai-usage-score">89%</div>
+                                    <div class="health-label">IA Usage Quality</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📊 Template Dashboard Productivité IA
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# DASHBOARD PRODUCTIVITÉ IA - MÉTRIQUES CLÉS
+
+## MÉTRIQUES COGNITIVES
+**Focus Quality Score (0-100)**
+- Deep work sessions / jour
+- Durée moyenne sans interruption  
+- Ratio focus time / total time
+- Qualité des outputs produits
+
+**Efficacité Décisionnelle**
+- Temps moyen prise de décision
+- Taux de décisions avec aide IA
+- Qualité des décisions (suivi post-facto)
+- Révisions/corrections nécessaires
+
+## MÉTRIQUES D'AUTOMATISATION
+**Niveau d'Automatisation (%)**
+- Tâches automatisées / tâches totales
+- Temps économisé par automations
+- Nouveaux workflows créés/semaine
+- ROI des automatisations
+
+**Utilisation IA Optimale**
+- Interactions IA pertinentes vs totales
+- Temps économisé par aide IA
+- Suggestions IA adoptées vs proposées  
+- Amélioration continue mesurée
+
+## MÉTRIQUES DE BIEN-ÊTRE
+**Charge Cognitive**
+- Context switches par heure
+- Surcharge informationnelle détectée
+- Stress levels (via HRV si disponible)
+- Satisfaction subjective quotidienne
+
+**Équilibre Vie/Travail**
+- Heures travaillées vs planifiées
+- Temps personnel respecté
+- Qualité sommeil (si tracking actif)
+- Activités enrichissantes pratiquées
+
+## MÉTRIQUES D'APPRENTISSAGE
+**Croissance Personnelle**
+- Nouvelles compétences acquises
+- Contenus consommés et synthétisés
+- Projets personnels avancés
+- Réseau professionnel développé
+
+**Amélioration Continue**
+- Optimisations système implémentées
+- Feedback positif reçu
+- Objectifs atteints vs fixés
+- Innovation/créativité mesurée
+                            </div>
+                        </div>
+
+                        <h3>🎯 Étape 3B : Insights et recommandations automatiques (25min)</h3>
+                        <div class="ecosystem-grid">
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">🔍</div>
+                                    <div>
+                                        <div class="node-title">Pattern Detection</div>
+                                        <div class="node-category">Intelligence</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Détection automatique de patterns dans vos habitudes de travail et suggestions d'optimisation
+                                </div>
+                                <div class="node-features">
+                                    <li>Moments de productivité optimale</li>
+                                    <li>Tâches énergivores identifiées</li>
+                                    <li>Corrélations environnementales</li>
+                                    <li>Cycles d'efficacité personnels</li>
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">💡</div>
+                                    <div>
+                                        <div class="node-title">Smart Recommendations</div>
+                                        <div class="node-category">Optimisation</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Recommandations personnalisées basées sur vos données et benchmarks de performance
+                                </div>
+                                <div class="node-features">
+                                    <li>Optimisations workflow suggérées</li>
+                                    <li>Nouveaux outils à tester</li>
+                                    <li>Habitudes à développer/arrêter</li>
+                                    <li>Objectifs personnalisés adaptatifs</li>
+                                </div>
+                            </div>
+                            <div class="ecosystem-node">
+                                <div class="node-header">
+                                    <div class="node-icon">🎯</div>
+                                    <div>
+                                        <div class="node-title">Goal Tracking IA</div>
+                                        <div class="node-category">Suivi</div>
+                                    </div>
+                                </div>
+                                <div class="node-description">
+                                    Suivi intelligent de vos objectifs avec ajustements automatiques et motivation adaptative
+                                </div>
+                                <div class="node-features">
+                                    <li>Décomposition automatique d'objectifs</li>
+                                    <li>Tracking de progrès temps réel</li>
+                                    <li>Aj

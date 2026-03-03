@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALL-E & Alternatives | Module 4 - IA Academy</title>
+    <style>
+        /* CSS Variables for Theme System */
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --primary-color: #818cf8;
+            --secondary-color: #06b6d4;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --pattern-opacity: 0.02;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle - Fixed */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            font-size: 12px;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '>';
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--accent-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tool Comparison Cards */
+        .tools-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            padding: 0.5rem;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .tool-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features h5 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-icon {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Pricing Badge */
+        .pricing-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-free {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .pricing-freemium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .pricing-paid {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error-color);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Example Cards */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            background: var(--glass-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .tools-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_images_2.html" class="breadcrumb-link">Images professionnelles</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">DALL-E & Alternatives</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🌟</span>
+                        <span>Micro-séquence 2B</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>30-40 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>📊</span>
+                        <span>Comparatif</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">🌟 DALL-E & Alternatives</h1>
+                <p class="lesson-description">
+                    Explorez l'écosystème complet des générateurs d'images IA. De DALL-E 3 intégré à ChatGPT aux solutions spécialisées comme Leonardo AI et Stable Diffusion, découvrez quel outil choisir selon vos besoins.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Pourquoi Diversifier vos Outils ?</h2>
+                    <div class="section-content">
+                        <p>Bien que Midjourney soit excellent pour l'art conceptuel, <strong>chaque générateur d'images IA a ses forces spécifiques</strong>. Cette diversité vous permet d'optimiser vos créations selon le contexte : précision textuelle, contrôle technique, facilité d'accès ou budget.</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Objectifs de cette micro-séquence
+                            </div>
+                            <ul>
+                                <li><strong>Maîtriser DALL-E 3</strong> et son intégration ChatGPT pour la précision créative</li>
+                                <li><strong>Découvrir Stable Diffusion</strong> pour le contrôle local et la personnalisation</li>
+                                <li><strong>Explorer Leonardo AI</strong> pour les styles spécialisés et la consistance</li>
+                                <li><strong>Utiliser Canva AI</strong> pour le design graphique accessible</li>
+                                <li><strong>Choisir le bon outil</strong> selon votre besoin spécifique</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comparatif des Outils -->
+                <section class="section">
+                    <h2 class="section-title">⚖️ Comparatif Complet des Outils</h2>
+                    <div class="section-content">
+                        <p>Chaque outil a sa <strong>personnalité</strong> et ses <strong>cas d'usage optimaux</strong>. Voici un guide complet pour vous y retrouver :</p>
+                        
+                        <div class="tools-comparison">
+                            <!-- DALL-E 3 -->
+                            <div class="tool-card">
+                                <div class="pricing-badge pricing-freemium">Freemium</div>
+                                <div class="tool-header">
+                                    <div class="tool-icon">🤖</div>
+                                    <h3 class="tool-name">DALL-E 3</h3>
+                                </div>
+                                <p class="tool-description">
+                                    Intégré à ChatGPT, DALL-E 3 excelle dans la compréhension précise des descriptions textuelles complexes et la génération d'images réalistes.
+                                </p>
+                                <div class="tool-features">
+                                    <h5>✅ Points Forts</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Précision textuelle exceptionnelle</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Intégration ChatGPT native</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Interface simple et accessible</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Respect des droits d'auteur</span>
+                                        </div>
+                                    </div>
+                                    <h5>❌ Limitations</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Moins artistique que Midjourney</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Personnalisation limitée</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Quotas quotidiens (ChatGPT Plus)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stable Diffusion -->
+                            <div class="tool-card">
+                                <div class="pricing-badge pricing-free">Gratuit</div>
+                                <div class="tool-header">
+                                    <div class="tool-icon">🔧</div>
+                                    <h3 class="tool-name">Stable Diffusion</h3>
+                                </div>
+                                <p class="tool-description">
+                                    Solution open-source offrant un contrôle total sur la génération, avec possibilité d'entraîner ses propres modèles et de faire tourner localement.
+                                </p>
+                                <div class="tool-features">
+                                    <h5>✅ Points Forts</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Contrôle total et personnalisation</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Installation locale possible</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Modèles spécialisés (anime, portraits...)</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Coût d'utilisation très bas</span>
+                                        </div>
+                                    </div>
+                                    <h5>❌ Limitations</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Configuration technique requise</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Interface moins intuitive</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Courbe d'apprentissage élevée</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Leonardo AI -->
+                            <div class="tool-card">
+                                <div class="pricing-badge pricing-freemium">Freemium</div>
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎭</div>
+                                    <h3 class="tool-name">Leonardo AI</h3>
+                                </div>
+                                <p class="tool-description">
+                                    Plateforme spécialisée dans la création d'images avec des styles précis et une consistance visuelle, idéale pour les projets de branding.
+                                </p>
+                                <div class="tool-features">
+                                    <h5>✅ Points Forts</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Styles spécialisés nombreux</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Consistance visuelle excellente</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Interface web moderne</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Contrôle avancé des paramètres</span>
+                                        </div>
+                                    </div>
+                                    <h5>❌ Limitations</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Moins connu que les leaders</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Communauté plus réduite</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Crédits limités en gratuit</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Canva AI -->
+                            <div class="tool-card">
+                                <div class="pricing-badge pricing-freemium">Freemium</div>
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎨</div>
+                                    <h3 class="tool-name">Canva AI</h3>
+                                </div>
+                                <p class="tool-description">
+                                    Intégré à l'écosystème Canva, parfait pour créer rapidement des visuels pour réseaux sociaux, présentations et marketing avec templates professionnels.
+                                </p>
+                                <div class="tool-features">
+                                    <h5>✅ Points Forts</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Intégration design complète</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Templates prêts à l'emploi</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Formats optimisés réseaux sociaux</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Simplicité d'utilisation extrême</span>
+                                        </div>
+                                    </div>
+                                    <h5>❌ Limitations</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Qualité artistique moindre</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Créativité limitée aux templates</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Moins de contrôle avancé</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DALL-E 3 en Détail -->
+                <section class="section">
+                    <h2 class="section-title">🤖 DALL-E 3 - Maîtrise Complète</h2>
+                    <div class="section-content">
+                        <p>DALL-E 3 révolutionne la génération d'images par sa <strong>compréhension naturelle du langage</strong> et son intégration transparente à ChatGPT.</p>
+                        
+                        <h3>Accès et Configuration</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🚀</span>
+                                <span>Méthodes d'Accès</span>
+                            </div>
+                            <ol>
+                                <li><strong>ChatGPT Plus/Pro</strong> - Accès direct via conversation</li>
+                                <li><strong>API OpenAI</strong> - Intégration dans vos applications</li>
+                                <li><strong>Microsoft Copilot</strong> - Version gratuite avec limitations</li>
+                                <li><strong>Bing Chat</strong> - Alternative gratuite (qualité réduite)</li>
+                            </ol>
+                        </div>
+                        
+                        <h3>Prompting Optimisé pour DALL-E 3</h3>
+                        <p>DALL-E 3 comprend le langage naturel mieux que ses concurrents. Vous pouvez être conversationnel :</p>
+                        
+                        <div class="code-block">❌ Style Midjourney :
+"corporate headshot, professional lighting, 85mm lens --ar 3:4"
+
+✅ Style DALL-E 3 naturel :
+"Créer une photo professionnelle d'une femme d'affaires souriante dans son bureau moderne, avec un éclairage naturel qui vient des grandes fenêtres derrière elle. L'ambiance doit être chaleureuse et professionnelle."</div>
+                        
+                        <h3>Techniques Avancées DALL-E 3</h3>
+                        
+                        <h4>1. Génération Itérative avec ChatGPT</h4>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🔄</span>
+                                <span>Workflow Conversationnel</span>
+                            </div>
+                            <p><strong>Étape 1 :</strong> "Crée une image de paysage montagnard"</p>
+                            <p><strong>Étape 2 :</strong> "Maintenant ajoute un lac au premier plan"</p>
+                            <p><strong>Étape 3 :</strong> "Change l'ambiance pour un coucher de soleil doré"</p>
+                            <p><strong>Avantage :</strong> Construction progressive de votre vision</p>
+                        </div>
+                        
+                        <h4>2. Description de Style Précise</h4>
+                        <div class="code-block">Prompt exemple pour style photographique :
+"Photographie portrait en studio d'un chef cuisinier dans sa cuisine moderne. Éclairage professionnel type Rembrandt, objectif 85mm avec bokeh doux, couleurs chaudes et contrastées comme dans un magazine culinaire haut de gamme."</div>
+                        
+                        <h4>3. Génération de Séries Cohérentes</h4>
+                        <p>Pour maintenir la cohérence visuelle :</p>
+                        <ul>
+                            <li><strong>Référence de style :</strong> "Dans le même style que l'image précédente..."</li>
+                            <li><strong>Palette couleur fixe :</strong> "En utilisant une palette bleu et blanc..."</li>
+                            <li><strong>Ambiance constante :</strong> "Avec la même ambiance lumineuse..."</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Configuration et Setup -->
+                <section class="section">
+                    <h2 class="section-title">⚙️ Configuration et Setup des Outils</h2>
+                    <div class="section-content">
+                        <p>Pour être efficace, chaque outil nécessite une configuration optimale adaptée à vos besoins.</p>
+                        
+                        <h3>Stable Diffusion - Installation Locale</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🖥️</span>
+                                <span>Setup Automatique (Recommandé)</span>
+                            </div>
+                            <ol>
+                                <li><strong>Automatic1111</strong> - Interface web complète</li>
+                                <li><strong>ComfyUI</strong> - Workflow par nodes (avancé)</li>
+                                <li><strong>InvokeAI</strong> - Solution clé en main</li>
+                                <li><strong>Requirements :</strong> GPU NVIDIA 6GB+ VRAM</li>
+                            </ol>
+                        </div>
+                        
+                        <h3>Leonardo AI - Configuration Web</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Setup Leonardo AI en 5 minutes
+                            </div>
+                            <ol>
+                                <li><strong>Inscription gratuite</strong> - 150 crédits offerts</li>
+                                <li><strong>Choix du modèle</strong> - Préférences artistiques</li>
+                                <li><strong>Configuration workspace</strong> - Organisation projets</li>
+                                <li><strong>Test des presets</strong> - Styles pré-configurés</li>
+                                <li><strong>Première génération</strong> - Validation du setup</li>
+                            </ol>
+                        </div>
+                        
+                        <h3>Optimisation des Paramètres par Outil</h3>
+                        <div class="tools-comparison">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">⚡</div>
+                                    <h3 class="tool-name">Rapide & Simple</h3>
+                                </div>
+                                <div class="tool-features">
+                                    <h5>Recommandé pour :</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>DALL-E 3 (ChatGPT)</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Canva AI</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎨</div>
+                                    <h3 class="tool-name">Créatif & Artistique</h3>
+                                </div>
+                                <div class="tool-features">
+                                    <h5>Recommandé pour :</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Midjourney</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Leonardo AI</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🔧</div>
+                                    <h3 class="tool-name">Contrôle & Personnalisation</h3>
+                                </div>
+                                <div class="tool-features">
+                                    <h5>Recommandé pour :</h5>
+                                    <div class="feature-list">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>Stable Diffusion</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">•</span>
+                                            <span>ComfyUI</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Interactif -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Quiz de Validation</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quel outil choisiriez-vous pour créer rapidement des visuels de réseaux sociaux avec des templates professionnels ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> Stable Diffusion
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>B)</span> DALL-E 3
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>C)</span> Canva AI
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> Leonardo AI
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback1">
+                            <strong>✅ Excellent choix !</strong> Canva AI est intégré à l'écosystème Canva avec des templates optimisés pour tous les réseaux sociaux. Perfect pour créer rapidement du contenu professionnel.
+                        </div>
+                    </div>
+
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quelle est la principale force de DALL-E 3 par rapport aux autres générateurs d'images ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> La qualité artistique supérieure
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>B)</span> La compréhension précise du langage naturel
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>C)</span> Les paramètres de personnalisation avancés
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> La génération d'images artistiques uniques
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback2">
+                            <strong>✅ Parfait !</strong> DALL-E 3 excelle dans la compréhension des descriptions complexes en langage naturel, permettant des prompts conversationnels très précis.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cas d'Usage Pratiques -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Cas d'Usage : Quel Outil pour Quel Besoin ?</h2>
+                    <div class="section-content">
+                        <p>Voici un guide pratique pour choisir le bon outil selon votre projet :</p>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📱</span>
+                                <span>Réseaux Sociaux & Marketing</span>
+                            </div>
+                            <ul>
+                                <li><strong>Posts Instagram/Facebook :</strong> Canva AI (templates optimisés)</li>
+                                <li><strong>Couvertures LinkedIn :</strong> DALL-E 3 (précision professionnelle)</li>
+                                <li><strong>Campagnes créatives :</strong> Midjourney (impact visuel)</li>
+                                <li><strong>Stories/Reels visuels :</strong> Leonardo AI (consistance)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>💼</span>
+                                <span>Communication d'Entreprise</span>
+                            </div>
+                            <ul>
+                                <li><strong>Présentations PowerPoint :</strong> DALL-E 3 + Canva AI</li>
+                                <li><strong>Reports et documents :</strong> DALL-E 3 (intégration ChatGPT)</li>
+                                <li><strong>Site web corporate :</strong> Leonardo AI (cohérence branding)</li>
+                                <li><strong>Newsletter visuelle :</strong> Canva AI (rapidité)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🎨</span>
+                                <span>Projets Créatifs</span>
+                            </div>
+                            <ul>
+                                <li><strong>Art conceptuel :</strong> Midjourney (qualité artistique)</li>
+                                <li><strong>Illustrations techniques :</strong> DALL-E 3 (précision)</li>
+                                <li><strong>Avatars/Personnages :</strong> Stable Diffusion (personnalisation)</li>
+                                <li><strong>Branding cohérent :</strong> Leonardo AI (styles spécialisés)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Challenge Pratique
+                            </div>
+                            <p><strong>Mission :</strong> Créez la même image avec 3 outils différents :</p>
+                            <ol>
+                                <li><strong>Sujet :</strong> "Portrait professionnel d'une startup founder dans un bureau moderne"</li>
+                                <li><strong>Testez :</strong> DALL-E 3, Leonardo AI, et Canva AI</li>
+                                <li><strong>Comparez :</strong> Qualité, style, facilité d'usage</li>
+                                <li><strong>Documentez :</strong> Quel outil pour quel context ?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ressources et Aller Plus Loin -->
+                <section class="section">
+                    <h2 class="section-title">📚 Ressources et Pour Aller Plus Loin</h2>
+                    <div class="section-content">
+                        <h3>Ressources Fournies</h3>
+                        <div class="tools-comparison">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎥</div>
+                                    <h3 class="tool-name">Comparatif Vidéo (15min)</h3>
+                                </div>
+                                <p class="tool-description">"DALL-E vs Midjourney vs Leonardo" - Démonstration pratique sur les mêmes prompts</p>
+                            </div>
+                            
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">📋</div>
+                                    <h3 class="tool-name">Guide Setup</h3>
+                                </div>
+                                <p class="tool-description">Configuration étape par étape de chaque outil avec screenshots</p>
+                            </div>
+                            
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-icon">🎯</div>
+                                    <h3 class="tool-name">Matrice de Choix</h3>
+                                </div>
+                                <p class="tool-description">Quel outil pour quel besoin - Guide de décision rapide</p>
+                            </div>
+                        </div>
+                        
+                        <h3>Liens Utiles et Communautés</h3>
+                        <ul>
+                            <li><strong>DALL-E 3 :</strong> <a href="https://chat.openai.com" target="_blank">Via ChatGPT Plus</a></li>
+                            <li><strong>Leonardo AI :</strong> <a href="https://leonardo.ai" target="_blank">Plateforme officielle</a></li>
+                            <li><strong>Stable Diffusion :</strong> <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui" target="_blank">Automatic1111 GitHub</a></li>
+                            <li><strong>Canva AI :</strong> <a href="https://canva.com/ai-image-generator" target="_blank">Générateur intégré</a></li>
+                        </ul>
+                        
+                        <h3>Prochaines Étapes</h3>
+                        <p>Maintenant que vous connaissez les outils, la prochaine micro-séquence vous apprendra à <strong>créer des workflows visuels professionnels</strong> en combinant ces outils pour une efficacité maximale.</p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>📊 Votre Progression</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>🎯 Micro-séquence</span>
+                            <span style="font-weight: 600; color: var(--primary-color);">2B/4</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>⏰ Durée</span>
+                            <span>30-40 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>📊 Focus</span>
+                            <span>Comparatif outils</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Access -->
+                <div class="sidebar-card">
+                    <h4>🚀 Accès Rapide</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.9rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">DALL-E 3</strong><br>
+                            <span style="color: var(--text-secondary);">Via ChatGPT Plus</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Leonardo AI</strong><br>
+                            <span style="color: var(--text-secondary);">leonardo.ai</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Canva AI</strong><br>
+                            <span style="color: var(--text-secondary);">canva.com/ai</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Helper -->
+                <div class="sidebar-card">
+                    <h4>🎯 Guide de Choix Rapide</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.85rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--success-color);">Simplicité</strong><br>
+                            <span style="color: var(--text-secondary);">→ DALL-E 3, Canva AI</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--warning-color);">Qualité</strong><br>
+                            <span style="color: var(--text-secondary);">→ Midjourney, Leonardo AI</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--error-color);">Contrôle</strong><br>
+                            <span style="color: var(--text-secondary);">→ Stable Diffusion</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="sidebar-card">
+                    <h4>💡 Conseil du Formateur</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--primary-color);">Testez avant de choisir !</strong><br>
+                        Créez la même image avec 2-3 outils différents pour comprendre leurs spécificités. L'expérience vaut mille explications.
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="lesson-navigation">
+            <a href="generative_4_midjourney_2a.html" class="btn btn-secondary">
+                <span>←</span> Midjourney - Maîtrise
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Micro-séquence 2B</div>
+                <div style="font-weight: 600; color: var(--text-primary);">DALL-E & Alternatives</div>
+            </div>
+            <a href="generative_4_workflows_visuels_2c.html" class="btn btn-primary">
+                Workflows Visuels <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections in this quiz
+            const quiz = element.closest('.quiz-container');
+            const options = quiz.querySelectorAll('.quiz-option');
+            const feedback = quiz.querySelector('.quiz-feedback');
+            
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selection and correctness classes
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Show feedback
+            feedback.classList.add('show');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Progress tracking
+        let progressData = JSON.parse(localStorage.getItem('ia-academy-progress') || '{}');
+        progressData.dalle_alternatives_2b = {
+            started: new Date().toISOString(),
+            status: 'in-progress'
+        };
+        localStorage.setItem('ia-academy-progress', JSON.stringify(progressData));
+    </script>
+</body>
+</html>

@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Personnalité - Module 8 | IA Academy</title>
+    <style>
+        /* Variables CSS pour les thèmes */
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-accent: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-accent: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            --pattern-opacity: 0.02;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%),
+                linear-gradient(0deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%);
+            background-size: 60px 60px;
+            z-index: -1;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(25px);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 90deg,
+                rgba(255, 255, 255, 0.05) 180deg,
+                transparent 270deg,
+                rgba(255, 255, 255, 0.1));
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, rgba(255, 255, 255, 0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Quiz Specific Styles */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-progress {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .quiz-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+            animation: shine 2s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .question-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+        }
+
+        .option-card:hover::before {
+            left: 100%;
+        }
+
+        .option-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .option-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .option-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.7s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.3));
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Parcours Cards */
+        .parcours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .parcours-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parcours-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .parcours-card.recommended {
+            border: 2px solid var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .parcours-card.recommended::before {
+            content: '⭐ RECOMMANDÉ POUR VOUS';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .parcours-card.recommended .parcours-content {
+            margin-top: 1rem;
+        }
+
+        .parcours-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .parcours-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .parcours-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .parcours-duration {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .parcours-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .parcours-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .parcours-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .parcours-features li::before {
+            content: '✅';
+            flex-shrink: 0;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-accent);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+        }
+
+        /* Quiz Navigation */
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .parcours-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Score Display */
+        .score-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .score-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .score-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🧠 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-slider">
+                            <span id="theme-icon">☀️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">🎯 Quiz de Personnalité IA</h1>
+                <p class="page-description">
+                    Découvrez quel parcours projet correspond le mieux à vos objectifs et votre profil
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+            <a href="index.html" class="breadcrumb-link">🏠 Dashboard</a>
+            <span>→</span>
+            <a href="projet_8_overview.html" class="breadcrumb-link">Module 8 : Projet Final</a>
+            <span>→</span>
+            <span class="breadcrumb-current">Quiz de Personnalité</span>
+        </nav>
+
+        <div class="quiz-container">
+            <!-- Progress Bar -->
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="progressBar"></div>
+            </div>
+
+            <!-- Introduction -->
+            <div id="intro-section" class="question-card active">
+                <div class="question-number">🚀</div>
+                <h2 class="question-title">Bienvenue dans votre Module 8 !</h2>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.6;">
+                    Ce quiz de 6 questions va analyser vos <strong>objectifs</strong>, votre <strong>profil technique</strong> et vos <strong>préférences</strong> pour vous recommander le parcours projet le plus adapté.
+                </p>
+
+                <div class="highlight-box">
+                    <div class="highlight-title">
+                        <span>💡</span>
+                        <span>3 parcours d'intégration disponibles</span>
+                    </div>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;">🎨 <strong>Parcours A :</strong> Mini-Agence IA Personnelle</li>
+                        <li style="margin-bottom: 0.5rem;">💼 <strong>Parcours B :</strong> Solution Métier IA Complète</li>
+                        <li style="margin-bottom: 0.5rem;">⚡ <strong>Parcours C :</strong> Écosystème IA Personnel</li>
+                    </ul>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="startQuiz()">
+                        Commencer le quiz 🎯
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question 1 -->
+            <div id="question-1" class="question-card">
+                <div class="question-number">1</div>
+                <h2 class="question-title">Quel est votre objectif principal avec l'IA ?</h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(1, 'content', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🎨</div>
+                            <div class="option-title">Créer du contenu pour mon business</div>
+                        </div>
+                        <div class="option-description">
+                            Générer des contenus marketing, réseaux sociaux, vidéos pour développer ma visibilité
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(1, 'business', this)">
+                        <div class="option-header">
+                            <div class="option-icon">💼</div>
+                            <div class="option-title">Optimiser mes processus métier</div>
+                        </div>
+                        <div class="option-description">
+                            Automatiser des tâches, améliorer l'efficacité, créer des solutions pour mon entreprise
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(1, 'personal', this)">
+                        <div class="option-header">
+                            <div class="option-icon">⚡</div>
+                            <div class="option-title">Améliorer ma productivité personnelle</div>
+                        </div>
+                        <div class="option-description">
+                            Créer un assistant IA personnel, optimiser mon organisation quotidienne
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div id="question-2" class="question-card">
+                <div class="question-number">2</div>
+                <h2 class="question-title">Quel est votre niveau de confort technique ?</h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(2, 'beginner', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🌱</div>
+                            <div class="option-title">Débutant</div>
+                        </div>
+                        <div class="option-description">
+                            Je préfère les interfaces simples et les solutions clés en main
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(2, 'intermediate', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🔧</div>
+                            <div class="option-title">Intermédiaire</div>
+                        </div>
+                        <div class="option-description">
+                            Je suis à l'aise avec les configurations et l'apprentissage de nouveaux outils
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(2, 'advanced', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🚀</div>
+                            <div class="option-title">Avancé</div>
+                        </div>
+                        <div class="option-description">
+                            J'aime expérimenter, connecter des outils complexes et personnaliser en profondeur
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div id="question-3" class="question-card">
+                <div class="question-number">3</div>
+                <h2 class="question-title">Combien de temps pouvez-vous consacrer par semaine à maintenir votre solution ?</h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(3, 'low', this)">
+                        <div class="option-header">
+                            <div class="option-icon">⏰</div>
+                            <div class="option-title">Moins de 30 minutes</div>
+                        </div>
+                        <div class="option-description">
+                            Je veux une solution qui fonctionne de manière autonome
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(3, 'medium', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🕐</div>
+                            <div class="option-title">30 minutes à 1 heure</div>
+                        </div>
+                        <div class="option-description">
+                            Je peux consacrer du temps pour optimiser et ajuster régulièrement
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(3, 'high', this)">
+                        <div class="option-header">
+                            <div class="option-icon">⚡</div>
+                            <div class="option-title">Plus d'1 heure</div>
+                        </div>
+                        <div class="option-description">
+                            J'aime expérimenter et améliorer continuellement mes outils
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div id="question-4" class="question-card">
+                <div class="question-number">4</div>
+                <h2 class="question-title">Préférez-vous créer ou optimiser ?</h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(4, 'create', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🎨</div>
+                            <div class="option-title">Créer du nouveau</div>
+                        </div>
+                        <div class="option-description">
+                            J'aime partir de zéro et créer des contenus originaux
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(4, 'optimize', this)">
+                        <div class="option-header">
+                            <div class="option-icon">⚙️</div>
+                            <div class="option-title">Optimiser l'existant</div>
+                        </div>
+                        <div class="option-description">
+                            Je préfère améliorer ce qui existe déjà pour le rendre plus efficace
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(4, 'both', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🔄</div>
+                            <div class="option-title">Les deux</div>
+                        </div>
+                        <div class="option-description">
+                            J'aime créer ET optimiser selon les besoins
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div id="question-5" class="question-card">
+                <div class="question-number">5</div>
+                <h2 class="question-title">Quel type de résultat vous motive le plus ?</h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(5, 'visible', this)">
+                        <div class="option-header">
+                            <div class="option-icon">👁️</div>
+                            <div class="option-title">Résultats visuels et partageables</div>
+                        </div>
+                        <div class="option-description">
+                            Créations que je peux montrer : contenus, designs, vidéos
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(5, 'functional', this)">
+                        <div class="option-header">
+                            <div class="option-icon">⚙️</div>
+                            <div class="option-title">Solutions fonctionnelles et mesurables</div>
+                        </div>
+                        <div class="option-description">
+                            Outils qui résolvent des problèmes concrets avec des métriques
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(5, 'learning', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🧠</div>
+                            <div class="option-title">Apprentissage et maîtrise technique</div>
+                        </div>
+                        <div class="option-description">
+                            Comprendre en profondeur comment tout fonctionne ensemble
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div id="question-6" class="question-card">
+                <div class="question-number">6</div>
+                <h2 class="question-title">Dans quel contexte souhaitez-vous utiliser votre projet ?</h2>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(6, 'professional', this)">
+                        <div class="option-header">
+                            <div class="option-icon">💼</div>
+                            <div class="option-title">Contexte professionnel</div>
+                        </div>
+                        <div class="option-description">
+                            Pour mon travail, mes clients ou mon entreprise
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(6, 'entrepreneurial', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🚀</div>
+                            <div class="option-title">Projet entrepreneurial</div>
+                        </div>
+                        <div class="option-description">
+                            Pour lancer un business, une activité créative ou un side-project
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(6, 'personal', this)">
+                        <div class="option-header">
+                            <div class="option-icon">🏠</div>
+                            <div class="option-title">Usage personnel</div>
+                        </div>
+                        <div class="option-description">
+                            Pour ma vie quotidienne, mes loisirs ou mes projets personnels
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Navigation -->
+            <div class="quiz-navigation" id="quiz-nav">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>
+                    ← Précédent
+                </button>
+                <span id="question-counter" style="color: var(--text-muted); font-weight: 500;">
+                    Introduction
+                </span>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+                    Suivant →
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-section" class="result-section">
+                <div class="result-icon" id="result-icon">🎯</div>
+                <h2 class="result-title" id="result-title">Votre parcours recommandé</h2>
+                <p class="result-description" id="result-description">
+                    Analyse en cours...
+                </p>
+
+                <!-- Score Display -->
+                <div class="score-display" id="score-display">
+                    <div class="score-item">
+                        <div class="score-label">Créateur</div>
+                        <div class="score-value" id="score-content">0</div>
+                        <div class="score-bar">
+                            <div class="score-fill" id="fill-content" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Business</div>
+                        <div class="score-value" id="score-business">0</div>
+                        <div class="score-bar">
+                            <div class="score-fill" id="fill-business" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Personnel</div>
+                        <div class="score-value" id="score-personal">0</div>
+                        <div class="score-bar">
+                            <div class="score-fill" id="fill-personal" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parcours Cards -->
+                <div class="parcours-grid" id="parcours-grid">
+                    <!-- Parcours A -->
+                    <div class="parcours-card" id="parcours-a">
+                        <div class="parcours-content">
+                            <div class="parcours-header">
+                                <div class="parcours-icon">🎨</div>
+                                <div>
+                                    <div class="parcours-title">Mini-Agence IA</div>
+                                    <div class="parcours-duration">3-4 heures</div>
+                                </div>
+                            </div>
+                            <p class="parcours-description">
+                                Créez votre pipeline automatisé de production de contenus : de l'idée à la publication sur toutes vos plateformes.
+                            </p>
+                            <ul class="parcours-features">
+                                <li>Assistant stratégique pour analyser vos briefs</li>
+                                <li>Génération automatique : texte + visuels + scripts</li>
+                                <li>Workflow de publication multi-plateformes</li>
+                                <li>Dashboard de suivi de performance</li>
+                            </ul>
+                            <button class="btn btn-primary" onclick="selectParcours('A')">
+                                Choisir ce parcours 🎨
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Parcours B -->
+                    <div class="parcours-card" id="parcours-b">
+                        <div class="parcours-content">
+                            <div class="parcours-header">
+                                <div class="parcours-icon">💼</div>
+                                <div>
+                                    <div class="parcours-title">Solution Métier IA</div>
+                                    <div class="parcours-duration">3-4 heures</div>
+                                </div>
+                            </div>
+                            <p class="parcours-description">
+                                Transformez un processus métier existant avec l'IA : audit, automatisation intelligente et mesure du ROI.
+                            </p>
+                            <ul class="parcours-features">
+                                <li>Audit IA d'un processus existant</li>
+                                <li>Automatisation intelligente complète</li>
+                                <li>Calcul du ROI et métriques business</li>
+                                <li>Guidelines éthiques intégrées</li>
+                            </ul>
+                            <button class="btn btn-primary" onclick="selectParcours('B')">
+                                Choisir ce parcours 💼
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Parcours C -->
+                    <div class="parcours-card" id="parcours-c">
+                        <div class="parcours-content">
+                            <div class="parcours-header">
+                                <div class="parcours-icon">⚡</div>
+                                <div>
+                                    <div class="parcours-title">Écosystème IA</div>
+                                    <div class="parcours-duration">4 heures</div>
+                                </div>
+                            </div>
+                            <p class="parcours-description">
+                                Construisez votre "cerveau IA étendu" : hub personnel avec tous vos outils interconnectés et optimisés.
+                            </p>
+                            <ul class="parcours-features">
+                                <li>Dashboard personnel centralisé</li>
+                                <li>Workflows interconnectés intelligents</li>
+                                <li>Métriques de productivité IA</li>
+                                <li>Système d'apprentissage continu</li>
+                            </ul>
+                            <button class="btn btn-primary" onclick="selectParcours('C')">
+                                Choisir ce parcours ⚡
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-secondary); border-radius: 12px; text-align: left;">
+                    <h3 style="color: var(--text-primary); margin-bottom: 1rem;">🤔 Pas convaincu par la recommandation ?</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Aucun problème ! Vous pouvez explorer les 3 parcours et changer à tout moment. 
+                        Cette recommandation est juste un point de départ basé sur vos réponses.
+                    </p>
+                    <button class="btn btn-outline" onclick="restartQuiz()">
+                        🔄 Refaire le quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz State
+        let currentQuestion = 0;
+        let answers = {};
+        let scores = {
+            content: 0,    // Parcours A
+            business: 0,   // Parcours B  
+            personal: 0    // Parcours C
+        };
+
+        const totalQuestions = 6;
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            themeIcon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+            
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-icon').textContent = savedTheme === 'light' ? '☀️' : '🌙';
+        });
+
+        // Quiz Logic
+        function startQuiz() {
+            currentQuestion = 1;
+            showQuestion(1);
+            updateProgress();
+            updateCounter();
+        }
+
+        function showQuestion(questionNum) {
+            // Hide all questions
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Show target question
+            const targetQuestion = document.getElementById(`question-${questionNum}`);
+            if (targetQuestion) {
+                targetQuestion.classList.add('active');
+            }
+            
+            updateNavigation();
+        }
+
+        function selectOption(questionNum, value, element) {
+            // Remove selection from other options in same question
+            const questionCard = element.parentElement;
+            questionCard.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select current option
+            element.classList.add('selected');
+            
+            // Store answer
+            answers[questionNum] = value;
+            
+            // Update scores based on question and answer
+            updateScores(questionNum, value);
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function updateScores(questionNum, value) {
+            // Question 1: Objectif principal
+            if (questionNum === 1) {
+                if (value === 'content') scores.content += 3;
+                if (value === 'business') scores.business += 3;
+                if (value === 'personal') scores.personal += 3;
+            }
+            
+            // Question 2: Niveau technique
+            if (questionNum === 2) {
+                if (value === 'beginner') {
+                    scores.content += 2;
+                    scores.personal += 1;
+                }
+                if (value === 'intermediate') {
+                    scores.business += 2;
+                    scores.content += 1;
+                }
+                if (value === 'advanced') {
+                    scores.personal += 2;
+                    scores.business += 1;
+                }
+            }
+            
+            // Question 3: Temps disponible
+            if (questionNum === 3) {
+                if (value === 'low') {
+                    scores.content += 2;
+                }
+                if (value === 'medium') {
+                    scores.business += 2;
+                }
+                if (value === 'high') {
+                    scores.personal += 2;
+                }
+            }
+            
+            // Question 4: Créer vs optimiser
+            if (questionNum === 4) {
+                if (value === 'create') scores.content += 2;
+                if (value === 'optimize') scores.business += 2;
+                if (value === 'both') scores.personal += 2;
+            }
+            
+            // Question 5: Type de résultat
+            if (questionNum === 5) {
+                if (value === 'visible') scores.content += 2;
+                if (value === 'functional') scores.business += 2;
+                if (value === 'learning') scores.personal += 2;
+            }
+            
+            // Question 6: Contexte d'usage
+            if (questionNum === 6) {
+                if (value === 'entrepreneurial') scores.content += 2;
+                if (value === 'professional') scores.business += 2;
+                if (value === 'personal') scores.personal += 2;
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+                updateProgress();
+                updateCounter();
+                
+                // Reset next button
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+                updateProgress();
+                updateCounter();
+                
+                // Enable next button if answer exists
+                if (answers[currentQuestion]) {
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function updateCounter() {
+            const counter = document.getElementById('question-counter');
+            if (currentQuestion === 0) {
+                counter.textContent = 'Introduction';
+            } else {
+                counter.textContent = `Question ${currentQuestion} / ${totalQuestions}`;
+            }
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // Previous button
+            prevBtn.disabled = currentQuestion <= 1;
+            
+            // Next button text
+            if (currentQuestion === totalQuestions) {
+                nextBtn.textContent = 'Voir les résultats 🎯';
+            } else {
+                nextBtn.textContent = 'Suivant →';
+            }
+            
+            // Next button state
+            nextBtn.disabled = !answers[currentQuestion];
+        }
+
+        function showResults() {
+            // Hide quiz navigation
+            document.getElementById('quiz-nav').style.display = 'none';
+            
+            // Show results
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.classList.add('show');
+            
+            // Calculate and display scores
+            displayScores();
+            
+            // Determine and highlight recommended parcours
+            const recommended = getRecommendedParcours();
+            highlightRecommendedParcours(recommended);
+            
+            // Update result text
+            updateResultText(recommended);
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayScores() {
+            const maxScore = 13; // Maximum possible per category
+            
+            // Update score values and bars
+            document.getElementById('score-content').textContent = scores.content;
+            document.getElementById('score-business').textContent = scores.business;
+            document.getElementById('score-personal').textContent = scores.personal;
+            
+            // Animate progress bars
+            setTimeout(() => {
+                document.getElementById('fill-content').style.width = `${(scores.content / maxScore) * 100}%`;
+                document.getElementById('fill-business').style.width = `${(scores.business / maxScore) * 100}%`;
+                document.getElementById('fill-personal').style.width = `${(scores.personal / maxScore) * 100}%`;
+            }, 500);
+        }
+
+        function getRecommendedParcours() {
+            const maxScore = Math.max(scores.content, scores.business, scores.personal);
+            
+            if (scores.content === maxScore) return 'A';
+            if (scores.business === maxScore) return 'B';
+            return 'C';
+        }
+
+        function highlightRecommendedParcours(recommended) {
+            // Remove previous recommendations
+            document.querySelectorAll('.parcours-card').forEach(card => {
+                card.classList.remove('recommended');
+            });
+            
+            // Add recommendation to selected parcours
+            const recommendedCard = document.getElementById(`parcours-${recommended.toLowerCase()}`);
+            recommendedCard.classList.add('recommended');
+        }
+
+        function updateResultText(recommended) {
+            const resultTexts = {
+                'A': {
+                    icon: '🎨',
+                    title: 'Parcours A : Mini-Agence IA Personnelle',
+                    description: 'Parfait ! Votre profil correspond à celui d\'un créateur de contenus. Vous allez adorer construire votre pipeline automatisé de création.'
+                },
+                'B': {
+                    icon: '💼', 
+                    title: 'Parcours B : Solution Métier IA Complète',
+                    description: 'Excellent choix ! Votre approche business et votre vision ROI font de vous le candidat idéal pour ce parcours d\'optimisation métier.'
+                },
+                'C': {
+                    icon: '⚡',
+                    title: 'Parcours C : Écosystème IA Personnel', 
+                    description: 'Formidable ! Votre curiosité technique et votre vision holistique sont parfaites pour construire un écosystème IA personnel avancé.'
+                }
+            };
+            
+            const result = resultTexts[recommended];
+            document.getElementById('result-icon').textContent = result.icon;
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('result-description').textContent = result.description;
+        }
+
+        function selectParcours(parcours) {
+            // Store selected parcours
+            localStorage.setItem('selectedParcours', parcours);
+            
+            // Navigate to next page based on parcours
+            const urls = {
+                'A': 'projet_8_conception_a.html',
+                'B': 'projet_8_conception_b.html', 
+                'C': 'projet_8_conception_c.html'
+            };
+            
+            // Show confirmation
+            const btn = event.target;
+            btn.textContent = '✅ Parcours sélectionné !';
+            btn.style.background = 'var(--success-color)';
+            
+            // Navigate after 1 second
+            setTimeout(() => {
+                window.location.href = urls[parcours];
+            }, 1000);
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = {};
+            scores = {content: 0, business: 0, personal: 0};
+            
+            // Reset UI
+            document.getElementById('quiz-nav').style.display = 'flex';
+            document.getElementById('results-section').classList.remove('show');
+            document.getElementById('intro-section').classList.add('active');
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('question-counter').textContent = 'Introduction';
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').textContent = 'Suivant →';
+            
+            // Clear selections
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        // Initialize
+        updateCounter();
+        updateNavigation();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT - Agents personnalisés | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .theme-toggle-button::after {
+            content: '☀️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(23px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::after {
+            content: '🌙';
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs for Better Navigation */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '→';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Micro-séquence Navigation */
+        .micro-sequence-nav {
+            background: var(--card-bg);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .micro-nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .micro-nav-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .micro-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+        }
+
+        .micro-nav.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .micro-nav.completed {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .micro-nav:hover:not(.current):not(.disabled) {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .micro-nav.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Sidebar for Learning Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Step-by-step guide styling */
+        .step-guide {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            font-weight: 600;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-content {
+            margin-left: 46px;
+            color: var(--text-secondary);
+        }
+
+        /* Warning box for requirements */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--error-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Alternative box */
+        .alternative-box {
+            background: linear-gradient(45deg, rgba(6, 182, 212, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .alternative-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Validation Quiz Section */
+        .validation-section {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .validation-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--warning-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-number {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .quiz-option {
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+        }
+
+        .quiz-option.selected {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(251, 191, 36, 0.1));
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Resources Section */
+        .resources-section {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .resources-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .resource-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .resource-content {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .resource-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Navigation Controls */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-sequence {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Buttons with Enhanced Interactions */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Tips and Warnings */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Sequence List for Sidebar */
+        .sequence-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .sequence-duration {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .micro-nav-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .step-content {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="outils_3_overview.html" class="breadcrumb-link">Module 3: Outils IA Populaires</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">ChatGPT - Agents personnalisés</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Micro-séquence Navigation -->
+    <div class="micro-sequence-nav">
+        <div class="container">
+            <div class="micro-nav-container">
+                <span class="micro-nav-label">Séquence 1 :</span>
+                <a href="outils_3_chatgpt_1a.html" class="micro-nav completed">1A</a>
+                <a href="outils_3_chatgpt_1b.html" class="micro-nav completed">1B</a>
+                <a href="outils_3_chatgpt_1c.html" class="micro-nav current">1C</a>
+                <a href="outils_3_chatgpt_1d.html" class="micro-nav disabled">1D</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🤖</span>
+                        <span>Micro-séquence 1C</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>30 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Avancé</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">ChatGPT - Agents personnalisés</h1>
+                <p class="lesson-description">
+                    Créez vos premiers agents IA spécialisés ! Découvrez les GPTs de OpenAI et apprenez à utiliser Poe.com 
+                    comme alternative gratuite pour concevoir des assistants sur mesure.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Objectifs de cette micro-séquence</h2>
+                    <div class="section-content">
+                        <p>À la fin de cette micro-séquence, vous serez capable de :</p>
+                        <ul>
+                            <li><strong>Comprendre le concept</strong> d'agents IA personnalisés et leurs avantages</li>
+                            <li><strong>Créer votre premier agent</strong> sur Poe.com (alternative gratuite)</li>
+                            <li><strong>Rédiger des instructions efficaces</strong> pour configurer le comportement de votre agent</li>
+                            <li><strong>Tester et optimiser</strong> votre agent selon vos besoins spécifiques</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Introduction aux agents IA -->
+                <section class="section">
+                    <h2 class="section-title">🤖 Qu'est-ce qu'un agent IA personnalisé ?</h2>
+                    
+                    <div class="section-content">
+                        <p>Les agents IA personnalisés représentent la révolution de l'intelligence artificielle : ils transforment l'IA généraliste en assistants spécialisés sur mesure. Imaginez avoir un expert dédié pour chacune de vos tâches récurrentes, configuré exactement selon vos besoins et votre style de travail.</p>
+
+                        <p>Contrairement à ChatGPT classique qui est généraliste, un agent personnalisé possède une expertise spécifique, un style de communication défini, et peut même accéder à vos documents personnels pour vous fournir des réponses ultra-pertinentes.</p>
+
+                        <div class="definition-box">
+                            <div class="definition-title">💡 Agent IA vs ChatGPT classique</div>
+                            <p><strong>ChatGPT classique :</strong> Assistant généraliste, mêmes réponses pour tous, pas de mémoire permanente</p>
+                            <p><strong>Agent personnalisé :</strong> Expert spécialisé, comportement sur mesure, connaissances spécifiques, style adapté</p>
+                        </div>
+
+                        <h3>Exemples d'agents ultra-utiles</h3>
+                        <ul>
+                            <li><strong>Assistant Marketing :</strong> Expert en copywriting, connaît votre marque, génère du contenu adapté à votre audience</li>
+                            <li><strong>Coach Code :</strong> Spécialisé dans votre langage de programmation, connaît votre style, aide au debugging</li>
+                            <li><strong>Gestionnaire de Projet :</strong> Maîtrise vos méthodes, connaît votre équipe, optimise votre planning</li>
+                            <li><strong>Assistant Rédaction :</strong> Adapté à votre ton, connaît vos sujets, respecte votre ligne éditoriale</li>
+                        </ul>
+
+                        <div class="tip-box">
+                            <div class="tip-title">🎯 Le secret du succès</div>
+                            <p>Un bon agent résout UN problème spécifique de manière excellente, plutôt que de faire 10 choses de manière moyenne. La spécialisation est la clé !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GPTs vs Alternatives -->
+                <section class="section">
+                    <h2 class="section-title">🔍 GPTs ChatGPT vs Alternatives gratuites</h2>
+                    
+                    <div class="section-content">
+                        <div class="warning-box">
+                            <div class="warning-title">⚠️ Prérequis GPTs OpenAI</div>
+                            <p><strong>Les GPTs personnalisés nécessitent un abonnement ChatGPT Plus ou ChatGPT Team</strong> (à partir de 20$/mois). Cette fonctionnalité n'est pas disponible avec la version gratuite de ChatGPT.</p>
+                        </div>
+
+                        <p>Heureusement, plusieurs alternatives gratuites offrent des fonctionnalités similaires ! Nous allons utiliser <strong>Poe.com</strong> (par Quora) qui permet de créer des agents personnalisés gratuitement.</p>
+
+                        <div class="alternative-box">
+                            <div class="alternative-title">🎯 Pourquoi Poe.com ?</div>
+                            <ul>
+                                <li><strong>Gratuit :</strong> Création d'agents illimitée sans abonnement</li>
+                                <li><strong>Interface simple :</strong> Très similaire aux GPTs de OpenAI</li>
+                                <li><strong>Plusieurs modèles :</strong> Accès à Claude, GPT-4, et d'autres IA</li>
+                                <li><strong>Partage facile :</strong> Vos agents peuvent être partagés avec d'autres</li>
+                                <li><strong>Communauté active :</strong> Découvrez des agents créés par d'autres utilisateurs</li>
+                            </ul>
+                        </div>
+
+                        <h3>Comparaison rapide</h3>
+                        <p><strong>GPTs (ChatGPT Plus) :</strong> Plus intégrés, upload de documents, actions API, GPT Store officiel</p>
+                        <p><strong>Poe.com (Gratuit) :</strong> Interface similaire, plusieurs modèles IA, partage communautaire, aucun coût</p>
+
+                        <p>Pour apprendre les concepts et créer vos premiers agents, Poe.com est parfait ! Une fois maîtrisé, vous pourrez facilement transférer vos compétences vers les GPTs payants si besoin.</p>
+                    </div>
+                </section>
+
+                <!-- Création step-by-step -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Créer votre premier agent sur Poe.com</h2>
+                    
+                    <div class="section-content">
+                        <p>Nous allons créer ensemble un agent "Assistant Marketing" spécialisé dans la création de posts LinkedIn. Ce tutorial step-by-step vous donnera toutes les clés pour créer n'importe quel type d'agent.</p>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">1</span>
+                                Inscription et accès à Poe.com
+                            </div>
+                            <div class="step-content">
+                                <p>Rendez-vous sur <a href="https://poe.com" target="_blank" style="color: var(--primary-color);">poe.com</a> et créez un compte gratuit avec votre email ou Google. L'inscription prend moins de 2 minutes.</p>
+                                <p><strong>Astuce :</strong> Utilisez le même email que vos autres outils de travail pour faciliter l'intégration future.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">2</span>
+                                Accéder à la création d'agent
+                            </div>
+                            <div class="step-content">
+                                <p>Une fois connecté, cherchez le bouton "Create Bot" ou "Créer un Bot" dans la barre latérale ou le menu principal. Cliquez dessus pour accéder à l'interface de création.</p>
+                                <p>Vous arrivez sur un formulaire simple avec plusieurs champs à remplir.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">3</span>
+                                Définir l'identité de votre agent
+                            </div>
+                            <div class="step-content">
+                                <p><strong>Nom :</strong> "Assistant Marketing LinkedIn"</p>
+                                <p><strong>Description :</strong> "Expert en création de posts LinkedIn engageants pour professionnels et entreprises"</p>
+                                <p><strong>Photo :</strong> Choisissez une image professionnelle ou laissez Poe en générer une automatiquement</p>
+                            </div>
+                        </div>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">4</span>
+                                Choisir le modèle IA de base
+                            </div>
+                            <div class="step-content">
+                                <p>Poe vous propose plusieurs modèles : Claude, GPT-4, GPT-3.5, etc. Pour notre agent marketing :</p>
+                                <p><strong>Recommandation :</strong> Claude (excellent pour le marketing et la créativité) ou GPT-4 (très polyvalent)</p>
+                                <p>Vous pourrez changer ce choix plus tard si besoin.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">5</span>
+                                Rédiger les instructions système
+                            </div>
+                            <div class="step-content">
+                                <p>C'est l'étape la plus importante ! Voici un exemple d'instructions pour notre Assistant Marketing :</p>
+                                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin-top: 1rem; font-style: italic;">
+                                    "Tu es un expert en marketing LinkedIn spécialisé dans la création de posts engageants. Tu maîtrises parfaitement les codes de LinkedIn et sais adapter le ton selon l'audience (BtoB, entrepreneurs, cadres).
+                                    <br><br>
+                                    <strong>Tu dois TOUJOURS :</strong><br>
+                                    - Demander le secteur d'activité et l'objectif du post<br>
+                                    - Proposer un hook accrocheur en première ligne<br>
+                                    - Structurer le contenu avec des paragraphes courts<br>
+                                    - Suggérer 3-5 hashtags pertinents<br>
+                                    - Inclure un call-to-action clair
+                                    <br><br>
+                                    <strong>Ton style :</strong> Professionnel mais accessible, inspirant sans être superficiel. Tu adaptes le niveau de formalité selon le contexte."
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">6</span>
+                                Tester et affiner
+                            </div>
+                            <div class="step-content">
+                                <p>Avant de finaliser, testez votre agent avec quelques prompts typiques :</p>
+                                <ul>
+                                    <li>"Crée un post sur l'intelligence artificielle pour une startup tech"</li>
+                                    <li>"Rédige un post de recrutement pour un poste de développeur"</li>
+                                    <li>"Aide-moi à annoncer le lancement de mon nouveau produit"</li>
+                                </ul>
+                                <p>Ajustez les instructions selon les résultats obtenus.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-guide">
+                            <div class="step-title">
+                                <span class="step-number">7</span>
+                                Finaliser et partager
+                            </div>
+                            <div class="step-content">
+                                <p>Une fois satisfait, sauvegardez votre agent. Vous pouvez choisir de le garder privé ou de le partager avec la communauté Poe.</p>
+                                <p><strong>Option recommandée :</strong> Commencez en privé, puis partagez une fois que vous êtes satisfait du résultat.</p>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">🎯 Votre mission pratique</div>
+                            <p><strong>Créez votre premier agent dès maintenant !</strong></p>
+                            <ol>
+                                <li>Identifiez UNE tâche récurrente de votre quotidien professionnel</li>
+                                <li>Suivez les 7 étapes ci-dessus pour créer votre agent sur Poe.com</li>
+                                <li>Testez-le avec 3 demandes différentes</li>
+                                <li>Notez les améliorations possibles pour la suite</li>
+                            </ol>
+                            <p>Temps estimé : 15-20 minutes pour votre premier agent !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Conseils d'optimisation -->
+                <section class="section">
+                    <h2 class="section-title">⚙️ Optimiser vos agents : les secrets des pros</h2>
+                    
+                    <div class="section-content">
+                        <p>Créer un agent n'est que le début. Pour qu'il devienne vraiment utile, il faut l'optimiser continuellement. Voici les techniques avancées des créateurs d'agents expérimentés.</p>
+
+                        <h3>Structure d'instructions optimale</h3>
+                        <p>Les meilleures instructions suivent cette structure éprouvée :</p>
+                        <ol>
+                            <li><strong>Rôle et expertise :</strong> "Tu es un [spécialiste] expert en [domaine précis]"</li>
+                            <li><strong>Contexte d'usage :</strong> "Tu t'adresses à [audience] pour [objectif]"</li>
+                            <li><strong>Style de communication :</strong> "Ton style est [caractéristiques précises]"</li>
+                            <li><strong>Règles obligatoires :</strong> "Tu dois TOUJOURS [actions systématiques]"</li>
+                            <li><strong>Interdictions claires :</strong> "Tu ne dois JAMAIS [comportements à éviter]"</li>
+                            <li><strong>Format de sortie :</strong> "Tes réponses incluent [structure, éléments obligatoires]"</li>
+                        </ol>
+
+                        <h3>Erreurs courantes à éviter</h3>
+                        <ul>
+                            <li><strong>Instructions trop génériques :</strong> "Aide-moi avec le marketing" → Trop vague !</li>
+                            <li><strong>Conflits d'instructions :</strong> Demander d'être à la fois créatif ET ultra-précis</li>
+                            <li><strong>Trop de règles :</strong> Plus de 7-8 règles créent de la confusion</li>
+                            <li><strong>Pas de tests :</strong> Lancer l'agent sans l'avoir testé sur plusieurs cas</li>
+                        </ul>
+
+                        <h3>Techniques de test efficaces</h3>
+                        <p>Testez toujours ces scénarios avant de finaliser :</p>
+                        <ul>
+                            <li><strong>Cas typique :</strong> La demande la plus fréquente que vous ferez</li>
+                            <li><strong>Cas limite :</strong> Une demande complexe ou inhabituelle</li>
+                            <li><strong>Cas d'erreur :</strong> Une demande hors sujet pour voir comment il réagit</li>
+                            <li><strong>Cas de précision :</strong> Une demande très spécifique avec des contraintes</li>
+                        </ul>
+
+                        <div class="tip-box">
+                            <div class="tip-title">🔧 Astuce d'itération rapide</div>
+                            <p>Créez d'abord une version simple qui fonctionne, puis ajoutez une règle à la fois. C'est plus efficace que d'essayer de tout définir parfaitement dès le début.</p>
+                        </div>
+
+                        <div class="definition-box">
+                            <div class="definition-title">🏆 Exemple d'instructions expertes</div>
+                            <p style="font-style: italic; background: var(--bg-secondary); padding: 1rem; border-radius: 8px;">
+                                "Tu es un conseiller en productivité spécialisé dans l'optimisation du temps pour les entrepreneurs. Tu t'adresses à des dirigeants de PME débordés cherchant des solutions concrètes.
+                                <br><br>
+                                <strong>Style :</strong> Direct, bienveillant, avec des exemples chiffrés et des actions immédiatement applicables.
+                                <br><br>
+                                <strong>Tu dois TOUJOURS :</strong> Demander le contexte (équipe, secteur, problème principal), proposer max 3 actions prioritaires, donner un délai d'implémentation réaliste.
+                                <br><br>
+                                <strong>Tu ne dois JAMAIS :</strong> Donner plus de 5 conseils à la fois, proposer des solutions nécessitant plus de 2h de setup, utiliser du jargon sans l'expliquer.
+                                <br><br>
+                                <strong>Format :</strong> Diagnostic (2 lignes) + 3 actions prioritaires + planning de mise en œuvre (1 semaine)."
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Validation Quiz -->
+                <section class="validation-section">
+                    <h2 class="validation-title">✅ Validation des acquis</h2>
+                    
+                    <div class="quiz-question">
+                        <div class="question-number">Question 1/3</div>
+                        <div class="question-text">Quelle est la principale différence entre ChatGPT classique et un agent personnalisé ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">L'agent personnalisé est plus rapide que ChatGPT</div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">L'agent personnalisé est spécialisé avec un comportement et une expertise sur mesure</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">L'agent personnalisé coûte moins cher à utiliser</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Il n'y a pas de différence significative</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-number">Question 2/3</div>
+                        <div class="question-text">Pourquoi utiliser Poe.com plutôt que les GPTs de ChatGPT pour débuter ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">Poe.com est plus performant que ChatGPT</div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">Poe.com permet de créer des agents gratuitement sans abonnement</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Poe.com a une meilleure interface utilisateur</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Les agents de Poe.com sont plus intelligents</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-number">Question 3/3</div>
+                        <div class="question-text">Quelle est la structure optimale pour rédiger des instructions d'agent efficaces ?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">Commencer par les interdictions, puis définir le rôle</div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">Rôle → Contexte → Style → Règles obligatoires → Interdictions → Format</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Écrire un long paragraphe avec toutes les informations mélangées</div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">Se contenter de définir le rôle, le reste est automatique</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="checkAnswers()" id="checkBtn">Vérifier mes réponses</button>
+                        <div id="quizResult" style="margin-top: 1rem; display: none;"></div>
+                    </div>
+                </section>
+
+                <!-- Resources Section -->
+                <section class="resources-section">
+                    <h2 class="resources-title">📚 Ressources complémentaires</h2>
+                    
+                    <div class="resource-item">
+                        <div class="resource-icon">🤖</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://poe.com" target="_blank" class="resource-link">Poe.com - Créer votre agent</a>
+                            </div>
+                            <div class="resource-description">Plateforme gratuite pour créer vos agents IA personnalisés</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">💎</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://chat.openai.com/gpts" target="_blank" class="resource-link">GPT Store officiel (ChatGPT Plus)</a>
+                            </div>
+                            <div class="resource-description">Magasin officiel des GPTs pour abonnés ChatGPT Plus</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">🛠️</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://character.ai" target="_blank" class="resource-link">Character.AI</a>
+                            </div>
+                            <div class="resource-description">Alternative gratuite orientée personnages et assistants créatifs</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">📖</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://help.openai.com/en/articles/8554397-creating-a-gpt" target="_blank" class="resource-link">Guide officiel création GPTs</a>
+                            </div>
+                            <div class="resource-description">Documentation complète d'OpenAI pour créer des GPTs</div>
+                        </div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon">💡</div>
+                        <div class="resource-content">
+                            <div class="resource-title">
+                                <a href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" class="resource-link">Awesome ChatGPT Prompts</a>
+                            </div>
+                            <div class="resource-description">Collection de prompts et d'instructions pour agents spécialisés</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="outils_3_chatgpt_1b.html" class="btn btn-secondary">
+                        <span>←</span> Micro-séquence 1B
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Micro-séquence 1C sur 4</div>
+                        <div class="nav-title">Agents personnalisés</div>
+                    </div>
+                    <a href="outils_3_chatgpt_1d.html" class="btn btn-primary">
+                        Micro-séquence 1D <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 18.75%;"></div>
+                    </div>
+                    <div class="progress-text">Micro-séquence 1C - Module 3</div>
+                </div>
+
+                <!-- Micro-séquences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🔗 Séquence ChatGPT</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1A</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Découverte & interfaces</div>
+                                <div class="sequence-duration">25 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon completed">1B</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Paramètres & optimisation</div>
+                                <div class="sequence-duration">20 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item current">
+                            <div class="sequence-icon current">1C</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Agents personnalisés</div>
+                                <div class="sequence-duration">30 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <div class="sequence-icon locked">1D</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Intégration workflow</div>
+                                <div class="sequence-duration">15 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">⚡ Actions rapides</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="outils_3_chatgpt_1b.html" target="_blank" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            🤖 Créer sur Poe.com
+                        </a>
+                        <a href="outils_3_chatgpt_1b.html" class="btn btn-secondary" style="font-size: 0.9rem;" onclick="markCompleted()">
+                            ✅ Marquer comme terminé
+                        </a>
+                        <a href="outils_3_chatgpt_1b.html" class="btn btn-secondary" style="font-size: 0.9rem;">
+                            📚 Voir toutes les ressources
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        let selectedAnswers = {};
+        let correctAnswers = {1: 2, 2: 2, 3: 2}; // Index des bonnes réponses (1-based)
+
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality - CORRIGÉ
+        function selectOption(element, isCorrect) {
+            try {
+                // Find question number
+                const questionElement = element.closest('.quiz-question');
+                if (!questionElement) {
+                    console.error('Quiz question element not found');
+                    return;
+                }
+                
+                const questionNumberText = questionElement.querySelector('.question-number')?.textContent;
+                if (!questionNumberText) {
+                    console.error('Question number not found');
+                    return;
+                }
+                
+                // ✅ CORRECTION : Conversion en nombre
+                const questionNumber = parseInt(questionNumberText.split('/')[0].replace('Question ', ''));
+                
+                // Remove previous selections for this question
+                questionElement.querySelectorAll('.quiz-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Mark this option as selected
+                element.classList.add('selected');
+                
+                // ✅ CORRECTION : Stocker avec clé numérique
+                const optionIndex = Array.from(questionElement.querySelectorAll('.quiz-option')).indexOf(element) + 1;
+                selectedAnswers[questionNumber] = optionIndex;
+                
+                console.log(`Question ${questionNumber}: option ${optionIndex} sélectionnée`);
+            } catch (error) {
+                console.error('Erreur dans selectOption:', error);
+            }
+        }
+
+        function checkAnswers() {
+            try {
+                let score = 0;
+                let total = Object.keys(correctAnswers).length;
+                
+                // Check each answer and apply visual feedback
+                document.querySelectorAll('.quiz-question').forEach((questionElement, index) => {
+                    const questionNumber = index + 1; // ✅ CORRECTION : Index numérique
+                    const options = questionElement.querySelectorAll('.quiz-option');
+                    const userAnswer = selectedAnswers[questionNumber];
+                    const correctAnswer = correctAnswers[questionNumber];
+                    
+                    console.log(`Q${questionNumber}: User=${userAnswer}, Correct=${correctAnswer}`);
+                    
+                    options.forEach((option, optionIndex) => {
+                        option.classList.remove('correct', 'incorrect');
+                        
+                        if (optionIndex + 1 === correctAnswer) {
+                            option.classList.add('correct');
+                            console.log(`Option ${optionIndex + 1}: marquée comme correcte`);
+                        } else if (optionIndex + 1 === userAnswer && userAnswer !== correctAnswer) {
+                            option.classList.add('incorrect');
+                            console.log(`Option ${optionIndex + 1}: marquée comme incorrecte`);
+                        }
+                    });
+                    
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                    }
+                });
+                
+                // Show result
+                const resultElement = document.getElementById('quizResult');
+                const percentage = Math.round((score / total) * 100);
+                
+                let message = '';
+                let emoji = '';
+                
+                if (percentage >= 80) {
+                    emoji = '🎉';
+                    message = 'Excellent ! Vous maîtrisez parfaitement la création d\'agents IA.';
+                } else if (percentage >= 60) {
+                    emoji = '👍';
+                    message = 'Bien joué ! Quelques points à revoir mais vous avez les bases.';
+                } else {
+                    emoji = '📚';
+                    message = 'Il serait bon de relire la séquence et de pratiquer sur Poe.com.';
+                }
+                
+                resultElement.innerHTML = `
+                    <div style="padding: 1rem; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                            ${emoji} Score : ${score}/${total} (${percentage}%)
+                        </div>
+                        <div style="color: var(--text-secondary);">${message}</div>
+                    </div>
+                `;
+                resultElement.style.display = 'block';
+                
+                // Disable quiz after check
+                document.getElementById('checkBtn').disabled = true;
+                document.getElementById('checkBtn').textContent = 'Quiz terminé';
+                
+            } catch (error) {
+                console.error('Erreur dans checkAnswers:', error);
+            }
+        }
+
+        // Mark sequence as completed
+        function markCompleted() {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[3]) progress.modules[3] = {};
+            if (!progress.modules[3]['chatgpt']) progress.modules[3]['chatgpt'] = {};
+            
+            progress.modules[3]['chatgpt']['1c'] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+            
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = '18.75%';
+            
+            // Enable next micro-sequence
+            const nextBtn = document.querySelector('a[href="outils_3_chatgpt_1d.html"]');
+            if (nextBtn) {
+                nextBtn.classList.remove('disabled');
+            }
+            
+            // Show confirmation
+            alert('Micro-séquence 1C terminée ! 🎉\nVous pouvez maintenant passer à la micro-séquence 1D - dernière étape !');
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

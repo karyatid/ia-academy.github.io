@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 2 : Techniques avancées | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+            opacity: 1;
+        }
+
+        /* Back Button for Learning Flow */
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(-2px);
+        }
+
+        /* Breadcrumbs for Learning Context */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '/';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Learning Support */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-card h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Code Block Styling */
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: 'Exemple de prompt';
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Warning/Alert Box */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Technique Box */
+        .technique-box {
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .technique-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Bar for Learning */
+        .progress-bar {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Navigation Buttons for Learning Flow */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="prompting_2_overview.html" class="breadcrumb-link">Module 2: Art du Prompting</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Séquence 2: Techniques avancées</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>📚</span>
+                        <span>Séquence 2 / 4</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>120 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Intermédiaire</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Techniques avancées de prompting</h1>
+                <p class="lesson-description">
+                    Maîtrisez les techniques avancées comme Chain of Thought et Few-shot prompting pour optimiser vos interactions avec l'IA et obtenir des résultats exceptionnels.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Section 1: Techniques de raffinement -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Techniques de raffinement</h2>
+                    <div class="section-content">
+                        
+                        <p>Maintenant que vous maîtrisez les bases, découvrons les techniques avancées qui transformeront la qualité de vos prompts et vous donneront un avantage considérable.</p>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>🧠</span>
+                                Chain of Thought (Chaîne de raisonnement)
+                            </div>
+                            <p><strong>Principe :</strong> Demander à l'IA de décomposer sa réflexion étape par étape, comme si elle "pensait à voix haute".</p>
+                            
+                            <p><strong>Pourquoi ça marche :</strong> L'IA génère des réponses plus précises en structurant sa logique, surtout pour les problèmes complexes.</p>
+                            
+                            <h4>✅ Exemple efficace :</h4>
+                            <div class="code-block" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+Calcule le retour sur investissement de cette campagne marketing, en détaillant chaque étape de ton raisonnement :
+
+Investissement : 15 000€
+Nouveaux clients acquis : 120
+Panier moyen : 75€
+Taux de rétention : 60%
+
+Processus attendu :
+1. Calcul du chiffre d'affaires immédiat
+2. Estimation du CA sur 12 mois avec rétention
+3. Calcul du ROI final
+4. Analyse de la rentabilité
+                            </div>
+                            
+                            <h4>🔥 Cas d'usage parfaits :</h4>
+                            <ul>
+                                <li><strong>Analyses financières</strong> : Calculs de ROI, budgets, projections</li>
+                                <li><strong>Résolution de problèmes</strong> : Diagnostic, troubleshooting, stratégies</li>
+                                <li><strong>Prises de décision</strong> : Comparaisons, avantages/inconvénients</li>
+                                <li><strong>Planification</strong> : Étapes de projet, roadmaps, processus</li>
+                            </ul>
+                        </div>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>📝</span>
+                                Few-shot prompting (Apprentissage par exemples)
+                            </div>
+                            <p><strong>Principe :</strong> Fournir quelques exemples concrets d'entrée/sortie pour que l'IA comprenne exactement le style et format souhaités.</p>
+                            
+                            <h4>✅ Exemple efficace :</h4>
+                            <div class="code-block" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+Transforme ces descriptions produits en accroches marketing percutantes :
+
+Exemple 1:
+Description : "Casque audio sans fil avec réduction de bruit active"
+Accroche : "🎧 Silence total, musique parfaite : votre bulle de sérénité sonore !"
+
+Exemple 2:
+Description : "Application de méditation avec 200+ séances guidées"
+Accroche : "🧘‍♀️ 10 minutes par jour = Une vie transformée : votre coach zen dans la poche !"
+
+À toi maintenant :
+Description : "Chaussures de running avec semelle à mémoire de forme"
+Accroche : ?
+                            </div>
+                            
+                            <h4>🎯 Quand l'utiliser :</h4>
+                            <ul>
+                                <li><strong>Style spécifique</strong> : Ton, format, structure particulière</li>
+                                <li><strong>Tâches créatives</strong> : Slogans, copywriting, naming</li>
+                                <li><strong>Formats standardisés</strong> : Emails types, rapports, présentations</li>
+                                <li><strong>Transformations de contenu</strong> : Reformulation, adaptation</li>
+                            </ul>
+                        </div>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>🎭</span>
+                                Role prompting (Assignation de rôle)
+                            </div>
+                            <p><strong>Principe :</strong> Assigner un rôle très spécifique à l'IA avec expertise, personnalité et contexte professionnel.</p>
+                            
+                            <h4>✅ Exemples de rôles puissants :</h4>
+                            <div class="code-block" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+Tu es Sarah, directrice marketing d'une startup SaaS B2B de 50 employés, avec 8 ans d'expérience en growth hacking. Tu as déjà fait grandir 2 startups de 0 à 10M€ de CA. Tu es pragmatique, data-driven, et tu penses toujours ROI en premier.
+
+Tu es Dr. Martinez, psychologue du travail spécialisé en gestion du stress et performance, consultant pour des entreprises du CAC40. Tu combines théorie scientifique et solutions pratiques immédiatement applicables.
+                            </div>
+                            
+                            <h4>💡 Éléments d'un rôle efficace :</h4>
+                            <ul>
+                                <li><strong>Nom et titre</strong> : Personnalise l'expertise</li>
+                                <li><strong>Expérience chiffrée</strong> : Années, résultats, secteurs</li>
+                                <li><strong>Personnalité professionnelle</strong> : Style de communication, approche</li>
+                                <li><strong>Contexte spécifique</strong> : Taille d'entreprise, secteur, défis</li>
+                            </ul>
+                        </div>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>🔧</span>
+                                Template prompting (Modèles réutilisables)
+                            </div>
+                            <p><strong>Principe :</strong> Créer des structures de prompts standardisées que vous pouvez réutiliser en changeant simplement les variables.</p>
+                            
+                            <h4>✅ Template email de prospection :</h4>
+                            <div class="code-block" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+[RÔLE] Tu es {PRÉNOM}, {FONCTION} avec {EXPÉRIENCE} ans d'expérience en {SECTEUR}.
+
+[TÂCHE] Rédige un email de prospection pour {CIBLE} qui travaille chez {ENTREPRISE}.
+
+[PROBLÈME IDENTIFIÉ] {PAIN_POINT_SPÉCIFIQUE}
+
+[SOLUTION] {NOTRE_VALEUR_AJOUTÉE}
+
+[CONTRAINTES]
+- Objet accrocheur sans spam
+- 100 mots maximum
+- Tone authentique et personnalisé  
+- CTA clair et soft
+
+[FORMAT] Objet / Corps / Signature
+                            </div>
+                            
+                            <p><strong>Avantages des templates :</strong></p>
+                            <ul>
+                                <li><strong>Gain de temps</strong> : Plus besoin de repartir de zéro</li>
+                                <li><strong>Qualité constante</strong> : Structure éprouvée</li>
+                                <li><strong>Scalabilité</strong> : Facilement adaptable</li>
+                                <li><strong>Formation d'équipe</strong> : Partage des bonnes pratiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2: Gestion du contexte -->
+                <section class="section">
+                    <h2 class="section-title">💬 Gestion du contexte et de la conversation</h2>
+                    <div class="section-content">
+                        
+                        <p>L'art de maintenir une conversation productive avec l'IA sur plusieurs échanges est crucial pour des projets complexes.</p>
+
+                        <h3>🔗 Maintenir le contexte sur plusieurs échanges</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                Stratégie de contexte persistant
+                            </div>
+                            <p><strong>1. Résumé de début de conversation :</strong></p>
+                            <div class="code-block">
+Pour notre discussion, garde en mémoire que :
+- Je suis {VOTRE_RÔLE} dans une {TYPE_ENTREPRISE}
+- Mon objectif principal : {OBJECTIF}
+- Contraintes importantes : {CONTRAINTES}
+- Style de communication préféré : {STYLE}
+
+Confirme que tu as bien intégré ce contexte avant de continuer.
+                            </div>
+                            
+                            <p><strong>2. Référencement explicite :</strong></p>
+                            <ul>
+                                <li>"En reprenant notre stratégie marketing définie plus haut..."</li>
+                                <li>"Comme tu l'as suggéré dans ta réponse précédente..."</li>
+                                <li>"En cohérence avec les 3 priorités identifiées..."</li>
+                            </ul>
+                        </div>
+
+                        <h3>🔄 Corriger et ajuster en cours de conversation</h3>
+                        <p><strong>Techniques de redirection efficaces :</strong></p>
+                        <ul>
+                            <li><strong>"Stop, pivote :"</strong> Change complètement de direction</li>
+                            <li><strong>"Affine ta réponse :"</strong> Amélioration progressive</li>
+                            <li><strong>"Reprends mais..."</strong> : Garde la base, modifie l'angle</li>
+                            <li><strong>"Ignore ma demande précédente"</strong> : Reset complet</li>
+                        </ul>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>⚡</span>
+                                Exemple de conversation optimisée
+                            </div>
+                            <p><strong>Prompt initial :</strong> "Aide-moi à créer une stratégie de contenu"</p>
+                            <p><strong>❌ Trop vague</strong> → Réponse générique</p>
+                            
+                            <p><strong>Correction immédiate :</strong></p>
+                            <div class="code-block">
+Stop, soyons plus précis. Je suis community manager pour une marque de cosmétiques bio qui cible les femmes 25-40 ans. 
+
+Reformule ta stratégie pour :
+- Instagram et TikTok uniquement
+- Budget contenu : 2000€/mois  
+- Objectif : +50% d'engagement en 3 mois
+- Style : authentique, éducatif, pas trop commercial
+
+Repars sur cette base précise.
+                            </div>
+                        </div>
+
+                        <h3>🧠 Gestion de la mémoire limitée des modèles</h3>
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>⚠️</span>
+                                Limites importantes à connaître
+                            </div>
+                            <p><strong>ChatGPT :</strong> ~4000 mots de contexte (conversation entière)</p>
+                            <p><strong>Claude :</strong> ~75000 mots de contexte (beaucoup plus flexible)</p>
+                            
+                            <p><strong>Signaux d'alerte :</strong></p>
+                            <ul>
+                                <li>L'IA "oublie" des éléments mentionnés plus tôt</li>
+                                <li>Réponses qui deviennent contradictoires</li>
+                                <li>Perte de cohérence avec le début de conversation</li>
+                            </ul>
+                            
+                            <p><strong>Solutions :</strong></p>
+                            <ul>
+                                <li><strong>Nouvelle conversation</strong> avec résumé du contexte</li>
+                                <li><strong>Prompts de rappel</strong> réguliers des éléments clés</li>
+                                <li><strong>Documents annexes</strong> pour les gros projets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3: Techniques d'optimisation -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Techniques d'optimisation avancées</h2>
+                    <div class="section-content">
+                        
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>🔄</span>
+                                Prompt itératif (Amélioration progressive)
+                            </div>
+                            <p><strong>Processus en 4 étapes :</strong></p>
+                            <ol>
+                                <li><strong>Version basique</strong> : Prompt simple pour tester l'approche</li>
+                                <li><strong>Ajout de contexte</strong> : Précisions sur le rôle et les contraintes</li>
+                                <li><strong>Enrichissement</strong> : Exemples et format de sortie</li>
+                                <li><strong>Finalisation</strong> : Optimisations basées sur les résultats</li>
+                            </ol>
+                            
+                            <div class="code-block">
+# Iteration 1 (Basique)
+"Écris un article sur le télétravail"
+
+# Iteration 2 (+ Contexte)  
+"Tu es expert RH, écris un article sur le télétravail pour managers"
+
+# Iteration 3 (+ Contraintes)
+"Tu es expert RH, écris un article 800 mots sur télétravail pour managers, ton actionnable et concret"
+
+# Iteration 4 (+ Format)
+"Tu es expert RH avec 10 ans d'expérience. Écris un article 800 mots sur télétravail pour managers. 
+Structure : Introduction + 3 conseils pratiques + Conclusion
+Ton : professionnel mais accessible
+Include : statistiques + exemples concrets + actions immédiates"
+                            </div>
+                        </div>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>⚖️</span>
+                                A/B Testing de prompts
+                            </div>
+                            <p><strong>Méthode systématique :</strong></p>
+                            <ol>
+                                <li><strong>Variable unique</strong> : Ne changez qu'un élément à la fois</li>
+                                <li><strong>Critères d'évaluation</strong> : Définissez ce qui fait un "bon" résultat</li>
+                                <li><strong>Tests répétés</strong> : Même prompt plusieurs fois pour vérifier la cohérence</li>
+                                <li><strong>Documentation</strong> : Gardez trace des versions efficaces</li>
+                            </ol>
+                            
+                            <p><strong>Variables à tester :</strong></p>
+                            <ul>
+                                <li><strong>Rôle</strong> : Expert vs débutant vs spécialiste</li>
+                                <li><strong>Ton</strong> : Formel vs décontracté vs technique</li>
+                                <li><strong>Structure</strong> : Étapes vs paragraphes vs listes</li>
+                                <li><strong>Longueur</strong> : Court vs détaillé vs ultra-précis</li>
+                            </ul>
+                        </div>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>🔍</span>
+                                Prompt debugging (Diagnostic d'erreurs)
+                            </div>
+                            <p><strong>Questions de diagnostic :</strong></p>
+                            <ul>
+                                <li><strong>Le contexte est-il clair ?</strong> L'IA comprend-elle son rôle ?</li>
+                                <li><strong>La tâche est-elle précise ?</strong> Objective mesurable ?</li>
+                                <li><strong>Y a-t-il des contradictions ?</strong> Instructions conflictuelles ?</li>
+                                <li><strong>Les exemples sont-ils pertinents ?</strong> Alignés avec l'objectif ?</li>
+                                <li><strong>Les contraintes sont-elles réalistes ?</strong> Attentes cohérentes ?</li>
+                            </ul>
+                            
+                            <div class="interactive-box">
+                                <div class="interactive-title">
+                                    <span>🛠️</span>
+                                    Technique de debug : "Explain your reasoning"
+                                </div>
+                                <p>Ajoutez cette phrase à vos prompts problématiques :</p>
+                                <div class="code-block">
+"Avant de répondre, explique-moi comment tu interprètes ma demande et quelle approche tu vas utiliser."
+                                </div>
+                                <p>L'IA vous montrera sa logique et vous pourrez identifier où ça dérape !</p>
+                            </div>
+                        </div>
+
+                        <div class="technique-box">
+                            <div class="technique-title">
+                                <span>🌡️</span>
+                                Température et paramètres de créativité
+                            </div>
+                            <p><strong>Contrôlez la créativité dans vos prompts :</strong></p>
+                            
+                            <p><strong>Pour plus de créativité :</strong></p>
+                            <div class="code-block" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+"Sois créatif et original dans ta réponse"
+"Propose des idées innovantes et surprenantes"
+"Pense outside the box"
+"Explore des angles inattendus"
+                            </div>
+                            
+                            <p><strong>Pour plus de précision :</strong></p>
+                            <div class="code-block" style="background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+"Sois factuel et précis dans ta réponse"
+"Base-toi uniquement sur des données vérifiables"
+"Évite les spéculations et reste concret"
+"Privilégie la cohérence et la logique"
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4: Erreurs courantes -->
+                <section class="section">
+                    <h2 class="section-title">❌ Erreurs courantes à éviter absolument</h2>
+                    <div class="section-content">
+                        
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>🚨</span>
+                                Top 5 des erreurs qui ruinent vos prompts
+                            </div>
+                            
+                            <h4>1. Prompts trop vagues ou ambigus</h4>
+                            <p><strong>❌ Mauvais :</strong> "Aide-moi avec mon business"</p>
+                            <p><strong>✅ Bon :</strong> "Aide-moi à définir une stratégie de pricing pour mon SaaS B2B qui cible les PME, avec 3 options tarifaires entre 50€ et 200€/mois"</p>
+                            
+                            <h4>2. Instructions contradictoires</h4>
+                            <p><strong>❌ Mauvais :</strong> "Sois bref mais très détaillé"</p>
+                            <p><strong>✅ Bon :</strong> "Synthèse en 200 mots avec 3 points clés développés en 2-3 phrases chacun"</p>
+                            
+                            <h4>3. Surcharge d'informations inutiles</h4>
+                            <p><strong>❌ Mauvais :</strong> 10 paragraphes de contexte pour une question simple</p>
+                            <p><strong>✅ Bon :</strong> Contexte minimal nécessaire + question précise</p>
+                            
+                            <h4>4. Anthropomorphisme excessif</h4>
+                            <p><strong>❌ Mauvais :</strong> "J'espère que tu vas bien, peux-tu s'il te plaît..."</p>
+                            <p><strong>✅ Bon :</strong> Direct et factuel sans politesses inutiles</p>
+                            
+                            <h4>5. Attentes irréalistes</h4>
+                            <p><strong>❌ Mauvais :</strong> "Prédis l'évolution du marché crypto en 2025"</p>
+                            <p><strong>✅ Bon :</strong> "Analyse les facteurs qui pourraient influencer le marché crypto et propose 3 scenarios possibles"</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                Challenge : Transformez ces prompts défaillants
+                            </div>
+                            <p>Avant de passer à la séquence suivante, transformez ces 3 prompts problématiques :</p>
+                            
+                            <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                                <p><strong>1. Prompt vague :</strong> "Écris-moi quelque chose de bien pour vendre mon produit"</p>
+                                <p><strong>2. Prompt contradictoire :</strong> "Sois ultra-créatif mais suis exactement ce modèle rigide"</p>
+                                <p><strong>3. Prompt surchargé :</strong> "Tu es expert en marketing, en psychologie, en design, en développement, en finance... Aide-moi à choisir la couleur de mon logo"</p>
+                            </div>
+                            
+                            <p><strong>Votre mission :</strong> Réécrivez ces prompts en appliquant les techniques apprises dans cette séquence !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="prompting_2_bases_1.html" class="btn btn-secondary nav-btn">
+                        <span>←</span> Bases du prompting
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 2 / 4</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Techniques avancées</div>
+                    </div>
+                    <a href="prompting_2_atelier_3.html" class="btn btn-primary nav-btn">
+                        Atelier pratique <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>📊 Progression du module</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%;"></div>
+                    </div>
+                    <div style="display: grid; gap: 0.5rem; font-size: 0.9rem; margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; color: var(--success-color); font-weight: 600;">
+                            <span>✅ Séquence 1</span>
+                            <span>25%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: var(--success-color); font-weight: 600;">
+                            <span>✅ Séquence 2</span>
+                            <span>25%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                            <span>⏳ Séquence 3</span>
+                            <span>0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                            <span>⏳ Séquence 4</span>
+                            <span>0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Duration Card -->
+                <div class="sidebar-card">
+                    <h4>⏱️ Durée estimée</h4>
+                    <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>🎯 Techniques</span>
+                            <span>40 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>💬 Contexte</span>
+                            <span>30 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>🚀 Optimisation</span>
+                            <span>30 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>❌ Erreurs</span>
+                            <span>20 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 600; color: var(--text-primary); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+                            <span>⏰ Total</span>
+                            <span>120 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Techniques Card -->
+                <div class="sidebar-card">
+                    <h4>🛠️ Techniques maîtrisées</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.9rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--secondary-color);">Chain of Thought</strong><br>
+                            <span style="color: var(--text-secondary);">Raisonnement étape par étape</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--secondary-color);">Few-shot prompting</strong><br>
+                            <span style="color: var(--text-secondary);">Apprentissage par exemples</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--secondary-color);">Role prompting</strong><br>
+                            <span style="color: var(--text-secondary);">Rôles spécialisés</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--secondary-color);">Template prompting</strong><br>
+                            <span style="color: var(--text-secondary);">Modèles réutilisables</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Tips Card -->
+                <div class="sidebar-card">
+                    <h4>💡 Pro tip</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--secondary-color);">Combinez les techniques !</strong><br>
+                        Le vrai pouvoir vient de l'association : Role prompting + Chain of Thought + Few-shot = résultats exceptionnels. Expérimentez les combinaisons !
+                    </p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(2, 2);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflows Visuels Professionnels | Module 4 - IA Academy</title>
+    <style>
+        /* CSS Variables for Theme System */
+        :root[data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --primary-color: #818cf8;
+            --secondary-color: #06b6d4;
+            --accent-color: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --pattern-opacity: 0.02;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle - Fixed */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            font-size: 12px;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '>';
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .breadcrumb-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--accent-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Lesson Header */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Workflow Steps */
+        .workflow-steps {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-step {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .workflow-step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .workflow-step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .workflow-step-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Format Cards */
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .format-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .format-card:hover {
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .format-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .format-icon {
+            font-size: 2rem;
+            padding: 0.5rem;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .format-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .format-specs {
+            background: var(--bg-tertiary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Brand Guidelines */
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .brand-element {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .brand-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-value {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Example Cards */
+        .example-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-feedback {
+            background: var(--glass-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Checklist */
+        .checklist {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .checklist-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist-items {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checklist-item input {
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .format-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_overview.html" class="breadcrumb-link">Module 4: IA Générative</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="generative_4_images_2.html" class="breadcrumb-link">Images professionnelles</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Workflows Visuels</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Micro-séquence 2C</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>20-30 min</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Workflow Professionnel</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">⚙️ Workflows Visuels Professionnels</h1>
+                <p class="lesson-description">
+                    Maîtrisez l'art de créer des visuels cohérents et professionnels en combinant intelligemment les outils IA. De la conception à la livraison, optimisez votre processus créatif pour un résultat impeccable.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🎯 L'Art du Workflow Visuel</h2>
+                    <div class="section-content">
+                        <p>Un <strong>workflow visuel professionnel</strong> n'est pas juste une succession d'étapes - c'est une méthode structurée qui garantit cohérence, efficacité et qualité constante, même en utilisant plusieurs outils IA différents.</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🎯 Objectifs de cette micro-séquence
+                            </div>
+                            <ul>
+                                <li><strong>Créer des identités visuelles cohérentes</strong> en combinant plusieurs outils IA</li>
+                                <li><strong>Optimiser pour tous les formats</strong> (réseaux sociaux, print, web)</li>
+                                <li><strong>Appliquer les règles de composition</strong> professionnelles</li>
+                                <li><strong>Gérer les droits et l'usage commercial</strong> en toute sécurité</li>
+                                <li><strong>Développer un système reproductible</strong> pour vos futurs projets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Workflow en 5 Étapes -->
+                <section class="section">
+                    <h2 class="section-title">📋 Le Workflow "De l'Idée à l'Image" en 5 Étapes</h2>
+                    <div class="section-content">
+                        <p>Cette méthode éprouvée vous guide de la conception à la livraison finale, en optimisant chaque étape pour un résultat professionnel.</p>
+                        
+                        <div class="workflow-steps">
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">1</div>
+                                    <div class="workflow-step-title">Brief et Recherche</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p><strong>Durée :</strong> 15-20% du temps total</p>
+                                    <ul>
+                                        <li>Définir objectifs, audience et contraintes techniques</li>
+                                        <li>Rechercher références visuelles et tendances</li>
+                                        <li>Établir palette couleur et typographie</li>
+                                        <li>Valider le concept avec le client/équipe</li>
+                                    </ul>
+                                    <p><strong>Livrables :</strong> Mood board, brief créatif, guidelines de base</p>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">2</div>
+                                    <div class="workflow-step-title">Planification Technique</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p><strong>Durée :</strong> 10-15% du temps total</p>
+                                    <ul>
+                                        <li>Choisir les outils IA optimaux pour chaque besoin</li>
+                                        <li>Définir les formats de sortie requis</li>
+                                        <li>Préparer les prompts de base et variations</li>
+                                        <li>Organiser l'architecture de fichiers</li>
+                                    </ul>
+                                    <p><strong>Livrables :</strong> Planning technique, prompts préparés, arborescence</p>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">3</div>
+                                    <div class="workflow-step-title">Génération et Itération</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p><strong>Durée :</strong> 40-50% du temps total</p>
+                                    <ul>
+                                        <li>Générer les éléments visuels principaux</li>
+                                        <li>Tester variations et ajustements</li>
+                                        <li>Maintenir cohérence entre les créations</li>
+                                        <li>Itérer selon feedback et objectives</li>
+                                    </ul>
+                                    <p><strong>Livrables :</strong> Éléments visuels bruts, variations testées</p>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">4</div>
+                                    <div class="workflow-step-title">Optimisation et Adaptation</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p><strong>Durée :</strong> 20-25% du temps total</p>
+                                    <ul>
+                                        <li>Adapter aux différents formats requis</li>
+                                        <li>Optimiser résolution et poids des fichiers</li>
+                                        <li>Appliquer retouches finales si nécessaire</li>
+                                        <li>Valider conformité aux guidelines</li>
+                                    </ul>
+                                    <p><strong>Livrables :</strong> Visuels finalisés, déclinaisons format</p>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">5</div>
+                                    <div class="workflow-step-title">Livraison et Documentation</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p><strong>Durée :</strong> 5-10% du temps total</p>
+                                    <ul>
+                                        <li>Organiser et nommer les fichiers finaux</li>
+                                        <li>Documenter prompts et processus utilisés</li>
+                                        <li>Archiver pour réutilisation future</li>
+                                        <li>Créer guide d'utilisation si nécessaire</li>
+                                    </ul>
+                                    <p><strong>Livrables :</strong> Package final, documentation, archives</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cohérence Visuelle Multi-Outils -->
+                <section class="section">
+                    <h2 class="section-title">🎨 Cohérence Visuelle à Travers Plusieurs Outils</h2>
+                    <div class="section-content">
+                        <p>Le défi majeur : maintenir une <strong>identité visuelle cohérente</strong> quand on utilise Midjourney pour l'art conceptuel, DALL-E pour les détails précis, et Canva pour la mise en page.</p>
+                        
+                        <h3>Établir vos Guidelines de Marque</h3>
+                        <div class="brand-grid">
+                            <div class="brand-element">
+                                <div class="brand-label">Palette Couleur</div>
+                                <div class="brand-value">#6366F1, #06B6D4, #10B981</div>
+                            </div>
+                            <div class="brand-element">
+                                <div class="brand-label">Style Visuel</div>
+                                <div class="brand-value">Modern minimalist, clean lines</div>
+                            </div>
+                            <div class="brand-element">
+                                <div class="brand-label">Ambiance</div>
+                                <div class="brand-value">Professional, accessible, innovative</div>
+                            </div>
+                            <div class="brand-element">
+                                <div class="brand-label">Éclairage</div>
+                                <div class="brand-value">Soft natural light, high contrast</div>
+                            </div>
+                            <div class="brand-element">
+                                <div class="brand-label">Composition</div>
+                                <div class="brand-value">Rule of thirds, negative space</div>
+                            </div>
+                            <div class="brand-element">
+                                <div class="brand-label">Exclusions</div>
+                                <div class="brand-value">No dark themes, no cluttered layouts</div>
+                            </div>
+                        </div>
+
+                        <h3>Techniques de Cohérence Multi-Outils</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>🔗</span>
+                                <span>Méthode de Référence Croisée</span>
+                            </div>
+                            <h4>Étape 1 : Créer l'Image Maître (Midjourney)</h4>
+                            <div class="code-block">modern office workspace, clean minimalist design, soft natural lighting, blue and cyan color scheme, professional atmosphere --ar 16:9 --style raw</div>
+                            
+                            <h4>Étape 2 : Déclinaisons Précises (DALL-E 3)</h4>
+                            <div class="code-block">Create variations of this modern office design: close-up of the desk area, meeting room in the same style, reception area with identical lighting and color scheme</div>
+                            
+                            <h4>Étape 3 : Mise en Page (Canva AI)</h4>
+                            <div class="code-block">Using these images as background, create social media templates maintaining the same blue and cyan color palette and minimalist aesthetic</div>
+                        </div>
+
+                        <h3>Système de Naming pour la Cohérence</h3>
+                        <div class="code-block">Structure recommandée :
+[PROJET]_[OUTIL]_[TYPE]_[FORMAT]_[VERSION]
+
+Exemples :
+- TechCorp_MJ_Hero_16x9_v1.jpg
+- TechCorp_DALLE_Detail_Square_v2.jpg  
+- TechCorp_Canva_Post_Story_Final.jpg</div>
+                    </div>
+                </section>
+
+                <!-- Optimisation Formats -->
+                <section class="section">
+                    <h2 class="section-title">📱 Optimisation pour Différents Formats</h2>
+                    <div class="section-content">
+                        <p>Chaque plateforme a ses spécificités techniques et ses codes visuels. Maîtriser ces formats vous fait gagner un temps précieux.</p>
+                        
+                        <div class="format-grid">
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">📱</div>
+                                    <div class="format-name">Instagram Post</div>
+                                </div>
+                                <div class="format-specs">1080x1080px
+RGB, 72 DPI
+Max 30MB</div>
+                                <p><strong>Spécificités :</strong> Carrés parfaits, couleurs vives autorisées, texte minimal car affiché petit sur mobile.</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">📺</div>
+                                    <div class="format-name">Instagram Story</div>
+                                </div>
+                                <div class="format-specs">1080x1920px
+RGB, 72 DPI  
+Max 30MB</div>
+                                <p><strong>Spécificités :</strong> Format vertical, zone de sécurité pour UI, adapté au contenu temporaire et interactif.</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">💼</div>
+                                    <div class="format-name">LinkedIn Post</div>
+                                </div>
+                                <div class="format-specs">1200x627px
+RGB, 72 DPI
+Max 5MB</div>
+                                <p><strong>Spécificités :</strong> Professionnel, sobre, texte lisible, éviter les couleurs flashy.</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🖥️</div>
+                                    <div class="format-name">Facebook Cover</div>
+                                </div>
+                                <div class="format-specs">1200x315px
+RGB, 72 DPI
+Max 100KB</div>
+                                <p><strong>Spécificités :</strong> Bannière large, attention aux zones masquées par l'avatar sur mobile.</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🎬</div>
+                                    <div class="format-name">YouTube Thumbnail</div>
+                                </div>
+                                <div class="format-specs">1280x720px
+RGB, 72 DPI
+Max 2MB</div>
+                                <p><strong>Spécificités :</strong> Lisibilité à petite taille, contraste élevé, visages expressifs fonctionnent bien.</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">📄</div>
+                                    <div class="format-name">Print A4</div>
+                                </div>
+                                <div class="format-specs">2480x3508px
+CMYK, 300 DPI
+PDF/TIFF</div>
+                                <p><strong>Spécificités :</strong> Haute résolution, profil couleur CMYK, fond perdu +3mm, attention aux petits textes.</p>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                ⚡ Astuce Pro : Hiérarchie de Création
+                            </div>
+                            <p><strong>Créez toujours dans l'ordre suivant :</strong></p>
+                            <ol>
+                                <li><strong>Format le plus grand d'abord</strong> (ex: Print A4 ou Desktop)</li>
+                                <li><strong>Adaptez vers les formats moyens</strong> (ex: Facebook, LinkedIn)</li>
+                                <li><strong>Déclinez vers les petits formats</strong> (ex: Stories, carré Instagram)</li>
+                            </ol>
+                            <p>Cette approche préserve la qualité et facilite les adaptations.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Techniques de Composition -->
+                <section class="section">
+                    <h2 class="section-title">📐 Techniques de Composition Professionnelles</h2>
+                    <div class="section-content">
+                        <p>Même avec l'IA, les <strong>règles de composition classiques</strong> restent essentielles pour créer des visuels qui captivent et convertissent.</p>
+                        
+                        <h3>Les 5 Règles Fondamentales</h3>
+                        <div class="workflow-steps">
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">📐</div>
+                                    <div class="workflow-step-title">Règle des Tiers</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p>Placez les éléments importants sur les intersections de la grille 3x3. Dans vos prompts IA :</p>
+                                    <div class="code-block">Prompt : "subject positioned on the right third of the frame, following rule of thirds composition"</div>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">👁️</div>
+                                    <div class="workflow-step-title">Points de Fuite</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p>Utilisez les lignes de fuite pour guider l'œil vers l'élément principal :</p>
+                                    <div class="code-block">Prompt : "leading lines drawing attention to the main subject, strong perspective"</div>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">⚪</div>
+                                    <div class="workflow-step-title">Espace Négatif</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p>Laissez respirer vos compositions avec des zones vides stratégiques :</p>
+                                    <div class="code-block">Prompt : "minimalist composition with plenty of negative space, clean and uncluttered"</div>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">🎨</div>
+                                    <div class="workflow-step-title">Contraste et Hiérarchie</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p>Créez une hiérarchie visuelle claire avec les contrastes :</p>
+                                    <div class="code-block">Prompt : "high contrast lighting, clear visual hierarchy, main subject prominently featured"</div>
+                                </div>
+                            </div>
+
+                            <div class="workflow-step">
+                                <div class="workflow-step-header">
+                                    <div class="workflow-step-number">🔁</div>
+                                    <div class="workflow-step-title">Symétrie et Répétition</div>
+                                </div>
+                                <div class="workflow-step-content">
+                                    <p>Utilisez répétitions et symétries pour créer harmonie et rythme :</p>
+                                    <div class="code-block">Prompt : "symmetrical composition with repeating elements, balanced and harmonious"</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Composition Spécifique aux Réseaux Sociaux</h3>
+                        <div class="example-card">
+                            <div class="example-header">
+                                <span>📱</span>
+                                <span>Bonnes Pratiques par Plateforme</span>
+                            </div>
+                            <ul>
+                                <li><strong>Instagram :</strong> Couleurs vives, contrastes forts, visages en gros plan fonctionnent bien</li>
+                                <li><strong>LinkedIn :</strong> Compositions plus sobres, éviter les couleurs criardes, privilégier le professionnel</li>
+                                <li><strong>TikTok :</strong> Format vertical, éléments centrés, texte lisible même en petit</li>
+                                <li><strong>Twitter :</strong> Images horizontales, texte minimal, high contrast pour la lisibilité</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Interactif -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Quiz de Validation</h2>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Quelle est la première étape d'un workflow visuel professionnel ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> Choisir les outils IA à utiliser
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>B)</span> Définir le brief créatif et rechercher des références
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>C)</span> Commencer directement la génération d'images
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> Optimiser les formats de sortie
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback1">
+                            <strong>✅ Parfait !</strong> Le brief créatif et la recherche de références constituent la fondation de tout projet visuel réussi. Cette étape guide toutes les décisions créatives suivantes.
+                        </div>
+                    </div>
+
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            Pour maintenir la cohérence visuelle entre plusieurs outils IA, quelle approche est la plus efficace ?
+                        </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>A)</span> Utiliser uniquement un seul outil pour tout le projet
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, true)">
+                                <span>B)</span> Établir des guidelines de marque précises et les appliquer systématiquement
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>C)</span> Laisser chaque outil interpréter librement le style
+                            </div>
+                            <div class="quiz-option" onclick="selectOption(this, false)">
+                                <span>D)</span> Utiliser les mêmes prompts pour tous les outils
+                            </div>
+                        </div>
+                        <div class="quiz-feedback" id="feedback2">
+                            <strong>✅ Excellent !</strong> Des guidelines de marque claires (palette couleur, style, ambiance) permettent de maintenir la cohérence même en combinant plusieurs outils IA différents.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gestion des Droits -->
+                <section class="section">
+                    <h2 class="section-title">⚖️ Gestion des Droits et Usage Commercial</h2>
+                    <div class="section-content">
+                        <p>Comprendre les <strong>droits d'usage</strong> des images générées par IA est crucial pour éviter tout problème légal, surtout dans un contexte commercial.</p>
+                        
+                        <h3>Droits par Outil : Ce que Vous Devez Savoir</h3>
+                        <div class="format-grid">
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🎭</div>
+                                    <div class="format-name">Midjourney</div>
+                                </div>
+                                <p><strong>Usage Commercial :</strong> ✅ Autorisé avec abonnement payant</p>
+                                <p><strong>Propriété :</strong> Vous possédez les droits des images créées</p>
+                                <p><strong>Limitation :</strong> Pas de reproduction de personnalités publiques</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🤖</div>
+                                    <div class="format-name">DALL-E 3</div>
+                                </div>
+                                <p><strong>Usage Commercial :</strong> ✅ Autorisé avec ChatGPT Plus</p>
+                                <p><strong>Propriété :</strong> Vous possédez les droits</p>
+                                <p><strong>Limitation :</strong> Politique stricte sur les contenus sensibles</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🎨</div>
+                                    <div class="format-name">Leonardo AI</div>
+                                </div>
+                                <p><strong>Usage Commercial :</strong> ✅ Autorisé selon le plan</p>
+                                <p><strong>Propriété :</strong> Droits limités en version gratuite</p>
+                                <p><strong>Limitation :</strong> Vérifier les conditions par plan</p>
+                            </div>
+
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🔧</div>
+                                    <div class="format-name">Stable Diffusion</div>
+                                </div>
+                                <p><strong>Usage Commercial :</strong> ✅ Libre (modèle open-source)</p>
+                                <p><strong>Propriété :</strong> Droits complets</p>
+                                <p><strong>Limitation :</strong> Responsabilité utilisateur sur le contenu</p>
+                            </div>
+                        </div>
+
+                        <div class="checklist">
+                            <div class="checklist-title">
+                                ✅ Checklist Légale Avant Publication
+                            </div>
+                            <div class="checklist-items">
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check1">
+                                    <label for="check1">Vérifier que j'ai un abonnement payant si usage commercial</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check2">
+                                    <label for="check2">Confirmer qu'aucune personnalité publique n'est représentée</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check3">
+                                    <label for="check3">S'assurer que le contenu respecte les politiques de la plateforme</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check4">
+                                    <label for="check4">Documenter les prompts utilisés pour traçabilité</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="check5">
+                                    <label for="check5">Vérifier les droits spécifiques du client si travail en agence</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                💡 Bonne Pratique : Documentation
+                            </div>
+                            <p>Gardez toujours une trace de :</p>
+                            <ul>
+                                <li>Les <strong>prompts exacts</strong> utilisés pour chaque image</li>
+                                <li>L'<strong>outil et version</strong> utilisés</li>
+                                <li>La <strong>date de création</strong> et le contexte d'usage</li>
+                                <li>Les <strong>conditions d'abonnement</strong> au moment de la création</li>
+                            </ul>
+                            <p>Cette documentation peut être cruciale en cas de question légale future.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ressources et Template -->
+                <section class="section">
+                    <h2 class="section-title">📚 Ressources et Templates</h2>
+                    <div class="section-content">
+                        <h3>Ressources Fournies</h3>
+                        <div class="format-grid">
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">🎥</div>
+                                    <div class="format-name">Vidéo Workflow (12min)</div>
+                                </div>
+                                <p>"De l'idée à l'image en 5 étapes" - Démonstration complète du processus avec un projet réel.</p>
+                            </div>
+                            
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">📋</div>
+                                    <div class="format-name">Template Notion</div>
+                                </div>
+                                <p>Tracker de créations avec métadonnées : prompts, outils utilisés, formats, droits, historique de modifications.</p>
+                            </div>
+                            
+                            <div class="format-card">
+                                <div class="format-header">
+                                    <div class="format-icon">✅</div>
+                                    <div class="format-name">Checklists Qualité</div>
+                                </div>
+                                <p>Standards professionnels : composition, formats, optimisation, cohérence, droits d'usage.</p>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Challenge Final : Créez Votre Premier Workflow
+                            </div>
+                            <p><strong>Mission :</strong> Créez une campagne visuelle complète pour un produit fictif</p>
+                            <ol>
+                                <li><strong>Brief :</strong> Définissez produit, audience, objectifs (5 min)</li>
+                                <li><strong>Guidelines :</strong> Palette, style, ambiance (5 min)</li>
+                                <li><strong>Création :</strong> 1 visuel principal + 3 déclinaisons format (15 min)</li>
+                                <li><strong>Optimisation :</strong> Adaptez pour Instagram, LinkedIn, Story (5 min)</li>
+                                <li><strong>Documentation :</strong> Archivez prompts et processus (5 min)</li>
+                            </ol>
+                            <p><strong>Objectif :</strong> Workflow reproductible en 35 minutes chrono !</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>📊 Votre Progression</h4>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>🎯 Micro-séquence</span>
+                            <span style="font-weight: 600; color: var(--primary-color);">2C/4</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>⏰ Durée</span>
+                            <span>20-30 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span>🎯 Focus</span>
+                            <span>Workflow Pro</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference -->
+                <div class="sidebar-card">
+                    <h4>⚡ Workflow en 1 Coup d'Œil</h4>
+                    <div style="display: grid; gap: 0.5rem; font-size: 0.85rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold;">1</span>
+                            <span>Brief & Recherche</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold;">2</span>
+                            <span>Planification Technique</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold;">3</span>
+                            <span>Génération & Itération</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold;">4</span>
+                            <span>Optimisation & Adaptation</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: var(--primary-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold;">5</span>
+                            <span>Livraison & Documentation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Format Quick Ref -->
+                <div class="sidebar-card">
+                    <h4>📐 Formats Essentiels</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 0.85rem;">
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Instagram Post</strong><br>
+                            <span style="color: var(--text-secondary);">1080x1080px</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">LinkedIn</strong><br>
+                            <span style="color: var(--text-secondary);">1200x627px</span>
+                        </div>
+                        <div style="padding: 0.5rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                            <strong style="color: var(--primary-color);">Stories</strong><br>
+                            <span style="color: var(--text-secondary);">1080x1920px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="sidebar-card">
+                    <h4>💡 Conseil du Formateur</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        <strong style="color: var(--primary-color);">La cohérence prime sur la perfection !</strong><br>
+                        Mieux vaut 5 visuels cohérents de qualité B+ qu'un visuel parfait et 4 autres disparates.
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Navigation -->
+        <div class="lesson-navigation">
+            <a href="generative_4_dalle_alternatives_2b.html" class="btn btn-secondary">
+                <span>←</span> DALL-E & Alternatives
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Micro-séquence 2C</div>
+                <div style="font-weight: 600; color: var(--text-primary);">Workflows Visuels</div>
+            </div>
+            <a href="generative_4_audio_video_sync_3.html" class="btn btn-primary">
+                Audio/Vidéo + Sync <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections in this quiz
+            const quiz = element.closest('.quiz-container');
+            const options = quiz.querySelectorAll('.quiz-option');
+            const feedback = quiz.querySelector('.quiz-feedback');
+            
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selection and correctness classes
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Show feedback
+            feedback.classList.add('show');
+        }
+
+        // Checkbox persistence for legal checklist
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+            const key = `legal_checklist_${checkbox.id}`;
+            checkbox.checked = localStorage.getItem(key) === 'true';
+            
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem(key, checkbox.checked);
+            });
+        });
+
+        // Progress tracking
+        let progressData = JSON.parse(localStorage.getItem('ia-academy-progress') || '{}');
+        progressData.workflows_visuels_2c = {
+            started: new Date().toISOString(),
+            status: 'in-progress'
+        };
+        localStorage.setItem('ia-academy-progress', JSON.stringify(progressData));
+    </script>
+</body>
+</html>

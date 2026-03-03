@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ressources Outils IA | IA Academy</title>
+    <style>
+        :root {
+            /* Light theme colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            
+            /* Brand colors */
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Effects */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --pattern-opacity: 0.05;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%),
+                linear-gradient(0deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%);
+            background-size: 60px 60px;
+            z-index: -1;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle {
+            width: 60px;
+            height: 30px;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-toggle-button {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(28px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2), transparent),
+                        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Filter Section */
+        .filters {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 73px;
+            z-index: 50;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-free {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .pricing-freemium {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .pricing-paid {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .tool-info h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .tool-category {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tool-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .tool-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tool-features li {
+            color: var(--text-secondary);
+            padding: 0.25rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .tool-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        /* Category Sections */
+        .category-section {
+            margin-bottom: 4rem;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .search-input {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            width: 100%;
+            max-width: 400px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .tool-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+                justify-content: center;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-btn {
+                text-align: center;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <a href="index.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Ressources Outils IA</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">📚 Centre de Ressources</div>
+                <h1 class="hero-title">Outils IA</h1>
+                <p class="hero-subtitle">
+                    Découvrez tous les outils d'intelligence artificielle utilisés dans la formation, avec guides d'utilisation et recommandations d'experts.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="search-bar">
+                <input type="text" 
+                       placeholder="🔍 Rechercher un outil..." 
+                       class="search-input"
+                       onkeyup="filterTools()">
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterCategory('all')">
+                    Tous les outils
+                </button>
+                <button class="filter-btn" onclick="filterCategory('conversational')">
+                    💬 IA Conversationnelle
+                </button>
+                <button class="filter-btn" onclick="filterCategory('image')">
+                    🎨 Génération d'Images
+                </button>
+                <button class="filter-btn" onclick="filterCategory('audio-video')">
+                    🎵 Audio & Vidéo
+                </button>
+                <button class="filter-btn" onclick="filterCategory('productivity')">
+                    💼 Productivité
+                </button>
+                <button class="filter-btn" onclick="filterCategory('automation')">
+                    🤖 Automatisation
+                </button>
+                <button class="filter-btn" onclick="filterCategory('code')">
+                    💻 Code & Développement
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- IA Conversationnelle -->
+            <section class="category-section" data-category="conversational">
+                <div class="category-header">
+                    <h2 class="category-title">💬 IA Conversationnelle</h2>
+                    <p class="category-description">
+                        Les assistants IA pour dialogue, rédaction, analyse et résolution de problèmes complexes.
+                    </p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-category="conversational" data-name="chatgpt">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🚀</div>
+                            <div class="tool-info">
+                                <h3>ChatGPT</h3>
+                                <span class="tool-category">OpenAI</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            L'outil IA conversationnel le plus populaire au monde. Parfait pour le brainstorming, la rédaction, l'analyse et de nombreuses tâches créatives.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Fonctionnalités clés</h4>
+                            <ul>
+                                <li>GPT-4 et GPT-4 Turbo</li>
+                                <li>GPTs personnalisés</li>
+                                <li>Génération d'images avec DALL-E</li>
+                                <li>Analyse de documents</li>
+                                <li>Navigation web</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://chat.openai.com" target="_blank" class="btn btn-primary">
+                                Essayer gratuitement 🚀
+                            </a>
+                            <a href="outils_3_chatgpt_1.html" class="btn btn-secondary">
+                                Guide complet
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="conversational" data-name="claude">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🧠</div>
+                            <div class="tool-info">
+                                <h3>Claude</h3>
+                                <span class="tool-category">Anthropic</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Alternative excellente à ChatGPT, réputé pour sa capacité d'analyse, sa créativité et son respect des consignes complexes.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Points forts</h4>
+                            <ul>
+                                <li>Contexte très long (200k tokens)</li>
+                                <li>Analyse précise de documents</li>
+                                <li>Créativité et nuance</li>
+                                <li>Claude Projects (espaces collaboratifs)</li>
+                                <li>Interface claire et intuitive</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://claude.ai" target="_blank" class="btn btn-primary">
+                                Découvrir Claude 🧠
+                            </a>
+                            <a href="outils_3_claude_2.html" class="btn btn-secondary">
+                                Tutoriel avancé
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="conversational" data-name="gemini">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">💎</div>
+                            <div class="tool-info">
+                                <h3>Gemini</h3>
+                                <span class="tool-category">Google</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            L'IA de Google, parfaitement intégrée à l'écosystème Google Workspace (Gmail, Docs, Sheets, etc.).
+                        </p>
+                        <div class="tool-features">
+                            <h4>Avantages</h4>
+                            <ul>
+                                <li>Intégration Google Workspace</li>
+                                <li>Accès temps réel au web</li>
+                                <li>Multimodal (texte, image, vidéo)</li>
+                                <li>Google AI Studio</li>
+                                <li>Extensions Gmail et Docs</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://gemini.google.com" target="_blank" class="btn btn-primary">
+                                Essayer Gemini 💎
+                            </a>
+                            <a href="outils_3_autres_3.html" class="btn btn-secondary">
+                                Voir comparatif
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="conversational" data-name="perplexity">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🔍</div>
+                            <div class="tool-info">
+                                <h3>Perplexity</h3>
+                                <span class="tool-category">Perplexity AI</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Moteur de recherche IA qui cite ses sources. Idéal pour la recherche d'informations actualisées et vérifiées.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Spécialités</h4>
+                            <ul>
+                                <li>Recherche avec sources citées</li>
+                                <li>Informations actualisées</li>
+                                <li>Synthèses de qualité</li>
+                                <li>Mode Focus (académique, news...)</li>
+                                <li>Collecte de données fiables</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://perplexity.ai" target="_blank" class="btn btn-primary">
+                                Explorer Perplexity 🔍
+                            </a>
+                            <a href="outils_3_autres_3.html" class="btn btn-secondary">
+                                Guide d'usage
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Génération d'Images -->
+            <section class="category-section" data-category="image">
+                <div class="category-header">
+                    <h2 class="category-title">🎨 Génération d'Images</h2>
+                    <p class="category-description">
+                        Créez des visuels époustouflants avec les meilleurs générateurs d'images IA du marché.
+                    </p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-category="image" data-name="midjourney">
+                        <div class="pricing-badge pricing-paid">Payant</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🎭</div>
+                            <div class="tool-info">
+                                <h3>Midjourney</h3>
+                                <span class="tool-category">Midjourney Inc.</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Le roi de la génération d'images IA. Qualité exceptionnelle pour le design et l'art conceptuel.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Spécialités</h4>
+                            <ul>
+                                <li>Qualité artistique supérieure</li>
+                                <li>Styles variés et uniques</li>
+                                <li>Interface Discord</li>
+                                <li>Communauté active</li>
+                                <li>Upscaling avancé</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://midjourney.com" target="_blank" class="btn btn-primary">
+                                Découvrir Midjourney 🎭
+                            </a>
+                            <a href="generative_4_images_2.html" class="btn btn-secondary">
+                                Tutoriel complet
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="image" data-name="dalle3">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🌟</div>
+                            <div class="tool-info">
+                                <h3>DALL-E 3</h3>
+                                <span class="tool-category">OpenAI</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Intégré à ChatGPT, excellent pour les images réalistes et le respect précis des descriptions textuelles.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Avantages</h4>
+                            <ul>
+                                <li>Intégration ChatGPT Plus</li>
+                                <li>Compréhension textuelle précise</li>
+                                <li>Images photoréalistes</li>
+                                <li>Édition d'images existantes</li>
+                                <li>Formats variés</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://chat.openai.com" target="_blank" class="btn btn-primary">
+                                Utiliser dans ChatGPT 🌟
+                            </a>
+                            <a href="generative_4_images_2.html" class="btn btn-secondary">
+                                Techniques avancées
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="image" data-name="leonardo">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🎨</div>
+                            <div class="tool-info">
+                                <h3>Leonardo AI</h3>
+                                <span class="tool-category">Leonardo.ai</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Plateforme complète avec contrôles avancés, parfaite pour la production de contenu en série.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Points forts</h4>
+                            <ul>
+                                <li>Contrôles fins de génération</li>
+                                <li>Modèles spécialisés</li>
+                                <li>Batch processing</li>
+                                <li>Interface web intuitive</li>
+                                <li>Consistance de style</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://leonardo.ai" target="_blank" class="btn btn-primary">
+                                Essayer Leonardo 🎨
+                            </a>
+                            <a href="generative_4_images_2.html" class="btn btn-secondary">
+                                Workflows avancés
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="image" data-name="canva-ai">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">✨</div>
+                            <div class="tool-info">
+                                <h3>Canva AI</h3>
+                                <span class="tool-category">Canva</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            IA intégrée à Canva pour le design graphique accessible. Perfect pour les visuels marketing rapides.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Facilités</h4>
+                            <ul>
+                                <li>Interface no-code</li>
+                                <li>Templates professionnels</li>
+                                <li>Formats pré-définis</li>
+                                <li>Magic Resize automatique</li>
+                                <li>Collaboration d'équipe</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://canva.com" target="_blank" class="btn btn-primary">
+                                Créer avec Canva ✨
+                            </a>
+                            <a href="generative_4_images_2.html" class="btn btn-secondary">
+                                Astuces design
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audio & Vidéo -->
+            <section class="category-section" data-category="audio-video">
+                <div class="category-header">
+                    <h2 class="category-title">🎵 Audio & Vidéo</h2>
+                    <p class="category-description">
+                        Produisez du contenu audio et vidéo professionnel avec des outils de synthèse vocale et de montage IA.
+                    </p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-category="audio-video" data-name="elevenlabs">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🎙️</div>
+                            <div class="tool-info">
+                                <h3>ElevenLabs</h3>
+                                <span class="tool-category">ElevenLabs</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            La référence en synthèse vocale IA. Voix ultra-réalistes et clonage vocal éthique pour vos projets audio.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Capacités</h4>
+                            <ul>
+                                <li>Voix hyper-réalistes</li>
+                                <li>Clonage vocal personnalisé</li>
+                                <li>Support multilingue</li>
+                                <li>Contrôle émotionnel</li>
+                                <li>API intégration</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://elevenlabs.io" target="_blank" class="btn btn-primary">
+                                Tester ElevenLabs 🎙️
+                            </a>
+                            <a href="generative_4_audio_video_sync_3.html" class="btn btn-secondary">
+                                Guide vocal
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="audio-video" data-name="suno">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🎵</div>
+                            <div class="tool-info">
+                                <h3>Suno</h3>
+                                <span class="tool-category">Suno AI</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Création de musique IA complète : paroles, mélodies, arrangements. De l'idée à la chanson finie en minutes.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Création musicale</h4>
+                            <ul>
+                                <li>Génération paroles + musique</li>
+                                <li>Styles variés (pop, rock, jazz...)</li>
+                                <li>Voix chantées réalistes</li>
+                                <li>Export haute qualité</li>
+                                <li>Droits d'usage inclus</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://suno.com" target="_blank" class="btn btn-primary">
+                                Composer avec Suno 🎵
+                            </a>
+                            <a href="generative_4_audio_video_sync_3.html" class="btn btn-secondary">
+                                Studio musical
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="audio-video" data-name="runway">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🎬</div>
+                            <div class="tool-info">
+                                <h3>RunwayML</h3>
+                                <span class="tool-category">Runway</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Studio de création vidéo IA complet. Générez, éditez et transformez vos vidéos avec des outils révolutionnaires.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Outils vidéo</h4>
+                            <ul>
+                                <li>Génération vidéo text-to-video</li>
+                                <li>Green screen automatique</li>
+                                <li>Upscaling et ralenti</li>
+                                <li>Effets spéciaux IA</li>
+                                <li>Édition collaborative</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://runwayml.com" target="_blank" class="btn btn-primary">
+                                Créer avec Runway 🎬
+                            </a>
+                            <a href="generative_4_audio_video_sync_3.html" class="btn btn-secondary">
+                                Production vidéo
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="audio-video" data-name="capcut">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">✂️</div>
+                            <div class="tool-info">
+                                <h3>CapCut</h3>
+                                <span class="tool-category">ByteDance</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Éditeur vidéo gratuit avec IA intégrée. Parfait pour le contenu social media et la synchronisation automatique.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Fonctionnalités IA</h4>
+                            <ul>
+                                <li>Sous-titres automatiques</li>
+                                <li>Synchronisation audio/vidéo</li>
+                                <li>Templates viraux</li>
+                                <li>Effets et transitions</li>
+                                <li>Export optimisé plateformes</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://capcut.com" target="_blank" class="btn btn-primary">
+                                Monter avec CapCut ✂️
+                            </a>
+                            <a href="generative_4_subtitles_tools_1c.html" class="btn btn-secondary">
+                                Sous-titres automatiques
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="audio-video" data-name="descript">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">📝</div>
+                            <div class="tool-info">
+                                <h3>Descript</h3>
+                                <span class="tool-category">Descript Inc.</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Éditeur audio/vidéo révolutionnaire : éditez vos contenus comme un document texte avec IA avancée.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Innovations</h4>
+                            <ul>
+                                <li>Édition par transcription</li>
+                                <li>Suppression "euh" automatique</li>
+                                <li>Overdub (clonage vocal)</li>
+                                <li>Studio virtuel</li>
+                                <li>Collaboration temps réel</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://descript.com" target="_blank" class="btn btn-primary">
+                                Découvrir Descript 📝
+                            </a>
+                            <a href="generative_4_subtitles_tools_1c.html" class="btn btn-secondary">
+                                Édition avancée
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Productivité -->
+            <section class="category-section" data-category="productivity">
+                <div class="category-header">
+                    <h2 class="category-title">💼 Productivité</h2>
+                    <p class="category-description">
+                        Boostez votre efficacité avec des outils IA spécialisés dans la gestion de tâches et la création de contenu professionnel.
+                    </p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-category="productivity" data-name="notion-ai">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">📊</div>
+                            <div class="tool-info">
+                                <h3>Notion AI</h3>
+                                <span class="tool-category">Notion</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            IA intégrée à Notion pour la gestion de connaissances et la productivité d'équipe intelligente.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Fonctionnalités</h4>
+                            <ul>
+                                <li>Rédaction et résumé automatique</li>
+                                <li>Brainstorming et idéation</li>
+                                <li>Analyse de données</li>
+                                <li>Templates intelligents</li>
+                                <li>Collaboration IA</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://notion.so" target="_blank" class="btn btn-primary">
+                                Organiser avec Notion 📊
+                            </a>
+                            <a href="casusage_6_productivite_3.html" class="btn btn-secondary">
+                                Workflows productivité
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="productivity" data-name="jasper">
+                        <div class="pricing-badge pricing-paid">Payant</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">✍️</div>
+                            <div class="tool-info">
+                                <h3>Jasper</h3>
+                                <span class="tool-category">Jasper AI</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Plateforme IA spécialisée marketing et copywriting. Créez du contenu de marque cohérent à grande échelle.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Spécialités marketing</h4>
+                            <ul>
+                                <li>Copywriting professionnel</li>
+                                <li>Brand voice cohérente</li>
+                                <li>Templates marketing</li>
+                                <li>Optimisation SEO</li>
+                                <li>Analyse de performance</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://jasper.ai" target="_blank" class="btn btn-primary">
+                                Découvrir Jasper ✍️
+                            </a>
+                            <a href="casusage_6_marketing_2.html" class="btn btn-secondary">
+                                Marketing IA
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Automatisation -->
+            <section class="category-section" data-category="automation">
+                <div class="category-header">
+                    <h2 class="category-title">🤖 Automatisation</h2>
+                    <p class="category-description">
+                        Connectez l'IA à vos outils quotidiens pour automatiser vos processus sans programmation.
+                    </p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-category="automation" data-name="zapier">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">⚡</div>
+                            <div class="tool-info">
+                                <h3>Zapier</h3>
+                                <span class="tool-category">Zapier Inc.</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            La référence en automatisation no-code. Connectez plus de 5000 applications avec IA intégrée.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Automatisations IA</h4>
+                            <ul>
+                                <li>5000+ intégrations</li>
+                                <li>Workflows IA intelligents</li>
+                                <li>Interface drag & drop</li>
+                                <li>Templates pré-faits</li>
+                                <li>Déclencheurs avancés</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://zapier.com" target="_blank" class="btn btn-primary">
+                                Automatiser avec Zapier ⚡
+                            </a>
+                            <a href="automatisation_5_zapier_2.html" class="btn btn-secondary">
+                                Guide Zapier IA
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="automation" data-name="make">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🔧</div>
+                            <div class="tool-info">
+                                <h3>Make.com</h3>
+                                <span class="tool-category">Make (ex-Integromat)</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Automatisation avancée avec interface visuelle. Parfait pour workflows complexes avec logiques conditionnelles.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Fonctionnalités avancées</h4>
+                            <ul>
+                                <li>Interface visuelle intuitive</li>
+                                <li>Logiques conditionnelles</li>
+                                <li>Traitement par lots</li>
+                                <li>Gestion d'erreurs</li>
+                                <li>Intégrations IA natives</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://make.com" target="_blank" class="btn btn-primary">
+                                Créer avec Make 🔧
+                            </a>
+                            <a href="automatisation_5_make_3.html" class="btn btn-secondary">
+                                Workflows avancés
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Code & Développement -->
+            <section class="category-section" data-category="code">
+                <div class="category-header">
+                    <h2 class="category-title">💻 Code & Développement</h2>
+                    <p class="category-description">
+                        Accélérez votre développement avec des assistants IA de programmation intelligents.
+                    </p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-category="code" data-name="github-copilot">
+                        <div class="pricing-badge pricing-paid">Payant</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">🐙</div>
+                            <div class="tool-info">
+                                <h3>GitHub Copilot</h3>
+                                <span class="tool-category">GitHub</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            L'assistant IA de programmation le plus populaire. Suggestions de code intelligentes dans votre éditeur.
+                        </p>
+                        <div class="tool-features">
+                            <h4>Assistance code</h4>
+                            <ul>
+                                <li>Suggestions temps réel</li>
+                                <li>Support multi-langages</li>
+                                <li>Intégration IDE</li>
+                                <li>Génération de tests</li>
+                                <li>Documentation automatique</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://github.com/features/copilot" target="_blank" class="btn btn-primary">
+                                Coder avec Copilot 🐙
+                            </a>
+                            <a href="outils_3_autres_3.html" class="btn btn-secondary">
+                                Outils développement
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-category="code" data-name="cursor">
+                        <div class="pricing-badge pricing-freemium">Freemium</div>
+                        <div class="tool-header">
+                            <div class="tool-icon">⚫</div>
+                            <div class="tool-info">
+                                <h3>Cursor</h3>
+                                <span class="tool-category">Cursor.sh</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">
+                            Éditeur de code IA-first révolutionnaire. Conçu dès le départ pour l'assistance intelligente.
+                        </p>
+                        <div class="tool-features">
+                            <h4>IA intégrée</h4>
+                            <ul>
+                                <li>Chat contextuel dans l'éditeur</li>
+                                <li>Refactoring automatique</li>
+                                <li>Génération de code naturelle</li>
+                                <li>Débogage assisté</li>
+                                <li>Interface moderne</li>
+                            </ul>
+                        </div>
+                        <div class="tool-actions">
+                            <a href="https://cursor.sh" target="_blank" class="btn btn-primary">
+                                Essayer Cursor ⚫
+                            </a>
+                            <a href="outils_3_autres_3.html" class="btn btn-secondary">
+                                Éditeurs IA
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🎯 Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="ressources_bibliotheque.html">Bibliothèque</a></li>
+                        <li><a href="ressources_forum.html">Communauté</a></li>
+                        <li><a href="projet_brief.html">Projets</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>📚 Modules</h4>
+                    <ul>
+                        <li><a href="fondamentaux_1_overview.html">Fondamentaux IA</a></li>
+                        <li><a href="prompting_2_overview.html">Art du Prompting</a></li>
+                        <li><a href="outils_3_overview.html">Outils IA</a></li>
+                        <li><a href="generative_4_overview.html">IA Générative</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🛠️ Ressources</h4>
+                    <ul>
+                        <li><a href="#conversational">IA Conversationnelle</a></li>
+                        <li><a href="#image">Génération d'Images</a></li>
+                        <li><a href="#audio-video">Audio & Vidéo</a></li>
+                        <li><a href="#automation">Automatisation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>💡 Support</h4>
+                    <ul>
+                        <li><a href="ressources_forum.html">Discord</a></li>
+                        <li><a href="mailto:support@ia-academy.com">Email Support</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Tutoriels</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            } catch (error) {
+                console.log('Theme toggle not available');
+            }
+        }
+
+        // Load saved theme
+        try {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (error) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        // Filter functions
+        function filterCategory(category) {
+            const cards = document.querySelectorAll('.tool-card');
+            const sections = document.querySelectorAll('.category-section');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                cards.forEach(card => card.style.display = 'block');
+                sections.forEach(section => section.style.display = 'block');
+            } else {
+                sections.forEach(section => {
+                    if (section.getAttribute('data-category') === category) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function filterTools() {
+            const searchTerm = event.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.tool-card');
+            
+            cards.forEach(card => {
+                const toolName = card.getAttribute('data-name');
+                const toolText = card.textContent.toLowerCase();
+                
+                if (toolName.includes(searchTerm) || toolText.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

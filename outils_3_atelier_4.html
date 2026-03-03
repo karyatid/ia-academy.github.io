@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier comparatif et optimisation workflow | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            transform: translateX(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            font-size: 12px;
+            position: absolute;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            padding: 1rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Navigation Lesson */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Workshop Cards */
+        .workshop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .workshop-card {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workshop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            border-color: var(--primary-color);
+        }
+
+        .workshop-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .workshop-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .workshop-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .workshop-duration {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .workshop-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .workshop-objectives {
+            list-style: none;
+            padding: 0;
+        }
+
+        .workshop-objectives li {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .workshop-objectives li::before {
+            content: '🎯';
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        /* Evaluation Grid */
+        .evaluation-grid {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .evaluation-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .evaluation-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .evaluation-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .evaluation-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .evaluation-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .evaluation-table tr:hover {
+            background: var(--glass-bg);
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 60%;
+            width: 80%;
+            height: 2px;
+            background: var(--border-color);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Workflow Mapping */
+        .workflow-mapping {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .mapping-category {
+            margin-bottom: 2rem;
+        }
+
+        .mapping-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-recommendation {
+            background: var(--glass-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .tool-recommendation .tool-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-recommendation .tool-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-recommendation .tool-use-case {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Buttons with enhanced styling */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .workshop-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .tool-recommendations {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>/</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="outils_3_overview.html" class="breadcrumb-link">Module 3: Outils IA Populaires</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>/</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Atelier comparatif et optimisation</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Séquence 4 • Module 3</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>105 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Atelier pratique</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Atelier comparatif et optimisation workflow</h1>
+                <p class="lesson-description">
+                    Mettez en pratique vos connaissances avec des ateliers concrets. Créez votre écosystème IA personnel et optimisez votre workflow quotidien pour une productivité maximale.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🎯</span>
+                        Objectif de l'atelier
+                    </h2>
+                    <div class="section-content">
+                        <p>Cette séquence finale du module vous invite à passer de la théorie à la pratique. Vous allez construire votre propre écosystème d'outils IA, tester des workflows concrets et repartir avec un plan d'action personnalisé.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                <span>À la fin de cet atelier, vous aurez :</span>
+                            </div>
+                            <ul>
+                                <li><strong>Un écosystème IA personnalisé</strong> adapté à vos besoins spécifiques</li>
+                                <li><strong>Des workflows optimisés</strong> pour vos tâches quotidiennes</li>
+                                <li><strong>Une grille d'évaluation</strong> pour tester de nouveaux outils</li>
+                                <li><strong>Un plan de formation continue</strong> pour rester à jour</li>
+                            </ul>
+                        </div>
+
+                        <p>Préparez-vous à 105 minutes d'intense pratique où vous allez manipuler, tester et configurer des outils IA en temps réel !</p>
+                    </div>
+                </section>
+
+                <!-- Programme de l'atelier -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>📋</span>
+                        Programme de l'atelier (105 minutes)
+                    </h2>
+                    <div class="section-content">
+                        <div class="progress-steps">
+                            <div class="progress-step">
+                                <div class="step-number">1</div>
+                                <div class="step-label">Écosystème IA<br>40 min</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">2</div>
+                                <div class="step-label">Challenge multi-outils<br>35 min</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-number">3</div>
+                                <div class="step-label">Veille & évaluation<br>30 min</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Atelier 1 -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🔧</span>
+                        Atelier 1 : Configuration d'un écosystème IA personnel (40min)
+                    </h2>
+                    <div class="section-content">
+                        <p>Créez votre boîte à outils IA personnalisée en analysant vos besoins réels et en sélectionnant les outils optimaux.</p>
+
+                        <h3>Phase 1 : Audit de vos besoins actuels (15min)</h3>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📊</span>
+                                <span>Exercice pratique : Cartographie de vos tâches</span>
+                            </div>
+                            <p><strong>Instructions :</strong> Listez 10-15 tâches récurrentes de votre travail et classez-les :</p>
+                            <ol>
+                                <li><strong>Fréquence :</strong> Quotidienne, hebdomadaire, mensuelle</li>
+                                <li><strong>Temps investi :</strong> Estimation en minutes/heures</li>
+                                <li><strong>Niveau de satisfaction :</strong> Tâche épanouissante ou fastidieuse</li>
+                                <li><strong>Potentiel d'optimisation IA :</strong> Fort, moyen, faible</li>
+                            </ol>
+                        </div>
+
+                        <div class="workflow-mapping">
+                            <div class="mapping-category">
+                                <div class="mapping-title">
+                                    <span>✍️</span>
+                                    Rédaction & Communication
+                                </div>
+                                <div class="tool-recommendations">
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">💬</div>
+                                        <div class="tool-name">ChatGPT</div>
+                                        <div class="tool-use-case">Emails, rapports</div>
+                                    </div>
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">📝</div>
+                                        <div class="tool-name">Claude</div>
+                                        <div class="tool-use-case">Textes longs</div>
+                                    </div>
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">✍️</div>
+                                        <div class="tool-name">Jasper</div>
+                                        <div class="tool-use-case">Marketing</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mapping-category">
+                                <div class="mapping-title">
+                                    <span>🎨</span>
+                                    Création visuelle
+                                </div>
+                                <div class="tool-recommendations">
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">🎭</div>
+                                        <div class="tool-name">Midjourney</div>
+                                        <div class="tool-use-case">Créations artistiques</div>
+                                    </div>
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">🤖</div>
+                                        <div class="tool-name">DALL-E 3</div>
+                                        <div class="tool-use-case">Images précises</div>
+                                    </div>
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">🎨</div>
+                                        <div class="tool-name">Canva AI</div>
+                                        <div class="tool-use-case">Design rapide</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mapping-category">
+                                <div class="mapping-title">
+                                    <span>📊</span>
+                                    Analyse & Recherche
+                                </div>
+                                <div class="tool-recommendations">
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">🔍</div>
+                                        <div class="tool-name">Perplexity</div>
+                                        <div class="tool-use-case">Recherche web</div>
+                                    </div>
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">📈</div>
+                                        <div class="tool-name">Claude</div>
+                                        <div class="tool-use-case">Analyse de données</div>
+                                    </div>
+                                    <div class="tool-recommendation">
+                                        <div class="tool-icon">📚</div>
+                                        <div class="tool-name">Notion AI</div>
+                                        <div class="tool-use-case">Synthèse docs</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Phase 2 : Sélection et configuration (15min)</h3>
+                        <p>Choisissez 3-5 outils complémentaires basés sur votre analyse. Créez vos comptes et configurez les paramètres de base.</p>
+
+                        <h3>Phase 3 : Tests d'intégration (10min)</h3>
+                        <p>Testez le passage de données entre vos outils choisis. Identifiez les points de friction et les optimisations possibles.</p>
+                    </div>
+                </section>
+
+                <!-- Atelier 2 -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🏆</span>
+                        Atelier 2 : Challenge multi-outils (35min)
+                    </h2>
+                    <div class="section-content">
+                        <p>Relevez un défi concret nécessitant l'utilisation coordonnée de plusieurs outils IA. Vous travaillerez sur un projet complet en temps réel.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                <span>Mission : Créer une campagne marketing complète (35min)</span>
+                            </div>
+                            <p><strong>Scénario :</strong> Vous lancez un nouveau produit et devez créer une campagne marketing cohérente.</p>
+                            
+                            <h4>Livrables attendus :</h4>
+                            <ol>
+                                <li><strong>Brief produit</strong> (ChatGPT/Claude) - 5min</li>
+                                <li><strong>5 angles marketing</strong> (Jasper/Copy.ai) - 10min</li>
+                                <li><strong>Visuel principal</strong> (Midjourney/DALL-E) - 10min</li>
+                                <li><strong>Post LinkedIn</strong> optimisé - 5min</li>
+                                <li><strong>Synthèse et archivage</strong> (Notion AI) - 5min</li>
+                            </ol>
+                        </div>
+
+                        <h3>Grille d'évaluation du workflow</h3>
+                        <div class="evaluation-grid">
+                            <table class="evaluation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Critère</th>
+                                        <th>Excellent (5)</th>
+                                        <th>Bon (3-4)</th>
+                                        <th>À améliorer (1-2)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Fluidité du workflow</strong></td>
+                                        <td>Transitions seamless entre outils</td>
+                                        <td>Quelques frictions mineures</td>
+                                        <td>Plusieurs points de blocage</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Qualité des outputs</strong></td>
+                                        <td>Résultats professionnels directs</td>
+                                        <td>Bonne qualité avec retouches</td>
+                                        <td>Nécessite plusieurs itérations</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Respect des délais</strong></td>
+                                        <td>Terminé en avance</td>
+                                        <td>Terminé dans les temps</td>
+                                        <td>Dépassement significatif</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cohérence globale</strong></td>
+                                        <td>Message unifié et impactant</td>
+                                        <td>Cohérent avec ajustements mineurs</td>
+                                        <td>Éléments disparates</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Efficacité des outils</strong></td>
+                                        <td>Outils parfaitement adaptés</td>
+                                        <td>Bons choix avec optimisations</td>
+                                        <td>Choix d'outils inadéquats</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>Retour d'expérience (5min)</h3>
+                        <p>Partagez vos découvertes : quels outils ont excellé ? Où avez-vous rencontré des difficultés ? Quelles optimisations envisagez-vous ?</p>
+                    </div>
+                </section>
+
+                <!-- Atelier 3 -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🔍</span>
+                        Atelier 3 : Veille et évaluation d'outils (30min)
+                    </h2>
+                    <div class="section-content">
+                        <p>Développez votre méthode pour rester à jour dans l'écosystème IA en constante évolution.</p>
+
+                        <h3>Méthode d'évaluation rapide (15min)</h3>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>⚡</span>
+                                <span>Framework RAPID : Évaluation en 15 minutes</span>
+                            </div>
+                            <ul>
+                                <li><strong>R</strong>equirements : L'outil répond-il à un besoin spécifique ?</li>
+                                <li><strong>A</strong>ccessibilité : Interface intuitive et onboarding fluide ?</li>
+                                <li><strong>P</strong>erformance : Qualité des résultats sur votre cas d'usage ?</li>
+                                <li><strong>I</strong>ntégration : Compatible avec votre stack actuel ?</li>
+                                <li><strong>D</strong>ollars : ROI justifié par rapport aux alternatives ?</li>
+                            </ul>
+                        </div>
+
+                        <h3>Test pratique sur nouvel outil (10min)</h3>
+                        <p>Choisissez un outil que vous ne connaissez pas dans cette liste et appliquez la méthode RAPID :</p>
+                        <ul>
+                            <li><strong>You.com</strong> - IA avec recherche temps réel</li>
+                            <li><strong>Rytr</strong> - Rédaction IA alternative</li>
+                            <li><strong>Tome</strong> - Création de présentations IA</li>
+                            <li><strong>Synthesia</strong> - Génération de vidéos avec avatars</li>
+                            <li><strong>Murf</strong> - Synthèse vocale réaliste</li>
+                        </ul>
+
+                        <h3>Plan de veille personnalisé (5min)</h3>
+                        <div class="workflow-mapping">
+                            <div class="mapping-category">
+                                <div class="mapping-title">
+                                    <span>📱</span>
+                                    Sources de veille recommandées
+                                </div>
+                                <ul>
+                                    <li><strong>Newsletters :</strong> The Rundown, AI Tool Report, Ben's Bites</li>
+                                    <li><strong>Communautés :</strong> Discord des outils utilisés, Reddit r/artificial</li>
+                                    <li><strong>Influenceurs :</strong> Compte Twitter d'experts de votre secteur</li>
+                                    <li><strong>Agrégateurs :</strong> Product Hunt, Futurepedia, AI Tools Directory</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ateliers pratiques détaillés -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>⚡</span>
+                        Ateliers pratiques en détail
+                    </h2>
+                    <div class="section-content">
+                        <div class="workshop-grid">
+                            <div class="workshop-card">
+                                <div class="workshop-header">
+                                    <div class="workshop-icon">🔧</div>
+                                    <div>
+                                        <div class="workshop-title">Configuration d'écosystème</div>
+                                        <div class="workshop-duration">40 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="workshop-description">
+                                    Créez votre boîte à outils IA personnalisée adaptée à vos besoins spécifiques et votre secteur d'activité.
+                                </div>
+                                <ul class="workshop-objectives">
+                                    <li>Audit complet de vos tâches quotidiennes</li>
+                                    <li>Sélection de 3-5 outils complémentaires</li>
+                                    <li>Configuration et personnalisation avancée</li>
+                                    <li>Tests d'intégration et workflow optimisé</li>
+                                </ul>
+                            </div>
+
+                            <div class="workshop-card">
+                                <div class="workshop-header">
+                                    <div class="workshop-icon">🏆</div>
+                                    <div>
+                                        <div class="workshop-title">Challenge multi-outils</div>
+                                        <div class="workshop-duration">35 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="workshop-description">
+                                    Projet concret nécessitant la coordination de plusieurs outils IA pour un résultat professionnel.
+                                </div>
+                                <ul class="workshop-objectives">
+                                    <li>Projet marketing complet en temps réel</li>
+                                    <li>Optimisation du passage de données</li>
+                                    <li>Évaluation de l'efficacité globale</li>
+                                    <li>Présentation des solutions trouvées</li>
+                                </ul>
+                            </div>
+
+                            <div class="workshop-card">
+                                <div class="workshop-header">
+                                    <div class="workshop-icon">🔍</div>
+                                    <div>
+                                        <div class="workshop-title">Veille et évaluation</div>
+                                        <div class="workshop-duration">30 minutes</div>
+                                    </div>
+                                </div>
+                                <div class="workshop-description">
+                                    Méthode systématique pour évaluer et adopter de nouveaux outils IA dans votre workflow.
+                                </div>
+                                <ul class="workshop-objectives">
+                                    <li>Framework d'évaluation RAPID</li>
+                                    <li>Test d'un nouvel outil en temps réel</li>
+                                    <li>Critères de décision adopt/abandon</li>
+                                    <li>Plan de veille personnalisé</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Livrables -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>📋</span>
+                        Livrables et prochaines étapes
+                    </h2>
+                    <div class="section-content">
+                        <h3>Ce que vous repartez avec :</h3>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🎯</span>
+                                <span>Votre kit de démarrage IA</span>
+                            </div>
+                            <ul>
+                                <li><strong>Écosystème personnalisé :</strong> 3-5 outils configurés et testés</li>
+                                <li><strong>Workflows optimisés :</strong> Processus documentés pour vos tâches clés</li>
+                                <li><strong>Grille d'évaluation :</strong> Framework RAPID pour futurs outils</li>
+                                <li><strong>Plan de veille :</strong> Sources et méthode de suivi des nouveautés</li>
+                                <li><strong>Retour d'expérience :</strong> Analyse de votre session pratique</li>
+                            </ul>
+                        </div>
+
+                        <h3>Plan d'action post-formation :</h3>
+                        <ol>
+                            <li><strong>Semaine 1-2 :</strong> Implémentation progressive de votre écosystème</li>
+                            <li><strong>Mois 1 :</strong> Mesure du gain de productivité et ajustements</li>
+                            <li><strong>Mois 2-3 :</strong> Formation de vos collègues aux outils sélectionnés</li>
+                            <li><strong>Trimestriel :</strong> Évaluation d'un nouvel outil selon méthode RAPID</li>
+                        </ol>
+
+                        <p>Félicitations ! Vous avez maintenant toutes les clés pour optimiser votre travail avec l'IA. Le module 4 vous attend pour explorer la créativité avec l'IA générative.</p>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="outils_3_autres_3.html" class="btn btn-secondary">
+                        <span>←</span> Séquence 3: Outils spécialisés
+                    </a>
+                    <a href="generative_4_overview.html" class="btn btn-primary">
+                        Module 4: IA Générative <span>→</span>
+                    </a>
+                </div>
+
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>🎉</span>
+                        <span>Module 3 terminé !</span>
+                    </div>
+                    <div style="background: var(--bg-tertiary); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Module 3</span>
+                            <span style="color: var(--success-color); font-weight: 600;">100%</span>
+                        </div>
+                        <div style="background: var(--bg-primary); border-radius: 5px; height: 8px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, var(--success-color), var(--accent-color)); height: 100%; width: 100%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
+                        Bravo ! Vous maîtrisez maintenant les outils IA populaires. Direction le module IA Générative !
+                    </p>
+                </div>
+
+                <!-- Workshop Summary -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>⚡</span>
+                        <span>Ateliers pratiques</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">Écosystème IA</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">40min • Configuration personnalisée</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">Challenge multi-outils</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">35min • Projet marketing complet</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">Veille & évaluation</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">30min • Framework RAPID</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>🔗</span>
+                        <span>Liens utiles</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="outils_3_overview.html" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem; border-radius: 8px; background: var(--bg-tertiary); transition: all 0.3s ease;">
+                            📚 Vue d'ensemble du module
+                        </a>
+                        <a href="ressources_outils.html" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem; border-radius: 8px; background: var(--bg-tertiary); transition: all 0.3s ease;">
+                            🛠️ Liste complète des outils
+                        </a>
+                        <a href="projet_suivi.html" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem; border-radius: 8px; background: var(--bg-tertiary); transition: all 0.3s ease;">
+                            📊 Suivi de progression
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>🚀</span>
+                        <span>Prochaines étapes</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                        <p style="margin-bottom: 1rem;">Module 4 vous attend !</p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 0.5rem;">🎨 Génération d'images</li>
+                            <li style="margin-bottom: 0.5rem;">📝 Création de contenu</li>
+                            <li style="margin-bottom: 0.5rem;">🎬 Audio et vidéo</li>
+                            <li>🎯 Projet créatif complet</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality with proper icons
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+            
+            // Mark module 3 as completed
+            if (sequenceNumber === 4) {
+                progress.modules[moduleNumber].completed = true;
+                localStorage.setItem('formation_progress', JSON.stringify(progress));
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as completed
+            markSequenceCompleted(3, 4);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Add hover effects to workshop cards
+            document.querySelectorAll('.workshop-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add countdown timer for workshops (simulation)
+            const workshopCards = document.querySelectorAll('.workshop-card');
+            workshopCards.forEach((card, index) => {
+                card.addEventListener('click', function() {
+                    // Simulate workshop start
+                    console.log(`Démarrage de l'atelier ${index + 1}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

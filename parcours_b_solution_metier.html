@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcours B : Solution Métier IA Complète | Module 8 - IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(25px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 2rem 0 0 0;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 25px 50px rgba(99, 102, 241, 0.3);
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 90deg,
+                rgba(255, 255, 255, 0.05) 180deg,
+                transparent 270deg,
+                rgba(255, 255, 255, 0.1));
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .page-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 0 0 4rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Sequence Navigation */
+        .sequences-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary-color);
+        }
+
+        .sequence-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .sequence-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin: 2rem 0 1rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        /* Metric Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Process Flow */
+        .process-flow {
+            margin: 2rem 0;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .process-step {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-color);
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem auto;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Audit Framework */
+        .audit-framework {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .audit-category {
+            margin-bottom: 2rem;
+        }
+
+        .audit-category h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .audit-questions {
+            list-style: none;
+        }
+
+        .audit-questions li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .audit-questions li::before {
+            content: '❓';
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        /* ROI Calculator */
+        .roi-calculator {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .roi-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .roi-result {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--success-color);
+        }
+
+        .roi-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success-color), #22c55e);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Warning/Info Boxes */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(45deg, rgba(6, 182, 212, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .success-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+        }
+
+        .nav-sequence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .metrics-grid,
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .roi-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+        }
+
+        /* Navigation fixes from previous page */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🧠 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-slider">
+                            <span id="theme-icon">☀️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+            <a href="index.html" class="breadcrumb-link">🏠 Dashboard</a>
+            <span>→</span>
+            <a href="projet_8_overview.html" class="breadcrumb-link">Module 8 : Projet Final</a>
+            <span>→</span>
+            <span class="breadcrumb-current">Parcours B : Solution Métier IA</span>
+        </nav>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">💼 Solution Métier IA Complète</h1>
+                <p class="page-description">
+                    Transformez un processus métier existant avec l'IA : audit, automatisation intelligente et mesure du ROI
+                </p>
+                
+                <div class="page-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">3-4h</span>
+                        <span class="stat-label">Durée totale</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">+200%</span>
+                        <span class="stat-label">ROI visé</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1</span>
+                        <span class="stat-label">Processus transformé</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                
+                <!-- Vue d'ensemble -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Ce que vous allez créer</h2>
+                    <div class="section-content">
+                        <p>
+                            À la fin de ce parcours, vous aurez <strong>transformé complètement un processus métier</strong> en solution IA intelligente avec un ROI mesurable et documenté.
+                        </p>
+
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <span class="metric-value">-70%</span>
+                                <div class="metric-label">Temps de traitement</div>
+                                <div class="metric-description">Automatisation intelligente des tâches répétitives</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value">+300%</span>
+                                <div class="metric-label">Précision</div>
+                                <div class="metric-description">Réduction drastique des erreurs humaines</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value">24/7</span>
+                                <div class="metric-label">Disponibilité</div>
+                                <div class="metric-description">Traitement continu sans intervention</div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🏗️ Votre transformation métier complète
+                            </div>
+                            <div class="process-flow">
+                                <div class="process-steps">
+                                    <div class="process-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-title">Audit IA</div>
+                                        <div class="step-description">Analyse complète du processus existant</div>
+                                    </div>
+                                    <div class="process-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-title">Architecture</div>
+                                        <div class="step-description">Conception de la solution optimale</div>
+                                    </div>
+                                    <div class="process-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-title">Automatisation</div>
+                                        <div class="step-description">Implémentation des workflows IA</div>
+                                    </div>
+                                    <div class="process-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-title">ROI & Éthique</div>
+                                        <div class="step-description">Mesure d'impact + guidelines responsables</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><strong>Exemple concret :</strong> Transformer le processus de "Réponse aux demandes clients" → Solution IA qui catégorise, répond automatiquement et escalade si nécessaire, avec 85% de résolution autonome !</p>
+                        </div>
+
+                        <h3>💼 Types de processus que vous pouvez transformer :</h3>
+                        <div class="process-steps">
+                            <div class="process-step">
+                                <div class="step-number">📧</div>
+                                <div class="step-title">Support Client</div>
+                                <div class="step-description">Tri, catégorisation et réponses automatiques intelligentes</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">📊</div>
+                                <div class="step-title">Analyse de Données</div>
+                                <div class="step-description">Reports automatiques, insights et recommandations IA</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">📝</div>
+                                <div class="step-title">Gestion Documentaire</div>
+                                <div class="step-description">Classification, résumé et recherche intelligente</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">🎯</div>
+                                <div class="step-title">Qualification Leads</div>
+                                <div class="step-description">Scoring automatique et recommandations d'actions</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 1 -->
+                <section class="section" id="sequence-1">
+                    <h2 class="section-title">🔍 Séquence 1 : Audit IA du Processus (60min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Analysons en profondeur un processus métier de votre choix pour identifier précisément les opportunités d'automatisation IA.
+                        </p>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>⚠️</span>
+                                <span>Choix stratégique du processus</span>
+                            </div>
+                            <p><strong>Critères de sélection :</strong> Processus répétitif, avec données structurées, impact business élevé, et résistance au changement faible. Évitez les processus trop créatifs ou avec forte composante relationnelle.</p>
+                        </div>
+
+                        <h3>🎯 Étape 1A : Sélection et cartographie du processus (20min)</h3>
+                        <div class="audit-framework">
+                            <div class="audit-category">
+                                <h4>📋 Framework de sélection</h4>
+                                <div class="audit-questions">
+                                    <li><strong>Impact Business :</strong> Ce processus représente-t-il plus de 5h/semaine d'activité ?</li>
+                                    <li><strong>Répétitivité :</strong> Les étapes sont-elles identiques à plus de 80% ?</li>
+                                    <li><strong>Données :</strong> Le processus génère/traite-t-il des données structurées ?</li>
+                                    <li><strong>Urgence :</strong> Y a-t-il des délais de traitement contraints ?</li>
+                                    <li><strong>Qualité :</strong> Y a-t-il des erreurs récurrentes ou de la variabilité ?</li>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🗺️ Template de cartographie processus
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# AUDIT PROCESSUS : [NOM DU PROCESSUS]
+
+## 1. ÉTAT ACTUEL (AS-IS)
+**Déclencheur :** Comment le processus démarre-t-il ?
+**Acteurs impliqués :** Qui fait quoi ?
+**Étapes détaillées :**
+1. [Étape 1] - Qui: [X] - Durée: [Y] - Outils: [Z]
+2. [Étape 2] - Qui: [X] - Durée: [Y] - Outils: [Z]
+3. [etc...]
+
+**Données en entrée :** Quelles informations sont nécessaires ?
+**Données en sortie :** Quels sont les livrables/résultats ?
+**Points de friction :** Où sont les ralentissements/erreurs ?
+
+## 2. MÉTRIQUES ACTUELLES
+- **Temps moyen de traitement :** [X] minutes/heures
+- **Volume traité par semaine :** [X] dossiers/demandes
+- **Taux d'erreur :** [X]%
+- **Coût en ressources humaines :** [X] h/semaine x [Y] €/h = [Z] €/mois
+
+## 3. OPPORTUNITÉS IA IDENTIFIÉES
+- **Automatisable à 100% :** [Liste des étapes]
+- **Automatisable avec supervision :** [Liste des étapes]
+- **Optimisable par IA :** [Liste des étapes]
+- **À conserver humain :** [Liste des étapes + justification]
+                            </div>
+                        </div>
+
+                        <h3>📊 Étape 1B : Analyse quantitative (20min)</h3>
+                        <div class="roi-calculator">
+                            <div class="interactive-title">
+                                📈 Calculateur ROI rapide
+                            </div>
+                            <div class="roi-inputs">
+                                <div class="input-group">
+                                    <label for="hours-week">Heures/semaine actuelles</label>
+                                    <input type="number" id="hours-week" placeholder="ex: 8" oninput="calculateROI()">
+                                </div>
+                                <div class="input-group">
+                                    <label for="hourly-rate">Coût horaire (€)</label>
+                                    <input type="number" id="hourly-rate" placeholder="ex: 35" oninput="calculateROI()">
+                                </div>
+                                <div class="input-group">
+                                    <label for="automation-percent">% automatisable</label>
+                                    <input type="number" id="automation-percent" placeholder="ex: 70" max="100" oninput="calculateROI()">
+                                </div>
+                                <div class="input-group">
+                                    <label for="setup-cost">Coût setup IA (€)</label>
+                                    <input type="number" id="setup-cost" placeholder="ex: 2000" oninput="calculateROI()">
+                                </div>
+                            </div>
+                            <div class="roi-result">
+                                <div class="roi-value" id="roi-percentage">--%</div>
+                                <div>ROI à 12 mois</div>
+                                <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                                    <div>Économies mensuelles : <span id="monthly-savings">-- €</span></div>
+                                    <div>Retour sur investissement : <span id="payback-months">-- mois</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>🎯 Étape 1C : Faisabilité technique et risques (20min)</h3>
+                        <div class="audit-framework">
+                            <div class="audit-category">
+                                <h4>⚙️ Évaluation technique</h4>
+                                <div class="audit-questions">
+                                    <li><strong>Données disponibles :</strong> Avez-vous accès aux données historiques (3-6 mois) ?</li>
+                                    <li><strong>Qualité des données :</strong> Les données sont-elles cohérentes et exploitables ?</li>
+                                    <li><strong>Intégrations système :</strong> Quels outils/logiciels utilise le processus actuel ?</li>
+                                    <li><strong>Compétences internes :</strong> Qui pourra maintenir la solution ?</li>
+                                </div>
+                            </div>
+                            <div class="audit-category">
+                                <h4>⚠️ Analyse des risques</h4>
+                                <div class="audit-questions">
+                                    <li><strong>Résistance organisationnelle :</strong> L'équipe est-elle favorable au changement ?</li>
+                                    <li><strong>Conformité réglementaire :</strong> Y a-t-il des contraintes légales (RGPD, etc.) ?</li>
+                                    <li><strong>Plan de repli :</strong> Comment revenir à l'ancien processus si besoin ?</li>
+                                    <li><strong>Formation requise :</strong> Quel accompagnement prévoir pour les utilisateurs ?</li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 2 -->
+                <section class="section" id="sequence-2">
+                    <h2 class="section-title">🏗️ Séquence 2 : Architecture de la Solution (75min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Concevons l'architecture technique optimale de votre solution IA, en sélectionnant les outils et technologies les plus adaptés.
+                        </p>
+
+                        <h3>🧠 Étape 2A : Choix des technologies IA (25min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🛠️ Stack technologique recommandée
+                            </div>
+                            <div class="process-steps">
+                                <div class="process-step">
+                                    <div class="step-number">🧠</div>
+                                    <div class="step-title">Intelligence</div>
+                                    <div class="step-description">
+                                        <strong>Simple :</strong> GPT-4 via OpenAI API<br>
+                                        <strong>Avancé :</strong> Claude + fine-tuning
+                                    </div>
+                                </div>
+                                <div class="process-step">
+                                    <div class="step-number">🔗</div>
+                                    <div class="step-title">Orchestration</div>
+                                    <div class="step-description">
+                                        <strong>No-code :</strong> Make.com Premium<br>
+                                        <strong>Code :</strong> n8n auto-hébergé
+                                    </div>
+                                </div>
+                                <div class="process-step">
+                                    <div class="step-number">📊</div>
+                                    <div class="step-title">Données</div>
+                                    <div class="step-description">
+                                        <strong>Stockage :</strong> Airtable/Notion API<br>
+                                        <strong>Analytics :</strong> Google Sheets/Looker
+                                    </div>
+                                </div>
+                                <div class="process-step">
+                                    <div class="step-number">📱</div>
+                                    <div class="step-title">Interface</div>
+                                    <div class="step-description">
+                                        <strong>Simple :</strong> Google Forms/Typeform<br>
+                                        <strong>Avancé :</strong> Retool/Bubble
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>💰</span>
+                                <span>Budget réaliste</span>
+                            </div>
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <span class="metric-value">150€</span>
+                                    <div class="metric-label">Setup initial</div>
+                                    <div class="metric-description">Outils + configuration</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">80€</span>
+                                    <div class="metric-label">Coût mensuel</div>
+                                    <div class="metric-description">APIs + subscriptions</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">10h</span>
+                                    <div class="metric-label">Temps dev</div>
+                                    <div class="metric-description">Configuration complète</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>⚙️ Étape 2B : Conception du workflow (30min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🔄 Template architecture workflow
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# ARCHITECTURE WORKFLOW IA
+
+## DÉCLENCHEURS (TRIGGERS)
+1. **Email reçu** → webhook vers Make.com
+2. **Formulaire soumis** → API call
+3. **Fichier uploadé** → surveillance dossier
+4. **Timer/Schedule** → traitement batch
+
+## ÉTAPES DE TRAITEMENT
+1. **RÉCEPTION + VALIDATION**
+   - Vérifier format/complétude
+   - Extraire métadonnées
+   - Log dans base de données
+
+2. **ANALYSE IA** 
+   - Classification automatique
+   - Extraction d'informations clés
+   - Calcul de score de priorité
+   - Génération de recommandations
+
+3. **ROUTAGE INTELLIGENT**
+   - Si score > 80% → traitement automatique
+   - Si 50-80% → escalade superviseur
+   - Si < 50% → traitement manuel
+
+4. **ACTIONS AUTOMATIQUES**
+   - Génération de réponse personnalisée
+   - Mise à jour des systèmes internes
+   - Notification des parties prenantes
+   - Archivage et reporting
+
+## POINTS DE CONTRÔLE
+- Validation humaine pour décisions critiques
+- Log de toutes les actions IA
+- Métriques de performance en temps réel
+- Alertes en cas d'anomalie
+                            </div>
+                        </div>
+
+                        <h3>🎛️ Étape 2C : Interfaces et contrôles (20min)</h3>
+                        <div class="process-steps">
+                            <div class="process-step">
+                                <div class="step-number">📊</div>
+                                <div class="step-title">Dashboard Monitoring</div>
+                                <div class="step-description">Suivi temps réel des performances et alertes</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">⚙️</div>
+                                <div class="step-title">Interface Admin</div>
+                                <div class="step-description">Configuration des règles et seuils de l'IA</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">👤</div>
+                                <div class="step-title">Interface Utilisateur</div>
+                                <div class="step-description">Workflow simplifié pour les équipes métier</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">📈</div>
+                                <div class="step-title">Analytics & Reports</div>
+                                <div class="step-description">Tableaux de bord ROI et performance</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 3 -->
+                <section class="section" id="sequence-3">
+                    <h2 class="section-title">⚡ Séquence 3 : Développement de la Solution (90min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Passons à la construction ! Développement step-by-step de votre solution IA métier avec tests et optimisations.
+                        </p>
+
+                        <h3>🔧 Phase 3A : Configuration Make.com avancée (35min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📹 Tutoriel vidéo complet
+                            </div>
+                            <div style="background: var(--bg-secondary); padding: 2rem; border-radius: 8px; text-align: center; margin: 1rem 0;">
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem;">🎬 <strong>Masterclass :</strong> "Solution Métier IA avec Make.com" (25 min)</p>
+                                <button class="btn btn-primary">▶️ Lancer le tutoriel avancé</button>
+                            </div>
+                            <p><strong>Ce que vous apprendrez :</strong></p>
+                            <ul>
+                                <li>Configuration des webhooks et APIs complexes</li>
+                                <li>Logique conditionnelle et routage intelligent</li>
+                                <li>Gestion des erreurs et retry automatique</li>
+                                <li>Intégration GPT-4 avec prompts métier optimisés</li>
+                                <li>Base de données et historique des décisions</li>
+                            </ul>
+                        </div>
+
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# PROMPT SYSTÈME MÉTIER OPTIMISÉ
+
+Tu es un assistant IA spécialisé dans [VOTRE DOMAINE MÉTIER].
+
+## CONTEXTE
+Processus: [NOM DU PROCESSUS]
+Objectif: [OBJECTIF BUSINESS]
+Contraintes: [CONTRAINTES SPÉCIFIQUES]
+
+## TA MISSION
+Analyser les [DONNÉES D'ENTRÉE] et fournir:
+1. **Classification** (catégorie + niveau de priorité 1-10)
+2. **Analyse** (points clés identifiés)
+3. **Recommandations** (actions concrètes)
+4. **Confiance** (score 0-100% + justification)
+
+## FORMAT DE RÉPONSE
+```json
+{
+  "classification": {
+    "category": "...",
+    "priority": 7,
+    "urgency": "medium"
+  },
+  "analysis": {
+    "key_points": ["...", "..."],
+    "risk_factors": ["...", "..."],
+    "opportunities": ["..."]
+  },
+  "recommendations": {
+    "immediate_actions": ["...", "..."],
+    "next_steps": ["...", "..."],
+    "stakeholders": ["..."]
+  },
+  "confidence": {
+    "score": 85,
+    "reasoning": "..."
+  }
+}
+```
+
+Adapte le niveau de détail selon la complexité du dossier.
+                        </div>
+
+                        <h3>📊 Phase 3B : Intégration données et analytics (30min)</h3>
+                        <div class="process-steps">
+                            <div class="process-step">
+                                <div class="step-number">📥</div>
+                                <div class="step-title">Ingestion</div>
+                                <div class="step-description">Connexions vers vos sources de données existantes</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">🔄</div>
+                                <div class="step-title">Transformation</div>
+                                <div class="step-description">Nettoyage et structuration automatique</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">🧠</div>
+                                <div class="step-title">Enrichissement IA</div>
+                                <div class="step-description">Analyse, catégorisation et scoring</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">📤</div>
+                                <div class="step-title">Export</div>
+                                <div class="step-description">Vers vos outils métier et dashboards</div>
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-title">
+                                <span>📊</span>
+                                <span>Templates Google Sheets prêts à l'emploi</span>
+                            </div>
+                            <p>Obtenez des dashboards pré-configurés pour votre secteur :</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <button class="btn btn-secondary btn-small">📧 Support Client</button>
+                                <button class="btn btn-secondary btn-small">💰 Qualification Leads</button>
+                                <button class="btn btn-secondary btn-small">📝 Gestion Documents</button>
+                                <button class="btn btn-secondary btn-small">📊 Analytics RH</button>
+                            </div>
+                        </div>
+
+                        <h3>🧪 Phase 3C : Tests et optimisation (25min)</h3>
+                        <div class="success-box">
+                            <div class="success-title">
+                                <span>✅</span>
+                                <span>Protocole de test complet</span>
+                            </div>
+                            <div class="audit-framework">
+                                <div class="audit-category">
+                                    <h4>🔍 Tests fonctionnels</h4>
+                                    <div class="audit-questions">
+                                        <li>Test avec 10 cas réels de complexité croissante</li>
+                                        <li>Validation des seuils de routage automatique</li>
+                                        <li>Vérification des intégrations système</li>
+                                        <li>Test de performance sous charge</li>
+                                    </div>
+                                </div>
+                                <div class="audit-category">
+                                    <h4>📊 Tests de précision IA</h4>
+                                    <div class="audit-questions">
+                                        <li>Précision de classification > 90%</li>
+                                        <li>Cohérence des recommandations</li>
+                                        <li>Détection des cas edge et exceptions</li>
+                                        <li>Calibration des scores de confiance</li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 4 -->
+                <section class="section" id="sequence-4">
+                    <h2 class="section-title">📈 Séquence 4 : ROI et Gouvernance IA (45min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Mesurons l'impact réel de votre solution et mettons en place une gouvernance IA responsable pour assurer sa pérennité.
+                        </p>
+
+                        <h3>💰 Phase 4A : Mesure du ROI (20min)</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <span class="metric-value">-65%</span>
+                                <div class="metric-label">Temps de traitement</div>
+                                <div class="metric-description">Gain d'efficacité mesuré</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value">+92%</span>
+                                <div class="metric-label">Précision</div>
+                                <div class="metric-description">Réduction des erreurs</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value">€3,200</span>
+                                <div class="metric-label">Économies/mois</div>
+                                <div class="metric-description">Valeur mesurable créée</div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📊 Dashboard ROI automatisé
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# MÉTRIQUES ROI À TRACKER AUTOMATIQUEMENT
+
+## EFFICACITÉ OPÉRATIONNELLE
+- Temps moyen de traitement (avant/après)
+- Volume traité par heure/jour
+- Taux d'automatisation complète
+- Réduction des tâches manuelles (en heures)
+
+## QUALITÉ ET PRÉCISION  
+- Taux d'erreur (avant/après)
+- Précision de la classification IA
+- Satisfaction utilisateur (NPS)
+- Taux d'escalade vers humains
+
+## IMPACT BUSINESS
+- Coûts opérationnels économisés (€/mois)
+- Temps collaborateur libéré (heures/semaine)
+- Amélioration délais de traitement
+- Augmentation capacité de traitement
+
+## PERFORMANCE IA
+- Précision du modèle IA (%)
+- Score de confiance moyen
+- Cas non traités automatiquement (%)
+- Temps de réponse IA (millisecondes)
+                            </div>
+                        </div>
+
+                        <h3>⚖️ Phase 4B : Gouvernance IA responsable (15min)</h3>
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>⚖️</span>
+                                <span>Éthique IA obligatoire</span>
+                            </div>
+                            <p>Toute solution IA métier doit respecter les principes d'éthique et de transparence. Cette étape est <strong>non négociable</strong> pour un déploiement responsable.</p>
+                        </div>
+
+                        <div class="audit-framework">
+                            <div class="audit-category">
+                                <h4>🔍 Transparence et explicabilité</h4>
+                                <div class="audit-questions">
+                                    <li><strong>Traçabilité :</strong> Chaque décision IA est-elle loggée et auditable ?</li>
+                                    <li><strong>Explication :</strong> Pouvez-vous justifier pourquoi l'IA a pris telle décision ?</li>
+                                    <li><strong>Recours :</strong> Existe-t-il un mécanisme de contestation/révision ?</li>
+                                    <li><strong>Communication :</strong> Les utilisateurs savent-ils qu'ils interagissent avec une IA ?</li>
+                                </div>
+                            </div>
+                            <div class="audit-category">
+                                <h4>⚡ Biais et discrimination</h4>
+                                <div class="audit-questions">
+                                    <li><strong>Données équilibrées :</strong> Vos données d'entraînement sont-elles représentatives ?</li>
+                                    <li><strong>Tests de biais :</strong> Avez-vous testé les performances par segment/groupe ?</li>
+                                    <li><strong>Monitoring continu :</strong> Y a-t-il une surveillance des dérives ?</li>
+                                    <li><strong>Correction :</strong> Processus en place pour corriger les biais détectés ?</li>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📋 Template Charte IA Métier
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# CHARTE D'USAGE IA - [VOTRE ENTREPRISE]
+
+## PRINCIPES FONDAMENTAUX
+1. **Transparence** : Toute utilisation d'IA est signalée aux utilisateurs
+2. **Contrôle humain** : Validation humaine pour décisions critiques
+3. **Équité** : Traitement équitable sans discrimination
+4. **Responsabilité** : Propriétaire identifié pour chaque système IA
+
+## RÈGLES OPÉRATIONNELLES
+- Seuil de confiance minimum : 85% pour traitement automatique
+- Révision humaine obligatoire pour scores < 85%
+- Log de toutes les décisions IA (30 jours minimum)
+- Formation équipe sur limites et biais potentiels
+
+## PROCESSUS DE CONTRÔLE
+- Audit mensuel des performances IA
+- Test de biais trimestriel par segment
+- Mise à jour modèle si précision < 90%
+- Escalade responsable IA pour cas complexes
+
+## DROITS DES UTILISATEURS
+- Droit à l'explication des décisions IA
+- Possibilité de contestation et révision humaine
+- Accès aux données personnelles utilisées
+- Opt-out du traitement automatique si souhaité
+                            </div>
+                        </div>
+
+                        <h3>📚 Phase 4C : Documentation et maintenance (10min)</h3>
+                        <div class="success-box">
+                            <div class="success-title">
+                                <span>🎉</span>
+                                <span>Félicitations ! Votre Solution Métier IA est opérationnelle</span>
+                            </div>
+                            <p><strong>Livrables finalisés :</strong></p>
+                            <ol>
+                                <li><strong>Solution technique déployée</strong> avec monitoring temps réel</li>
+                                <li><strong>Dashboard ROI</strong> avec métriques business automatisées</li>
+                                <li><strong>Documentation complète</strong> : architecture, prompts, procédures</li>
+                                <li><strong>Charte éthique IA</strong> validée et communiquée aux équipes</li>
+                                <li><strong>Plan de maintenance</strong> et d'évolution sur 12 mois</li>
+                            </ol>
+                        </div>
+
+                        <div class="process-steps">
+                            <div class="process-step">
+                                <div class="step-number">📖</div>
+                                <div class="step-title">Manuel d'Utilisation</div>
+                                <div class="step-description">Guide step-by-step pour les équipes métier</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">🔧</div>
+                                <div class="step-title">Guide Technique</div>
+                                <div class="step-description">Architecture, APIs, maintenance pour les admins</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">📊</div>
+                                <div class="step-title">Reporting ROI</div>
+                                <div class="step-description">Templates de présentation pour le management</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-number">🔄</div>
+                                <div class="step-title">Roadmap Evolution</div>
+                                <div class="step-description">Plan d'amélioration continue sur 6-12 mois</div>
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-title">
+                                <span>🚀</span>
+                                <span>Et maintenant ? Scaling et optimisation</span>
+                            </div>
+                            <p><strong>Prochaines étapes recommandées :</strong></p>
+                            <ul>
+                                <li><strong>Semaine 1-4</strong> : Déploiement progressif et ajustements</li>
+                                <li><strong>Mois 2-3</strong> : Analyse ROI et optimisation des performances</li>
+                                <li><strong>Mois 4-6</strong> : Extension à d'autres processus métier</li>
+                                <li><strong>Mois 6+</strong> : Envisager la Masterclass pour industrialiser</li>
+                            </ul>
+                            <div style="margin-top: 1.5rem;">
+                                <button class="btn btn-success">💬 Partager votre succès sur Discord</button>
+                                <button class="btn btn-secondary">📈 Programmer un suivi ROI</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="quiz_parcours_module8.html" class="btn btn-secondary">
+                        <span>←</span> Retour au Quiz
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Parcours B - Solution Métier Complète</div>
+                        <div class="nav-title">Transformation IA & ROI Mesurable</div>
+                    </div>
+                    <a href="projet_8_documentation_b.html" class="btn btn-primary">
+                        Documentation finale <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;" id="progress-bar"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Prêt à démarrer</div>
+                    </div>
+                </div>
+
+                <!-- Sequences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">💼 Séquences métier</h3>
+                    <ul class="sequences-list">
+                        <li class="sequence-item current" data-sequence="1">
+                            <div class="sequence-icon current">1</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Audit IA du Processus</div>
+                                <div class="sequence-duration">60 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item" data-sequence="2">
+                            <div class="sequence-icon locked">2</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Architecture Solution</div>
+                                <div class="sequence-duration">75 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item" data-sequence="3">
+                            <div class="sequence-icon locked">3</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Développement Solution</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item" data-sequence="4">
+                            <div class="sequence-icon locked">4</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">ROI & Gouvernance IA</div>
+                                <div class="sequence-duration">45 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">⏱️ Temps estimé</h4>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                            <div>🔍 Audit : 60min</div>
+                            <div>🏗️ Architecture : 75min</div>
+                            <div>⚡ Développement : 90min</div>
+                            <div>📈 ROI & Éthique : 45min</div>
+                            <div style="font-weight: bold; color: var(--text-primary); border-top: 2px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.75rem;">⏰ Total : 4h30</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROI Estimator -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📈 ROI Estimé</h3>
+                    <div class="metrics-grid" style="grid-template-columns: 1fr;">
+                        <div class="metric-card">
+                            <span class="metric-value" id="sidebar-roi">--%</span>
+                            <div class="metric-label">ROI à 12 mois</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>💰 Économies/mois:</span>
+                            <span id="sidebar-savings">-- €</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>⏰ Retour investissement:</span>
+                            <span id="sidebar-payback">-- mois</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>⚡ Temps économisé:</span>
+                            <span id="sidebar-time-saved">-- h/semaine</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Stack -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🛠️ Stack technologique</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span style="font-size: 0.9rem;">Make.com Premium</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span style="font-size: 0.9rem;">OpenAI GPT-4 API</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span style="font-size: 0.9rem;">Airtable/Notion</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--warning-color);">⏳</span>
+                            <span style="font-size: 0.9rem;">Google Sheets/Looker</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--text-muted);">⚪</span>
+                            <span style="font-size: 0.9rem;">Retool (optionnel)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">💰 Budget estimé</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                            <div>Setup : 150€</div>
+                            <div>Mensuel : 80€/mois</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            themeIcon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+            
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-icon').textContent = savedTheme === 'light' ? '☀️' : '🌙';
+        });
+
+        // Progress tracking with fixed navigation
+        let currentSequence = 1;
+        let isScrolling = false;
+        let sequenceProgress = {
+            1: 0, // Audit
+            2: 0, // Architecture
+            3: 0, // Développement
+            4: 0  // ROI & Gouvernance
+        };
+
+        function updateProgress() {
+            const totalSequences = 4;
+            const completedSequences = Object.values(sequenceProgress).reduce((acc, progress) => acc + (progress / 100), 0);
+            const overallProgress = (completedSequences / totalSequences) * 100;
+            
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            progressBar.style.width = `${overallProgress}%`;
+            
+            if (overallProgress === 0) {
+                progressText.textContent = 'Prêt à démarrer';
+            } else if (overallProgress < 100) {
+                progressText.textContent = `${Math.round(overallProgress)}% complété`;
+            } else {
+                progressText.textContent = 'Parcours terminé ! 🎉';
+            }
+        }
+
+        // Sequence navigation - separated from scroll logic
+        function updateActiveSequence(sequenceNumber) {
+            // Remove current class from all items
+            document.querySelectorAll('.sequence-item').forEach(item => {
+                item.classList.remove('current');
+            });
+            
+            // Add current class to selected item
+            const targetItem = document.querySelector(`[data-sequence="${sequenceNumber}"]`);
+            if (targetItem) {
+                targetItem.classList.add('current');
+            }
+            
+            currentSequence = sequenceNumber;
+        }
+
+        // Manual navigation (only when clicking)
+        function navigateToSequence(sequenceNumber) {
+            if (isScrolling) return;
+            
+            isScrolling = true;
+            updateActiveSequence(sequenceNumber);
+            
+            // Scroll to sequence with offset for header
+            const targetSection = document.getElementById(`sequence-${sequenceNumber}`);
+            if (targetSection) {
+                const headerHeight = document.querySelector('.header').offsetHeight;
+                const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Reset flag after scroll completes
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 1000);
+            } else {
+                isScrolling = false;
+            }
+        }
+
+        // Intersection Observer for progress tracking (no auto-scroll)
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '-80px 0px -50% 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            if (isScrolling) return;
+            
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    if (sectionId.startsWith('sequence-')) {
+                        const sequenceNum = parseInt(sectionId.split('-')[1]);
+                        if (sequenceNum !== currentSequence) {
+                            updateActiveSequence(sequenceNum);
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // ROI Calculator
+        function calculateROI() {
+            const hoursWeek = parseFloat(document.getElementById('hours-week')?.value) || 0;
+            const hourlyRate = parseFloat(document.getElementById('hourly-rate')?.value) || 0;
+            const automationPercent = parseFloat(document.getElementById('automation-percent')?.value) || 0;
+            const setupCost = parseFloat(document.getElementById('setup-cost')?.value) || 0;
+            
+            if (hoursWeek && hourlyRate && automationPercent) {
+                // Calculations
+                const currentMonthlyCost = hoursWeek * hourlyRate * 4.33; // 4.33 weeks per month
+                const monthlySavings = (currentMonthlyCost * automationPercent / 100) - 80; // 80€ monthly tool cost
+                const annualSavings = monthlySavings * 12;
+                const roi = ((annualSavings - setupCost) / setupCost) * 100;
+                const paybackMonths = setupCost / monthlySavings;
+                const timeSaved = hoursWeek * automationPercent / 100;
+                
+                // Update main calculator
+                const roiElement = document.getElementById('roi-percentage');
+                const savingsElement = document.getElementById('monthly-savings');
+                const paybackElement = document.getElementById('payback-months');
+                
+                if (roiElement) roiElement.textContent = `${Math.round(roi)}%`;
+                if (savingsElement) savingsElement.textContent = `${Math.round(monthlySavings)} €`;
+                if (paybackElement) paybackElement.textContent = `${Math.round(paybackMonths)} mois`;
+                
+                // Update sidebar
+                const sidebarRoi = document.getElementById('sidebar-roi');
+                const sidebarSavings = document.getElementById('sidebar-savings');
+                const sidebarPayback = document.getElementById('sidebar-payback');
+                const sidebarTimeSaved = document.getElementById('sidebar-time-saved');
+                
+                if (sidebarRoi) sidebarRoi.textContent = `${Math.round(roi)}%`;
+                if (sidebarSavings) sidebarSavings.textContent = `${Math.round(monthlySavings)} €`;
+                if (sidebarPayback) sidebarPayback.textContent = `${Math.round(paybackMonths)} mois`;
+                if (sidebarTimeSaved) sidebarTimeSaved.textContent = `${Math.round(timeSaved)} h`;
+            }
+        }
+
+        // Copy text function
+        function copyText(button) {
+            const codeBlock = button.parentElement;
+            const text = codeBlock.textContent.replace('📋 Copier', '').trim();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✅ Copié';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'var(--primary-color)';
+                }, 2000);
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers to sequence items
+            document.querySelectorAll('.sequence-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const sequenceNumber = this.getAttribute('data-sequence');
+                    navigateToSequence(parseInt(sequenceNumber));
+                });
+            });
+            
+            // Observe all sequence sections
+            document.querySelectorAll('[id^="sequence-"]').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Detect end of smooth scrolling
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    if (isScrolling) {
+                        isScrolling = false;
+                    }
+                }, 150);
+            });
+        });
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>

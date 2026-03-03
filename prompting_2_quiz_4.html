@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz et cas complexes | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-button {
+            width: 19px;
+            height: 19px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-1px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs for Navigation Context */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '→';
+            margin-left: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Additional Resources */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Tracking */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        /* Lesson Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(var(--transform-x, 0));
+        }
+
+        .nav-btn:first-child:hover {
+            --transform-x: -5px;
+        }
+
+        .nav-btn:last-child:hover {
+            --transform-x: 5px;
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, var(--warning-color), #f97316);
+            color: white;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success-color), var(--accent-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Quiz Specific Styles */
+        .quiz-container {
+            margin: 2rem 0;
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-number {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .option {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+        }
+
+        .option.incorrect {
+            border-color: var(--error-color);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+        }
+
+        .option-label {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-label {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .option-text {
+            flex: 1;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .explanation {
+            background: var(--glass-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Complex Case Styles */
+        .case-study {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(249, 115, 22, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .case-icon {
+            background: linear-gradient(45deg, var(--warning-color), var(--error-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .case-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .case-difficulty {
+            background: var(--warning-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .prompt-analysis {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .prompt-analysis::before {
+            content: '🔍 Prompt à corriger';
+            position: absolute;
+            top: -10px;
+            left: 1rem;
+            background: var(--card-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--warning-color);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Score Display */
+        .score-display {
+            background: linear-gradient(135deg, var(--success-color), var(--accent-color));
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .score-feedback {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Case Action Buttons */
+        .case-actions {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        /* Solution/Hint sections */
+        .hint-section, .solution-section {
+            background: var(--glass-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .hint-section {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .solution-section {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .hint-section.show, .solution-section.show {
+            display: block;
+        }
+
+        .hint-title, .solution-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hint-title {
+            color: var(--warning-color);
+        }
+
+        .solution-title {
+            color: var(--success-color);
+        }
+
+        .solution-prompt {
+            background: var(--bg-primary);
+            border: 1px solid var(--success-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .case-actions {
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="prompting_2_overview.html" class="breadcrumb-link">Module 2: Art du Prompting</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Séquence 4: Quiz et cas complexes</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Séquence 4 / 4</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>25 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Évaluation</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Quiz et cas complexes de prompting</h1>
+                <p class="lesson-description">
+                    Validez vos acquis et testez votre maîtrise sur des défis de prompting avancés. Cette évaluation synthétise tout ce que vous avez appris dans ce module.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🎯 Objectifs de l'évaluation
+                    </h2>
+                    <div class="section-content">
+                        <p>Cette évaluation finale du module 2 vous permet de :</p>
+                        <ul>
+                            <li>Valider votre compréhension des techniques de prompting</li>
+                            <li>Tester votre capacité à résoudre des cas complexes</li>
+                            <li>Identifier les derniers points à approfondir</li>
+                            <li>Obtenir un score de maîtrise personnalisé</li>
+                        </ul>
+
+                        <div class="quiz-container">
+                            <div style="background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1)); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 1.5rem; margin: 2rem 0;">
+                                <div style="font-weight: 600; color: var(--primary-color); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    ⚡ Format de l'évaluation
+                                </div>
+                                <p><strong>Partie 1 :</strong> 8 questions à choix multiples (15 minutes) - <em>Score calculé automatiquement</em></p>
+                                <p><strong>Partie 2 :</strong> 2 cas complexes à résoudre sur votre outil IA (10 minutes) - <em>Auto-évaluation</em></p>
+                                <p><strong>Score minimal :</strong> 7/10 sur le quiz pour valider le module</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="section">
+                    <h2 class="section-title">
+                        📝 Partie 1: Quiz de validation (noté /8)
+                    </h2>
+
+                    <!-- Question 1 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">1</div>
+                            <div class="question-text">Quelle est la structure recommandée d'un prompt efficace selon la méthode CTCEF ?</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Créativité, Tâche, Contexte, Exemples, Format</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Contexte, Tâche, Contraintes, Exemples, Format</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Contenu, Technique, Communication, Évaluation, Finalisation</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Clarté, Tonalité, Complexité, Expression, Forme</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>CTCEF signifie <strong>Contexte</strong> (le cadre), <strong>Tâche</strong> (l'objectif précis), <strong>Contraintes</strong> (limites et exigences), <strong>Exemples</strong> (illustrations), et <strong>Format</strong> (structure attendue de la réponse).</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">2</div>
+                            <div class="question-text">Qu'est-ce que le "Chain of Thought" prompting ?</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Enchaîner plusieurs prompts rapidement pour gagner du temps</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Demander à l'IA de raisonner étape par étape avant de donner sa réponse finale</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Créer des prompts liés thématiquement les uns aux autres</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Utiliser des mots-clés en chaîne pour optimiser les résultats</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>Le Chain of Thought consiste à demander explicitement à l'IA de détailler son raisonnement ("explique-moi étape par étape", "raisonne d'abord puis donne ta réponse"). Cette technique améliore significativement la qualité des réponses complexes.</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">3</div>
+                            <div class="question-text">Quelle est la principale erreur dans ce prompt : "Tu es expert en tout, aide-moi à tout faire parfaitement" ?</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Le ton n'est pas assez formel</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Trop vague, manque de contexte et de tâche précise</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Il manque des exemples concrets</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Le format de sortie n'est pas spécifié</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>Ce prompt souffre d'un manque total de spécificité. Sans contexte précis ni tâche définie, l'IA ne peut pas fournir une réponse utile. C'est l'erreur #1 : la <strong>vagité excessive</strong>.</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">4</div>
+                            <div class="question-text">Le "Few-shot prompting" consiste à :</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Poser des questions courtes et directes</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Donner quelques exemples d'entrée/sortie pour guider l'IA</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Répéter le même prompt plusieurs fois</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Utiliser des mots-clés pour accélérer les réponses</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>Le Few-shot prompting fournit 2-5 exemples concrets du format attendu. Par exemple : "Exemple 1: Question -> Réponse | Exemple 2: Question -> Réponse | Maintenant réponds à : [votre question]"</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">5</div>
+                            <div class="question-text">Pour débugger un prompt qui ne fonctionne pas, quelle est la première étape ?</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Changer complètement l'approche</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Ajouter plus d'exemples</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Demander à l'IA d'expliquer comment elle interprète le prompt</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Raccourcir le prompt au maximum</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>La technique de debug consiste à ajouter : "Avant de répondre, explique-moi comment tu interprètes ma demande". Cela révèle les incompréhensions et permet d'ajuster précisément le prompt.</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">6</div>
+                            <div class="question-text">Quelle contrainte est la plus importante pour un email professionnel ?</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Utiliser exactement 150 mots</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Spécifier le ton et l'objectif précis</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Inclure au moins 3 paragraphes</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Éviter toute forme de politesse</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>Le ton (formel, cordial, direct...) et l'objectif précis (demander, informer, relancer...) sont cruciaux pour un email professionnel efficace. Ces contraintes déterminent la structure et le style de tout le message.</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">7</div>
+                            <div class="question-text">L'A/B testing de prompts sert à :</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Tester deux IA différentes avec le même prompt</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Comparer deux versions d'un prompt pour identifier la plus efficace</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Vérifier la cohérence des réponses dans le temps</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Mesurer la vitesse de génération des réponses</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>L'A/B testing consiste à créer deux versions d'un prompt (ex: avec/sans exemples) et comparer systématiquement la qualité des résultats pour optimiser continuellement ses prompts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Question 8 -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="question-number">8</div>
+                            <div class="question-text">Pour maintenir le contexte sur plusieurs échanges, il faut :</div>
+                        </div>
+                        <div class="options-container">
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">A</div>
+                                <div class="option-text">Répéter tout le contexte à chaque message</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, true)">
+                                <div class="option-label">B</div>
+                                <div class="option-text">Référencer les éléments précédents et maintenir la continuité thématique</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">C</div>
+                                <div class="option-text">Commencer une nouvelle conversation à chaque fois</div>
+                            </div>
+                            <div class="option" onclick="selectOption(this, false)">
+                                <div class="option-label">D</div>
+                                <div class="option-text">Utiliser exactement les mêmes mots-clés</div>
+                            </div>
+                        </div>
+                        <div class="explanation">
+                            <div class="explanation-title">
+                                💡 Explication
+                            </div>
+                            <p>La gestion du contexte nécessite de faire référence aux échanges précédents ("En reprenant ton analyse précédente...") tout en gérant les limites de mémoire des modèles d'IA.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Complex Cases Section -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🔥 Partie 2: Défis pratiques (auto-évaluation)
+                    </h2>
+
+                    <div style="background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(249, 115, 22, 0.1)); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 1.5rem; margin: 2rem 0;">
+                        <div style="font-weight: 600; color: var(--warning-color); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            🎯 Instructions
+                        </div>
+                        <p>Pour chaque défi, <strong>travaillez sur votre outil IA préféré</strong> (ChatGPT, Claude, etc.). Utilisez les boutons d'aide si nécessaire puis comparez avec la solution proposée.</p>
+                    </div>
+
+                    <!-- Case Study 1 -->
+                    <div class="case-study">
+                        <div class="case-header">
+                            <div class="case-icon">🎯</div>
+                            <div>
+                                <div class="case-title">Défi #1: Prompt de brainstorming défaillant</div>
+                                <div class="case-difficulty">Niveau Avancé</div>
+                            </div>
+                        </div>
+
+                        <div class="section-content">
+                            <p><strong>Situation :</strong> Une startup veut des idées innovantes pour son nouveau produit mais le prompt suivant génère des réponses génériques et inutiles.</p>
+
+                            <div class="prompt-analysis">
+"Donne-moi des idées créatives pour mon produit. Il faut que ce soit innovant et différent de la concurrence. Sois original et propose des trucs que personne n'a pensé. Donne-moi plein d'idées variées pour que je puisse choisir les meilleures."
+                            </div>
+
+                            <p><strong>🎯 Votre mission :</strong> Réécrivez ce prompt pour obtenir des idées concrètes et exploitables. Testez sur votre outil IA et comparez les résultats !</p>
+
+                            <div class="case-actions">
+                                <button class="btn btn-warning" onclick="showHint('hint1')">💡 Indice</button>
+                                <button class="btn btn-success" onclick="showSolution('solution1')">✅ Voir la solution</button>
+                            </div>
+
+                            <div class="hint-section" id="hint1">
+                                <div class="hint-title">
+                                    💡 Indices progressifs
+                                </div>
+                                <p><strong>🔍 Problèmes à identifier :</strong></p>
+                                <ul>
+                                    <li>Quel type de produit ? Quel secteur ? Quelle cible ?</li>
+                                    <li>"Des idées créatives" → trop vague, quel type d'idées ?</li>
+                                    <li>Aucune contrainte → budget ? faisabilité ? timeline ?</li>
+                                    <li>"Que personne n'a pensé" → irréaliste et bloquant</li>
+                                </ul>
+                                <p><strong>💪 Améliorations à apporter :</strong></p>
+                                <ul>
+                                    <li>Préciser le contexte de la startup (secteur, produit, cible)</li>
+                                    <li>Définir le type d'idées recherchées (fonctionnalités, positionnement, marketing...)</li>
+                                    <li>Ajouter des contraintes réalistes</li>
+                                    <li>Structurer le format de sortie attendu</li>
+                                </ul>
+                            </div>
+
+                            <div class="solution-section" id="solution1">
+                                <div class="solution-title">
+                                    ✅ Solution optimisée
+                                </div>
+                                <div class="solution-prompt">
+[CONTEXTE] Tu es consultant en innovation pour une startup fintech B2B qui développe une solution de paiement pour PME en Europe.
+
+[TÂCHE] Génère 5 idées de fonctionnalités différenciantes pour se démarquer des solutions existantes (Stripe, PayPal Business, Square).
+
+[CONTRAINTES]
+- Budget développement : 6 mois max avec équipe de 3 devs
+- Cible : PME 10-100 employés en France/Allemagne
+- Doit être faisable avec API existantes
+- Focus sur l'expérience utilisateur et la simplicité
+
+[EXEMPLES] Évite les idées génériques comme "dashboard personnalisable" ou "support 24/7"
+
+[FORMAT] Pour chaque idée :
+- Nom de la fonctionnalité (1-2 mots)
+- Description (50 mots max)
+- Avantage concurrentiel spécifique
+- Difficulté de mise en œuvre (/5)
+- Impact business estimé (/5)
+                                </div>
+                                <p><strong>🎯 Résultat attendu :</strong> Idées précises, actionables, avec critères d'évaluation clairs pour prioriser le développement.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case Study 2 -->
+                    <div class="case-study">
+                        <div class="case-header">
+                            <div class="case-icon">🔍</div>
+                            <div>
+                                <div class="case-title">Défi #2: Prompt d'analyse contradictoire</div>
+                                <div class="case-difficulty">Niveau Expert</div>
+                            </div>
+                        </div>
+
+                        <div class="section-content">
+                            <p><strong>Situation :</strong> Un consultant veut analyser des données de vente mais son prompt contient des instructions contradictoires qui bloquent l'IA.</p>
+
+                            <div class="prompt-analysis">
+"Analyse ces données de vente en détail mais reste concis. Sois très précis dans tes chiffres mais donne une vue d'ensemble. Focus sur les tendances générales mais détaille chaque mois. Sois objectif mais donne ton opinion personnelle sur les causes. Présente un résumé exécutif complet en maximum 100 mots avec tous les détails importants."
+                            </div>
+
+                            <p><strong>🎯 Votre mission :</strong> Restructurez ce prompt pour éliminer toutes les contradictions et obtenir une analyse exploitable. Testez la différence !</p>
+
+                            <div class="case-actions">
+                                <button class="btn btn-warning" onclick="showHint('hint2')">💡 Indice</button>
+                                <button class="btn btn-success" onclick="showSolution('solution2')">✅ Voir la solution</button>
+                            </div>
+
+                            <div class="hint-section" id="hint2">
+                                <div class="hint-title">
+                                    💡 Indices pour débugger
+                                </div>
+                                <p><strong>🚨 Contradictions à éliminer :</strong></p>
+                                <ol>
+                                    <li><strong>"Détaillé mais concis"</strong> → Choisir un niveau de détail cohérent</li>
+                                    <li><strong>"Très précis mais vue d'ensemble"</strong> → Séparer les deux approches</li>
+                                    <li><strong>"Tendances générales mais détaille chaque mois"</strong> → Définir la granularité</li>
+                                    <li><strong>"Objectif mais opinion personnelle"</strong> → Clarifier le niveau d'analyse</li>
+                                    <li><strong>"Résumé complet en 100 mots avec tous les détails"</strong> → Mission impossible !</li>
+                                </ol>
+                                <p><strong>🔧 Stratégie de restructuration :</strong></p>
+                                <ul>
+                                    <li>Séparer en sections distinctes (synthèse + détail)</li>
+                                    <li>Définir des longueurs réalistes pour chaque partie</li>
+                                    <li>Préciser le type d'analyse souhaité</li>
+                                    <li>Structurer la sortie en niveaux hiérarchiques</li>
+                                </ul>
+                            </div>
+
+                            <div class="solution-section" id="solution2">
+                                <div class="solution-title">
+                                    ✅ Solution restructurée
+                                </div>
+                                <div class="solution-prompt">
+[CONTEXTE] Tu es analyste business avec 5 ans d'expérience en retail/e-commerce.
+
+[TÂCHE] Analyse ces données de vente Q4 pour identifier les 3 insights les plus actionables pour la direction.
+
+[CONTRAINTES]
+- Données : Ventes mensuelles par catégorie produit
+- Focus sur variations significatives (>15% vs période précédente)
+- Hypothèses explicites sur les causes probables
+- Ton factuel avec recommandations mesurables
+
+[FORMAT]
+1. RÉSUMÉ EXÉCUTIF (150 mots max)
+   - 3 insights clés numérotés
+   - Impact business de chacun
+
+2. ANALYSE DÉTAILLÉE (400 mots max)
+   - Breakdown par catégorie avec chiffres précis
+   - Hypothèses sur les causes (événements, saisonnalité, concurrence)
+   - Corrélations identifiées
+
+3. RECOMMANDATIONS (200 mots max)
+   - 3 actions prioritaires avec timeline
+   - Métriques de suivi proposées
+   - Budget/ressources estimés si applicable
+
+[EXEMPLES] Évite les généralités comme "les ventes ont augmenté". Préfère "Catégorie X: +23% vs Q4 N-1, probablement dû à..."
+                                </div>
+                                <p><strong>🎯 Résultat attendu :</strong> Analyse structurée, actionnable, avec niveaux de détail cohérents et recommandations concrètes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Score Display -->
+                <div class="score-display" style="display: none;" id="scoreDisplay">
+                    <div class="score-number" id="scoreNumber">0/8</div>
+                    <div class="score-text" id="scoreText">Score du quiz (Partie 1)</div>
+                    <div class="score-feedback" id="scoreFeedback">Cliquez sur "Voir mes résultats" pour afficher votre score final</div>
+                    <button class="btn btn-primary" onclick="retakeQuiz()" style="margin-top: 1rem;">Refaire le quiz</button>
+                </div>
+
+                <!-- Quiz Controls -->
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button class="btn btn-primary" onclick="showResults()" id="showResultsBtn">
+                        Voir mes résultats du quiz
+                    </button>
+                    <button class="btn btn-secondary" onclick="showAllExplanations()" style="margin-left: 1rem;">
+                        Voir toutes les explications
+                    </button>
+                </div>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="prompting_2_atelier_3.html" class="btn btn-secondary nav-btn">
+                        <span>←</span> Atelier pratique
+                    </a>
+                    <div style="text-align: center;">
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Séquence 4 / 4</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">Quiz et cas complexes</div>
+                    </div>
+                    <a href="outils_3_overview.html" class="btn btn-primary nav-btn">
+                        Module 3: Outils IA <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h4>🎉 Module terminé !</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--success-color); margin-top: 0.5rem; font-weight: 600;">
+                        <span>Séquence 4/4</span>
+                        <span>100%</span>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1)); border-radius: 8px; border-left: 3px solid var(--success-color);">
+                        <div style="font-weight: 600; color: var(--success-color); font-size: 0.9rem;">Félicitations !</div>
+                        <div style="color: var(--text-secondary); font-size: 0.8rem;">Vous avez terminé le module "Art du Prompting"</div>
+                    </div>
+                </div>
+
+                <!-- Score Summary -->
+                <div class="sidebar-card" id="scoreSummary" style="display: none;">
+                    <h4>📊 Résultat du quiz</h4>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-color); margin: 1rem 0;" id="sidebarScore">-/8</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);" id="sidebarFeedback">Score en attente</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Défis pratiques : auto-évaluation</div>
+                    </div>
+                </div>
+
+                <!-- Module Overview -->
+                <div class="sidebar-card">
+                    <h4>🗺️ Récapitulatif du module</h4>
+                    <div style="space-y: 0.75rem;">
+                        <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--success-color); font-size: 0.9rem;">✅ Séquence 1</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">Bases du prompting</div>
+                        </div>
+                        <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--success-color); font-size: 0.9rem;">✅ Séquence 2</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">Techniques avancées</div>
+                        </div>
+                        <div style="padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="font-weight: 600; color: var(--success-color); font-size: 0.9rem;">✅ Séquence 3</div>
+                            <div style="color: var(--text-secondary); font-size: 0.85rem;">Atelier pratique</div>
+                        </div>
+                        <div style="padding: 0.75rem; background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1)); border-radius: 8px; border: 1px solid var(--success-color);">
+                            <div style="font-weight: 600; color: var(--success-color); font-size: 0.9rem;">🎯 Séquence 4</div>
+                            <div style="color: var(--text-primary); font-size: 0.85rem;">Quiz et cas complexes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="sidebar-card">
+                    <h4>🚀 Prochaines étapes</h4>
+                    <div style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                        <p style="margin-bottom: 0.75rem;"><strong>Module 3 :</strong> Découvrez les outils IA populaires (ChatGPT, Claude, etc.)</p>
+                        <p style="margin-bottom: 0.75rem;"><strong>Pratique :</strong> Appliquez vos prompts dans des outils concrets</p>
+                        <p><strong>Challenge :</strong> Créez votre premier workflow automatisé</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        let selectedAnswers = {};
+
+        function selectOption(element, isCorrect) {
+            const questionCard = element.closest('.question-card');
+            const questionNumber = questionCard.querySelector('.question-number').textContent;
+            const allOptions = questionCard.querySelectorAll('.option');
+            
+            // Remove previous selections
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Select current option
+            element.classList.add('selected');
+            
+            // Store answer
+            selectedAnswers[questionNumber] = isCorrect;
+        }
+
+        function showResults() {
+            // Calculate score
+            let score = 0;
+            const totalQuestions = 8;
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (selectedAnswers[i] === true) {
+                    score++;
+                }
+            }
+            
+            // Update displays
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreNumber = document.getElementById('scoreNumber');
+            const scoreText = document.getElementById('scoreText');
+            const scoreFeedback = document.getElementById('scoreFeedback');
+            const sidebarScore = document.getElementById('sidebarScore');
+            const sidebarFeedback = document.getElementById('sidebarFeedback');
+            const scoreSummary = document.getElementById('scoreSummary');
+            
+            scoreNumber.textContent = `${score}/${totalQuestions}`;
+            sidebarScore.textContent = `${score}/${totalQuestions}`;
+            
+            // Determine feedback
+            let feedback = '';
+            let sidebarFeedbackText = '';
+            if (score >= 7) {
+                feedback = '🎉 Excellent ! Vous maîtrisez parfaitement les techniques de prompting. Module validé !';
+                sidebarFeedbackText = 'Module validé !';
+                scoreFeedback.style.color = 'var(--success-color)';
+            } else if (score >= 5) {
+                feedback = '👍 Bien joué ! Quelques points à revoir mais vous êtes sur la bonne voie. Révisez les explications.';
+                sidebarFeedbackText = 'À approfondir';
+                scoreFeedback.style.color = 'var(--warning-color)';
+            } else {
+                feedback = '📚 Il est recommandé de revoir les séquences précédentes. Les bases ne sont pas encore acquises.';
+                sidebarFeedbackText = 'À retravailler';
+                scoreFeedback.style.color = 'var(--error-color)';
+            }
+            
+            scoreFeedback.textContent = feedback;
+            sidebarFeedback.textContent = sidebarFeedbackText;
+            
+            // Show displays
+            scoreDisplay.style.display = 'block';
+            scoreSummary.style.display = 'block';
+            
+            // Hide show results button
+            document.getElementById('showResultsBtn').style.display = 'none';
+            
+            // Show all explanations
+            showAllExplanations();
+            
+            // Mark correct/incorrect answers visually
+            markAnswers();
+            
+            // Save progress
+            markModuleCompleted(2, score);
+        }
+
+        function markAnswers() {
+            const questionCards = document.querySelectorAll('.question-card');
+            questionCards.forEach((card, index) => {
+                const questionNumber = index + 1;
+                const selectedOption = card.querySelector('.option.selected');
+                const correctOption = card.querySelector('.option[onclick*="true"]');
+                
+                if (selectedOption) {
+                    if (selectedAnswers[questionNumber] === true) {
+                        selectedOption.classList.add('correct');
+                    } else {
+                        selectedOption.classList.add('incorrect');
+                        if (correctOption) {
+                            correctOption.classList.add('correct');
+                        }
+                    }
+                }
+            });
+        }
+
+        function showAllExplanations() {
+            const explanations = document.querySelectorAll('.explanation');
+            explanations.forEach(explanation => {
+                explanation.classList.add('show');
+            });
+        }
+
+        function retakeQuiz() {
+            // Reset all selections and scores
+            selectedAnswers = {};
+            
+            // Remove all visual indicators
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Hide results and explanations
+            document.getElementById('scoreDisplay').style.display = 'none';
+            document.getElementById('scoreSummary').style.display = 'none';
+            document.getElementById('showResultsBtn').style.display = 'inline-flex';
+            
+            const explanations = document.querySelectorAll('.explanation');
+            explanations.forEach(explanation => {
+                explanation.classList.remove('show');
+            });
+            
+            // Scroll to top of quiz
+            document.querySelector('.quiz-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show hint function
+        function showHint(hintId) {
+            const hintSection = document.getElementById(hintId);
+            hintSection.classList.add('show');
+        }
+
+        // Show solution function
+        function showSolution(solutionId) {
+            const solutionSection = document.getElementById(solutionId);
+            solutionSection.classList.add('show');
+        }
+
+        // Save progress function
+        function markModuleCompleted(moduleNumber, quizScore) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber].completed = true;
+            progress.modules[moduleNumber].completedAt = new Date().toISOString();
+            progress.modules[moduleNumber].quizScore = quizScore;
+            progress.modules[moduleNumber].validated = quizScore >= 7;
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[2]) progress.modules[2] = {};
+            progress.modules[2][4] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        });
+    </script>
+</body>
+</html>

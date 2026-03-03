@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque - Ressources IA | IA Academy</title>
+    <style>
+        :root {
+            /* Light theme colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            
+            /* Brand colors */
+            --primary-color: #6366f1;
+            --secondary-color: #06b6d4;
+            --accent-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Effects */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --pattern-opacity: 0.03;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --pattern-opacity: 0.05;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%),
+                linear-gradient(0deg, transparent 24%, rgba(99, 102, 241, var(--pattern-opacity)) 25%, rgba(99, 102, 241, var(--pattern-opacity)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, var(--pattern-opacity)) 75%, rgba(99, 102, 241, var(--pattern-opacity)) 76%, transparent 77%);
+            background-size: 60px 60px;
+            z-index: -1;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle {
+            width: 60px;
+            height: 30px;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-toggle-button {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(28px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2), transparent),
+                        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        /* Category Section */
+        .category-section {
+            margin-bottom: 4rem;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Resource Cards */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .resource-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .resource-card:hover::before {
+            opacity: 1;
+        }
+
+        .resource-type {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .type-guide {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .type-template {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .type-article {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .type-community {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .type-tool {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .resource-info h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .resource-author {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .resource-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .resource-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Template Cards */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .template-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .template-category {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .template-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .template-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Interactive boxes */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .interactive-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px dashed var(--border-color);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .coming-soon-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .coming-soon-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .resource-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <a href="index.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Bibliothèque</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">📚 Centre de Ressources</div>
+                <h1 class="hero-title">Bibliothèque IA</h1>
+                <p class="hero-subtitle">
+                    Guides, templates, articles et ressources pour approfondir vos connaissances en intelligence artificielle
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Ressources externes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">Templates & Checklists</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Guides complets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Ressources gratuites</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Guides Essentiels -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">📖 Guides Essentiels</h2>
+                    <p class="category-description">
+                        Les meilleures ressources pour maîtriser les concepts fondamentaux et les techniques avancées de l'IA.
+                    </p>
+                </div>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-type type-guide">Guide</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🚀</div>
+                            <div class="resource-info">
+                                <h3>Prompt Engineering Guide</h3>
+                                <span class="resource-author">OpenAI</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Le guide officiel d'OpenAI pour maîtriser l'art du prompt engineering. Techniques avancées, exemples pratiques et bonnes pratiques.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Prompting</span>
+                            <span class="tag">ChatGPT</span>
+                            <span class="tag">Officiel</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" class="btn btn-primary">
+                                Lire le guide 📖
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-guide">Guide</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🧠</div>
+                            <div class="resource-info">
+                                <h3>Anthropic's Constitutional AI</h3>
+                                <span class="resource-author">Anthropic</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Comprendre l'approche unique d'Anthropic pour créer des IA sûres et alignées. Concepts avancés sur l'éthique et la sécurité IA.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Claude</span>
+                            <span class="tag">Éthique</span>
+                            <span class="tag">Sécurité</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://www.anthropic.com/research" target="_blank" class="btn btn-primary">
+                                Explorer la recherche 🧠
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-guide">Guide</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🎨</div>
+                            <div class="resource-info">
+                                <h3>Midjourney Documentation</h3>
+                                <span class="resource-author">Midjourney Team</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Documentation complète de Midjourney : paramètres, styles, techniques avancées et exemples pour créer des images exceptionnelles.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Midjourney</span>
+                            <span class="tag">Images</span>
+                            <span class="tag">Créativité</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://docs.midjourney.com/" target="_blank" class="btn btn-primary">
+                                Consulter la doc 🎨
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-article">Article</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">⚡</div>
+                            <div class="resource-info">
+                                <h3>State of AI Report 2024</h3>
+                                <span class="resource-author">Nathan Benaich</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Rapport annuel de référence sur l'état de l'IA : tendances, investissements, percées techniques et prédictions pour l'avenir.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Tendances</span>
+                            <span class="tag">Recherche</span>
+                            <span class="tag">2024</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://www.stateof.ai/" target="_blank" class="btn btn-primary">
+                                Télécharger le rapport ⚡
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Templates & Checklists -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">📋 Templates & Checklists</h2>
+                    <p class="category-description">
+                        Outils pratiques prêts à l'emploi pour optimiser votre workflow et structurer vos projets IA.
+                    </p>
+                </div>
+
+                <div class="template-grid">
+                    <!-- Templates Prompting -->
+                    <div class="template-card">
+                        <div class="template-category">Prompting</div>
+                        <div class="template-name">Template Email Professionnel</div>
+                        <div class="template-description">
+                            Rédige un email [ton] pour [objectif] à [destinataire] en respectant [contraintes spécifiques] et en incluant [éléments obligatoires].
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Prompting</div>
+                        <div class="template-name">Structure Article Long</div>
+                        <div class="template-description">
+                            Crée un article de [X mots] sur [sujet] pour [audience] avec hook, plan détaillé, exemples concrets et conclusion actionnable.
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Prompting</div>
+                        <div class="template-name">Analyse Concurrentielle</div>
+                        <div class="template-description">
+                            Analyse [concurrent] dans [secteur] : forces, faiblesses, stratégies, opportunités et recommandations pour [entreprise].
+                        </div>
+                    </div>
+
+                    <!-- Templates Créatifs -->
+                    <div class="template-card">
+                        <div class="template-category">Créativité</div>
+                        <div class="template-name">Script Vidéo Viral</div>
+                        <div class="template-description">
+                            Script [durée] pour [plateforme] sur [sujet] : hook 3sec, storytelling, moments forts, CTA optimisé pour engagement maximum.
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Créativité</div>
+                        <div class="template-name">Prompt Midjourney Pro</div>
+                        <div class="template-description">
+                            [Sujet] dans le style [artistique], [composition], éclairage [type], couleurs [palette], --ar [ratio] --stylize [valeur].
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Créativité</div>
+                        <div class="template-name">Brief Créatif Complet</div>
+                        <div class="template-description">
+                            Définis un concept créatif pour [projet] : objectifs, contraintes, mood board, références, timeline et critères de validation.
+                        </div>
+                    </div>
+
+                    <!-- Templates Business -->
+                    <div class="template-card">
+                        <div class="template-category">Business</div>
+                        <div class="template-name">Plan Marketing IA</div>
+                        <div class="template-description">
+                            Stratégie marketing pour [produit/service] : personas, positionnement, mix marketing, budget et KPIs avec intégration IA.
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Business</div>
+                        <div class="template-name">Audit Processus</div>
+                        <div class="template-description">
+                            Analyse [processus métier] : cartographie, points de friction, opportunités d'automatisation IA et plan d'optimisation.
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Business</div>
+                        <div class="template-name">ROI Projet IA</div>
+                        <div class="template-description">
+                            Calcule le retour sur investissement de [projet IA] : coûts, bénéfices, timeline, risques et recommandations stratégiques.
+                        </div>
+                    </div>
+
+                    <!-- Templates Techniques -->
+                    <div class="template-card">
+                        <div class="template-category">Technique</div>
+                        <div class="template-name">Checklist Qualité Contenu</div>
+                        <div class="template-description">
+                            ✓ Cohérence style ✓ Grammaire ✓ Structure ✓ SEO ✓ Appels à l'action ✓ Adaptation audience ✓ Originalité ✓ Valeur ajoutée.
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Technique</div>
+                        <div class="template-name">Workflow Automatisation</div>
+                        <div class="template-description">
+                            1. Identification tâche 2. Mapping processus 3. Choix outils 4. Configuration 5. Tests 6. Déploiement 7. Monitoring.
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <div class="template-category">Technique</div>
+                        <div class="template-name">Debug Prompt Avancé</div>
+                        <div class="template-description">
+                            Analyse et optimise [prompt] : clarté consigne, contexte suffisant, exemples, contraintes, format sortie, tests A/B.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-box">
+                    <div class="interactive-title">💡 Comment utiliser ces templates</div>
+                    <p>Chaque template est conçu pour être personnalisé :</p>
+                    <ul style="margin: 1rem 0; padding-left: 2rem;">
+                        <li>Remplacez les <strong>[variables entre crochets]</strong> par vos informations</li>
+                        <li>Adaptez le <strong>niveau de détail</strong> selon vos besoins</li>
+                        <li>Testez et <strong>itérez</strong> pour optimiser les résultats</li>
+                        <li>Documentez vos <strong>versions qui fonctionnent</strong> le mieux</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Ressources d'Approfondissement -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">🎓 Ressources d'Approfondissement</h2>
+                    <p class="category-description">
+                        Cours, certifications et ressources académiques pour devenir expert en intelligence artificielle.
+                    </p>
+                </div>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-type type-guide">Cours</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🎓</div>
+                            <div class="resource-info">
+                                <h3>CS229: Machine Learning</h3>
+                                <span class="resource-author">Stanford University</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Cours magistral d'Andrew Ng sur le Machine Learning. Fondements théoriques et implémentations pratiques des algorithmes d'apprentissage.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Stanford</span>
+                            <span class="tag">ML</span>
+                            <span class="tag">Gratuit</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://cs229.stanford.edu/" target="_blank" class="btn btn-primary">
+                                Accéder au cours 🎓
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-guide">Cours</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🧪</div>
+                            <div class="resource-info">
+                                <h3>Deep Learning Specialization</h3>
+                                <span class="resource-author">Coursera - deeplearning.ai</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Spécialisation complète sur le Deep Learning : réseaux de neurones, CNN, RNN, et applications pratiques avec TensorFlow.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Deep Learning</span>
+                            <span class="tag">TensorFlow</span>
+                            <span class="tag">Certification</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://www.coursera.org/specializations/deep-learning" target="_blank" class="btn btn-primary">
+                                S'inscrire 🧪
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-article">Recherche</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">📄</div>
+                            <div class="resource-info">
+                                <h3>Papers With Code</h3>
+                                <span class="resource-author">Community</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Plateforme communautaire réunissant les dernières recherches en IA avec leurs implémentations open-source et benchmarks.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Recherche</span>
+                            <span class="tag">Open Source</span>
+                            <span class="tag">Code</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://paperswithcode.com/" target="_blank" class="btn btn-primary">
+                                Explorer 📄
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-tool">Outil</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🔬</div>
+                            <div class="resource-info">
+                                <h3>Hugging Face Hub</h3>
+                                <span class="resource-author">Hugging Face</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Plateforme collaborative pour découvrir, tester et déployer des modèles IA. Plus de 500k modèles open-source disponibles.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Modèles</span>
+                            <span class="tag">Transformers</span>
+                            <span class="tag">Communauté</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://huggingface.co/" target="_blank" class="btn btn-primary">
+                                Découvrir les modèles 🔬
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Veille et Communautés -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">📡 Veille & Communautés</h2>
+                    <p class="category-description">
+                        Restez à jour avec les dernières avancées IA et connectez-vous avec la communauté mondiale.
+                    </p>
+                </div>
+
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-type type-community">Newsletter</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">📰</div>
+                            <div class="resource-info">
+                                <h3>The Batch</h3>
+                                <span class="resource-author">Andrew Ng</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Newsletter hebdomadaire d'Andrew Ng sur les dernières avancées en IA, avec analyses d'experts et implications business.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Hebdomadaire</span>
+                            <span class="tag">Actualités</span>
+                            <span class="tag">Business</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://www.deeplearning.ai/the-batch/" target="_blank" class="btn btn-primary">
+                                S'abonner 📰
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-community">Reddit</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">🤖</div>
+                            <div class="resource-info">
+                                <h3>r/MachineLearning</h3>
+                                <span class="resource-author">Reddit Community</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Communauté Reddit la plus active sur le ML/IA : discussions techniques, nouveautés, partage de projets et Q&A d'experts.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Communauté</span>
+                            <span class="tag">Discussions</span>
+                            <span class="tag">Technique</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://www.reddit.com/r/MachineLearning/" target="_blank" class="btn btn-primary">
+                                Rejoindre 🤖
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-community">Discord</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">💬</div>
+                            <div class="resource-info">
+                                <h3>Midjourney Server</h3>
+                                <span class="resource-author">Midjourney Community</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Serveur Discord officiel de Midjourney : créations en temps réel, techniques avancées, inspiration et support communautaire.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">Discord</span>
+                            <span class="tag">Art IA</span>
+                            <span class="tag">Inspiration</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://discord.gg/midjourney" target="_blank" class="btn btn-primary">
+                                Rejoindre Discord 💬
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-type type-community">YouTube</div>
+                        <div class="resource-header">
+                            <div class="resource-icon">📺</div>
+                            <div class="resource-info">
+                                <h3>Two Minute Papers</h3>
+                                <span class="resource-author">Károly Zsolnai-Fehér</span>
+                            </div>
+                        </div>
+                        <p class="resource-description">
+                            Chaîne YouTube référence qui décrypte les publications scientifiques IA en vidéos courtes et accessibles.
+                        </p>
+                        <div class="resource-tags">
+                            <span class="tag">YouTube</span>
+                            <span class="tag">Recherche</span>
+                            <span class="tag">Vulgarisation</span>
+                        </div>
+                        <div class="resource-actions">
+                            <a href="https://www.youtube.com/@TwoMinutePapers" target="_blank" class="btn btn-primary">
+                                S'abonner 📺
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documents Téléchargeables (Coming Soon) -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-title">📥 Documents Téléchargeables</h2>
+                    <p class="category-description">
+                        Guides PDF, checklists, templates et ressources exclusives à télécharger et conserver.
+                    </p>
+                </div>
+
+                <div class="coming-soon">
+                    <div class="coming-soon-icon">🚧</div>
+                    <div class="coming-soon-title">Bientôt Disponible</div>
+                    <div class="coming-soon-description">
+                        Nous préparons une collection exclusive de guides PDF, checklists interactives et templates avancés 
+                        que vous pourrez télécharger et utiliser hors ligne. Restez connectés !
+                    </div>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <div class="btn btn-outline">📄 Guides PDF Expert</div>
+                        <div class="btn btn-outline">✅ Checklists Interactives</div>
+                        <div class="btn btn-outline">🎯 Templates Premium</div>
+                        <div class="btn btn-outline">📊 Worksheets Pratiques</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="interactive-box">
+                <div class="interactive-title">🎯 Contribuer à la bibliothèque</div>
+                <p>Vous avez découvert une ressource exceptionnelle ? Vous avez créé un template qui fonctionne parfaitement ? 
+                Partagez-le avec la communauté !</p>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                    <a href="ressources_forum.html" class="btn btn-primary">
+                        💬 Partager sur Discord
+                    </a>
+                    <a href="mailto:ressources@ia-academy.com" class="btn btn-secondary">
+                        📧 Suggérer une ressource
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>📚 Bibliothèque</h4>
+                    <ul>
+                        <li><a href="#guides">Guides Essentiels</a></li>
+                        <li><a href="#templates">Templates & Checklists</a></li>
+                        <li><a href="#approfondissement">Approfondissement</a></li>
+                        <li><a href="#veille">Veille & Communautés</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🛠️ Ressources</h4>
+                    <ul>
+                        <li><a href="ressources_outils.html">Outils IA</a></li>
+                        <li><a href="ressources_forum.html">Communauté</a></li>
+                        <li><a href="projet_brief.html">Projets</a></li>
+                        <li><a href="index.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>📖 Formation</h4>
+                    <ul>
+                        <li><a href="fondamentaux_1_overview.html">Fondamentaux</a></li>
+                        <li><a href="prompting_2_overview.html">Prompting</a></li>
+                        <li><a href="generative_4_overview.html">IA Générative</a></li>
+                        <li><a href="automatisation_5_overview.html">Automatisation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>💡 Support</h4>
+                    <ul>
+                        <li><a href="ressources_forum.html">Discord</a></li>
+                        <li><a href="mailto:support@ia-academy.com">Email</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Tutoriels</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            } catch (error) {
+                console.log('Theme toggle not available');
+            }
+        }
+
+        // Load saved theme
+        try {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (error) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        // Smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

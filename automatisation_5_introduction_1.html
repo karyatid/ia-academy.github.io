@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séquence 1: Introduction et stratégie d'automatisation | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            left: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            content: '🌙';
+            left: auto;
+            right: 4px;
+        }
+
+        [data-theme="dark"] .theme-toggle::after {
+            left: 27px;
+            background: var(--secondary-color);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(-2px);
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Definition Box for Key Concepts */
+        .definition-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tips and Notes */
+        .tip-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--error-color);
+            color: var(--error-color);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Circle */
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) 72deg, var(--bg-tertiary) 72deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            position: absolute;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Module Navigation */
+        .module-nav {
+            list-style: none;
+        }
+
+        .module-nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .module-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .module-nav-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .module-nav-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .module-nav-link.completed {
+            color: var(--success-color);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .nav-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        /* Lesson Navigation at bottom */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <a href="index.html" class="back-btn">
+                        ← Dashboard
+                    </a>
+                    <div class="theme-toggle" onclick="toggleTheme()"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>⚙️</span>
+                        <span>Module 5</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>🎯</span>
+                        <span>Séquence 1</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>60 minutes</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Introduction et stratégie d'automatisation</h1>
+                <p class="lesson-description">
+                    Découvrez les fondamentaux de l'automatisation no-code avec l'IA. Apprenez à identifier les opportunités d'automatisation, comprendre le ROI et choisir les bons outils pour optimiser votre productivité.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <main class="main-content">
+                
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">🚀 Bienvenue dans l'automatisation intelligente</h2>
+                    <div class="section-content">
+                        <p>L'automatisation no-code représente l'une des révolutions les plus importantes de notre époque numérique. En combinant l'intelligence artificielle avec des plateformes accessibles, vous pouvez éliminer les tâches répétitives et libérer du temps pour des activités à plus forte valeur ajoutée.</p>
+                        
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>📖</span>
+                                <span>Qu'est-ce que l'automatisation no-code ?</span>
+                            </div>
+                            <p>L'automatisation no-code permet de créer des workflows intelligents sans écrire une seule ligne de code. En connectant vos applications favorites avec l'IA, vous créez des systèmes qui travaillent pour vous 24h/24.</p>
+                        </div>
+                        
+                        <p><strong>À la fin de cette séquence, vous saurez :</strong></p>
+                        <ul>
+                            <li>Distinguer automatisation simple et automatisation intelligente avec IA</li>
+                            <li>Identifier et prioriser les tâches automatisables dans votre quotidien</li>
+                            <li>Calculer le ROI de vos automatisations pour justifier l'investissement</li>
+                            <li>Choisir la plateforme adaptée à vos besoins spécifiques</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Concepts fondamentaux -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Concepts fondamentaux</h2>
+                    <div class="section-content">
+                        
+                        <h3>Automatisation simple vs intelligente</h3>
+                        <p>Il existe une différence fondamentale entre l'automatisation traditionnelle et l'automatisation intelligente :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>⚡</span>
+                                <span>Automatisation simple</span>
+                            </div>
+                            <p><strong>Principe :</strong> "Si ceci, alors cela" - des règles fixes et prédéfinies.</p>
+                            <p><strong>Exemple :</strong> Quand je reçois un email de mon équipe → L'envoyer dans le dossier "Équipe"</p>
+                            <p><strong>Limites :</strong> Ne peut pas s'adapter à des situations inattendues ou prendre des décisions complexes.</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🧠</span>
+                                <span>Automatisation intelligente (avec IA)</span>
+                            </div>
+                            <p><strong>Principe :</strong> L'IA analyse, comprend et prend des décisions contextuelles.</p>
+                            <p><strong>Exemple :</strong> Quand je reçois un email → L'IA analyse le contenu, détermine la priorité, génère une réponse appropriée et me propose des actions.</p>
+                            <p><strong>Avantages :</strong> S'adapte aux situations, apprend des données et peut gérer la complexité.</p>
+                        </div>
+
+                        <h3>ROI et métriques de succès</h3>
+                        <p>Pour justifier l'investissement dans l'automatisation, il est crucial de mesurer son impact :</p>
+                        
+                        <h4>Métriques de temps</h4>
+                        <ul>
+                            <li><strong>Temps économisé par semaine :</strong> Combien d'heures libérées ?</li>
+                            <li><strong>Temps de traitement :</strong> Réduction du délai entre déclencheur et action</li>
+                            <li><strong>Temps de qualité :</strong> Heures récupérées pour des tâches créatives</li>
+                        </ul>
+
+                        <h4>Métriques de qualité</h4>
+                        <ul>
+                            <li><strong>Réduction d'erreurs :</strong> Moins d'oublis et de fautes de frappe</li>
+                            <li><strong>Cohérence :</strong> Standardisation des processus</li>
+                            <li><strong>Disponibilité :</strong> Fonctionnement 24h/24, 7j/7</li>
+                        </ul>
+
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>💡</span>
+                                <span>Calcul simple du ROI</span>
+                            </div>
+                            <p><strong>Formule :</strong> (Temps économisé par mois × Votre taux horaire) - Coût mensuel de l'automatisation</p>
+                            <p><strong>Exemple :</strong> Économie de 10h/mois × 50€/h = 500€ - 30€ d'abonnement = <strong>470€ de gain net par mois</strong></p>
+                        </div>
+
+                        <h3>Quick wins vs projets complexes</h3>
+                        <p>Pour débuter efficacement, il faut distinguer les gains rapides des projets ambitieux :</p>
+
+                        <h4>🎯 Quick wins (à faire en premier)</h4>
+                        <ul>
+                            <li>Automatisation de notifications et alertes</li>
+                            <li>Synchronisation de données entre outils</li>
+                            <li>Archivage automatique de documents</li>
+                            <li>Génération de rapports simples</li>
+                        </ul>
+
+                        <h4>🚀 Projets complexes (à planifier)</h4>
+                        <ul>
+                            <li>Workflows multi-étapes avec logique conditionnelle</li>
+                            <li>Intégration de systèmes métier critiques</li>
+                            <li>Automatisation de processus clients complets</li>
+                            <li>Analyses prédictives avec IA avancée</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Audit de vos processus -->
+                <section class="section">
+                    <h2 class="section-title">🔍 Audit de vos processus</h2>
+                    <div class="section-content">
+                        
+                        <h3>Méthode de mapping des tâches répétitives</h3>
+                        <p>Pour identifier les opportunités d'automatisation, suivez cette méthode structurée :</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📋</span>
+                                <span>Étape 1 : Inventaire des tâches</span>
+                            </div>
+                            <p>Pendant une semaine, notez toutes les tâches que vous effectuez plus d'une fois. Pour chaque tâche, précisez :</p>
+                            <ul>
+                                <li><strong>Fréquence :</strong> Combien de fois par jour/semaine ?</li>
+                                <li><strong>Durée :</strong> Temps nécessaire à chaque exécution</li>
+                                <li><strong>Complexité :</strong> Simple, moyen, complexe</li>
+                                <li><strong>Outils impliqués :</strong> Applications et systèmes utilisés</li>
+                            </ul>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>⚖️</span>
+                                <span>Étape 2 : Grille de priorisation Impact vs Effort</span>
+                            </div>
+                            <p>Classez chaque tâche selon deux critères :</p>
+                            <ul>
+                                <li><strong>Impact :</strong> Temps économisé × Fréquence (faible/moyen/élevé)</li>
+                                <li><strong>Effort :</strong> Complexité technique de l'automatisation (faible/moyen/élevé)</li>
+                            </ul>
+                            <p><strong>Priorité 1 :</strong> Impact élevé + Effort faible = À automatiser en premier</p>
+                            <p><strong>Priorité 2 :</strong> Impact élevé + Effort moyen = Projets à moyen terme</p>
+                        </div>
+
+                        <h3>Calcul du temps investi vs temps économisé</h3>
+                        
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>🧮</span>
+                                <span>Exemple concret de calcul</span>
+                            </div>
+                            <p><strong>Tâche :</strong> Envoyer un rapport hebdomadaire par email</p>
+                            <ul>
+                                <li><strong>Temps actuel :</strong> 30 min/semaine × 52 semaines = 26h/an</li>
+                                <li><strong>Temps d'automatisation :</strong> 4h de configuration</li>
+                                <li><strong>Temps maintenance :</strong> 30 min/trimestre = 2h/an</li>
+                                <li><strong>Gain net :</strong> 26h - 4h - 2h = <strong>20h économisées la première année</strong></li>
+                            </ul>
+                        </div>
+
+                        <h3>Risques et limites de l'automatisation</h3>
+                        <p>Bien que puissante, l'automatisation présente des défis qu'il faut anticiper :</p>
+
+                        <h4>⚠️ Risques techniques</h4>
+                        <ul>
+                            <li><strong>Dépendance aux APIs :</strong> Changements dans les services tiers</li>
+                            <li><strong>Pannes en cascade :</strong> Un élément défaillant peut bloquer tout le workflow</li>
+                            <li><strong>Limitations des plateformes :</strong> Quotas et restrictions</li>
+                        </ul>
+
+                        <h4>⚠️ Risques humains</h4>
+                        <ul>
+                            <li><strong>Sur-automatisation :</strong> Perdre le contrôle des processus</li>
+                            <li><strong>Perte de compétences :</strong> Déléguer sans comprendre</li>
+                            <li><strong>Résistance au changement :</strong> Équipes réticentes</li>
+                        </ul>
+
+                        <div class="definition-box">
+                            <div class="definition-title">
+                                <span>🛡️</span>
+                                <span>Bonnes pratiques pour minimiser les risques</span>
+                            </div>
+                            <ul>
+                                <li>Commencer par des automatisations simples et non-critiques</li>
+                                <li>Prévoir des systèmes de fallback et de monitoring</li>
+                                <li>Documenter tous les workflows pour faciliter la maintenance</li>
+                                <li>Former les équipes aux nouveaux processus</li>
+                                <li>Garder un œil humain sur les résultats critiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Panorama des outils -->
+                <section class="section">
+                    <h2 class="section-title">🛠️ Panorama des outils</h2>
+                    <div class="section-content">
+                        <p>Le choix de la plateforme d'automatisation dépend de vos besoins, votre budget et votre niveau technique. Voici un comparatif des principales solutions :</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>⚡</span>
+                                <span>Zapier : Simplicité et intégrations nombreuses</span>
+                            </div>
+                            <p><strong>Points forts :</strong></p>
+                            <ul>
+                                <li>Interface ultra-intuitive, parfaite pour débuter</li>
+                                <li>Plus de 6000 applications connectées</li>
+                                <li>Templates prêts à l'emploi pour cas d'usage courants</li>
+                                <li>Intégration native avec OpenAI et Claude</li>
+                            </ul>
+                            <p><strong>Limites :</strong></p>
+                            <ul>
+                                <li>Prix élevé pour gros volumes</li>
+                                <li>Logique conditionnelle limitée</li>
+                                <li>Pas de loops ou d'itérations complexes</li>
+                            </ul>
+                            <p><strong>Idéal pour :</strong> Débutants, PME, workflows simples à moyens</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🔧</span>
+                                <span>Make (ex-Integromat) : Workflows complexes</span>
+                            </div>
+                            <p><strong>Points forts :</strong></p>
+                            <ul>
+                                <li>Interface visuelle avec flowcharts</li>
+                                <li>Logique avancée : conditions, loops, filtres</li>
+                                <li>Gestion fine des erreurs et retry logic</li>
+                                <li>Excellent rapport qualité/prix</li>
+                            </ul>
+                            <p><strong>Limites :</strong></p>
+                            <ul>
+                                <li>Courbe d'apprentissage plus élevée</li>
+                                <li>Moins d'intégrations natives que Zapier</li>
+                                <li>Interface parfois moins intuitive</li>
+                            </ul>
+                            <p><strong>Idéal pour :</strong> Utilisateurs intermédiaires, workflows complexes, budgets serrés</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🔓</span>
+                                <span>n8n : Solution open-source</span>
+                            </div>
+                            <p><strong>Points forts :</strong></p>
+                            <ul>
+                                <li>Gratuit et open-source</li>
+                                <li>Hébergement possible sur ses propres serveurs</li>
+                                <li>Customisation complète du code</li>
+                                <li>Communauté active de développeurs</li>
+                            </ul>
+                            <p><strong>Limites :</strong></p>
+                            <ul>
+                                <li>Nécessite des compétences techniques</li>
+                                <li>Maintenance et hébergement à gérer</li>
+                                <li>Support communautaire uniquement</li>
+                            </ul>
+                            <p><strong>Idéal pour :</strong> Développeurs, entreprises avec équipe technique, contrôle total requis</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>🏢</span>
+                                <span>Microsoft Power Automate : Écosystème Microsoft</span>
+                            </div>
+                            <p><strong>Points forts :</strong></p>
+                            <ul>
+                                <li>Intégration native avec Office 365</li>
+                                <li>Templates spécifiques aux environnements pro</li>
+                                <li>Sécurité et compliance entreprise</li>
+                                <li>Inclus dans certains abonnements Microsoft</li>
+                            </ul>
+                            <p><strong>Limites :</strong></p>
+                            <ul>
+                                <li>Principalement orienté écosystème Microsoft</li>
+                                <li>Interface parfois complexe</li>
+                                <li>Intégrations tiers limitées</li>
+                            </ul>
+                            <p><strong>Idéal pour :</strong> Entreprises Microsoft, besoins de compliance, intégration Office 365</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📱</span>
+                                <span>IFTTT : Automatisations personnelles simples</span>
+                            </div>
+                            <p><strong>Points forts :</strong></p>
+                            <ul>
+                                <li>Gratuit pour usage personnel</li>
+                                <li>Parfait pour IoT et domotique</li>
+                                <li>Interface très simple</li>
+                                <li>Forte communauté d'applets partagées</li>
+                            </ul>
+                            <p><strong>Limites :</strong></p>
+                            <ul>
+                                <li>Logique très basique (if-then uniquement)</li>
+                                <li>Pas d'intégration IA native</li>
+                                <li>Version pro limitée</li>
+                            </ul>
+                            <p><strong>Idéal pour :</strong> Automatisations personnelles, IoT, workflows très simples</p>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-title">
+                                <span>🎯</span>
+                                <span>Comment choisir votre plateforme ?</span>
+                            </div>
+                            <p><strong>Débutant avec workflows simples :</strong> Zapier</p>
+                            <p><strong>Utilisateur intermédiaire avec besoins complexes :</strong> Make.com</p>
+                            <p><strong>Entreprise Microsoft :</strong> Power Automate</p>
+                            <p><strong>Équipe technique avec budget serré :</strong> n8n</p>
+                            <p><strong>Automatisations personnelles basiques :</strong> IFTTT</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz interactif -->
+                <section class="section">
+                    <div class="quiz-container">
+                        <h2 class="quiz-title">
+                            <span>🧠</span>
+                            Quiz : Testez vos connaissances
+                        </h2>
+                        
+                        <div class="quiz-question">
+                            Quelle est la principale différence entre automatisation simple et automatisation intelligente ?
+                        </div>
+                        
+                        <ul class="quiz-options">
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                L'automatisation simple est plus rapide à mettre en place
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, true)">
+                                L'automatisation intelligente peut analyser et prendre des décisions contextuelles grâce à l'IA
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                L'automatisation simple coûte moins cher
+                            </li>
+                            <li class="quiz-option" onclick="selectOption(this, false)">
+                                Il n'y a pas de différence significative
+                            </li>
+                        </ul>
+                        
+                        <div class="quiz-feedback">
+                            <p></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <div class="breadcrumb">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                        <span>></span>
+                        <a href="automatisation_5_overview.html" class="breadcrumb-link">Module 5: Automatisation</a>
+                        <span>></span>
+                        <span class="breadcrumb-current">Introduction et stratégie</span>
+                    </div>
+                    <a href="automatisation_5_zapier_2.html" class="btn btn-primary">
+                        Séquence 2: Zapier et workflows IA <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Progression</h3>
+                    <div class="progress-circle">
+                        <span class="progress-text">2/5</span>
+                    </div>
+                    <div style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                        Séquence 1 sur 4 (+ overview)
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Navigation du module</h3>
+                    <ul class="module-nav">
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_overview.html" class="module-nav-link completed">
+                                <div class="nav-icon completed">✓</div>
+                                <span>Vue d'ensemble</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_introduction_1.html" class="module-nav-link active">
+                                <div class="nav-icon current">1</div>
+                                <span>Introduction et stratégie</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_zapier_2.html" class="module-nav-link">
+                                <div class="nav-icon locked">2</div>
+                                <span>Zapier et workflows IA</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_make_3.html" class="module-nav-link">
+                                <div class="nav-icon locked">3</div>
+                                <span>Make.com avancé</span>
+                            </a>
+                        </li>
+                        <li class="module-nav-item">
+                            <a href="automatisation_5_projet_4.html" class="module-nav-link">
+                                <div class="nav-icon locked">4</div>
+                                <span>Projet personnalisé</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">💡 Points clés</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>🎯 Quick wins :</strong> Commencez par des automatisations simples à fort impact
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>📊 ROI :</strong> Mesurez toujours le temps économisé vs temps investi
+                        </li>
+                        <li style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px;">
+                            <strong>🛡️ Sécurité :</strong> Prévoir des systèmes de fallback et monitoring
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🚀 Prochaines étapes</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Dans la séquence suivante, vous allez apprendre à créer vos premiers workflows avec Zapier et l'IA.
+                    </p>
+                    <a href="automatisation_5_zapier_2.html" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        Continuer
+                    </a>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Quiz functionality
+        function selectOption(element, isCorrect) {
+            // Remove previous selections
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            element.classList.add('selected');
+            
+            // Show correct/incorrect state
+            if (isCorrect) {
+                element.classList.add('correct');
+                showFeedback('Correct ! L\'automatisation intelligente utilise l\'IA pour analyser les données et prendre des décisions contextuelles, contrairement à l\'automatisation simple qui suit des règles fixes.', true);
+            } else {
+                element.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(option => {
+                    if (option.onclick.toString().includes('true')) {
+                        option.classList.add('correct');
+                    }
+                });
+                showFeedback('Pas tout à fait. L\'automatisation intelligente se distingue par sa capacité à utiliser l\'IA pour analyser les données et prendre des décisions adaptées au contexte, tandis que l\'automatisation simple suit des règles prédéfinies.', false);
+            }
+        }
+
+        function showFeedback(message, isCorrect) {
+            const feedback = document.querySelector('.quiz-feedback');
+            const feedbackText = feedback.querySelector('p');
+            
+            feedbackText.textContent = message;
+            feedback.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(5, 1);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

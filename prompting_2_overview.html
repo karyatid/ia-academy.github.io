@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Art du Prompting - Vue d'ensemble | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced Background pattern for marketing feel */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(6, 182, 212, var(--pattern-opacity)) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Enhanced Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 25px;
+            background: var(--bg-tertiary);
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] .theme-toggle-button {
+            left: 2px;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            left: calc(100% - 23px);
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Enhanced Breadcrumbs */
+        .breadcrumbs {
+            background: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:not(:last-child)::after {
+            content: '⟩';
+            margin: 0 1rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+        }
+
+        .breadcrumb-link:hover {
+            background: var(--glass-bg);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            transform: scale(1.05);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* SPECTACULAR Module Header */
+        .module-header {
+            background: linear-gradient(135deg, 
+                var(--primary-color) 0%, 
+                var(--secondary-color) 40%, 
+                var(--accent-color) 80%, 
+                var(--primary-color) 100%);
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .module-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 45deg,
+                rgba(255, 255, 255, 0.05) 90deg,
+                transparent 135deg,
+                rgba(255, 255, 255, 0.1) 180deg,
+                transparent);
+            animation: rotate 25s linear infinite;
+            z-index: 0;
+        }
+
+        .module-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                         radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.2) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .module-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .module-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .module-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            padding: 0.75rem 2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .module-badge:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, white, rgba(255, 255, 255, 0.8), white);
+            -webkit-background-clip: text;
+            animation: titlePulse 4s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .module-description {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.7;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 400;
+        }
+
+        /* Enhanced Main Content */
+        .main-content {
+            padding: 0 0 4rem 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Enhanced Sections */
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section:hover::before {
+            opacity: 0.3;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 1.8rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+        }
+
+        /* Enhanced Sidebar */
+        .sidebar {
+            padding: 0;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sequence-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sequence-item:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .sequence-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .sequence-number {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+        }
+
+        .sequence-item:hover .sequence-number {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .sequence-item:hover .sequence-duration {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, 
+                var(--primary-color) 0%, 
+                var(--secondary-color) 40%, 
+                var(--accent-color) 80%, 
+                var(--primary-color) 100%);
+            color: white;
+            border-radius: 30px;
+            padding: 4rem;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.15), 
+                transparent 90deg,
+                rgba(255, 255, 255, 0.08) 180deg,
+                transparent 270deg,
+                rgba(255, 255, 255, 0.15));
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-description {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Enhanced Navigation */
+        .module-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-cta {
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.25), 
+                rgba(255, 255, 255, 0.35));
+            color: white;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            font-size: 1.3rem;
+            padding: 1.5rem 3rem;
+            border-radius: 20px;
+            font-weight: 800;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-cta:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Learning Objectives */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .objective-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .objective-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .objective-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .objective-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .objective-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Prompt Examples */
+        .prompt-example {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            position: relative;
+        }
+
+        .prompt-example::before {
+            content: '💬';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--card-bg);
+            padding: 0 8px;
+            font-size: 1.2rem;
+        }
+
+        .prompt-label {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prompt-text {
+            color: var(--text-primary);
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .module-title {
+                font-size: 2.5rem;
+            }
+
+            .module-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .module-navigation {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+
+            .btn-cta {
+                font-size: 1.1rem;
+                padding: 1.25rem 2.5rem;
+            }
+
+            .objectives-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Module 2: Art du Prompting</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- SPECTACULAR Module Header -->
+    <section class="module-header">
+        <div class="container">
+            <div class="module-header-content">
+                <div class="module-meta">
+                    <div class="module-badge">
+                        <span>💬</span>
+                        <span>Module 2</span>
+                    </div>
+                    <div class="module-badge">
+                        <span>⏱️</span>
+                        <span>6 heures</span>
+                    </div>
+                    <div class="module-badge">
+                        <span>🎯</span>
+                        <span>Intermédiaire</span>
+                    </div>
+                </div>
+                <h1 class="module-title">Art du Prompting</h1>
+                <p class="module-description">
+                    Maîtrisez l'art de communiquer efficacement avec les IA génératives. Apprenez à structurer des prompts puissants, découvrez les techniques avancées et créez votre bibliothèque personnelle de prompts optimisés.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content-grid">
+            <main class="main-content">
+                <!-- Objectifs d'apprentissage -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🎯 Objectifs d'apprentissage
+                    </h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1.1rem;">
+                        À la fin de ce module, vous serez capable de :
+                    </p>
+                    <div class="objectives-grid">
+                        <div class="objective-card">
+                            <span class="objective-icon">🧩</span>
+                            <h3 class="objective-title">Maîtriser les fondamentaux</h3>
+                            <p class="objective-description">
+                                Comprendre les principes du prompt engineering et structurer des prompts efficaces avec contexte, tâche et contraintes.
+                            </p>
+                        </div>
+                        <div class="objective-card">
+                            <span class="objective-icon">⚡</span>
+                            <h3 class="objective-title">Techniques avancées</h3>
+                            <p class="objective-description">
+                                Utiliser Chain of Thought, Few-shot prompting et optimiser vos interactions avec l'IA.
+                            </p>
+                        </div>
+                        <div class="objective-card">
+                            <span class="objective-icon">🛠️</span>
+                            <h3 class="objective-title">Créer sa bibliothèque</h3>
+                            <p class="objective-description">
+                                Construire une collection personnalisée de templates de prompts pour vos usages récurrents.
+                            </p>
+                        </div>
+                        <div class="objective-card">
+                            <span class="objective-icon">🎨</span>
+                            <h3 class="objective-title">Éviter les erreurs</h3>
+                            <p class="objective-description">
+                                Identifier et corriger les prompts défaillants, optimiser la qualité des réponses obtenues.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Anatomie d'un bon prompt -->
+                <section class="section">
+                    <h2 class="section-title">
+                        💬 Anatomie d'un prompt efficace
+                    </h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1.1rem;">
+                        Découvrez la structure qui fait la différence entre un prompt moyen et un prompt puissant :
+                    </p>
+
+                    <div class="prompt-example">
+                        <div class="prompt-label">[CONTEXTE]</div>
+                        <div class="prompt-text">Tu es un expert en marketing digital avec 10 ans d'expérience.</div>
+                    </div>
+
+                    <div class="prompt-example">
+                        <div class="prompt-label">[TÂCHE]</div>
+                        <div class="prompt-text">Rédige un email de relance pour un client qui n'a pas répondu depuis 2 semaines.</div>
+                    </div>
+
+                    <div class="prompt-example">
+                        <div class="prompt-label">[CONTRAINTES]</div>
+                        <div class="prompt-text">
+                            - Ton amical mais professionnel<br>
+                            - Maximum 150 mots<br>
+                            - Inclure un call-to-action clair
+                        </div>
+                    </div>
+
+                    <div class="prompt-example">
+                        <div class="prompt-label">[EXEMPLE]</div>
+                        <div class="prompt-text">Évite les formules comme "j'espère que vous allez bien"</div>
+                    </div>
+
+                    <div class="prompt-example">
+                        <div class="prompt-label">[FORMAT]</div>
+                        <div class="prompt-text">Structure : Objet / Corps de l'email / Signature</div>
+                    </div>
+                </section>
+
+                <!-- Contenu du module -->
+                <section class="section">
+                    <h2 class="section-title">
+                        📖 Contenu du module
+                    </h2>
+                    <div style="display: grid; gap: 2rem;">
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color);">
+                            <h3 style="color: var(--primary-color); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: var(--primary-color); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">1</span>
+                                Bases du prompting (90 min)
+                            </h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                Principes fondamentaux et structure d'un prompt efficace.
+                            </p>
+                            <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                                <li>Qu'est-ce qu'un prompt et comment ça marche ?</li>
+                                <li>Structure CTCEF : Contexte, Tâche, Contraintes, Exemples, Format</li>
+                                <li>Premiers tests et comparaisons</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color);">
+                            <h3 style="color: var(--primary-color); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: var(--primary-color); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">2</span>
+                                Techniques avancées (120 min)
+                            </h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                Chain of Thought, Few-shot prompting et optimisation systématique.
+                            </p>
+                            <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                                <li>Chain of Thought : raisonnement étape par étape</li>
+                                <li>Few-shot prompting avec exemples</li>
+                                <li>Gestion du contexte et de la conversation</li>
+                                <li>Prompt debugging et A/B testing</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color);">
+                            <h3 style="color: var(--primary-color); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: var(--primary-color); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">3</span>
+                                Atelier pratique (120 min)
+                            </h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                Création de prompts optimisés et construction de votre bibliothèque personnelle.
+                            </p>
+                            <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                                <li>5 cas d'usage concrets : email, résumé, brainstorming...</li>
+                                <li>Challenge d'optimisation en temps réel</li>
+                                <li>Templates pour productivité, communication, créativité</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color);">
+                            <h3 style="color: var(--primary-color); font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: var(--primary-color); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">4</span>
+                                Quiz et cas complexes (25 min)
+                            </h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                Validation des acquis et résolution de défis prompting avancés.
+                            </p>
+                            <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                                <li>Quiz interactif sur les techniques</li>
+                                <li>Correction de prompts défaillants</li>
+                                <li>Prompts multi-étapes et logique conditionnelle</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Use Cases -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🎯 Use Cases que vous maîtriserez
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <div style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1rem;">✍️</div>
+                            <h3 style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.75rem;">Rédaction assistée</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Emails, rapports, analyses critiques, contenus web optimisés</p>
+                        </div>
+
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <div style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1rem;">💡</div>
+                            <h3 style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.75rem;">Brainstorming créatif</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Génération d'idées, noms, slogans, innovation produit/service</p>
+                        </div>
+
+                        <div style="background: var(--glass-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <div style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 1rem;">📊</div>
+                            <h3 style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.75rem;">Résumé & analyse</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Synthèses, vulgarisation, extraction d'insights actionables</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Livrables -->
+                <section class="section">
+                    <h2 class="section-title">
+                        🎁 Vos livrables
+                    </h2>
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="background: var(--primary-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+                                📚
+                            </div>
+                            <div>
+                                <h3 style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.5rem;">
+                                    Bibliothèque de prompts personnalisée
+                                </h3>
+                                <p style="color: var(--text-secondary);">
+                                    Minimum 15 templates documentés couvrant vos besoins personnels et professionnels.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="background: var(--success-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+                                🧪
+                            </div>
+                            <div>
+                                <h3 style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.5rem;">
+                                    Rapport d'expérimentation
+                                </h3>
+                                <p style="color: var(--text-secondary);">
+                                    Tests A/B sur 5 prompts avec résultats quantifiés et bonnes pratiques identifiées.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <div style="background: var(--accent-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+                                ⚡
+                            </div>
+                            <div>
+                                <h3 style="color: var(--text-primary); font-weight: 700; margin-bottom: 0.5rem;">
+                                    Workflow optimisé
+                                </h3>
+                                <p style="color: var(--text-secondary);">
+                                    Processus structuré pour créer, tester et affiner vos prompts efficacement.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Enhanced Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🗺️ Parcours du module</h3>
+                    <ul class="sequence-list">
+                        <li class="sequence-item">
+                            <span class="sequence-number">1.</span>
+                            <div>
+                                <div class="sequence-title">Bases du prompting</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <span class="sequence-number">2.</span>
+                            <div>
+                                <div class="sequence-title">Techniques avancées</div>
+                                <div class="sequence-duration">120 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <span class="sequence-number">3.</span>
+                            <div>
+                                <div class="sequence-title">Atelier pratique</div>
+                                <div class="sequence-duration">120 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item">
+                            <span class="sequence-number">4.</span>
+                            <div>
+                                <div class="sequence-title">Quiz et cas complexes</div>
+                                <div class="sequence-duration">25 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-primary); font-weight: 700;">⏱️ Temps estimé</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 1rem; color: var(--text-secondary);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Séquence 1</span>
+                            <span>90 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Séquence 2</span>
+                            <span>120 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Pause déjeuner</span>
+                            <span>60 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Séquence 3</span>
+                            <span>120 min</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Séquence 4</span>
+                            <span>25 min</span>
+                        </div>
+                        <div style="font-weight: bold; color: var(--text-primary); border-top: 2px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.75rem; font-size: 1.1rem; display: flex; justify-content: space-between;">
+                            <span>⏰ Total</span>
+                            <span>6 heures</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-primary); font-weight: 700;">🎯 Prérequis</h4>
+                    <div style="display: grid; gap: 0.5rem; font-size: 0.95rem; color: var(--text-secondary);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span>Module 1 terminé</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span>Compte ChatGPT ou Claude</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span>Curiosité et envie d'expérimenter</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- SPECTACULAR CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">Prêt à maîtriser l'art du prompting ?</h2>
+                <p class="cta-description">
+                    Transformez vos interactions avec l'IA et obtenez des résultats spectaculaires grâce à des prompts optimisés. Votre productivité va exploser !
+                </p>
+                <a href="prompting_2_bases_1.html" class="btn btn-cta">
+                    Commencer le Module 2 💬
+                </a>
+            </div>
+        </section>
+
+        <!-- Enhanced Navigation -->
+        <div class="module-navigation">
+            <a href="fondamentaux_1_quiz_4.html" class="btn btn-secondary">
+                <span>←</span> Module 1
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 1rem; font-weight: 600;">Module 2</div>
+                <div style="font-weight: 700; color: var(--text-primary); font-size: 1.2rem;">Art du Prompting</div>
+            </div>
+            <a href="prompting_2_bases_1.html" class="btn btn-primary">
+                Première séquence <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 IA Academy. Formation complète à l'intelligence artificielle pour débutants - 45 heures de contenu pratique.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced Theme Toggle Function
+        function toggleTheme() {
+            try {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('theme', newTheme);
+                }
+            } catch (error) {
+                console.warn('Error toggling theme:', error);
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            try {
+                let savedTheme = 'light';
+                if (typeof(Storage) !== "undefined") {
+                    savedTheme = localStorage.getItem('theme') || 'light';
+                }
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                console.warn('Error loading theme:', error);
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add animation on scroll for objective cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe objective cards
+            document.querySelectorAll('.objective-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+
+            // Observe prompt examples
+            document.querySelectorAll('.prompt-example').forEach((example, index) => {
+                example.style.opacity = '0';
+                example.style.transform = 'translateX(-20px)';
+                example.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
+                observer.observe(example);
+            });
+        });
+
+        // Add progress tracking
+        function trackModuleStart() {
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+                    if (!progress.modules) progress.modules = {};
+                    
+                    progress.modules.module2 = {
+                        started: true,
+                        startedAt: new Date().toISOString(),
+                        currentSequence: 'overview'
+                    };
+                    
+                    localStorage.setItem('formation_progress', JSON.stringify(progress));
+                }
+            } catch (error) {
+                console.warn('Error tracking progress:', error);
+            }
+        }
+
+        // Track module start when page loads
+        document.addEventListener('DOMContentLoaded', trackModuleStart);
+    </script>
+</body>
+</html>

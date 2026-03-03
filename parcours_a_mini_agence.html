@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcours A : Mini-Agence IA Personnelle | Module 8 - IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(25px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 2rem 0 0 0;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 25px 50px rgba(99, 102, 241, 0.3);
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 90deg,
+                rgba(255, 255, 255, 0.05) 180deg,
+                transparent 270deg,
+                rgba(255, 255, 255, 0.1));
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .page-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            padding: 0 0 4rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Sequence Navigation */
+        .sequences-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sequence-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .sequence-item.current {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary-color);
+        }
+
+        .sequence-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .sequence-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .sequence-icon.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .sequence-icon.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin: 2rem 0 1rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        /* Template Cards */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .template-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            border-color: var(--primary-color);
+        }
+
+        .template-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .template-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .template-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .template-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Tool Cards */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tool-info h4 {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .tool-info .tool-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Step Indicators */
+        .steps-container {
+            margin: 2rem 0;
+        }
+
+        .steps-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: -1;
+        }
+
+        .step-item.completed:not(:last-child)::after {
+            background: var(--success-color);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-item.completed .step-number {
+            background: var(--success-color);
+        }
+
+        .step-item.current .step-number {
+            background: var(--primary-color);
+        }
+
+        .step-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .step-item.current .step-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Warning/Info Boxes */
+        .warning-box {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box {
+            background: linear-gradient(45deg, rgba(6, 182, 212, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .success-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Navigation */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-info {
+            text-align: center;
+        }
+
+        .nav-sequence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .template-grid,
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .steps-list {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step-item:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        /* Hidden content for step-by-step reveal */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🧠 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-slider">
+                            <span id="theme-icon">☀️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+            <a href="index.html" class="breadcrumb-link">🏠 Dashboard</a>
+            <span>→</span>
+            <a href="projet_8_overview.html" class="breadcrumb-link">Module 8 : Projet Final</a>
+            <span>→</span>
+            <span class="breadcrumb-current">Parcours A : Mini-Agence IA</span>
+        </nav>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">🎨 Mini-Agence IA Personnelle</h1>
+                <p class="page-description">
+                    Créez votre pipeline automatisé de production de contenus : de l'idée à la publication sur toutes vos plateformes
+                </p>
+                
+                <div class="page-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">3-4h</span>
+                        <span class="stat-label">Durée totale</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Séquences</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Outils intégrés</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+                
+                <!-- Vue d'ensemble -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Ce que vous allez créer</h2>
+                    <div class="section-content">
+                        <p>
+                            À la fin de ce parcours, vous disposerez d'une <strong>Mini-Agence IA fonctionnelle</strong> qui automatise complètement votre création de contenus. Plus besoin de jongler entre 10 outils différents !
+                        </p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🚀 Votre pipeline automatisé final
+                            </div>
+                            <div class="steps-container">
+                                <div class="steps-list">
+                                    <div class="step-item completed">
+                                        <div class="step-number">1</div>
+                                        <div class="step-title">Brief IA</div>
+                                    </div>
+                                    <div class="step-item completed">
+                                        <div class="step-number">2</div>
+                                        <div class="step-title">Génération</div>
+                                    </div>
+                                    <div class="step-item completed">
+                                        <div class="step-number">3</div>
+                                        <div class="step-title">Optimisation</div>
+                                    </div>
+                                    <div class="step-item completed">
+                                        <div class="step-number">4</div>
+                                        <div class="step-title">Publication</div>
+                                    </div>
+                                    <div class="step-item completed">
+                                        <div class="step-number">5</div>
+                                        <div class="step-title">Analytics</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><strong>Exemple concret :</strong> Vous donnez le sujet "Productivité avec l'IA" → 15 minutes plus tard, vous avez un thread LinkedIn, un post Instagram, un script TikTok et une newsletter, tous publiés automatiquement !</p>
+                        </div>
+
+                        <h3>🎨 Types de contenus que votre agence produira :</h3>
+                        <div class="template-grid">
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">📱</div>
+                                    <div class="template-title">Réseaux sociaux</div>
+                                </div>
+                                <div class="template-description">
+                                    Posts LinkedIn, Instagram, threads Twitter avec visuels adaptés
+                                </div>
+                            </div>
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">🎬</div>
+                                    <div class="template-title">Vidéos courtes</div>
+                                </div>
+                                <div class="template-description">
+                                    Scripts TikTok/Reels avec sous-titres et visuels générés automatiquement
+                                </div>
+                            </div>
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">📧</div>
+                                    <div class="template-title">Newsletters</div>
+                                </div>
+                                <div class="template-description">
+                                    Emails engageants avec call-to-actions et design automatisé
+                                </div>
+                            </div>
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">📝</div>
+                                    <div class="template-title">Articles de blog</div>
+                                </div>
+                                <div class="template-description">
+                                    Contenus longs avec images, SEO et intégration WordPress
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 1 -->
+                <section class="section" id="sequence-1">
+                    <h2 class="section-title">📋 Séquence 1 : Brief et Diagnostic (45min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Définissons précisément votre stratégie contenu et les automatisations qui vous feront gagner le plus de temps.
+                        </p>
+
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>⚠️</span>
+                                <span>Prérequis technique</span>
+                            </div>
+                            <p><strong>Outils nécessaires :</strong> Comptes ChatGPT Plus, Canva Pro, Zapier Starter, Buffer/Hootsuite (ou équivalent). Budget estimé : 50€/mois.</p>
+                        </div>
+
+                        <h3>🎯 Étape 1A : Audit de votre stratégie contenu (15min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📊 Questionnaire diagnostic
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+1. AUDIENCE ET PLATEFORMES
+   • Qui est votre audience cible ? (âge, profession, centres d'intérêt)
+   • Sur quelles plateformes êtes-vous actif ? (LinkedIn, Instagram, TikTok, etc.)
+   • Combien de posts par semaine voulez-vous publier ?
+
+2. CONTENUS ACTUELS
+   • Quels types de contenus créez-vous actuellement ?
+   • Combien de temps passez-vous par semaine à créer du contenu ?
+   • Quels sont vos plus gros points de friction ?
+
+3. OBJECTIFS
+   • Quel est votre objectif principal ? (notoriété, ventes, leads, etc.)
+   • Avez-vous des KPIs spécifiques à atteindre ?
+   • Quel style/ton voulez-vous pour votre marque ?
+                            </div>
+                        </div>
+
+                        <h3>🏗️ Étape 1B : Architecture de votre agence IA (20min)</h3>
+                        <p>Selon vos réponses, nous allons définir votre stack technologique optimal :</p>
+
+                        <div class="template-grid">
+                            <div class="template-card" onclick="selectTemplate('creator')">
+                                <div class="template-header">
+                                    <div class="template-icon">🎨</div>
+                                    <div class="template-title">Créateur Solo</div>
+                                </div>
+                                <div class="template-description">
+                                    1-2 plateformes, 3-5 posts/semaine, focus qualité
+                                </div>
+                            </div>
+                            <div class="template-card" onclick="selectTemplate('business')">
+                                <div class="template-header">
+                                    <div class="template-icon">💼</div>
+                                    <div class="template-title">Business Owner</div>
+                                </div>
+                                <div class="template-description">
+                                    3-4 plateformes, 10+ posts/semaine, focus conversion
+                                </div>
+                            </div>
+                            <div class="template-card" onclick="selectTemplate('agency')">
+                                <div class="template-header">
+                                    <div class="template-icon">🏢</div>
+                                    <div class="template-title">Agence/Équipe</div>
+                                </div>
+                                <div class="template-description">
+                                    Multi-clients, 50+ posts/semaine, focus scalabilité
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>⚙️ Étape 1C : Validation technique (10min)</h3>
+                        <div class="info-box">
+                            <div class="info-title">
+                                <span>🔧</span>
+                                <span>Checklist de setup</span>
+                            </div>
+                            <ul>
+                                <li>✅ ChatGPT Plus actif avec accès GPTs</li>
+                                <li>✅ Canva Pro ou Figma avec Automate</li>
+                                <li>✅ Zapier/Make.com compte actif</li>
+                                <li>✅ Outils de publication (Buffer, Hootsuite, Creator Studio)</li>
+                                <li>✅ Google Drive/Notion pour stockage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 2 -->
+                <section class="section" id="sequence-2">
+                    <h2 class="section-title">🏗️ Séquence 2 : Conception de votre Mini-Agence (60min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Construisons l'architecture technique de votre pipeline. Chaque élément sera configuré step-by-step.
+                        </p>
+
+                        <h3>🧠 Étape 2A : Création de votre GPT Stratégique (25min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                🤖 Template GPT "Content Strategist"
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+# INSTRUCTIONS SYSTÈME GPT
+
+Tu es un stratégiste contenu expert qui aide à créer des contenus engageants et adaptés.
+
+## TON RÔLE
+- Analyser les briefs créatifs
+- Générer des idées de contenus viraux  
+- Adapter le ton selon la plateforme
+- Optimiser pour l'engagement et la conversion
+
+## FORMAT DE BRIEF
+Quand je te donne un brief, tu me renvoies :
+1. **Angle créatif** : 3 approches différentes
+2. **Contenus générés** : 
+   - Post LinkedIn (280 car max)
+   - Post Instagram avec hashtags
+   - Script TikTok (30-60 sec)
+   - Newsletter (150 mots)
+3. **Éléments visuels** : Description précise pour génération d'images
+4. **CTA optimisés** : Call-to-actions selon l'objectif
+
+## STYLE ET TON
+[À PERSONNALISER SELON VOTRE MARQUE]
+- Professionnel mais accessible
+- Storytelling et exemples concrets
+- Questions pour engager
+- Émojis avec parcimonie
+
+Commence chaque réponse par "🎯 BRIEF ANALYSÉ" puis structure ta réponse.
+                            </div>
+                        </div>
+
+                        <h3>🎨 Étape 2B : Configuration des générateurs visuels (20min)</h3>
+                        <div class="tool-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-logo">🎨</div>
+                                    <div class="tool-info">
+                                        <h4>Canva Automate</h4>
+                                        <div class="tool-category">Design automatique</div>
+                                    </div>
+                                </div>
+                                <div class="tool-description">
+                                    Templates intelligents qui s'adaptent automatiquement à vos contenus
+                                </div>
+                                <div class="tool-features">
+                                    <li>Templates par plateforme</li>
+                                    <li>Brand kit automatique</li>
+                                    <li>Génération par API</li>
+                                    <li>Export multi-formats</li>
+                                </div>
+                                <button class="btn btn-primary btn-small">Configurer Canva</button>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-logo">🖼️</div>
+                                    <div class="tool-info">
+                                        <h4>DALL-E + Midjourney</h4>
+                                        <div class="tool-category">Images IA</div>
+                                    </div>
+                                </div>
+                                <div class="tool-description">
+                                    Images originales générées automatiquement selon votre style
+                                </div>
+                                <div class="tool-features">
+                                    <li>Style consistent</li>
+                                    <li>Prompts optimisés</li>
+                                    <li>Formats adaptés</li>
+                                    <li>Droits commerciaux</li>
+                                </div>
+                                <button class="btn btn-secondary btn-small">Configurer IA Images</button>
+                            </div>
+                        </div>
+
+                        <h3>🔗 Étape 2C : Architecture du workflow Zapier (15min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                ⚡ Schéma du workflow principal
+                            </div>
+                            <div class="steps-container">
+                                <div class="steps-list">
+                                    <div class="step-item">
+                                        <div class="step-number">📝</div>
+                                        <div class="step-title">Brief → Google Form</div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">🧠</div>
+                                        <div class="step-title">GPT → Génération contenu</div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">🎨</div>
+                                        <div class="step-title">Canva → Visuels auto</div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">📱</div>
+                                        <div class="step-title">Buffer → Publication</div>
+                                    </div>
+                                    <div class="step-item">
+                                        <div class="step-number">📊</div>
+                                        <div class="step-title">Analytics → Rapport</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><strong>Temps de traitement :</strong> 15 minutes de votre brief à la publication automatique !</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 3 -->
+                <section class="section" id="sequence-3">
+                    <h2 class="section-title">⚡ Séquence 3 : Construction du Pipeline (90min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Passons à la construction ! Suivez les tutoriels step-by-step pour connecter tous les éléments.
+                        </p>
+
+                        <h3>🔧 Phase 3A : Configuration Zapier Master (35min)</h3>
+                        <div class="warning-box">
+                            <div class="warning-title">
+                                <span>⏱️</span>
+                                <span>Checkpoint important</span>
+                            </div>
+                            <p>Cette phase est technique mais cruciale. Prenez votre temps, testez chaque étape individuellement avant de passer à la suivante.</p>
+                        </div>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📹 Tutoriel vidéo intégré
+                            </div>
+                            <div style="background: var(--bg-secondary); padding: 2rem; border-radius: 8px; text-align: center; margin: 1rem 0;">
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem;">🎬 <strong>Vidéo :</strong> "Configuration Zapier Pipeline Content" (18 min)</p>
+                                <button class="btn btn-primary">▶️ Lancer le tutoriel</button>
+                            </div>
+                            <p><strong>Ce que vous apprendrez :</strong></p>
+                            <ul>
+                                <li>Connexion Google Forms → ChatGPT API</li>
+                                <li>Parsing des réponses GPT vers Canva</li>
+                                <li>Distribution multi-plateformes automatique</li>
+                                <li>Gestion des erreurs et retry logic</li>
+                            </ul>
+                        </div>
+
+                        <h3>🎨 Phase 3B : Templates Canva automatisés (25min)</h3>
+                        <div class="tool-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-logo">📱</div>
+                                    <div class="tool-info">
+                                        <h4>LinkedIn Post Template</h4>
+                                        <div class="tool-category">1080x1080px</div>
+                                    </div>
+                                </div>
+                                <div class="tool-description">
+                                    Template intelligent qui adapte votre texte avec votre branding
+                                </div>
+                                <div class="tool-features">
+                                    <li>Auto-resize texte</li>
+                                    <li>Couleurs de marque</li>
+                                    <li>Logo automatique</li>
+                                    <li>QR code optionnel</li>
+                                </div>
+                                <button class="btn btn-outline btn-small">Dupliquer Template</button>
+                            </div>
+                            
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <div class="tool-logo">📺</div>
+                                    <div class="tool-info">
+                                        <h4>Story Instagram/TikTok</h4>
+                                        <div class="tool-category">1080x1920px</div>
+                                    </div>
+                                </div>
+                                <div class="tool-description">
+                                    Format vertical optimisé avec animations et call-to-actions
+                                </div>
+                                <div class="tool-features">
+                                    <li>Animations intégrées</li>
+                                    <li>Texte dynamique</li>
+                                    <li>CTA personnalisables</li>
+                                    <li>Export vidéo MP4</li>
+                                </div>
+                                <button class="btn btn-outline btn-small">Dupliquer Template</button>
+                            </div>
+                        </div>
+
+                        <h3>📱 Phase 3C : Tests et debug (30min)</h3>
+                        <div class="success-box">
+                            <div class="success-title">
+                                <span>✅</span>
+                                <span>Checklist de tests</span>
+                            </div>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyText(this)">📋 Copier</button>
+☐ Test 1: Brief simple → Vérifier génération GPT
+☐ Test 2: Contenu généré → Vérifier création visuel Canva  
+☐ Test 3: Visuel créé → Vérifier publication Buffer/Hootsuite
+☐ Test 4: Publication → Vérifier analytics et reporting
+☐ Test 5: Workflow complet → Brief → Publication (sous 20min)
+
+PROBLÈMES FRÉQUENTS ET SOLUTIONS :
+• GPT timeout → Réduire la longueur du prompt
+• Canva API limit → Upgrade vers Business
+• Buffer publication failed → Vérifier tokens d'auth
+• Images générées floues → Ajuster prompts DALL-E
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Séquence 4 -->
+                <section class="section" id="sequence-4">
+                    <h2 class="section-title">📊 Séquence 4 : Optimisation et Documentation (45min)</h2>
+                    <div class="section-content">
+                        <p>
+                            Votre pipeline fonctionne ! Maintenant optimisons-le et documentons tout pour que vous puissiez l'améliorer en continu.
+                        </p>
+
+                        <h3>📈 Phase 4A : Dashboard de performance (20min)</h3>
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                📊 Template Notion Analytics
+                            </div>
+                            <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Métriques à tracker automatiquement :</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                    <div>
+                                        <strong>📱 Réseaux sociaux</strong><br>
+                                        • Engagement rate<br>
+                                        • Reach/Impressions<br>
+                                        • Clics CTA<br>
+                                        • Partages/Saves
+                                    </div>
+                                    <div>
+                                        <strong>⚡ Pipeline IA</strong><br>
+                                        • Temps de génération<br>
+                                        • Taux de succès<br>
+                                        • Coût par contenu<br>
+                                        • Erreurs/bugs
+                                    </div>
+                                    <div>
+                                        <strong>💼 Business Impact</strong><br>
+                                        • Leads générés<br>
+                                        • Trafic website<br>
+                                        • Conversions<br>
+                                        • ROI content marketing
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">🎯 Dupliquer le Dashboard Notion</button>
+                        </div>
+
+                        <h3>📚 Phase 4B : Documentation complète (15min)</h3>
+                        <div class="template-grid">
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">📋</div>
+                                    <div class="template-title">Guide Utilisateur</div>
+                                </div>
+                                <div class="template-description">
+                                    Mode d'emploi de votre mini-agence avec troubleshooting
+                                </div>
+                            </div>
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">⚙️</div>
+                                    <div class="template-title">Paramètres Techniques</div>
+                                </div>
+                                <div class="template-description">
+                                    Toutes les configurations, APIs keys et connexions
+                                </div>
+                            </div>
+                            <div class="template-card">
+                                <div class="template-header">
+                                    <div class="template-icon">🔄</div>
+                                    <div class="template-title">Plan d'Évolution</div>
+                                </div>
+                                <div class="template-description">
+                                    Roadmap d'améliorations et nouvelles fonctionnalités
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>🚀 Phase 4C : Plan d'amélioration continue (10min)</h3>
+                        <div class="success-box">
+                            <div class="success-title">
+                                <span>🎉</span>
+                                <span>Félicitations ! Votre Mini-Agence IA est opérationnelle</span>
+                            </div>
+                            <p><strong>Prochaines étapes recommandées :</strong></p>
+                            <ol>
+                                <li><strong>Semaine 1-2</strong> : Utilisation quotidienne et ajustements</li>
+                                <li><strong>Mois 1</strong> : Analyse des performances et optimisations</li>
+                                <li><strong>Mois 2-3</strong> : Ajout de nouvelles plateformes et formats</li>
+                                <li><strong>Mois 6</strong> : Considérer la Masterclass pour passer au niveau supérieur</li>
+                            </ol>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-title">
+                                <span>💡</span>
+                                <span>Besoin d'aide ? La communauté est là !</span>
+                            </div>
+                            <p>Rejoignez le canal Discord <strong>#parcours-mini-agence</strong> pour partager vos créations, poser vos questions et s'inspirer mutuellement.</p>
+                            <button class="btn btn-secondary">💬 Rejoindre Discord</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="quiz_parcours_module8.html" class="btn btn-secondary">
+                        <span>←</span> Retour au Quiz
+                    </a>
+                    <div class="nav-info">
+                        <div class="nav-sequence">Parcours A - Intégration complète</div>
+                        <div class="nav-title">Mini-Agence IA Personnelle</div>
+                    </div>
+                    <a href="projet_8_documentation_a.html" class="btn btn-primary">
+                        Documentation finale <span>→</span>
+                    </a>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">📊 Votre progression</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;" id="progress-bar"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Prêt à démarrer</div>
+                    </div>
+                </div>
+
+                <!-- Sequences Navigation -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🎯 Séquences du parcours</h3>
+                    <ul class="sequences-list">
+                        <li class="sequence-item current" data-sequence="1">
+                            <div class="sequence-icon current">1</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Brief et Diagnostic</div>
+                                <div class="sequence-duration">45 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item" data-sequence="2">
+                            <div class="sequence-icon locked">2</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Conception Architecture</div>
+                                <div class="sequence-duration">60 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item" data-sequence="3">
+                            <div class="sequence-icon locked">3</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Construction Pipeline</div>
+                                <div class="sequence-duration">90 minutes</div>
+                            </div>
+                        </li>
+                        <li class="sequence-item" data-sequence="4">
+                            <div class="sequence-icon locked">4</div>
+                            <div class="sequence-info">
+                                <div class="sequence-title">Optimisation & Documentation</div>
+                                <div class="sequence-duration">45 minutes</div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">⏱️ Temps estimé</h4>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                            <div>📋 Brief : 45min</div>
+                            <div>🏗️ Conception : 60min</div>
+                            <div>⚡ Construction : 90min</div>
+                            <div>📊 Optimisation : 45min</div>
+                            <div style="font-weight: bold; color: var(--text-primary); border-top: 2px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.75rem;">⏰ Total : 4h</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Required -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🛠️ Outils requis</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span style="font-size: 0.9rem;">ChatGPT Plus</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span style="font-size: 0.9rem;">Canva Pro</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--success-color);">✅</span>
+                            <span style="font-size: 0.9rem;">Zapier Starter</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--warning-color);">⏳</span>
+                            <span style="font-size: 0.9rem;">Buffer/Hootsuite</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--text-muted);">⚪</span>
+                            <span style="font-size: 0.9rem;">Notion (optionnel)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">💰 Budget estimé</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary);">~50€/mois pour tous les outils</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            themeIcon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+            
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-icon').textContent = savedTheme === 'light' ? '☀️' : '🌙';
+        });
+
+        // Progress tracking
+        let currentSequence = 1;
+        let isScrolling = false; // Prevent conflicts
+        let sequenceProgress = {
+            1: 0, // Brief et diagnostic
+            2: 0, // Conception
+            3: 0, // Construction
+            4: 0  // Optimisation
+        };
+
+        function updateProgress() {
+            const totalSequences = 4;
+            const completedSequences = Object.values(sequenceProgress).reduce((acc, progress) => acc + (progress / 100), 0);
+            const overallProgress = (completedSequences / totalSequences) * 100;
+            
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            progressBar.style.width = `${overallProgress}%`;
+            
+            if (overallProgress === 0) {
+                progressText.textContent = 'Prêt à démarrer';
+            } else if (overallProgress < 100) {
+                progressText.textContent = `${Math.round(overallProgress)}% complété`;
+            } else {
+                progressText.textContent = 'Parcours terminé ! 🎉';
+            }
+        }
+
+        // Sequence navigation - separated from scroll logic
+        function updateActiveSequence(sequenceNumber) {
+            // Remove current class from all items
+            document.querySelectorAll('.sequence-item').forEach(item => {
+                item.classList.remove('current');
+            });
+            
+            // Add current class to selected item
+            const targetItem = document.querySelector(`[data-sequence="${sequenceNumber}"]`);
+            if (targetItem) {
+                targetItem.classList.add('current');
+            }
+            
+            currentSequence = sequenceNumber;
+        }
+
+        // Manual navigation (only when clicking)
+        function navigateToSequence(sequenceNumber) {
+            if (isScrolling) return; // Prevent conflicts
+            
+            isScrolling = true;
+            updateActiveSequence(sequenceNumber);
+            
+            // Scroll to sequence with offset for header
+            const targetSection = document.getElementById(`sequence-${sequenceNumber}`);
+            if (targetSection) {
+                const headerHeight = document.querySelector('.header').offsetHeight;
+                const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Reset flag after scroll completes
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 1000);
+            } else {
+                isScrolling = false;
+            }
+        }
+
+        // Add click handlers to sequence items
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.sequence-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const sequenceNumber = this.getAttribute('data-sequence');
+                    navigateToSequence(parseInt(sequenceNumber));
+                });
+            });
+            
+            // Observe all sequence sections
+            document.querySelectorAll('[id^="sequence-"]').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Detect end of smooth scrolling
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    if (isScrolling) {
+                        isScrolling = false;
+                    }
+                }, 150);
+            });
+        });
+
+        // Template selection
+        function selectTemplate(templateType) {
+            // Remove selection from all templates
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.style.borderColor = 'var(--border-color)';
+                card.style.background = 'var(--glass-bg)';
+            });
+            
+            // Highlight selected template
+            event.target.closest('.template-card').style.borderColor = 'var(--primary-color)';
+            event.target.closest('.template-card').style.background = 'rgba(99, 102, 241, 0.1)';
+            
+            // Store selection for later use
+            localStorage.setItem('selectedTemplate', templateType);
+            
+            // Show confirmation
+            const button = event.target.closest('.template-card').querySelector('.template-title');
+            const originalText = button.textContent;
+            button.textContent = '✅ Sélectionné';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+
+        // Copy text function
+        function copyText(button) {
+            const codeBlock = button.parentElement;
+            const text = codeBlock.textContent.replace('📋 Copier', '').trim();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✅ Copié';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'var(--primary-color)';
+                }, 2000);
+            });
+        }
+
+        // Intersection Observer for progress tracking (no auto-scroll)
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '-80px 0px -50% 0px' // Account for header
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            // Don't update during programmatic scrolling
+            if (isScrolling) return;
+            
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    if (sectionId.startsWith('sequence-')) {
+                        const sequenceNum = parseInt(sectionId.split('-')[1]);
+                        // Only update active state, no scrolling
+                        if (sequenceNum !== currentSequence) {
+                            updateActiveSequence(sequenceNum);
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>

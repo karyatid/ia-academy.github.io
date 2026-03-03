@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outils spécialisés : découverte et test | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtle Background pattern for learning focus */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 25%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 75%, rgba(99, 102, 241, calc(var(--pattern-opacity) * 0.5)) 76%, transparent 77%);
+            background-size: 80px 80px;
+            z-index: -1;
+            animation: backgroundMove 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Simplified Header for Learning Focus */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Compact Theme Toggle for Learning Pages */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle-button {
+            width: 21px;
+            height: 21px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            transform: translateX(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+            font-size: 12px;
+            position: absolute;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(25px);
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            padding: 1rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Clean Lesson Header for Focus */
+        .lesson-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .lesson-header-content {
+            text-align: center;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-badge {
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lesson-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Layout Optimized for Reading */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.01), transparent);
+            animation: rotate 40s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sidebar for Progress */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Navigation Lesson */
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Content Sections Optimized for Learning */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .section-content ul, .section-content ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Learning Elements */
+        .interactive-box {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: left 0.5s ease;
+        }
+
+        .interactive-box:hover::before {
+            left: 0;
+        }
+
+        .interactive-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tool Cards */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+            border-color: var(--primary-color);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .tool-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .tool-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tool-features li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Category Headers */
+        .category-header {
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Practical Exercise Box */
+        .exercise-box {
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .exercise-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Buttons with enhanced styling */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            box-shadow: var(--glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .lesson-navigation {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .lesson-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🤖 IA Academy
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-button"></div>
+                    </div>
+                    <a href="index.html" class="back-btn">
+                        <span>←</span> Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <nav>
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>/</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="outils_3_overview.html" class="breadcrumb-link">Module 3: Outils IA Populaires</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>/</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="breadcrumb-current">Outils spécialisés</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Lesson Header -->
+    <section class="lesson-header">
+        <div class="container">
+            <div class="lesson-header-content">
+                <div class="lesson-meta">
+                    <div class="lesson-badge">
+                        <span>🛠️</span>
+                        <span>Séquence 3 • Module 3</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>⏱️</span>
+                        <span>90 minutes</span>
+                    </div>
+                    <div class="lesson-badge">
+                        <span>👥</span>
+                        <span>Débutant</span>
+                    </div>
+                </div>
+                <h1 class="lesson-title">Outils spécialisés : découverte et test</h1>
+                <p class="lesson-description">
+                    Explorez l'écosystème riche des outils IA spécialisés pour l'image, le code et la productivité. Apprenez à identifier et choisir les outils optimaux selon vos besoins spécifiques.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-layout">
+            <!-- Main Content -->
+            <main class="main-content">
+
+                <!-- Introduction -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🎯</span>
+                        Introduction aux outils spécialisés
+                    </h2>
+                    <div class="section-content">
+                        <p>Après avoir maîtrisé les géants comme ChatGPT et Claude, il est temps d'explorer l'écosystème riche des outils IA spécialisés. Chaque domaine d'activité a vu naître des solutions dédiées qui excellent dans leur spécialité.</p>
+
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>💡</span>
+                                <span>Pourquoi utiliser des outils spécialisés ?</span>
+                            </div>
+                            <p>Bien que les IA générales soient polyvalentes, les outils spécialisés offrent souvent:</p>
+                            <ul>
+                                <li><strong>Une meilleure qualité</strong> dans leur domaine de spécialité</li>
+                                <li><strong>Des interfaces optimisées</strong> pour des workflows spécifiques</li>
+                                <li><strong>Des fonctionnalités avancées</strong> impossibles avec les IA générales</li>
+                                <li><strong>Une intégration native</strong> avec les outils de votre secteur</li>
+                            </ul>
+                        </div>
+
+                        <p>Cette séquence vous fera découvrir les meilleurs outils dans trois catégories essentielles : la création d'images, l'assistance au code et la productivité. Vous apprendrez également à évaluer rapidement de nouveaux outils pour rester à jour dans cet écosystème en évolution rapide.</p>
+                    </div>
+                </section>
+
+                <!-- IA pour l'image -->
+                <div class="category-header">
+                    <div class="category-title">
+                        <span>🎨</span>
+                        IA pour l'image : création artistique et commerciale
+                    </div>
+                    <div class="category-description">
+                        La révolution de l'IA générative a complètement transformé la création visuelle. Explorez les outils leaders qui permettent de créer des images professionnelles sans compétences artistiques préalables.
+                    </div>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🎭</div>
+                            <div class="tool-name">Midjourney</div>
+                        </div>
+                        <div class="tool-description">
+                            La référence pour la création artistique et commerciale. Excellence dans les styles créatifs et la cohérence esthétique.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Qualité artistique exceptionnelle</li>
+                            <li>Styles variés et originaux</li>
+                            <li>Communauté active et inspirante</li>
+                            <li>Commandes Discord intuitives</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🤖</div>
+                            <div class="tool-name">DALL-E 3</div>
+                        </div>
+                        <div class="tool-description">
+                            Intégré dans ChatGPT, excellent pour la précision et la compréhension de prompts complexes.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Intégration ChatGPT native</li>
+                            <li>Compréhension précise des prompts</li>
+                            <li>Édition et variations faciles</li>
+                            <li>Respect des consignes détaillées</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">⚙️</div>
+                            <div class="tool-name">Stable Diffusion</div>
+                        </div>
+                        <div class="tool-description">
+                            Solution open-source offrant un contrôle avancé et la possibilité d'installation locale.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Contrôle total des paramètres</li>
+                            <li>Installation locale possible</li>
+                            <li>Modèles personnalisés</li>
+                            <li>Communauté technique active</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🎨</div>
+                            <div class="tool-name">Canva AI</div>
+                        </div>
+                        <div class="tool-description">
+                            Design graphique accessible avec IA intégrée, parfait pour les créations marketing rapides.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Interface intuitive</li>
+                            <li>Templates professionnels</li>
+                            <li>IA de design automatique</li>
+                            <li>Collaboration en équipe</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- IA pour le code -->
+                <div class="category-header">
+                    <div class="category-title">
+                        <span>💻</span>
+                        IA pour le code : assistance et développement
+                    </div>
+                    <div class="category-description">
+                        L'IA transforme la programmation en assistant les développeurs à tous les niveaux. Ces outils démocratisent le code et accélèrent considérablement la productivité.
+                    </div>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🐙</div>
+                            <div class="tool-name">GitHub Copilot</div>
+                        </div>
+                        <div class="tool-description">
+                            L'assistant de programmation de référence, intégré dans les IDE populaires pour une assistance en temps réel.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Complétion de code intelligente</li>
+                            <li>Intégration IDE native</li>
+                            <li>Support multi-langages</li>
+                            <li>Suggestions contextuelles</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📝</div>
+                            <div class="tool-name">Cursor</div>
+                        </div>
+                        <div class="tool-description">
+                            Éditeur de code révolutionnaire conçu dès le départ pour l'IA, offrant une expérience native optimisée.
+                        </div>
+                        <ul class="tool-features">
+                            <li>IA-first par design</li>
+                            <li>Chat intégré avec le code</li>
+                            <li>Édition collaborative avec IA</li>
+                            <li>Interface moderne et fluide</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔧</div>
+                            <div class="tool-name">Replit</div>
+                        </div>
+                        <div class="tool-description">
+                            Plateforme de développement collaboratif avec IA intégrée, parfaite pour l'apprentissage et les projets rapides.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Développement dans le navigateur</li>
+                            <li>Collaboration temps réel</li>
+                            <li>IA d'assistance au code</li>
+                            <li>Déploiement instantané</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔍</div>
+                            <div class="tool-name">Claude for Code</div>
+                        </div>
+                        <div class="tool-description">
+                            Utilisation spécialisée de Claude pour la révision de code, l'explication et la documentation.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Révision de code experte</li>
+                            <li>Explications détaillées</li>
+                            <li>Génération de documentation</li>
+                            <li>Refactoring intelligent</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- IA pour la productivité -->
+                <div class="category-header">
+                    <div class="category-title">
+                        <span>📈</span>
+                        IA pour la productivité : organisation et contenu
+                    </div>
+                    <div class="category-description">
+                        Optimisez votre workflow quotidien avec des outils IA dédiés à la gestion de connaissances, la prise de notes et la création de contenu professionnel.
+                    </div>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📚</div>
+                            <div class="tool-name">Notion AI</div>
+                        </div>
+                        <div class="tool-description">
+                            Gestion de connaissances révolutionnée avec IA intégrée pour la création, l'organisation et la collaboration.
+                        </div>
+                        <ul class="tool-features">
+                            <li>IA intégrée dans Notion</li>
+                            <li>Génération de contenu contextuel</li>
+                            <li>Organisation automatique</li>
+                            <li>Collaboration équipe avancée</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🧠</div>
+                            <div class="tool-name">Obsidian AI</div>
+                        </div>
+                        <div class="tool-description">
+                            Prise de notes intelligente avec connexions automatiques et exploration de connaissances par IA.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Liens automatiques intelligents</li>
+                            <li>Exploration de connaissances</li>
+                            <li>Synthèse et résumés</li>
+                            <li>Graphe de connaissances</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">✍️</div>
+                            <div class="tool-name">Jasper</div>
+                        </div>
+                        <div class="tool-description">
+                            Spécialisé dans le marketing et le copywriting, avec des templates et workflows optimisés pour la conversion.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Templates marketing spécialisés</li>
+                            <li>Optimisation pour conversion</li>
+                            <li>Analyse de performance</li>
+                            <li>Workflows marketing complets</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📝</div>
+                            <div class="tool-name">Copy.ai</div>
+                        </div>
+                        <div class="tool-description">
+                            Génération de contenu marketing rapide et efficace, avec focus sur la créativité et la diversité.
+                        </div>
+                        <ul class="tool-features">
+                            <li>Génération rapide de contenu</li>
+                            <li>Multiples variations créatives</li>
+                            <li>Templates par industrie</li>
+                            <li>Interface simple et efficace</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Atelier pratique -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🎯</span>
+                        Atelier pratique : Test comparatif
+                    </h2>
+                    <div class="section-content">
+                        <div class="exercise-box">
+                            <div class="exercise-title">
+                                <span>🔬</span>
+                                <span>Exercice : Évaluation d'outils spécialisés</span>
+                            </div>
+                            <p><strong>Objectif :</strong> Tester 3 outils différents sur une même tâche pour comprendre leurs forces et faiblesses spécifiques.</p>
+                            
+                            <h4>Missions pratiques :</h4>
+                            <ol>
+                                <li><strong>Création d'image (20min) :</strong> Créez le logo d'une startup avec Midjourney, DALL-E 3 et Canva AI</li>
+                                <li><strong>Assistance code (15min) :</strong> Demandez à GitHub Copilot et Claude d'écrire une fonction simple en Python</li>
+                                <li><strong>Contenu marketing (15min) :</strong> Générez un post LinkedIn avec Jasper et Copy.ai</li>
+                            </ol>
+
+                            <h4>Grille d'évaluation :</h4>
+                            <ul>
+                                <li><strong>Qualité du résultat :</strong> /5</li>
+                                <li><strong>Facilité d'utilisation :</strong> /5</li>
+                                <li><strong>Temps nécessaire :</strong> /5</li>
+                                <li><strong>Coût :</strong> /5</li>
+                                <li><strong>Potentiel d'intégration :</strong> /5</li>
+                            </ul>
+                        </div>
+
+                        <h3>Méthode d'évaluation rapide</h3>
+                        <p>Pour chaque nouvel outil que vous découvrirez, utilisez cette grille de 5 critères :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>📊</span>
+                                <span>Framework d'évaluation QUTIC</span>
+                            </div>
+                            <ul>
+                                <li><strong>Q</strong>ualité : Le résultat correspond-il à vos attentes ?</li>
+                                <li><strong>U</strong>tilisation : L'interface est-elle intuitive ?</li>
+                                <li><strong>T</strong>emps : Combien de temps pour obtenir un bon résultat ?</li>
+                                <li><strong>I</strong>ntégration : S'intègre-t-il dans votre workflow ?</li>
+                                <li><strong>C</strong>oût : Le pricing est-il justifié par la valeur apportée ?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stratégies d'intégration -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>🔗</span>
+                        Stratégies d'intégration dans votre workflow
+                    </h2>
+                    <div class="section-content">
+                        <h3>Approche progressive</h3>
+                        <p>N'essayez pas d'adopter tous les outils en même temps. Privilégiez une approche progressive :</p>
+                        
+                        <ol>
+                            <li><strong>Identifiez votre besoin principal :</strong> Quelle tâche vous fait perdre le plus de temps ?</li>
+                            <li><strong>Testez 2-3 outils spécialisés :</strong> Comparez sur votre cas d'usage réel</li>
+                            <li><strong>Adoptez celui qui apporte le meilleur ROI :</strong> Temps gagné vs effort d'apprentissage</li>
+                            <li><strong>Maîtrisez avant d'ajouter :</strong> Exploitez pleinement un outil avant d'en adopter un nouveau</li>
+                        </ol>
+
+                        <h3>Écosystème cohérent</h3>
+                        <p>Recherchez les synergies entre outils pour créer un workflow fluide :</p>
+                        
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>⚡</span>
+                                <span>Exemple de workflow intégré</span>
+                            </div>
+                            <p><strong>Création de contenu marketing complet :</strong></p>
+                            <ol>
+                                <li><strong>Brainstorming :</strong> ChatGPT pour les idées initiales</li>
+                                <li><strong>Rédaction :</strong> Jasper pour le contenu optimisé</li>
+                                <li><strong>Visuel :</strong> Midjourney pour l'image d'accompagnement</li>
+                                <li><strong>Mise en forme :</strong> Canva AI pour l'assemblage final</li>
+                                <li><strong>Organisation :</strong> Notion AI pour archiver et analyser les performances</li>
+                            </ol>
+                        </div>
+
+                        <h3>Veille et évolution</h3>
+                        <p>L'écosystème IA évolue rapidement. Maintenez une veille active :</p>
+                        <ul>
+                            <li><strong>Newsletters spécialisées :</strong> The Rundown, AI Tool Report</li>
+                            <li><strong>Communautés :</strong> Discord/Reddit des outils que vous utilisez</li>
+                            <li><strong>Test mensuel :</strong> Essayez un nouvel outil chaque mois</li>
+                            <li><strong>Partage d'expérience :</strong> Échangez avec d'autres utilisateurs</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Récapitulatif -->
+                <section class="section">
+                    <h2 class="section-title">
+                        <span>📝</span>
+                        Points clés à retenir
+                    </h2>
+                    <div class="section-content">
+                        <div class="interactive-box">
+                            <div class="interactive-title">
+                                <span>✅</span>
+                                <span>Ce que vous avez appris</span>
+                            </div>
+                            <ul>
+                                <li><strong>Écosystème spécialisé :</strong> Chaque domaine a ses outils optimisés</li>
+                                <li><strong>Évaluation méthodique :</strong> Framework QUTIC pour tester rapidement</li>
+                                <li><strong>Intégration progressive :</strong> Adoptez un outil à la fois, maîtrisez avant d'étendre</li>
+                                <li><strong>Workflow cohérent :</strong> Recherchez les synergies entre outils</li>
+                                <li><strong>Veille continue :</strong> L'écosystème évolue, restez informé</li>
+                            </ul>
+                        </div>
+
+                        <p>Vous disposez maintenant d'une cartographie claire des outils IA spécialisés et d'une méthode pour évaluer et intégrer de nouveaux outils dans votre workflow. La prochaine séquence vous permettra de mettre en pratique ces connaissances dans un atelier comparatif complet.</p>
+                    </div>
+                </section>
+
+                <!-- Navigation -->
+                <div class="lesson-navigation">
+                    <a href="outils_3_claude_2.html" class="btn btn-secondary">
+                        <span>←</span> Séquence 2: Claude et alternatives
+                    </a>
+                    <a href="outils_3_atelier_4.html" class="btn btn-primary">
+                        Séquence 4: Atelier comparatif <span>→</span>
+                    </a>
+                </div>
+
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>📊</span>
+                        <span>Votre progression</span>
+                    </div>
+                    <div style="background: var(--bg-tertiary); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Module 3</span>
+                            <span style="color: var(--primary-color); font-weight: 600;">75%</span>
+                        </div>
+                        <div style="background: var(--bg-primary); border-radius: 5px; height: 8px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); height: 100%; width: 75%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
+                        Excellent ! Vous maîtrisez maintenant les outils spécialisés. Plus qu'une séquence pour terminer ce module.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>🔗</span>
+                        <span>Liens utiles</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="outils_3_overview.html" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem; border-radius: 8px; background: var(--bg-tertiary); transition: all 0.3s ease;">
+                            📚 Vue d'ensemble du module
+                        </a>
+                        <a href="ressources_outils.html" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem; border-radius: 8px; background: var(--bg-tertiary); transition: all 0.3s ease;">
+                            🛠️ Liste complète des outils
+                        </a>
+                        <a href="ressources_forum.html" style="color: var(--text-secondary); text-decoration: none; padding: 0.5rem; border-radius: 8px; background: var(--bg-tertiary); transition: all 0.3s ease;">
+                            💬 Forum communauté
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tools covered -->
+                <div class="sidebar-card">
+                    <div class="sidebar-title">
+                        <span>🛠️</span>
+                        <span>Outils couverts</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.85rem;">
+                        <div style="background: var(--bg-tertiary); padding: 0.5rem; border-radius: 6px; text-align: center;">
+                            <div>🎭</div>
+                            <div style="color: var(--text-secondary);">Midjourney</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.5rem; border-radius: 6px; text-align: center;">
+                            <div>🤖</div>
+                            <div style="color: var(--text-secondary);">DALL-E 3</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.5rem; border-radius: 6px; text-align: center;">
+                            <div>🐙</div>
+                            <div style="color: var(--text-secondary);">Copilot</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.5rem; border-radius: 6px; text-align: center;">
+                            <div>📝</div>
+                            <div style="color: var(--text-secondary);">Cursor</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.5rem; border-radius: 6px; text-align: center;">
+                            <div>📚</div>
+                            <div style="color: var(--text-secondary);">Notion AI</div>
+                        </div>
+                        <div style="background: var(--bg-tertiary); padding: 0.5rem; border-radius: 6px; text-align: center;">
+                            <div>✍️</div>
+                            <div style="color: var(--text-secondary);">Jasper</div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality with proper icons
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Save progress function
+        function markSequenceCompleted(moduleNumber, sequenceNumber) {
+            const progress = JSON.parse(localStorage.getItem('formation_progress') || '{}');
+            
+            if (!progress.modules) progress.modules = {};
+            if (!progress.modules[moduleNumber]) progress.modules[moduleNumber] = {};
+            
+            progress.modules[moduleNumber][sequenceNumber] = {
+                completed: true,
+                completedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('formation_progress', JSON.stringify(progress));
+        }
+
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Mark this sequence as visited
+            markSequenceCompleted(3, 3);
+            
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Add hover effects to tool cards
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

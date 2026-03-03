@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 8: Projet Final - Vue d'ensemble | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Light mode (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.2);
+            --pattern-opacity: 0.03;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 25px rgba(99, 102, 241, 0.4);
+            --pattern-opacity: 0.08;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced Background pattern for marketing feel */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, var(--pattern-opacity)) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, var(--pattern-opacity)) 0%, transparent 50%);
+            z-index: -1;
+            animation: patternShift 20s ease-in-out infinite;
+        }
+
+        @keyframes patternShift {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+
+        .back-btn {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .back-btn {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle-button {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            transform: translateX(30px);
+        }
+
+        .theme-toggle-button::before {
+            content: '☀️';
+        }
+
+        [data-theme="dark"] .theme-toggle-button::before {
+            content: '🌙';
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+        }
+
+        .breadcrumb-link:hover {
+            background: var(--glass-bg);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            transform: scale(1.05);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        /* SPECTACULAR Module Header */
+        .module-header {
+            background: linear-gradient(135deg, 
+                var(--primary-color) 0%, 
+                var(--secondary-color) 40%, 
+                var(--accent-color) 80%, 
+                var(--primary-color) 100%);
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .module-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 45deg,
+                rgba(255, 255, 255, 0.05) 90deg,
+                transparent 135deg,
+                rgba(255, 255, 255, 0.1) 180deg,
+                transparent);
+            animation: rotate 25s linear infinite;
+            z-index: 0;
+        }
+
+        .module-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                         radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.2) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .module-header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .module-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .module-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .module-description {
+            font-size: 1.4rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.7;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 0 4rem 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 1.8rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.1) 0%, 
+                rgba(139, 92, 246, 0.1) 50%, 
+                rgba(6, 182, 212, 0.1) 100%);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+
+        /* Enhanced Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sequence-list {
+            list-style: none;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sequence-item.current {
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.15) 0%, 
+                rgba(139, 92, 246, 0.15) 100%);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .sequence-item:not(.current):hover {
+            background: var(--glass-bg);
+            transform: translateX(5px);
+        }
+
+        .sequence-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .sequence-icon.overview {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .sequence-icon.locked {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .sequence-info {
+            flex: 1;
+        }
+
+        .sequence-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .sequence-duration {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* SPECTACULAR CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.95) 0%, 
+                rgba(139, 92, 246, 0.95) 40%, 
+                rgba(6, 182, 212, 0.95) 80%, 
+                rgba(99, 102, 241, 0.95) 100%);
+            color: white;
+            padding: 4rem 0;
+            border-radius: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin: 4rem 0;
+            backdrop-filter: blur(20px);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 45deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent 90deg,
+                rgba(255, 255, 255, 0.05) 180deg,
+                transparent 270deg,
+                rgba(255, 255, 255, 0.1) 360deg);
+            animation: rotate 30s linear infinite;
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-description {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .btn-cta {
+            background: white;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            padding: 1.25rem 3rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced Navigation */
+        .module-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            gap: 2rem;
+        }
+
+        .module-navigation .btn {
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        /* Progress indicators */
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass-bg);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .progress-dot.active {
+            background: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .sidebar {
+                position: static;
+                order: -1;
+            }
+            
+            .module-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .module-header {
+                padding: 3rem 0;
+            }
+            
+            .module-title {
+                font-size: 2rem;
+            }
+            
+            .module-description {
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .module-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .module-navigation .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="back-btn">← Dashboard</a>
+                <a href="index.html" class="logo">IA Academy</a>
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-toggle-button"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="index.html" class="breadcrumb-link">Dashboard</a>
+                    <span style="color: var(--text-muted);">></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="breadcrumb-current">Module 8: Projet Final</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Module Header -->
+    <section class="module-header">
+        <div class="container">
+            <div class="module-header-content">
+                <div class="module-badge">📚 Module 8 - Formation IA Academy</div>
+                <h1 class="module-title">🎯 Projet Final</h1>
+                <p class="module-description">
+                    Concrétisez vos acquis avec un projet personnel complet utilisant les compétences développées tout au long de la formation. Créez une solution IA fonctionnelle de A à Z.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content-grid">
+            <main class="main-content">
+                <!-- Pourquoi ce module -->
+                <section class="section">
+                    <h2 class="section-title">🤔 Pourquoi ce module ?</h2>
+                    <div class="section-content">
+                        <p>
+                            Le projet final représente l'aboutissement de votre parcours d'apprentissage. Il vous permet de <strong>consolider tous les acquis</strong> de la formation en créant une solution concrète qui répond à un besoin réel, personnel ou professionnel.
+                        </p>
+                        
+                        <div class="highlight-box">
+                            <h3>🎯 L'objectif principal</h3>
+                            <p>
+                                Démontrer votre capacité à <strong>concevoir, développer et déployer</strong> une solution IA complète en intégrant les technologies et méthodologies apprises durant les 7 modules précédents.
+                            </p>
+                        </div>
+
+                        <h3>Ce que vous allez accomplir :</h3>
+                        <ul>
+                            <li><strong>Projet personnalisé</strong> : Choisir et définir un projet qui vous tient à cœur</li>
+                            <li><strong>Architecture complète</strong> : Concevoir une solution techniquement viable</li>
+                            <li><strong>Réalisation guidée</strong> : Développer avec un accompagnement expert</li>
+                            <li><strong>Présentation professionnelle</strong> : Démontrer et défendre vos choix</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Objectifs pédagogiques -->
+                <section class="section">
+                    <h2 class="section-title">🎯 Objectifs pédagogiques</h2>
+                    <div class="section-content">
+                        <p>À la fin de ce module, vous serez capable de :</p>
+                        
+                        <h3>🏗️ Conception et planification</h3>
+                        <ul>
+                            <li><strong>Concevoir</strong> un projet IA complet de A à Z selon une méthodologie structurée</li>
+                            <li><strong>Planifier</strong> les étapes de développement avec des jalons réalistes</li>
+                            <li><strong>Évaluer</strong> la faisabilité technique et économique d'une solution</li>
+                        </ul>
+
+                        <h3>🔧 Intégration technique</h3>
+                        <ul>
+                            <li><strong>Intégrer</strong> plusieurs technologies et approches apprises durant la formation</li>
+                            <li><strong>Choisir</strong> les outils les plus adaptés selon les contraintes du projet</li>
+                            <li><strong>Développer</strong> une solution fonctionnelle et déployée</li>
+                        </ul>
+
+                        <h3>📋 Documentation et communication</h3>
+                        <ul>
+                            <li><strong>Documenter</strong> votre démarche de façon reproductible</li>
+                            <li><strong>Présenter</strong> et défendre vos choix techniques et méthodologiques</li>
+                            <li><strong>Établir</strong> un plan d'évolution et de maintenance de votre solution</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Programme détaillé -->
+                <section class="section">
+                    <h2 class="section-title">📋 Programme détaillé</h2>
+                    <div class="section-content">
+                        <h3>🎯 Séquence 1 : Brief et définition du projet (90min)</h3>
+                        <ul>
+                            <li><strong>Cahier des charges</strong> : Contraintes techniques et critères d'évaluation</li>
+                            <li><strong>Méthodologie Design Thinking</strong> : Framework de conception pour l'IA</li>
+                            <li><strong>Choix du sujet</strong> : Brainstorming, pitch et validation collective</li>
+                            <li><strong>Planification détaillée</strong> : Jalons, livrables et points de contrôle</li>
+                        </ul>
+
+                        <h3>🏗️ Séquence 2 : Conception et architecture (120min)</h3>
+                        <ul>
+                            <li><strong>Architecture de solution</strong> : Schéma fonctionnel et composants IA/non-IA</li>
+                            <li><strong>Sélection des outils</strong> : Comparaison des alternatives et critères de choix</li>
+                            <li><strong>Prototypage rapide</strong> : Proof of concept et validation de faisabilité</li>
+                            <li><strong>Plan de développement</strong> : MVP, priorisation et environnement technique</li>
+                        </ul>
+
+                        <h3>⚡ Séquence 3 : Réalisation et développement (180min)</h3>
+                        <ul>
+                            <li><strong>Développement guidé</strong> : Implémentation step-by-step avec accompagnement</li>
+                            <li><strong>Tests et validation</strong> : Tests unitaires, intégration et données réelles</li>
+                            <li><strong>Documentation technique</strong> : Code, déploiement et maintenance</li>
+                            <li><strong>Préparation présentation</strong> : Structure, démo live et anticipation des questions</li>
+                        </ul>
+
+                        <h3>🎤 Séquence 4 : Présentation et feedback (90min)</h3>
+                        <ul>
+                            <li><strong>Présentations individuelles</strong> : 6 présentations de 10 min + 5 min Q&A</li>
+                            <li><strong>Démonstrations live</strong> : Solutions fonctionnelles en action</li>
+                            <li><strong>Feedback collectif</strong> : Évaluation selon grille de critères</li>
+                            <li><strong>Plan d'amélioration</strong> : Suggestions d'évolution et bonnes pratiques</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Exemples de projets -->
+                <section class="section">
+                    <h2 class="section-title">💡 Exemples de projets types</h2>
+                    <div class="section-content">
+                        <h3>🟢 Niveau débutant</h3>
+                        <ul>
+                            <li><strong>Assistant de veille personnalisé</strong> avec résumés automatiques de sources multiples</li>
+                            <li><strong>Générateur de contenu marketing</strong> pour PME avec adaptation au secteur d'activité</li>
+                            <li><strong>Chatbot de support client</strong> avec base de connaissances et escalade intelligente</li>
+                        </ul>
+
+                        <h3>🟡 Niveau intermédiaire</h3>
+                        <ul>
+                            <li><strong>Système d'analyse de sentiment</strong> sur avis clients avec dashboard de suivi</li>
+                            <li><strong>Workflow d'automatisation complète</strong> d'un processus métier spécifique</li>
+                            <li><strong>Application de génération de présentations</strong> à partir de données structurées</li>
+                        </ul>
+
+                        <h3>🔴 Niveau avancé</h3>
+                        <ul>
+                            <li><strong>Plateforme de formation adaptative</strong> avec IA pour personnaliser les parcours</li>
+                            <li><strong>Système de recommandation produit</strong> personnalisé avec apprentissage continu</li>
+                            <li><strong>Solution d'analyse prédictive</strong> pour optimisation business avec modèle prédictif</li>
+                        </ul>
+
+                        <div class="highlight-box">
+                            <h3>💎 Livrables attendus</h3>
+                            <ul>
+                                <li><strong>Solution technique</strong> : Application/workflow fonctionnel et déployé</li>
+                                <li><strong>Documentation complète</strong> : Rapport technique, guide utilisateur et métriques</li>
+                                <li><strong>Présentation professionnelle</strong> : Démonstration live et plan d'évolution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ce que vous allez apprendre -->
+                <section class="section">
+                    <h2 class="section-title">🧠 Ce que vous allez apprendre</h2>
+                    <div class="section-content">
+                        <h3>Compétences techniques</h3>
+                        <ul>
+                            <li><strong>Gestion de projet IA</strong> : De l'idée au déploiement en production</li>
+                            <li><strong>Architecture système</strong> : Conception de solutions robustes et évolutives</li>
+                            <li><strong>Intégration multi-outils</strong> : Combinaison efficace de différentes technologies IA</li>
+                            <li><strong>Tests et validation</strong> : Protocoles de vérification et métriques de performance</li>
+                        </ul>
+
+                        <h3>Compétences professionnelles</h3>
+                        <ul>
+                            <li><strong>Présentation technique</strong> : Communication claire de solutions complexes</li>
+                            <li><strong>Justification des choix</strong> : Argumentation des décisions techniques</li>
+                            <li><strong>Documentation reproductible</strong> : Création de guides pour la maintenance</li>
+                            <li><strong>Vision produit</strong> : Planification d'évolution et roadmap</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Enhanced Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">🗺️ Parcours du module</h3>
+                <ul class="sequence-list">
+                    <li class="sequence-item current">
+                        <div class="sequence-icon overview">📋</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Vue d'ensemble</div>
+                            <div class="sequence-duration">5 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Brief et définition</div>
+                            <div class="sequence-duration">90 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Conception et architecture</div>
+                            <div class="sequence-duration">120 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Réalisation et développement</div>
+                            <div class="sequence-duration">180 minutes</div>
+                        </div>
+                    </li>
+                    <li class="sequence-item">
+                        <div class="sequence-icon locked">🔒</div>
+                        <div class="sequence-info">
+                            <div class="sequence-title">Présentation et feedback</div>
+                            <div class="sequence-duration">90 minutes</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text-primary); font-weight: 700;">⏱️ Temps estimé</h4>
+                    <div style="display: grid; gap: 0.75rem; font-size: 1rem; color: var(--text-secondary);">
+                        <div>📋 Vue d'ensemble : 5min</div>
+                        <div>🎯 Brief et définition : 90min</div>
+                        <div>🏗️ Conception : 120min</div>
+                        <div>⚡ Réalisation : 180min</div>
+                        <div>🎤 Présentation : 90min</div>
+                        <div style="font-weight: bold; color: var(--text-primary); border-top: 2px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.75rem; font-size: 1.1rem;">⏰ Total : 8h25</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- SPECTACULAR CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">🚀 Prêt à créer votre projet IA ?</h2>
+                <p class="cta-description">
+                    Transformez vos idées en réalité ! Ce module final vous permettra de créer une solution IA complète et fonctionnelle que vous pourrez utiliser immédiatement dans votre quotidien professionnel ou personnel.
+                </p>
+                <a href="projet_8_definition_1.html" class="btn btn-cta">
+                    Commencer mon projet final 🎯
+                </a>
+            </div>
+        </section>
+
+        <!-- Enhanced Navigation -->
+        <div class="module-navigation">
+            <a href="ethique_7_futur_3.html" class="btn btn-secondary">
+                <span>←</span> Module 7 - Séquence 3
+            </a>
+            <div style="text-align: center;">
+                <div style="color: var(--text-muted); font-size: 1rem; font-weight: 600;">Module 8 sur 8</div>
+                <div style="font-weight: 700; color: var(--text-primary); font-size: 1.2rem;">Projet Final</div>
+            </div>
+            <a href="index.html" class="btn btn-primary">
+                Brief et définition <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        // Enhanced scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
