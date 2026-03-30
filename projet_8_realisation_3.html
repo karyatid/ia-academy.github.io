@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Final : La Réalisation | IA Academy</title>
+    <style>
+        :root {
+            --primary-color: #6366f1; --secondary-color: #8b5cf6; --accent-color: #06b6d4;
+            --success-color: #10b981; --bg-primary: #ffffff; --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9; --text-primary: #1e293b; --text-secondary: #64748b;
+            --text-muted: #94a3b8; --border-color: rgba(99, 102, 241, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.8); --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --pattern-opacity: 0.03;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-tertiary: #334155;
+            --text-primary: #e2e8f0; --text-secondary: #cbd5e1; --text-muted: #94a3b8;
+            --border-color: rgba(99, 102, 241, 0.3); --glass-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.9); --shadow: 0 25px 50px rgba(0, 0, 0, 0.3); --pattern-opacity: 0.08;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed; min-height: 100vh; transition: all 0.3s ease; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .header { background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); padding: 1rem 0;
+            position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; }
+        .breadcrumb { font-size: 0.85rem; color: var(--text-secondary); }
+        .breadcrumb a { color: var(--primary-color); text-decoration: none; }
+        .theme-btn { background: var(--border-color); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; }
+        .main-content { padding: 3rem 0; }
+        .page-title { font-size: 2.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+        .page-subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 2rem;
+            border: 1px solid var(--border-color); box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+        .card h2 { color: var(--primary-color); margin-bottom: 1rem; font-size: 1.4rem; }
+        .card h3 { color: var(--text-primary); margin-bottom: 0.75rem; font-size: 1.1rem; }
+        .card p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
+        .card ul { color: var(--text-secondary); padding-left: 1.5rem; line-height: 1.8; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; background: rgba(99,102,241,0.1); color: var(--primary-color); margin-bottom: 1rem; }
+        .nav-footer { display: flex; justify-content: space-between; align-items: center;
+            padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 2rem; }
+        .btn { padding: 0.75rem 1.5rem; border-radius: 10px; text-decoration: none; font-weight: 600;
+            border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-secondary { background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .highlight-box { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+            border-left: 4px solid var(--primary-color); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; }
+        .step { display: flex; gap: 1rem; margin-bottom: 1.25rem; align-items: flex-start; }
+        .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color);
+            color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .page-title { font-size: 1.6rem; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <nav class="breadcrumb">
+                    <a href="dashboard.html">Dashboard</a> &rsaquo; Projet Final : La Réalisation
+                </nav>
+                <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <div class="container">
+            <span class="badge">Module 8 — Projet Final</span>
+            <h1 class="page-title">Projet Final : La Réalisation</h1>
+            <p class="page-subtitle">Module 8 — Phase 3</p>
+            <div class="card">
+                <h2>🛠️ Phase de Réalisation</h2>
+                <p>C'est le moment de construire ! Armé de votre brief et de votre conception, vous allez maintenant créer votre prototype IA. Cette phase demande méthode, tests réguliers et itérations.</p>
+            </div>
+            <div class="card">
+                <h2>🔄 Méthode itérative</h2>
+                <div class="step"><div class="step-num">1</div><div><strong>MVP (Minimum Viable Product)</strong> — Commencez par la version la plus simple qui démontre la valeur. Ne cherchez pas la perfection dès le début.</div></div>
+                <div class="step"><div class="step-num">2</div><div><strong>Tester tôt</strong> — Testez avec de vrais cas d'usage dès que possible. Les surprises arrivent toujours plus tôt qu'on ne le pense.</div></div>
+                <div class="step"><div class="step-num">3</div><div><strong>Itérer rapidement</strong> — Chaque test révèle des améliorations. Cycles courts : construire → tester → apprendre → améliorer.</div></div>
+                <div class="step"><div class="step-num">4</div><div><strong>Documenter</strong> — Notez vos choix techniques, vos prompts qui fonctionnent, les problèmes rencontrés.</div></div>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>🧪 Protocole de test</h3>
+                    <ul>
+                        <li>Définir 5-10 scénarios de test</li>
+                        <li>Tester les cas limites (edge cases)</li>
+                        <li>Mesurer la qualité des outputs IA</li>
+                        <li>Tester avec des vrais utilisateurs</li>
+                        <li>Documenter les résultats</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🐛 Débogage IA</h3>
+                    <ul>
+                        <li>Output inattendu → Revoir le prompt</li>
+                        <li>Incohérences → Ajouter du contexte</li>
+                        <li>Trop verbeux → Contraindre le format</li>
+                        <li>Hallucinations → Ajouter des sources</li>
+                        <li>Coûts élevés → Optimiser les tokens</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <h2>📦 Livrable attendu</h2>
+                <div class="highlight-box">
+                    Un prototype fonctionnel qui démontre votre solution sur au moins un scénario complet, accompagné d'une documentation de 1-2 pages (ce que ça fait, comment l'utiliser, limites connues).
+                </div>
+            </div>
+            <div class="nav-footer">
+                <a href="projet_8_conception_2.html" class="btn btn-secondary">&#8592; Conception</a>
+                <a href="projet_8_presentation_4.html" class="btn btn-primary">Présentation &#8594;</a>
+            </div>
+        </div>
+    </main>
+    <script>
+        function toggleTheme() {
+            const t = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', t === 'dark' ? 'light' : 'dark');
+            localStorage.setItem('theme', t === 'dark' ? 'light' : 'dark');
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+        });
+    </script>
+</body>
+</html>

@@ -95,7 +95,7 @@ def main():
     elif choice == "3":
         # Corrections rapides des caractères les plus courants
         fixes = [
-            ('Ã©', 'é'), ('Ã¨', 'è'), ('Ã ', 'à'), ('â†'', '→'), 
+            ('Ã©', 'é'), ('Ã¨', 'è'), ('Ã ', 'à'), ('â†'', '->'), 
             ('â†', '←'), ('âœ"', '✓'), ('ðŸ', '🏆'), ('ðŸš€', '🚀')
         ]
         for bad, good in fixes:
