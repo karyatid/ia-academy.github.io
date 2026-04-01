@@ -1,56 +1,66 @@
-# Formation IA V4 — CLAUDE.md
+# IA Academy — CLAUDE.md
 
-## Description du projet
+## Vue d'ensemble du projet
 
-Formation complète sur l'Intelligence Artificielle, composée de fichiers HTML organisés par modules, avec des scripts Python de maintenance.
+Dépôt GitHub Pages (`karyatid/ia-academy.github.io`) contenant deux composants :
 
-## Structure des modules
+1. **Site vitrine** (racine) — Page marketing statique en français ciblant TPE/PME, freelances et particuliers
+2. **Formation** (`formation/`) — Formation complète sur l'IA, 8 modules, fichiers HTML organisés par module
+
+## Architecture
+
+```
+/                           ← Site vitrine (point d'entrée GitHub Pages)
+├── index.html              ← Page d'accueil du site vitrine
+├── programme.html
+├── a-propos.html
+├── blog.html
+├── article.html
+├── contact.html
+├── assets/css/design-system.css
+└── formation/              ← Tous les contenus de formation
+    ├── index.html          ← Dashboard / point d'entrée de la formation
+    ├── assets/css/main.css
+    └── [modules 1–8]
+```
+
+## Site vitrine
+
+**Stack** : HTML + CSS custom properties + Tailwind CDN + vanilla JS. Aucun build system.
+
+- Design token principal : `--color-primary: #E8600A` (orange)
+- Chaque page HTML embarque sa propre config Tailwind (`<script id="tailwind-config">`)
+- Navigation active : classe `.nav-active` / `.nav-default` (définie dans `design-system.css`)
+- Typo : **Manrope** (titres + body) + **Inter** (labels) via Google Fonts
+
+## Formation
+
+### Modules
 
 | Module | Préfixe | Contenu |
 |--------|---------|---------|
-| 1 | `fondamentaux_1_` | Fondamentaux de l'IA (histoire, introduction, types, quiz) |
-| 2 | `prompting_2_` | Prompting (bases, techniques avancées, atelier, quiz) |
-| 3 | `outils_3_` | Outils IA (ChatGPT, Claude, autres, atelier) |
-| 4 | `generative_4_` | IA Générative (texte, image, audio, vidéo, workflows) |
-| 5 | `automatisation_5_` | Automatisation (Make, Zapier, projet) |
-| 6 | `casusage_6_` | Cas d'usage (éducation, marketing, productivité) |
-| 7 | `ethique_7_` | Éthique IA (enjeux, biais, futur) |
+| 1 | `fondamentaux_1_` | Fondamentaux de l'IA |
+| 2 | `prompting_2_` | Prompting |
+| 3 | `outils_3_` | Outils IA |
+| 4 | `generative_4_` | IA Générative |
+| 5 | `automatisation_5_` | Automatisation |
+| 6 | `casusage_6_` | Cas d'usage |
+| 7 | `ethique_7_` | Éthique IA |
 | 8 | `projet_8_` | Projet final |
 
-## Fichiers principaux
+### Conventions formation
 
-- `index.html` — Page d'accueil / point d'entrée
-- `dashboard.html` — Tableau de bord de la formation
-- `fix_formation.py` — Correction automatique complète (encodage + navigation)
-- `quick_fix.py` — Modifications rapides et ciblées
-- `test_quiz.py` — Testeur de quiz HTML
-- `correction_report.json` — Rapport des corrections appliquées
+- Encodage : **UTF-8** obligatoire
+- Nommage : `module_numéro_sujet_ordre.html` (ex: `fondamentaux_1_quiz_4.html`)
+- Tous les liens internes sont relatifs entre fichiers du dossier `formation/`
 
-## Conventions et règles
+## TODO — À faire (non urgent)
 
-- Encodage : **UTF-8** obligatoire pour tous les fichiers HTML
-- Convention de nommage : `module_numéro_sujet_ordre.html` (ex: `fondamentaux_1_quiz_4.html`)
-- Les scripts Python n'utilisent que la bibliothèque standard (pas de pip install)
+- [ ] **Logo** : créer un logo unifié pour la marque (site vitrine + formation utilisent des noms différents — à harmoniser)
+- [ ] **Lien logo formation → site vitrine** : dans tous les fichiers de formation, le logo pointe vers `index.html` (dashboard formation). À terme, le faire pointer vers `../index.html` (site vitrine) ou prévoir une navigation retour.
+- [ ] **CTA site vitrine → formation** : ajouter un bouton "Accéder à la formation" dans le hero du site vitrine pointant vers `formation/index.html`
+- [ ] **Nom unifié** : harmoniser le nom de la formation et de la société sur tous les supports
 
-## Commandes utiles
+## Développement local
 
-```bash
-# Correction complète avec sauvegarde
-python fix_formation.py
-
-# Modification rapide et ciblée
-python quick_fix.py
-
-# Tester les quiz
-python test_quiz.py
-
-# Ouvrir le dashboard
-open dashboard.html
-```
-
-## Points d'attention
-
-- Toujours vérifier l'encodage UTF-8 lors de modifications de fichiers HTML
-- Les liens de navigation entre pages suivent la convention de nommage des fichiers
-- Tester les quiz après toute modification JavaScript
-- Créer un backup manuel avant des modifications massives
+Ouvrir directement les fichiers HTML dans un navigateur. Aucune installation requise.

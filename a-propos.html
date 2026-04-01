@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="light" lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>À propos - IA Academy Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@300..700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/design-system.css"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#E8600A",
+          "cta": "#F97316",
+          "background-light": "#FAFAF7",
+          "background-dark": "#1A1208",
+          "text-primary": "#0F0F0F",
+          "text-secondary": "#888888",
+        },
+        fontFamily: { "display": ["Inter", "sans-serif"] },
+        borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+</head>
+<body class="bg-background-light text-text-primary">
+
+<!-- ===== NAVIGATION UNIFIÉE ===== -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAFAF7]/90 backdrop-blur-md border-b border-slate-200/60">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="text-xl font-bold tracking-tighter text-[#1A1208]" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Accueil</a>
+      <a href="programme.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Programme</a>
+      <a href="a-propos.html" class="nav-active text-sm tracking-tight" style="font-family: Manrope, sans-serif;">À propos</a>
+      <a href="blog.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Blog</a>
+      <a href="contact.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Contact</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="../formation-ia-v4/index.html" class="hidden lg:block text-sm font-semibold text-[#E8600A] hover:underline">Accéder à la formation</a>
+      <a href="contact.html" class="bg-[#F97316] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform shadow-lg shadow-orange-500/20">S'inscrire</a>
+      <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+        <span class="material-symbols-outlined text-[#1A1208]">menu</span>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-[#FAFAF7] border-t border-slate-200 px-6 py-4 flex flex-col gap-4">
+    <a href="index.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Accueil</a>
+    <a href="programme.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Programme</a>
+    <a href="a-propos.html" class="text-sm font-bold text-[#E8600A]">À propos</a>
+    <a href="blog.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Blog</a>
+    <a href="contact.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Contact</a>
+    <hr class="border-slate-200"/>
+    <a href="../formation-ia-v4/index.html" class="text-sm font-semibold text-[#E8600A]">Accéder à la formation →</a>
+    <a href="contact.html" class="bg-[#F97316] text-white px-5 py-3 rounded-full text-sm font-bold text-center block">S'inscrire</a>
+  </div>
+</nav>
+
+<div class="relative flex min-h-screen flex-col bg-background-light pt-20">
+<main class="flex-1">
+
+<!-- Hero Section -->
+<section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="space-y-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+        <span class="material-symbols-outlined text-sm">stars</span> Notre Mission
+      </div>
+      <h1 class="text-text-primary text-5xl md:text-6xl font-black leading-tight tracking-tight">
+        Propulser les PME et <span class="text-primary">Indépendants</span>
+      </h1>
+      <p class="text-text-secondary text-lg md:text-xl leading-relaxed max-w-xl">
+        IA Academy Pro démocratise l'intelligence artificielle en transformant des concepts complexes en compétences pratiques et immédiatement actionnables pour votre quotidien professionnel.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="programme.html" class="bg-cta text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-cta/20 hover:-translate-y-1 transition-transform">
+          Découvrir nos formations
+        </a>
+      </div>
+    </div>
+    <div class="relative group">
+      <div class="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-cta/20 rounded-3xl blur-2xl group-hover:opacity-75 transition-opacity opacity-50"></div>
+      <div class="relative bg-slate-100 rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl border border-white/20">
+        <img alt="Équipe IA Academy Pro" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0y2BYu0naR3K8Kd6yhcCh8_S03kuHhrgSh4wcFYe4a3OIvD_R__LXl0hqeKFVPfcafOsVfiGaqSfpVNOTO1Wg0hNqfdRkLwx0-If2hGMw69fi18Bt9AGKI_ixet8eyHooN8sfiVWDKArC7-af6Cn-QK5aZAfuUCExm1I3Tpos22L_6w0NAOMwbFPalq116mVx9VyLhC2gd55MkkJoXSUM-f4m5pMHYfjt57GWWzVo-MGQ-1MWn4nsuwsP8aHmm5_kfF_6uNUWB_c"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Notre Histoire -->
+<section class="bg-[#F3F3EF] py-20">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="order-2 md:order-1 h-[400px] rounded-2xl overflow-hidden shadow-xl transform -rotate-2">
+        <img class="w-full h-full object-cover" alt="Atelier collaboratif" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiMPcJNd8SdY4zjHgEpfA3YfJQUY68982BB0zRTvzDdCPiBIu7rFvjPFISjYiM1HaAmxr14dG10SA-D64qpadFhrMvNRW-Xo0-7ITXjkgIiwmm77VeXBi54bezufjv8Tld9sitAn7fNZNPQ_f6zy_BuhFC98UzvgwJs54bT_K-OlE0pHwS4yfv6p8OmOF9TTTgn9Zd36uvBJkMHcuu3qB43sI2DCRRWTrjA5HP_mwxEjLoCDtD8l0WMfpNV2E-yGng-tlPRCIZ5gU"/>
+      </div>
+      <div class="space-y-6 order-1 md:order-2">
+        <h2 class="text-text-primary text-4xl font-bold tracking-tight">Notre Histoire</h2>
+        <p class="text-text-secondary text-lg leading-relaxed">
+          IA Academy Pro est née d'un constat simple en 2022 : l'écart grandissant entre la théorie académique de l'IA et la réalité quotidienne des entreprises.
+        </p>
+        <p class="text-text-secondary text-lg leading-relaxed">
+          Nous avons fondé cette académie pour combler ce fossé, en offrant des parcours qui privilégient l'usage d'outils concrets plutôt que les algorithmes abstraits. Aujourd'hui, nous accompagnons ceux qui veulent rester compétitifs dans une économie en pleine mutation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Nos Valeurs -->
+<section class="max-w-7xl mx-auto px-6 py-24">
+  <div class="text-center mb-16 space-y-4">
+    <h2 class="text-text-primary text-4xl font-bold tracking-tight">Nos Valeurs Fondamentales</h2>
+    <p class="text-text-secondary max-w-2xl mx-auto">Ce qui nous définit et guide chacune de nos sessions de formation.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+      <div class="size-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-3xl">psychology</span>
+      </div>
+      <h3 class="text-xl font-bold text-text-primary mb-4">Pragmatisme (60% Pratique)</h3>
+      <p class="text-text-secondary">Pas de longs discours. Nos formations sont composées majoritairement d'ateliers pratiques sur vos propres cas d'usage réels.</p>
+    </div>
+    <div class="p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+      <div class="size-14 bg-cta/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cta group-hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-3xl">verified_user</span>
+      </div>
+      <h3 class="text-xl font-bold text-text-primary mb-4">Éthique &amp; Responsabilité</h3>
+      <p class="text-text-secondary">Nous enseignons une IA au service de l'humain, respectueuse des données et transparente dans ses applications.</p>
+    </div>
+    <div class="p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+      <div class="size-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-3xl">accessibility_new</span>
+      </div>
+      <h3 class="text-xl font-bold text-text-primary mb-4">Accessibilité</h3>
+      <p class="text-text-secondary">L'IA ne doit pas être réservée aux ingénieurs. Nous vulgarisons pour rendre la puissance tech accessible à tous les profils.</p>
+    </div>
+  </div>
+</section>
+
+<!-- L'Équipe -->
+<section class="bg-background-dark text-white py-24">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold mb-16">Rencontrez l'Équipe</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+      <div class="group">
+        <div class="aspect-square rounded-2xl overflow-hidden mb-6 relative bg-slate-700 flex items-center justify-center">
+          <span class="material-symbols-outlined text-6xl text-slate-500">person</span>
+          <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <h3 class="text-xl font-bold">Julien Moreau</h3>
+        <p class="text-primary font-medium">Fondateur &amp; Expert IA</p>
+      </div>
+      <div class="group">
+        <div class="aspect-square rounded-2xl overflow-hidden mb-6 relative bg-slate-700 flex items-center justify-center">
+          <span class="material-symbols-outlined text-6xl text-slate-500">person</span>
+          <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <h3 class="text-xl font-bold">Sophie Chen</h3>
+        <p class="text-primary font-medium">Lead Trainer</p>
+      </div>
+      <div class="group">
+        <div class="aspect-square rounded-2xl overflow-hidden mb-6 relative bg-slate-700 flex items-center justify-center">
+          <span class="material-symbols-outlined text-6xl text-slate-500">person</span>
+          <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        <h3 class="text-xl font-bold">Marc Dubois</h3>
+        <p class="text-primary font-medium">Community Manager</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pourquoi nous faire confiance -->
+<section class="max-w-7xl mx-auto px-6 py-24">
+  <div class="bg-primary/5 rounded-[2.5rem] p-8 md:p-16 relative overflow-hidden">
+    <div class="absolute top-0 right-0 -mt-20 -mr-20 size-80 bg-primary/10 rounded-full blur-3xl"></div>
+    <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="space-y-8">
+        <h2 class="text-4xl font-bold text-text-primary leading-tight">Pourquoi nous faire confiance ?</h2>
+        <div class="space-y-6">
+          <div class="flex gap-4 items-start">
+            <div class="size-10 bg-primary text-white flex items-center justify-center rounded-full flex-shrink-0">
+              <span class="material-symbols-outlined">groups</span>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-text-primary">200+ Professionnels formés</h4>
+              <p class="text-text-secondary">Des entrepreneurs et des salariés de grands groupes nous ont déjà fait confiance.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="size-10 bg-primary text-white flex items-center justify-center rounded-full flex-shrink-0">
+              <span class="material-symbols-outlined">menu_book</span>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-text-primary">Méthode Pédagogique Agile</h4>
+              <p class="text-text-secondary">Un apprentissage itératif inspiré des meilleures pratiques du monde de la tech.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="size-10 bg-primary text-white flex items-center justify-center rounded-full flex-shrink-0">
+              <span class="material-symbols-outlined">verified</span>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-text-primary">Certification Reconnue</h4>
+              <p class="text-text-secondary">Nos formations délivrent un certificat de compétences validé par nos partenaires industriels.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white p-8 rounded-3xl shadow-lg text-center transform translate-y-8">
+          <p class="text-4xl font-black text-primary mb-2">98%</p>
+          <p class="text-text-secondary font-medium">De satisfaction client</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-lg text-center">
+          <p class="text-4xl font-black text-cta mb-2">15+</p>
+          <p class="text-text-secondary font-medium">Experts intervenants</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-lg text-center transform translate-y-8">
+          <p class="text-4xl font-black text-text-primary mb-2">2500</p>
+          <p class="text-text-secondary font-medium">Heures de formation</p>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-lg text-center">
+          <p class="text-4xl font-black text-primary mb-2">4.9/5</p>
+          <p class="text-text-secondary font-medium">Note moyenne Google</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER UNIFIÉ ===== -->
+<footer class="bg-[#1A1208] text-white py-16">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div>
+        <a href="index.html" class="text-xl font-bold tracking-tighter text-white mb-4 block" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+        <p class="text-slate-400 text-sm leading-relaxed">L'intelligence artificielle au service de votre productivité et de votre carrière professionnelle.</p>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Formation</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="programme.html" class="hover:text-[#E8600A] transition-colors">Programme complet</a></li>
+          <li><a href="../formation-ia-v4/index.html" class="hover:text-[#E8600A] transition-colors">Accéder à la formation</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">S'inscrire</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Académie</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="a-propos.html" class="hover:text-[#E8600A] transition-colors">À propos</a></li>
+          <li><a href="blog.html" class="hover:text-[#E8600A] transition-colors">Blog</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Légal</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Mentions légales</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">CGV</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-8 text-center">
+      <p class="text-xs text-slate-500">© 2025 IA Academy Pro. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+</div>
+</body>
+</html>

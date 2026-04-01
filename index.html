@@ -1,900 +1,411 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html class="scroll-smooth" lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Introduction pratique à l'IA pour débutants | IA Academy</title>
-    <style>
-        /* Variables CSS pour les thèmes */
-        :root {
-            --primary-color: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary-color: #64748b;
-            --accent-color: #f59e0b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
-            
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-accent: #f1f5f9;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-            --border-color: #e2e8f0;
-            --card-bg: #ffffff;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-accent: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --border-color: #334155;
-            --card-bg: #1e293b;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            background: var(--bg-primary);
-            transition: all 0.3s ease;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        /* Header */
-        .header {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .theme-toggle {
-            background: var(--bg-accent);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .theme-toggle:hover {
-            background: var(--border-color);
-        }
-
-        /* Main Content */
-        .main {
-            padding: 2rem 0;
-            min-height: calc(100vh - 120px);
-        }
-
-        .hero-section {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--text-primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* Modules Grid */
-        .modules-section {
-            margin-bottom: 3rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .module-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .module-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--text-primary));
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .module-number {
-            background: var(--primary-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-        }
-
-        .module-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .module-duration {
-            background: var(--bg-accent);
-            color: var(--text-secondary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-left: auto;
-        }
-
-        .module-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .sequences-list {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .sequence-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .sequence-item:last-child {
-            border-bottom: none;
-        }
-
-        .sequence-item:hover {
-            background: var(--bg-accent);
-            margin: 0 -1rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            border-radius: 8px;
-        }
-
-        .sequence-number {
-            background: var(--bg-accent);
-            color: var(--text-primary);
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .sequence-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            flex: 1;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .sequence-link:hover {
-            color: var(--primary-color);
-        }
-
-        .module-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: var(--bg-accent);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border-color);
-        }
-
-        /* Resources Section */
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .resource-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .resource-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .resource-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .resource-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .resource-description {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        /* Navigation */
-        .sequence-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 3rem;
-            padding: 2rem;
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 2rem 0;
-            text-align: center;
-            color: var(--text-muted);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-            
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .resources-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .sequence-navigation {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-
-        /* Animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .module-card {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        .module-card:nth-child(1) { animation-delay: 0.1s; }
-        .module-card:nth-child(2) { animation-delay: 0.2s; }
-        .module-card:nth-child(3) { animation-delay: 0.3s; }
-        .module-card:nth-child(4) { animation-delay: 0.4s; }
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IA Academy Pro - L'Excellence en Éducation IA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@300..700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/design-system.css"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "background": "#FAFAF7",
+          "primary": "#E8600A",
+          "secondary": "#9d4300",
+          "primary-container": "#F97316",
+          "secondary-container": "#F97316",
+          "surface": "#FAFAF7",
+          "surface-container-low": "#f4f4f1",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-high": "#e8e8e5",
+          "on-background": "#0F0F0F",
+          "on-surface": "#0F0F0F",
+          "on-surface-secondary": "#888888",
+          "on-surface-variant": "#594137",
+          "outline": "#8d7165",
+          "outline-variant": "#e1bfb2",
+          "tertiary-fixed": "#f1e0ce",
+          "inverse-surface": "#1A1208",
+          "primary-fixed": "#ffdbcc",
+          "on-primary-fixed": "#351000",
+        },
+        fontFamily: {
+          "headline": ["Manrope", "sans-serif"],
+          "body": ["Manrope", "sans-serif"],
+          "label": ["Inter", "sans-serif"],
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      },
+    },
+  }
+</script>
 </head>
+<body class="bg-background text-on-background font-body selection:bg-primary/20">
 
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">
-                    🧠 IA Academy
-                </a>
-                <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
-                    🌙
-                </button>
-            </div>
+<!-- ===== NAVIGATION UNIFIÉE ===== -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAFAF7]/90 backdrop-blur-md border-b border-slate-200/60">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="text-xl font-bold tracking-tighter text-[#1A1208]" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-active text-sm tracking-tight" style="font-family: Manrope, sans-serif;">Accueil</a>
+      <a href="programme.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Programme</a>
+      <a href="a-propos.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">À propos</a>
+      <a href="blog.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Blog</a>
+      <a href="contact.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Contact</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="../formation-ia-v4/index.html" class="hidden lg:block text-sm font-semibold text-[#E8600A] hover:underline transition-all">Accéder à la formation</a>
+      <a href="contact.html" class="bg-[#F97316] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform shadow-lg shadow-orange-500/20">S'inscrire</a>
+      <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+        <span class="material-symbols-outlined text-[#1A1208]">menu</span>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-[#FAFAF7] border-t border-slate-200 px-6 py-4 flex flex-col gap-4">
+    <a href="index.html" class="text-sm font-bold text-[#E8600A]">Accueil</a>
+    <a href="programme.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Programme</a>
+    <a href="a-propos.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">À propos</a>
+    <a href="blog.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Blog</a>
+    <a href="contact.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Contact</a>
+    <hr class="border-slate-200"/>
+    <a href="../formation-ia-v4/index.html" class="text-sm font-semibold text-[#E8600A]">Accéder à la formation →</a>
+    <a href="contact.html" class="bg-[#F97316] text-white px-5 py-3 rounded-full text-sm font-bold text-center block">S'inscrire</a>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="pt-32 pb-20 px-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+    <div class="flex-1 space-y-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 text-primary rounded-full border border-primary/10">
+        <span class="text-[10px] font-bold uppercase tracking-widest font-label">Formation de Classe Mondiale</span>
+      </div>
+      <h1 class="text-5xl md:text-7xl font-bold font-headline tracking-tight text-on-background leading-[1.1]">
+        Maîtrisez l'IA pour <span class="text-primary">propulser</span> votre activité.
+      </h1>
+      <p class="text-xl text-on-surface-secondary max-w-xl leading-relaxed">
+        Une immersion académique conçue pour les PME, Freelances et innovateurs. Transformez la complexité technologique en levier de croissance stratégique.
+      </p>
+      <div class="flex flex-wrap gap-4 pt-4">
+        <a href="contact.html" class="bg-primary-container text-white px-8 py-4 rounded-full font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+          Démarrer ma formation
+        </a>
+        <a href="programme.html" class="bg-surface-container-high text-on-surface px-8 py-4 rounded-full font-bold hover:bg-surface-container-high/80 transition-all">
+          Voir le curriculum
+        </a>
+      </div>
+    </div>
+    <div class="flex-1 w-full h-[500px] relative rounded-3xl overflow-hidden shadow-2xl">
+      <img alt="Formation IA Academy Pro" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEupC8Yx-pibBxmT80qVBu_gWVSvrwLZqE_MQHXZc6-9z8BAhR3xJVVDw7fo1hvY1T3UnHP_sgMq3jh_nzuS46b9DSLE4Z6uz2fsG9lBn9OcTuTMiiqUqx0V3flsNaMxL8nNojgC3A6Mjvm3-T_asYT09saImrYpB5foDIWbYkE6mwrjaG80xShDvLQdA-KQX91G_0aLPDVgpgD7fY6C2GDUsRMVkDvbjxdhPeLNvRGCQNt1p8eZSDwjUZuivPLnb4pYO8214etpk"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#1A1208]/40 to-transparent"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Social Proof -->
+<section class="py-12 bg-surface-container-low">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="flex flex-wrap justify-between items-center gap-8 opacity-80">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl font-bold text-primary">200+</span>
+        <span class="font-label text-sm uppercase tracking-wider">Pros formés</span>
+      </div>
+      <div class="w-px h-8 bg-outline/20 hidden md:block"></div>
+      <div class="flex items-center gap-3">
+        <span class="text-3xl font-bold text-primary">4.8/5</span>
+        <span class="font-label text-sm uppercase tracking-wider">Satisfaction</span>
+      </div>
+      <div class="w-px h-8 bg-outline/20 hidden md:block"></div>
+      <div class="flex items-center gap-3">
+        <span class="text-3xl font-bold text-primary">95%</span>
+        <span class="font-label text-sm uppercase tracking-wider">Recommandent</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Differentiation Section -->
+<section class="py-32 px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20">
+      <h2 class="text-4xl font-headline font-bold mb-6">Une approche sur mesure</h2>
+      <p class="text-on-surface-secondary max-w-2xl mx-auto text-lg">Parce que vos besoins en IA dépendent de votre structure, nous avons segmenté nos bénéfices.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-outline/5">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8">
+          <span class="material-symbols-outlined text-3xl">corporate_fare</span>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
-            <!-- Hero Section -->
-            <section class="hero-section">
-                <h1 class="hero-title">Introduction pratique à l'IA pour débutants</h1>
-                <p class="hero-subtitle">
-                    Maîtrisez l'intelligence artificielle avec une approche 60% pratique, 40% théorie. 
-                    Formation complète en 8 modules progressifs pour transformer votre façon de travailler.
-                </p>
-            </section>
-
-            <!-- Stats -->
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">35h</div>
-                    <div class="stat-label">de formation</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">8</div>
-                    <div class="stat-label">modules</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">60%</div>
-                    <div class="stat-label">pratique</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">accès</div>
-                </div>
-            </section>
-
-            <!-- Modules -->
-            <section class="modules-section">
-                <h2 class="section-title">📚 Parcours de formation</h2>
-                
-                <div class="modules-grid">
-                    <!-- Module 1 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">1</div>
-                            <div class="module-title">Fondamentaux de l'IA</div>
-                            <div class="module-duration">3h</div>
-                        </div>
-                        <p class="module-description">
-                            Découvrez les bases de l'intelligence artificielle, son histoire et ses applications concrètes dans notre quotidien.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="fondamentaux_1_introduction_1.html" class="sequence-link">Introduction et concepts clés</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="fondamentaux_1_histoire_2.html" class="sequence-link">Histoire et évolution de l'IA</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="fondamentaux_1_types_safari_3.html" class="sequence-link">Types d'IA et Safari pratique</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="fondamentaux_1_quiz_4.html" class="sequence-link">Quiz et démystification</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="fondamentaux_1_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 2 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">2</div>
-                            <div class="module-title">Art du Prompting</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Maîtrisez l'art de communiquer efficacement avec les IA génératives pour obtenir des résultats exceptionnels.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="prompting_2_bases_1.html" class="sequence-link">Bases du prompting efficace</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="prompting_2_techniques_avancees_2.html" class="sequence-link">Techniques avancées</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="prompting_2_atelier_3.html" class="sequence-link">Atelier : Templates et bibliothèque</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="prompting_2_quiz_4.html" class="sequence-link">Évaluation et cas d'usage</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="prompting_2_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 3 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">3</div>
-                            <div class="module-title">Outils IA</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Explorez les outils IA essentiels et apprenez à les utiliser efficacement dans vos projets.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="outils_3_chatgpt_1a.html" class="sequence-link">ChatGPT et GPT-4</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="outils_3_claude_2.html" class="sequence-link">Claude et alternatives</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="outils_3_autres_3.html" class="sequence-link">Autres outils spécialisés</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="outils_3_atelier_4.html" class="sequence-link">Atelier comparatif</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="outils_3_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 4 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">4</div>
-                            <div class="module-title">IA Générative</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Créez du contenu avec l'IA : textes, images, vidéos et audio. Techniques et bonnes pratiques.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="generative_4_texte_scripts_1.html" class="sequence-link">Génération de texte avancée</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="generative_4_midjourney_debutant_2a.html" class="sequence-link">Création d'images et design</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="generative_4_audio_3a.html" class="sequence-link">Vidéo et audio IA</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="generative_4_projet_portfolio_4.html" class="sequence-link">Projet créatif complet</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="generative_4_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 5 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">5</div>
-                            <div class="module-title">Automatisation</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Automatisez vos tâches avec l'IA : workflows, intégrations et optimisation des processus.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                            <div class="sequence-number">1</div>
-                              <a href="automatisation_5_introduction_1.html" class="sequence-link">Introduction et concepts</a>
-                            </li>
-                             <li class="sequence-item">
-                            <div class="sequence-number">2</div>
-                            <a href="automatisation_5_zapier_2.html" class="sequence-link">Zapier et workflows</a>
-                        </li>
-                        <li class="sequence-item">
-                            <div class="sequence-number">3</div>
-                            <a href="automatisation_5_make_3.html" class="sequence-link">Make.com avancé</a>
-                        </li>
-                        <li class="sequence-item">
-                            <div class="sequence-number">4</div>
-                            <a href="automatisation_5_projet_4.html" class="sequence-link">Projet d'automatisation</a>
-                        </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="automatisation_5_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 6 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">6</div>
-                            <div class="module-title">Cas d'Usage Métier</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Applications concrètes de l'IA dans différents secteurs : éducation, marketing, productivité.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="casusage_6_education_1.html" class="sequence-link">IA et éducation</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="casusage_6_marketing_2.html" class="sequence-link">IA et marketing</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="casusage_6_productivite_3.html" class="sequence-link">IA et productivité</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="casusage_6_adaptive_2.html" class="sequence-link">Audit et implémentation</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="casusage_6_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 7 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">7</div>
-                            <div class="module-title">Éthique et IA</div>
-                            <div class="module-duration">2h</div>
-                        </div>
-                        <p class="module-description">
-                            Enjeux éthiques, bonnes pratiques et utilisation responsable de l'intelligence artificielle.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="ethique_7_enjeux_1a.html" class="sequence-link">Enjeux et défis éthiques</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="ethique_7_biais_2.html" class="sequence-link">Pratiques responsables</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="ethique_7_futur_3.html" class="sequence-link">Atelier audit éthique</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="ethique_7_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Module 8 -->
-                    <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">8</div>
-                            <div class="module-title">Projet Final ** en construction **</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Consolidez vos apprentissages avec un projet personnel utilisant les technologies IA étudiées.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="projet_8_brief_1.html" class="sequence-link">Brief et définition</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="projet_8_conception_2.html" class="sequence-link">Conception et architecture</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="projet_8_realisation_3.html" class="sequence-link">Réalisation et développement</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="projet_8_presentation_4.html" class="sequence-link">Présentation et feedback</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="projet_8_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Resources Section -->
-            <section>
-                <h2 class="section-title">🛠️ Ressources complémentaires</h2>
-                <div class="resources-grid">
-                    <div class="resource-card">
-                        <div class="resource-icon">📚</div>
-                        <div class="resource-title">Bibliothèque</div>
-                        <p class="resource-description">Templates, guides et ressources téléchargeables</p>
-                        <a href="ressources_bibliotheque.html" class="btn btn-secondary">Consulter</a>
-                    </div>
-                    <div class="resource-card">
-                        <div class="resource-icon">💬</div>
-                        <div class="resource-title">Communauté</div>
-                        <p class="resource-description">Échangez avec d'autres apprenants</p>
-                        <a href="ressources_forum.html" class="btn btn-secondary">Rejoindre</a>
-                    </div>
-                    <div class="resource-card">
-                        <div class="resource-icon">🎯</div>
-                        <div class="resource-title">Certification</div>
-                        <p class="resource-description">Validez vos compétences avec notre certification</p>
-                        <a href="certification.html" class="btn btn-secondary">Découvrir</a>
-                    </div>
-                    <div class="resource-card">
-                        <div class="resource-icon">📊</div>
-                        <div class="resource-title">Suivi</div>
-                        <p class="resource-description">Suivez votre progression et vos résultats</p>
-                        <a href="suivi_progression.html" class="btn btn-secondary">Voir</a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Navigation principale -->
-            <div class="sequence-navigation">
-                <a href="#" class="btn btn-secondary nav-btn disabled">
-                    <span>←</span> Précédent
-                </a>
-                <div style="text-align: center;">
-                    <div style="color: var(--text-muted); font-size: 0.9rem;">Formation IA Academy</div>
-                    <div style="font-weight: 600; color: var(--text-primary);">Choisissez votre module</div>
-                </div>
-                <a href="fondamentaux_1_overview.html" class="btn btn-primary nav-btn">
-                    Commencer la formation <span>→</span>
-                </a>
-            </div>
+        <h3 class="text-2xl font-bold mb-4">Pour les PME</h3>
+        <p class="text-on-surface-secondary leading-relaxed mb-6">Optimisez vos processus internes et gagnez en compétitivité grâce à l'automatisation intelligente de vos workflows.</p>
+        <ul class="space-y-3 text-sm font-label text-on-surface/80">
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> ROI mesurable</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Acculturation d'équipe</li>
+        </ul>
+      </div>
+      <div class="bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-outline/5">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8">
+          <span class="material-symbols-outlined text-3xl">person_pin</span>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 IA Academy. Formation complète à l'intelligence artificielle pour débutants - 45 heures de contenu pratique.</p>
+        <h3 class="text-2xl font-bold mb-4">Pour les Freelances</h3>
+        <p class="text-on-surface-secondary leading-relaxed mb-6">Multipliez votre capacité de production par 3. Libérez-vous des tâches répétitives pour vous concentrer sur la création.</p>
+        <ul class="space-y-3 text-sm font-label text-on-surface/80">
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Gain de temps massif</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Avantage concurrentiel</li>
+        </ul>
+      </div>
+      <div class="bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm hover:shadow-xl transition-shadow border border-outline/5">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8">
+          <span class="material-symbols-outlined text-3xl">psychology</span>
         </div>
-    </footer>
+        <h3 class="text-2xl font-bold mb-4">Pour les Particuliers</h3>
+        <p class="text-on-surface-secondary leading-relaxed mb-6">Devenez indispensable sur le marché de l'emploi en maîtrisant les outils qui définiront le travail de demain.</p>
+        <ul class="space-y-3 text-sm font-label text-on-surface/80">
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Certificats reconnus</li>
+          <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Projets concrets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Theme Toggle Function
-        function toggleTheme() {
-            try {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                
-                // Update theme toggle icon
-                const themeToggle = document.querySelector('.theme-toggle');
-                themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-            } catch (error) {
-                console.log('Theme toggle non disponible dans cet environnement');
-            }
-        }
+<!-- Curriculum Timeline -->
+<section class="py-32 bg-[#1A1208] text-white overflow-hidden">
+  <div class="max-w-7xl mx-auto px-8">
+    <div class="mb-20">
+      <span class="font-label text-primary uppercase tracking-[0.3em] text-xs font-bold">Le Parcours Académique</span>
+      <h2 class="text-4xl md:text-5xl font-headline font-bold mt-4">8 Modules vers l'Excellence</h2>
+    </div>
+    <div class="relative">
+      <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-white/10 hidden md:block"></div>
+      <div class="space-y-12">
+        <div class="flex flex-col md:flex-row items-center gap-8 relative">
+          <div class="md:w-1/2 md:text-right">
+            <h4 class="text-2xl font-bold">01. Introduction</h4>
+            <p class="text-white/60 mt-2">Comprendre les fondements et l'histoire de l'IA moderne.</p>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10 shrink-0">
+            <span class="text-sm font-bold">1</span>
+          </div>
+          <div class="md:w-1/2"></div>
+        </div>
+        <div class="flex flex-col md:flex-row-reverse items-center gap-8 relative">
+          <div class="md:w-1/2 text-left">
+            <h4 class="text-2xl font-bold">02. Prompting</h4>
+            <p class="text-white/60 mt-2">L'art de communiquer avec les LLMs pour des résultats optimaux.</p>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10 shrink-0">
+            <span class="text-sm font-bold">2</span>
+          </div>
+          <div class="md:w-1/2"></div>
+        </div>
+        <div class="flex flex-col md:flex-row items-center gap-8 relative">
+          <div class="md:w-1/2 md:text-right">
+            <h4 class="text-2xl font-bold">03. Outils</h4>
+            <p class="text-white/60 mt-2">Cartographie complète de l'écosystème IA productif.</p>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10 shrink-0">
+            <span class="text-sm font-bold">3</span>
+          </div>
+          <div class="md:w-1/2"></div>
+        </div>
+        <div class="flex flex-col md:flex-row-reverse items-center gap-8 relative">
+          <div class="md:w-1/2 text-left">
+            <h4 class="text-2xl font-bold">04. Générative</h4>
+            <p class="text-white/60 mt-2">Création de contenu, images et médias assistée par IA.</p>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10 shrink-0">
+            <span class="text-sm font-bold">4</span>
+          </div>
+          <div class="md:w-1/2"></div>
+        </div>
+        <div class="flex flex-col md:flex-row items-center gap-8 relative">
+          <div class="md:w-1/2 md:text-right">
+            <h4 class="text-2xl font-bold">05-08. Spécialisation</h4>
+            <p class="text-white/60 mt-2">Automatisation, Cas métier, Éthique &amp; Projet final.</p>
+          </div>
+          <div class="w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center z-10 shrink-0">
+            <span class="material-symbols-outlined text-primary">keyboard_double_arrow_down</span>
+          </div>
+          <div class="md:w-1/2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Initialize theme
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                const savedTheme = 'light'; // Par défaut en mode clair
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                
-                const themeToggle = document.querySelector('.theme-toggle');
-                themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-            } catch (error) {
-                console.log('Initialisation du thème non disponible dans cet environnement');
-            }
-        });
+<!-- Pricing Section -->
+<section class="py-32 px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20">
+      <h2 class="text-4xl font-headline font-bold">Choisissez votre voie</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white p-10 rounded-[2rem] flex flex-col border border-outline/10 h-full">
+        <span class="font-label text-xs font-bold uppercase text-on-surface-secondary tracking-widest mb-4">Autonomie</span>
+        <h3 class="text-2xl font-bold mb-2">En ligne</h3>
+        <div class="flex items-baseline gap-1 mb-8">
+          <span class="text-4xl font-bold">897€</span>
+          <span class="text-on-surface-secondary text-sm">HT</span>
+        </div>
+        <ul class="space-y-4 mb-10 flex-grow">
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">check</span> Accès plateforme 24/7</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">check</span> Mises à jour incluses</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">check</span> Communauté Discord</li>
+        </ul>
+        <a href="contact.html" class="w-full py-4 rounded-xl border border-primary text-primary font-bold hover:bg-primary/5 transition-all text-center block">S'inscrire</a>
+      </div>
+      <div class="bg-white p-10 rounded-[2rem] flex flex-col border-2 border-primary relative h-full transform md:-translate-y-4 shadow-2xl">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Recommandé</div>
+        <span class="font-label text-xs font-bold uppercase text-primary tracking-widest mb-4">Accompagnement</span>
+        <h3 class="text-2xl font-bold mb-2">Premium</h3>
+        <div class="flex items-baseline gap-1 mb-8">
+          <span class="text-4xl font-bold">1697€</span>
+          <span class="text-on-surface-secondary text-sm">HT</span>
+        </div>
+        <ul class="space-y-4 mb-10 flex-grow">
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">star</span> Tout le contenu En ligne</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">star</span> 4 Coachings individuels</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">star</span> Revue de projet personnalisée</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">star</span> Certification Academy Pro</li>
+        </ul>
+        <a href="contact.html" class="w-full py-4 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all text-center block">Choisir Premium</a>
+      </div>
+      <div class="bg-white p-10 rounded-[2rem] flex flex-col border border-outline/10 h-full">
+        <span class="font-label text-xs font-bold uppercase text-on-surface-secondary tracking-widest mb-4">Sur-mesure</span>
+        <h3 class="text-2xl font-bold mb-2">Entreprise</h3>
+        <div class="flex items-baseline gap-1 mb-8">
+          <span class="text-4xl font-bold">De 5+</span>
+          <span class="text-on-surface-secondary text-sm">collaborateurs</span>
+        </div>
+        <ul class="space-y-4 mb-10 flex-grow">
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">groups</span> Sessions en présentiel</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">groups</span> Audit de vos workflows</li>
+          <li class="flex items-center gap-3 text-sm"><span class="material-symbols-outlined text-primary">groups</span> Support dédié 1 an</li>
+        </ul>
+        <a href="contact.html" class="w-full py-4 rounded-xl border border-on-background text-on-background font-bold hover:bg-on-background/5 transition-all text-center block">Contacter les ventes</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    </script>
+<!-- Testimonials -->
+<section class="py-32 bg-surface-container-low px-8 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-headline font-bold mb-16">Ils nous font confiance</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-surface p-8 rounded-3xl">
+        <div class="flex gap-1 text-primary mb-4">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+        </div>
+        <p class="italic text-on-surface mb-6">"Une transformation radicale pour notre équipe marketing. Nous avons réduit nos délais de production créative de 60%."</p>
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-secondary font-bold">M</div>
+          <div>
+            <p class="font-bold text-sm">Marc L.</p>
+            <p class="text-xs text-on-surface-secondary">Directeur PME Logistique</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-surface p-8 rounded-3xl">
+        <div class="flex gap-1 text-primary mb-4">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+        </div>
+        <p class="italic text-on-surface mb-6">"En tant que freelance, le temps est mon seul actif. Cette formation m'a permis d'automatiser tout mon administratif."</p>
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-secondary font-bold">J</div>
+          <div>
+            <p class="font-bold text-sm">Julie D.</p>
+            <p class="text-xs text-on-surface-secondary">Designer UX/UI Freelance</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-surface p-8 rounded-3xl">
+        <div class="flex gap-1 text-primary mb-4">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+        </div>
+        <p class="italic text-on-surface mb-6">"Je n'y connaissais rien. Aujourd'hui, je crée mes propres scripts d'IA pour mes projets personnels. C'est magique."</p>
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-secondary font-bold">T</div>
+          <div>
+            <p class="font-bold text-sm">Thomas B.</p>
+            <p class="text-xs text-on-surface-secondary">Curieux &amp; Apprenant</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-32 text-center px-8">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-5xl font-headline font-bold mb-8">Prêt à devenir un expert ?</h2>
+    <p class="text-on-surface-secondary text-xl mb-12">Les places sont limitées pour garantir la qualité de l'accompagnement. Ne manquez pas la prochaine session.</p>
+    <a href="contact.html" class="inline-block bg-primary-container text-white px-12 py-6 rounded-full text-xl font-bold shadow-2xl shadow-primary/30 hover:scale-105 transition-all">
+      Rejoindre l'IA Academy Pro
+    </a>
+  </div>
+</section>
+
+<!-- ===== FOOTER UNIFIÉ ===== -->
+<footer class="bg-[#1A1208] text-white py-16">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div>
+        <a href="index.html" class="text-xl font-bold tracking-tighter text-white mb-4 block" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+        <p class="text-slate-400 text-sm leading-relaxed">L'intelligence artificielle au service de votre productivité et de votre carrière professionnelle.</p>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Formation</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="programme.html" class="hover:text-[#E8600A] transition-colors">Programme complet</a></li>
+          <li><a href="../formation-ia-v4/index.html" class="hover:text-[#E8600A] transition-colors">Accéder à la formation</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">S'inscrire</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Académie</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="a-propos.html" class="hover:text-[#E8600A] transition-colors">À propos</a></li>
+          <li><a href="blog.html" class="hover:text-[#E8600A] transition-colors">Blog</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Légal</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Mentions légales</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">CGV</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-xs text-slate-500">© 2025 IA Academy Pro. Tous droits réservés. Formation éligible aux financements OPCO &amp; FNE-Formation.</p>
+      <div class="flex items-center gap-2">
+        <span class="size-2 bg-green-500 rounded-full animate-pulse"></span>
+        <span class="text-slate-500 text-xs">Plateforme opérationnelle</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

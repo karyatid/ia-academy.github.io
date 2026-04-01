@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="light" lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stitch : Votre nouveau partenaire de design UI/UX | IA Academy Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@300..700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/design-system.css"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#E8600A",
+          "cta": "#F97316",
+          "background-light": "#FAFAF7",
+          "background-dark": "#1A1208",
+          "primary-text": "#0F0F0F",
+          "secondary-text": "#888888",
+        },
+        fontFamily: { "display": ["Inter", "sans-serif"] },
+        borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+</head>
+<body class="bg-background-light font-display text-primary-text antialiased">
+
+<!-- ===== NAVIGATION UNIFIÉE ===== -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAFAF7]/90 backdrop-blur-md border-b border-slate-200/60">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="text-xl font-bold tracking-tighter text-[#1A1208]" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Accueil</a>
+      <a href="programme.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Programme</a>
+      <a href="a-propos.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">À propos</a>
+      <a href="blog.html" class="nav-active text-sm tracking-tight" style="font-family: Manrope, sans-serif;">Blog</a>
+      <a href="contact.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Contact</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="../formation-ia-v4/index.html" class="hidden lg:block text-sm font-semibold text-[#E8600A] hover:underline">Accéder à la formation</a>
+      <a href="contact.html" class="bg-[#F97316] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform shadow-lg shadow-orange-500/20">S'inscrire</a>
+      <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+        <span class="material-symbols-outlined text-[#1A1208]">menu</span>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-[#FAFAF7] border-t border-slate-200 px-6 py-4 flex flex-col gap-4">
+    <a href="index.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Accueil</a>
+    <a href="programme.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Programme</a>
+    <a href="a-propos.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">À propos</a>
+    <a href="blog.html" class="text-sm font-bold text-[#E8600A]">Blog</a>
+    <a href="contact.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Contact</a>
+    <hr class="border-slate-200"/>
+    <a href="../formation-ia-v4/index.html" class="text-sm font-semibold text-[#E8600A]">Accéder à la formation →</a>
+    <a href="contact.html" class="bg-[#F97316] text-white px-5 py-3 rounded-full text-sm font-bold text-center block">S'inscrire</a>
+  </div>
+</nav>
+
+<div class="relative flex h-auto min-h-screen w-full flex-col pt-20">
+<div class="flex h-full grow flex-col">
+<main class="flex-1">
+<div class="max-w-5xl mx-auto px-6 py-8">
+  <!-- Breadcrumbs -->
+  <nav class="flex items-center gap-2 text-sm font-medium mb-8">
+    <a class="text-secondary-text hover:text-primary" href="blog.html">Blog</a>
+    <span class="material-symbols-outlined text-secondary-text/50 text-sm">chevron_right</span>
+    <a class="text-secondary-text hover:text-primary" href="blog.html">Design UI/UX</a>
+    <span class="material-symbols-outlined text-secondary-text/50 text-sm">chevron_right</span>
+    <span class="text-primary-text truncate">Stitch : Votre nouveau partenaire...</span>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="space-y-6 mb-12">
+    <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+      Design UI/UX
+    </div>
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-primary-text leading-[1.1] tracking-tight">
+      Stitch : Votre nouveau partenaire de design UI/UX boosté par l'IA
+    </h1>
+    <div class="flex flex-wrap items-center gap-6 text-secondary-text">
+      <div class="flex items-center gap-3">
+        <div class="size-10 rounded-full overflow-hidden bg-slate-200 flex items-center justify-center font-bold text-slate-500">A</div>
+        <span class="font-semibold text-primary-text">Alex J.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-lg">calendar_today</span>
+        <span>12 Octobre 2024</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-lg">schedule</span>
+        <span>8 min de lecture</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Image -->
+  <div class="aspect-[21/9] w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl mb-12 border border-slate-200">
+    <div class="w-full h-full bg-slate-200 relative group">
+      <img alt="Poste de travail moderne avec logiciel de design" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2_zP9Dj9B8RziO0fAEOiaqJoSyRxHmkMyijQSP9XpI2ZspIROFO2fTYMxNYJviK0Qd7_HIj8mbZQSu8KwCbg-Q-HdOcFcjCYGajabXkGdaKP5Bb0zv_OeVuUfwND9MwTxsk51sBdLRSdQc3HWG9E4i_iGATtVvR5fXa1CnbSlIW19UFC88bGpzcny5ddruMVmTfvHbpVYTOxwTsnWO69tiWNhj439Dgpj6O8mcR6ZRRflhX6wyEU5Ih-N-jzWJJHRehwKBxETBMg"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+    </div>
+  </div>
+
+  <!-- Article Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    <!-- Main Body -->
+    <article class="lg:col-span-8 prose prose-slate max-w-none">
+      <p class="text-xl leading-relaxed text-secondary-text font-medium mb-8">
+        Le monde du design d'interface connaît une révolution sans précédent. Avec l'arrivée de Stitch, l'intelligence artificielle ne se contente plus d'assister ; elle devient un véritable collaborateur créatif capable de transformer vos idées en prototypes fonctionnels en quelques secondes.
+      </p>
+      <h2 class="text-3xl font-bold text-primary-text mt-12 mb-6 flex items-center gap-3">
+        <span class="size-2 bg-primary rounded-full"></span>
+        Qu'est-ce que Stitch ?
+      </h2>
+      <p class="mb-6 text-primary-text/80 leading-relaxed">
+        Stitch est une plateforme de design de nouvelle génération qui intègre des modèles de langage avancés directement dans votre flux de travail UI/UX. Contrairement aux outils traditionnels, Stitch comprend le contexte métier et les besoins utilisateurs pour suggérer des mises en page cohérentes et esthétiques.
+      </p>
+      <p class="mb-6 text-primary-text/80 leading-relaxed">
+        Que vous soyez un designer chevronné cherchant à automatiser les tâches répétitives ou un entrepreneur souhaitant maquetter rapidement une idée, Stitch offre une flexibilité inégalée.
+      </p>
+      <blockquote class="border-l-4 border-primary bg-primary/5 p-8 rounded-r-xl my-10 italic text-lg font-medium text-primary-text">
+        "Le design n'est pas seulement ce à quoi il ressemble, c'est comment il fonctionne. Avec l'IA, nous pouvons enfin nous concentrer sur l'expérience plutôt que sur les pixels."
+      </blockquote>
+      <h3 class="text-2xl font-bold text-primary-text mt-10 mb-4">Fonctionnalités Clés</h3>
+      <ul class="space-y-4 mb-8">
+        <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+          <span class="text-primary-text/80"><strong>Génération de wireframes :</strong> Transformez un simple prompt textuel en une structure de page complète.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+          <span class="text-primary-text/80"><strong>Design system intelligent :</strong> Stitch crée automatiquement une palette de couleurs et une typographie harmonieuses basées sur votre marque.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+          <span class="text-primary-text/80"><strong>Accessibilité native :</strong> Vérification en temps réel des contrastes et de la lisibilité pour répondre aux standards WCAG.</span>
+        </li>
+      </ul>
+      <h2 class="text-3xl font-bold text-primary-text mt-12 mb-6">Comment Stitch change la donne pour les entreprises</h2>
+      <p class="mb-6 text-primary-text/80 leading-relaxed">
+        Pour les entreprises, le temps, c'est de l'argent. Stitch réduit le cycle de conception de 60% en éliminant les allers-retours fastidieux sur les premières itérations. Les équipes produit peuvent désormais tester des hypothèses de design en une matinée au lieu d'une semaine complète.
+      </p>
+
+      <!-- Social Share -->
+      <div class="mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="font-bold text-primary-text uppercase tracking-wider text-sm">Partager cet article</div>
+        <div class="flex gap-4">
+          <button class="size-10 flex items-center justify-center rounded-full bg-slate-100 text-secondary-text hover:bg-primary hover:text-white transition-all">
+            <svg class="size-5 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+          </button>
+          <button class="size-10 flex items-center justify-center rounded-full bg-slate-100 text-secondary-text hover:bg-primary hover:text-white transition-all">
+            <svg class="size-5 fill-current" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"></path></svg>
+          </button>
+          <button class="size-10 flex items-center justify-center rounded-full bg-slate-100 text-secondary-text hover:bg-primary hover:text-white transition-all">
+            <span class="material-symbols-outlined text-xl">link</span>
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="lg:col-span-4 space-y-10">
+      <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+        <h4 class="text-xl font-bold mb-6 text-primary-text">Articles Similaires</h4>
+        <div class="space-y-6">
+          <a class="group flex gap-4" href="article.html">
+            <div class="size-20 shrink-0 rounded-xl overflow-hidden bg-slate-200 flex items-center justify-center">
+              <span class="material-symbols-outlined text-slate-400 text-2xl">article</span>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold leading-tight text-primary-text group-hover:text-primary transition-colors">L'IA et la psychologie des couleurs en UX</h5>
+              <span class="text-xs text-secondary-text mt-2 block">5 min de lecture</span>
+            </div>
+          </a>
+          <a class="group flex gap-4" href="article.html">
+            <div class="size-20 shrink-0 rounded-xl overflow-hidden bg-slate-200 flex items-center justify-center">
+              <span class="material-symbols-outlined text-slate-400 text-2xl">article</span>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold leading-tight text-primary-text group-hover:text-primary transition-colors">Top 10 des outils IA pour designers en 2025</h5>
+              <span class="text-xs text-secondary-text mt-2 block">12 min de lecture</span>
+            </div>
+          </a>
+          <a class="group flex gap-4" href="article.html">
+            <div class="size-20 shrink-0 rounded-xl overflow-hidden bg-slate-200 flex items-center justify-center">
+              <span class="material-symbols-outlined text-slate-400 text-2xl">article</span>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold leading-tight text-primary-text group-hover:text-primary transition-colors">Comment l'IA va remplacer Figma ?</h5>
+              <span class="text-xs text-secondary-text mt-2 block">10 min de lecture</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <!-- Newsletter CTA Sidebar -->
+      <div class="bg-primary p-8 rounded-3xl text-white relative overflow-hidden group">
+        <div class="absolute -right-8 -top-8 size-32 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all"></div>
+        <h4 class="text-2xl font-black mb-4 relative z-10">Restez informé</h4>
+        <p class="text-white/80 text-sm mb-6 relative z-10">Recevez nos dernières analyses sur l'IA directement dans votre boîte mail.</p>
+        <div class="space-y-3 relative z-10">
+          <input class="w-full bg-white/20 border-none rounded-xl placeholder:text-white/60 focus:ring-2 focus:ring-white/40 text-sm py-3" placeholder="Votre email" type="email"/>
+          <button class="w-full bg-white text-primary font-bold py-3 rounded-xl hover:bg-slate-100 transition-colors shadow-lg">S'abonner</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Final CTA -->
+  <section class="mt-20 py-16 px-8 rounded-[2.5rem] bg-background-dark text-white text-center relative overflow-hidden">
+    <div class="relative z-10 max-w-2xl mx-auto space-y-8">
+      <h2 class="text-3xl md:text-5xl font-black">Prêt à maîtriser le futur du design ?</h2>
+      <p class="text-lg text-slate-400">Rejoignez la prochaine cohorte de l'IA Academy et apprenez à intégrer les meilleurs outils d'IA dans vos projets dès aujourd'hui.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="contact.html" class="w-full sm:w-auto px-10 py-4 bg-cta text-white font-black rounded-xl text-lg hover:scale-105 transition-transform shadow-xl shadow-cta/30">
+          Rejoindre la cohorte
+        </a>
+        <a href="programme.html" class="w-full sm:w-auto px-10 py-4 bg-white/10 text-white font-bold rounded-xl text-lg border border-white/20 hover:bg-white/20 transition-all">
+          Voir le programme
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<!-- ===== FOOTER UNIFIÉ ===== -->
+<footer class="bg-[#1A1208] text-white py-16">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div>
+        <a href="index.html" class="text-xl font-bold tracking-tighter text-white mb-4 block" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+        <p class="text-slate-400 text-sm leading-relaxed">L'intelligence artificielle au service de votre productivité et de votre carrière professionnelle.</p>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Formation</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="programme.html" class="hover:text-[#E8600A] transition-colors">Programme complet</a></li>
+          <li><a href="../formation-ia-v4/index.html" class="hover:text-[#E8600A] transition-colors">Accéder à la formation</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">S'inscrire</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Académie</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="a-propos.html" class="hover:text-[#E8600A] transition-colors">À propos</a></li>
+          <li><a href="blog.html" class="hover:text-[#E8600A] transition-colors">Blog</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Légal</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Mentions légales</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">CGV</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-8 text-center">
+      <p class="text-xs text-slate-500">© 2025 IA Academy Pro. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="light" lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Programme - IA Academy Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@300..700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/design-system.css"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#E8600A",
+          "cta": "#F97316",
+          "background-light": "#FAFAF7",
+          "background-dark": "#1A1208",
+          "primary-text": "#0F0F0F",
+          "secondary-text": "#888888",
+        },
+        fontFamily: { "display": ["Inter", "sans-serif"] },
+        borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+</head>
+<body class="font-display bg-background-light text-primary-text">
+
+<!-- ===== NAVIGATION UNIFIÉE ===== -->
+<nav class="fixed top-0 w-full z-50 bg-[#FAFAF7]/90 backdrop-blur-md border-b border-slate-200/60">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="text-xl font-bold tracking-tighter text-[#1A1208]" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Accueil</a>
+      <a href="programme.html" class="nav-active text-sm tracking-tight" style="font-family: Manrope, sans-serif;">Programme</a>
+      <a href="a-propos.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">À propos</a>
+      <a href="blog.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Blog</a>
+      <a href="contact.html" class="nav-default text-sm font-medium tracking-tight" style="font-family: Manrope, sans-serif;">Contact</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="../formation-ia-v4/index.html" class="hidden lg:block text-sm font-semibold text-[#E8600A] hover:underline">Accéder à la formation</a>
+      <a href="contact.html" class="bg-[#F97316] text-white px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform shadow-lg shadow-orange-500/20">S'inscrire</a>
+      <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+        <span class="material-symbols-outlined text-[#1A1208]">menu</span>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-[#FAFAF7] border-t border-slate-200 px-6 py-4 flex flex-col gap-4">
+    <a href="index.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Accueil</a>
+    <a href="programme.html" class="text-sm font-bold text-[#E8600A]">Programme</a>
+    <a href="a-propos.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">À propos</a>
+    <a href="blog.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Blog</a>
+    <a href="contact.html" class="text-sm font-semibold text-[#1A1208] hover:text-[#E8600A] transition-colors">Contact</a>
+    <hr class="border-slate-200"/>
+    <a href="../formation-ia-v4/index.html" class="text-sm font-semibold text-[#E8600A]">Accéder à la formation →</a>
+    <a href="contact.html" class="bg-[#F97316] text-white px-5 py-3 rounded-full text-sm font-bold text-center block">S'inscrire</a>
+  </div>
+</nav>
+
+<div class="relative flex min-h-screen flex-col bg-background-light pt-20">
+<main class="flex-1">
+<section class="max-w-7xl mx-auto px-6 py-12 md:py-20">
+  <div class="flex flex-col lg:flex-row gap-12 items-center">
+    <div class="flex-1 space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold uppercase tracking-wider">
+        <span class="material-symbols-outlined text-sm">auto_awesome</span>
+        <span>Programme 2024</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight text-primary-text">
+        Parcours de formation complet
+      </h1>
+      <p class="text-lg text-secondary-text max-w-2xl">
+        Une approche unique équilibrant <span class="text-primary font-bold">60% de pratique</span> et 40% de théorie, conçue spécifiquement pour les PME, freelances et particuliers souhaitant maîtriser concrètement les outils d'IA.
+      </p>
+      <div class="flex flex-wrap gap-4 pt-4">
+        <a href="contact.html" class="px-8 py-4 bg-cta text-white font-bold rounded-xl shadow-lg shadow-cta/25 hover:bg-cta/90 transition-all">
+          Commencer maintenant
+        </a>
+        <a href="../formation-ia-v4/index.html" class="px-8 py-4 bg-white border border-slate-200 text-primary-text font-bold rounded-xl hover:bg-slate-50 transition-all">
+          Accéder à la formation
+        </a>
+      </div>
+    </div>
+    <div class="flex-1 w-full max-w-[560px]">
+      <div class="relative group">
+        <div class="absolute -inset-1 bg-gradient-to-r from-primary to-cta rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+        <div class="relative bg-white rounded-2xl overflow-hidden shadow-2xl aspect-video bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBubvKEMouIjIWG2jJdGAMzd53zkzSHxCgj9oyIjBqhC1vqUPm5P8Xk6jf7U74nFFmLijlQoEFLdCMcCLzkXFWzBJ8gm6qIAbO6CGOOQhUwqLMkuDCFRsPEC0xodIxws-av9G2ECT2s6FtZAMbfjPb3KAkqD0MYDldGOs8aA7RgBDfXZvDgmqZ5XhsLqC7qPLjZesROKAtWXC5g8uMAG_isSqNSfTXkqnzqtSYZrZ6j1A-Sz4oXkVNT1mynTpc1Ca05T6XQJE_MkM4');">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white py-12 border-y border-slate-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="flex flex-col items-center p-6 rounded-2xl bg-background-light border border-slate-100">
+        <span class="material-symbols-outlined text-primary text-3xl mb-2">schedule</span>
+        <p class="text-secondary-text text-sm font-medium">Formation</p>
+        <p class="text-primary-text text-3xl font-black tracking-tight">45h</p>
+      </div>
+      <div class="flex flex-col items-center p-6 rounded-2xl bg-background-light border border-slate-100">
+        <span class="material-symbols-outlined text-primary text-3xl mb-2">view_module</span>
+        <p class="text-secondary-text text-sm font-medium">Modules</p>
+        <p class="text-primary-text text-3xl font-black tracking-tight">8</p>
+      </div>
+      <div class="flex flex-col items-center p-6 rounded-2xl bg-background-light border border-slate-100">
+        <span class="material-symbols-outlined text-primary text-3xl mb-2">handyman</span>
+        <p class="text-secondary-text text-sm font-medium">Pratique</p>
+        <p class="text-primary-text text-3xl font-black tracking-tight">60%</p>
+      </div>
+      <div class="flex flex-col items-center p-6 rounded-2xl bg-background-light border border-slate-100">
+        <span class="material-symbols-outlined text-primary text-3xl mb-2">all_inclusive</span>
+        <p class="text-secondary-text text-sm font-medium">Accès</p>
+        <p class="text-primary-text text-3xl font-black tracking-tight">À vie</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-6 py-20">
+  <div class="mb-12">
+    <h2 class="text-3xl font-bold text-primary-text mb-4">Programme de la formation</h2>
+    <div class="h-1.5 w-24 bg-primary rounded-full"></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAOqm6g6HfLdrYsFbmk_gCqvHNCTe38OtZKpQ3WqD2MFIzkFt9CpPOpsDuLR26WL5Qox-RAUlbk3F7kHWfCjLGV8eS8gn61V6kYV7WmdAHqOeDuTYklpL5ZmKreDeQ-LO-G4l0UCGIACuixY2xJfpZduiMHyPJqIyWPzsg_PXwE-o63rQUdvE8xY7-uxatwGWHk86iIDStztDMvyqqgCCPGo-hzTVYyUJ5m-mbQXNkjWxXY9zus5dxQhB6spemcK4f4qLIQRqJnx8');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 1 • 4h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Fondamentaux de l'IA</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Histoire, concepts clés et panorama des différents types d'IA actuels.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">history_edu</span> Bases théoriques
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBq7DFhbM_rmNDMgUOCg26ix0QAqLm2zTcoDMcbmxcVSA6YjBjnC9THDW8KWXjyFk_FKGK1OMIF-XTucq4Duvu8fWclOQ10bYZ_Zne7S3qT_NtiUGPAa4UONjA1UvXoy4tnStzgGoh64EZDWbZqUaWbW0uJF3eaB_M-UHlsZ2_-4AY3Xe5Ypi4eaAuFwNMYbJ9QdAfekAbmIZMD-PCZNY_2UnLIpJMNJz2YpSc2jnGendLtS_cYF3vFsK9Y5A6X4JPI2gxiBi8jdGw');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 2 • 6h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Art du Prompting</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Structure, techniques avancées et bibliothèque de templates actionnables.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">edit_note</span> Ingénierie du prompt
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCzaeU-MmlFlPjfYbZAArNGw_yvk_EGLS8wVztcO3jzLL98xJEuDIE28uUR0fTPVuWlXRGJ3ODZ8HwAHizR4dDuAnJiLVNJq5GpVV7hR3LCm1bZyTmhIu4b0kTYxEWZuRO1g0r7y1zJEQlORVGYb776sf7y8vs0Ew6agAqK2O8X91_CM0FZSAvYrMsNAsF4gm9NOOlRz-TqGLZjDHA_VADXkfJfZXFpXmwKbQnRqg4Lrlvcs93oGqNCliGz2g6zCZLzSMGMPUH9eAo');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 3 • 6h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Outils IA Populaires</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Maîtrise approfondie de ChatGPT, Claude et création de vos propres custom GPTs.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">apps</span> Ecosystème LLM
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0yOMf7H4xNC85cYH1TNwEP1QEK8Iz8pNM4_Vt8SWW_TYuXfp-s2mH4Mob7FaFdEQUmANe1uxgEVqW64yZDJFPH3WBZYP2AML9pWtWcFSBC1zd5mtkpFZd3fP-IeN9Y-d3BUvsMgLRHDqXHhB7JtEuRLEgh6uIwiS6EuBBtB3qpmZDXiqO7xiVTpS5F3FrZdXFyySt7iups8GvFdUa3iQ8o2CgcUpYxYZ6YWQH4Hd4OBStcheN0_tfGFtTlkiEdn-1ReLQqPNbOMw');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 4 • 7h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">IA Générative</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Création de contenu : Texte, Image (Midjourney), Audio et montage Vidéo assisté.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">palette</span> Création visuelle
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtOxSUUFCyveNZMOqvycnVcT0-vIfR26-y1JTnh0NKE9qE3coDPjSTrP-1Qj1Av3wpY5jomVbV3lbkyzHaRKUmWVksV5FmwWhRWAWDlH5k-MXlTXuT302Ea7A-EEFXajhQXfG5DGEAPrelq8ih9WseACw59rkCJXhZ6qplr5vFLXOMrBjGptdPlRdpttpVV1gDUHRDSAMPSOmh_vYG9N1aYkdDmhFOoW3lh_IcoVWJY0mahdPENNWodDPOgfCfywQpMYnYS0OoCpQ');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 5 • 6h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Automatisation No-Code</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Connecter l'IA à vos outils quotidiens via Zapier et Make.com sans coder.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">settings_input_component</span> Workflow Automation
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGyu_sY-mWy1ESCF8y2HyFk1ALpwd5RLt_p5pfnYGNf-vRfeFtsuRl4Nrqyokdgqji-j-6QfEb5j8z1uIkLK-G8lMMd7EsS5V17aQNSQ-zpUttADtws3m2_wSy6VD-6xI7_kpa-2h7Vt6lrX_unNWX2WRNGjbW7miyzi5uhZeGDHUnZr7gaQa3c6pwfN2KCXV-ks98hhiCjIXw9dEOmzt-8NScHzzFUj4X5qzTQchXaqiraUlOt8mYLqHa4fwt9DJvv2yyyHvBP7w');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 6 • 5h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Cas d'Usage Métier</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Applications réelles en Marketing, Éducation, RH et Productivité individuelle.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">business_center</span> Business Impact
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLp8CYTsnxVEhPhAG-S4hdRidR9C7hnhOFxQvjx7ERY81lvVhMJj4Tx2ZELjg1I3vFDmRQQMd1WjU4KO1TiWGKp3CHyNkaznw13fgzzqK64FnfvXH7iypKP1tZN-v7GUX-I6b2tnpg7BRKMUiErYQYBiiscfqllpwdWEbUxh39LHxtwetLqcYDn8UN9cijKGO9xIXg4kPo1mta1e-eHaMClrTgPP9iB0J6EIdw1A15eqjmKaP8PucCV70xZeL4R3zAy0HcHPO2Rl0');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 7 • 3h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Éthique et Responsabilité</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Biais, AI Act européen, conformité RGPD et utilisation responsable.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">gavel</span> Legal &amp; Compliance
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-primary transition-all shadow-sm hover:shadow-xl">
+      <div class="h-40 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUEHNCFurz7IChQfyCnnwptXqL1Fw3t2hFBi8_IDJO2NBcXe2grox_40KNsTW64jrQJF8_X5rxrsbK3mdSL3-IwPJxsgMBLwL_b4AvCk8A3MxG7CY7FDy9HqZPGDW5WZ4YjBovARjtWuJOzX33ZGu2TLWhxBeNnrHU-MLL6qi4xZ1Z9phlZEPRRzHhDqUwSGNiifEhQBm0npv1tUCfoq1itKv_KJibLcuPJqIxwi7VFD6YIjYukYGLy0gOnO4j9DAcMwoPu5rCFMc');"></div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-primary text-xs font-bold uppercase mb-2">Module 8 • 8h</span>
+        <h3 class="text-lg font-bold text-primary-text mb-2 group-hover:text-primary transition-colors">Projet Final</h3>
+        <p class="text-secondary-text text-sm leading-relaxed mb-4">Accompagnement personnalisé pour la réalisation d'un projet IA complet de A à Z.</p>
+        <div class="mt-auto flex items-center gap-2 text-xs font-medium text-secondary-text">
+          <span class="material-symbols-outlined text-sm">rocket_launch</span> Capstone Project
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-primary/5 py-20">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-primary-text mb-12">Plus qu'une simple formation</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm">
+        <div class="size-14 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
+          <span class="material-symbols-outlined text-3xl">library_books</span>
+        </div>
+        <h4 class="text-xl font-bold mb-2">Bibliothèque de Ressources</h4>
+        <p class="text-secondary-text">Accès illimité à nos guides, cheat sheets et templates exclusifs mis à jour mensuellement.</p>
+      </div>
+      <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm">
+        <div class="size-14 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
+          <span class="material-symbols-outlined text-3xl">groups</span>
+        </div>
+        <h4 class="text-xl font-bold mb-2">Communauté Privée</h4>
+        <p class="text-secondary-text">Rejoignez un réseau d'entraide sur Discord avec des experts et d'autres apprenants passionnés.</p>
+      </div>
+      <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-sm">
+        <div class="size-14 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
+          <span class="material-symbols-outlined text-3xl">workspace_premium</span>
+        </div>
+        <h4 class="text-xl font-bold mb-2">Certification Finale</h4>
+        <p class="text-secondary-text">Validez vos acquis avec une certification reconnue par l'industrie pour booster votre carrière.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-20">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <div class="bg-primary rounded-3xl p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
+      <div class="absolute top-0 right-0 -mr-16 -mt-16 size-64 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 -ml-16 -mb-16 size-64 bg-cta/20 rounded-full blur-3xl"></div>
+      <h2 class="text-3xl md:text-5xl font-black mb-6 relative z-10">Prêt à dominer l'IA ?</h2>
+      <p class="text-lg md:text-xl text-orange-50 mb-10 relative z-10">Rejoignez plus de 1 500 professionnels déjà formés et transformez votre productivité dès aujourd'hui.</p>
+      <a href="contact.html" class="relative z-10 inline-block bg-white text-primary px-10 py-5 rounded-xl font-black text-lg transition-transform hover:scale-105 active:scale-95 shadow-xl">
+        Rejoindre la formation
+      </a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER UNIFIÉ ===== -->
+<footer class="bg-[#1A1208] text-white py-16">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div>
+        <a href="index.html" class="text-xl font-bold tracking-tighter text-white mb-4 block" style="font-family: Manrope, sans-serif;">IA Academy Pro</a>
+        <p class="text-slate-400 text-sm leading-relaxed">L'intelligence artificielle au service de votre productivité et de votre carrière professionnelle.</p>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Formation</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="programme.html" class="hover:text-[#E8600A] transition-colors">Programme complet</a></li>
+          <li><a href="../formation-ia-v4/index.html" class="hover:text-[#E8600A] transition-colors">Accéder à la formation</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">S'inscrire</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Académie</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="a-propos.html" class="hover:text-[#E8600A] transition-colors">À propos</a></li>
+          <li><a href="blog.html" class="hover:text-[#E8600A] transition-colors">Blog</a></li>
+          <li><a href="contact.html" class="hover:text-[#E8600A] transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="font-bold text-white mb-6 text-sm uppercase tracking-wider">Légal</h5>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Mentions légales</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">CGV</a></li>
+          <li><a href="#" class="hover:text-[#E8600A] transition-colors">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-8 text-center">
+      <p class="text-xs text-slate-500">© 2025 IA Academy Pro. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+</div>
+</body>
+</html>
