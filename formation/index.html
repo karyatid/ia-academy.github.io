@@ -181,70 +181,73 @@
 
         .modules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .module-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 12px;
+            padding: 0;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .module-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
         }
 
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--text-primary));
+        .module-card-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
         }
 
-        .module-header {
+        .module-content {
+            padding: 1.25rem;
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            flex-direction: column;
+            flex: 1;
         }
 
-        .module-number {
-            background: var(--primary-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
+        .module-badge {
+            color: var(--primary-color);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
         }
 
         .module-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
         }
 
-        .module-duration {
-            background: var(--bg-accent);
-            color: var(--text-secondary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-left: auto;
+        .module-card:hover .module-title {
+            color: var(--primary-color);
+        }
+
+        .module-card-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: auto;
+            padding-top: 0.75rem;
         }
 
         .module-description {
@@ -523,277 +526,285 @@
                 <div class="modules-grid">
                     <!-- Module 1 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">1</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAOqm6g6HfLdrYsFbmk_gCqvHNCTe38OtZKpQ3WqD2MFIzkFt9CpPOpsDuLR26WL5Qox-RAUlbk3F7kHWfCjLGV8eS8gn61V6kYV7WmdAHqOeDuTYklpL5ZmKreDeQ-LO-G4l0UCGIACuixY2xJfpZduiMHyPJqIyWPzsg_PXwE-o63rQUdvE8xY7-uxatwGWHk86iIDStztDMvyqqgCCPGo-hzTVYyUJ5m-mbQXNkjWxXY9zus5dxQhB6spemcK4f4qLIQRqJnx8');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 1 • 3h</span>
                             <div class="module-title">Fondamentaux de l'IA</div>
-                            <div class="module-duration">3h</div>
-                        </div>
-                        <p class="module-description">
-                            Découvrez les bases de l'intelligence artificielle, son histoire et ses applications concrètes dans notre quotidien.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="fondamentaux_1_introduction_1.html" class="sequence-link">Introduction et concepts clés</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="fondamentaux_1_histoire_2.html" class="sequence-link">Histoire et évolution de l'IA</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="fondamentaux_1_types_safari_3.html" class="sequence-link">Types d'IA et Safari pratique</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="fondamentaux_1_quiz_4.html" class="sequence-link">Quiz et démystification</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="fondamentaux_1_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Découvrez les bases de l'intelligence artificielle, son histoire et ses applications concrètes dans notre quotidien.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="fondamentaux_1_introduction_1.html" class="sequence-link">Introduction et concepts clés</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="fondamentaux_1_histoire_2.html" class="sequence-link">Histoire et évolution de l'IA</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="fondamentaux_1_types_safari_3.html" class="sequence-link">Types d'IA et Safari pratique</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="fondamentaux_1_quiz_4.html" class="sequence-link">Quiz et démystification</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="fondamentaux_1_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">📖 Bases théoriques</div>
                         </div>
                     </div>
 
                     <!-- Module 2 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">2</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBq7DFhbM_rmNDMgUOCg26ix0QAqLm2zTcoDMcbmxcVSA6YjBjnC9THDW8KWXjyFk_FKGK1OMIF-XTucq4Duvu8fWclOQ10bYZ_Zne7S3qT_NtiUGPAa4UONjA1UvXoy4tnStzgGoh64EZDWbZqUaWbW0uJF3eaB_M-UHlsZ2_-4AY3Xe5Ypi4eaAuFwNMYbJ9QdAfekAbmIZMD-PCZNY_2UnLIpJMNJz2YpSc2jnGendLtS_cYF3vFsK9Y5A6X4JPI2gxiBi8jdGw');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 2 • 5h</span>
                             <div class="module-title">Art du Prompting</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Maîtrisez l'art de communiquer efficacement avec les IA génératives pour obtenir des résultats exceptionnels.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="prompting_2_bases_1.html" class="sequence-link">Bases du prompting efficace</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="prompting_2_techniques_avancees_2.html" class="sequence-link">Techniques avancées</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="prompting_2_atelier_3.html" class="sequence-link">Atelier : Templates et bibliothèque</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="prompting_2_quiz_4.html" class="sequence-link">Évaluation et cas d'usage</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="prompting_2_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Maîtrisez l'art de communiquer efficacement avec les IA génératives pour obtenir des résultats exceptionnels.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="prompting_2_bases_1.html" class="sequence-link">Bases du prompting efficace</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="prompting_2_techniques_avancees_2.html" class="sequence-link">Techniques avancées</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="prompting_2_atelier_3.html" class="sequence-link">Atelier : Templates et bibliothèque</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="prompting_2_quiz_4.html" class="sequence-link">Évaluation et cas d'usage</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="prompting_2_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">✍️ Ingénierie du prompt</div>
                         </div>
                     </div>
 
                     <!-- Module 3 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">3</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCzaeU-MmlFlPjfYbZAArNGw_yvk_EGLS8wVztcO3jzLL98xJEuDIE28uUR0fTPVuWlXRGJ3ODZ8HwAHizR4dDuAnJiLVNJq5GpVV7hR3LCm1bZyTmhIu4b0kTYxEWZuRO1g0r7y1zJEQlORVGYb776sf7y8vs0Ew6agAqK2O8X91_CM0FZSAvYrMsNAsF4gm9NOOlRz-TqGLZjDHA_VADXkfJfZXFpXmwKbQnRqg4Lrlvcs93oGqNCliGz2g6zCZLzSMGMPUH9eAo');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 3 • 5h</span>
                             <div class="module-title">Outils IA</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Explorez les outils IA essentiels et apprenez à les utiliser efficacement dans vos projets.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="outils_3_chatgpt_1a.html" class="sequence-link">ChatGPT et GPT-4</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="outils_3_claude_2.html" class="sequence-link">Claude et alternatives</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="outils_3_autres_3.html" class="sequence-link">Autres outils spécialisés</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="outils_3_atelier_4.html" class="sequence-link">Atelier comparatif</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="outils_3_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Explorez les outils IA essentiels et apprenez à les utiliser efficacement dans vos projets.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="outils_3_chatgpt_1a.html" class="sequence-link">ChatGPT et GPT-4</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="outils_3_claude_2.html" class="sequence-link">Claude et alternatives</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="outils_3_autres_3.html" class="sequence-link">Autres outils spécialisés</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="outils_3_atelier_4.html" class="sequence-link">Atelier comparatif</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="outils_3_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">🛠️ Ecosystème LLM</div>
                         </div>
                     </div>
 
                     <!-- Module 4 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">4</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0yOMf7H4xNC85cYH1TNwEP1QEK8Iz8pNM4_Vt8SWW_TYuXfp-s2mH4Mob7FaFdEQUmANe1uxgEVqW64yZDJFPH3WBZYP2AML9pWtWcFSBC1zd5mtkpFZd3fP-IeN9Y-d3BUvsMgLRHDqXHhB7JtEuRLEgh6uIwiS6EuBBtB3qpmZDXiqO7xiVTpS5F3FrZdXFyySt7iups8GvFdUa3iQ8o2CgcUpYxYZ6YWQH4Hd4OBStcheN0_tfGFtTlkiEdn-1ReLQqPNbOMw');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 4 • 5h</span>
                             <div class="module-title">IA Générative</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Créez du contenu avec l'IA : textes, images, vidéos et audio. Techniques et bonnes pratiques.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="generative_4_texte_scripts_1.html" class="sequence-link">Génération de texte avancée</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="generative_4_midjourney_debutant_2a.html" class="sequence-link">Création d'images et design</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="generative_4_audio_3a.html" class="sequence-link">Vidéo et audio IA</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="generative_4_projet_portfolio_4.html" class="sequence-link">Projet créatif complet</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="generative_4_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Créez du contenu avec l'IA : textes, images, vidéos et audio. Techniques et bonnes pratiques.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="generative_4_texte_scripts_1.html" class="sequence-link">Génération de texte avancée</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="generative_4_midjourney_debutant_2a.html" class="sequence-link">Création d'images et design</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="generative_4_audio_3a.html" class="sequence-link">Vidéo et audio IA</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="generative_4_projet_portfolio_4.html" class="sequence-link">Projet créatif complet</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="generative_4_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">🎨 Création visuelle</div>
                         </div>
                     </div>
 
                     <!-- Module 5 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">5</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtOxSUUFCyveNZMOqvycnVcT0-vIfR26-y1JTnh0NKE9qE3coDPjSTrP-1Qj1Av3wpY5jomVbV3lbkyzHaRKUmWVksV5FmwWhRWAWDlH5k-MXlTXuT302Ea7A-EEFXajhQXfG5DGEAPrelq8ih9WseACw59rkCJXhZ6qplr5vFLXOMrBjGptdPlRdpttpVV1gDUHRDSAMPSOmh_vYG9N1aYkdDmhFOoW3lh_IcoVWJY0mahdPENNWodDPOgfCfywQpMYnYS0OoCpQ');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 5 • 5h</span>
                             <div class="module-title">Automatisation</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Automatisez vos tâches avec l'IA : workflows, intégrations et optimisation des processus.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                            <div class="sequence-number">1</div>
-                              <a href="automatisation_5_introduction_1.html" class="sequence-link">Introduction et concepts</a>
-                            </li>
-                             <li class="sequence-item">
-                            <div class="sequence-number">2</div>
-                            <a href="automatisation_5_zapier_2.html" class="sequence-link">Zapier et workflows</a>
-                        </li>
-                        <li class="sequence-item">
-                            <div class="sequence-number">3</div>
-                            <a href="automatisation_5_make_3.html" class="sequence-link">Make.com avancé</a>
-                        </li>
-                        <li class="sequence-item">
-                            <div class="sequence-number">4</div>
-                            <a href="automatisation_5_projet_4.html" class="sequence-link">Projet d'automatisation</a>
-                        </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="automatisation_5_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Automatisez vos tâches avec l'IA : workflows, intégrations et optimisation des processus.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="automatisation_5_introduction_1.html" class="sequence-link">Introduction et concepts</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="automatisation_5_zapier_2.html" class="sequence-link">Zapier et workflows</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="automatisation_5_make_3.html" class="sequence-link">Make.com avancé</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="automatisation_5_projet_4.html" class="sequence-link">Projet d'automatisation</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="automatisation_5_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">⚙️ Workflow Automation</div>
                         </div>
                     </div>
 
                     <!-- Module 6 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">6</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGyu_sY-mWy1ESCF8y2HyFk1ALpwd5RLt_p5pfnYGNf-vRfeFtsuRl4Nrqyokdgqji-j-6QfEb5j8z1uIkLK-G8lMMd7EsS5V17aQNSQ-zpUttADtws3m2_wSy6VD-6xI7_kpa-2h7Vt6lrX_unNWX2WRNGjbW7miyzi5uhZeGDHUnZr7gaQa3c6pwfN2KCXV-ks98hhiCjIXw9dEOmzt-8NScHzzFUj4X5qzTQchXaqiraUlOt8mYLqHa4fwt9DJvv2yyyHvBP7w');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 6 • 5h</span>
                             <div class="module-title">Cas d'Usage Métier</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Applications concrètes de l'IA dans différents secteurs : éducation, marketing, productivité.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="casusage_6_education_1.html" class="sequence-link">IA et éducation</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="casusage_6_marketing_2.html" class="sequence-link">IA et marketing</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="casusage_6_productivite_3.html" class="sequence-link">IA et productivité</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="casusage_6_adaptive_2.html" class="sequence-link">Audit et implémentation</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="casusage_6_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Applications concrètes de l'IA dans différents secteurs : éducation, marketing, productivité.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="casusage_6_education_1.html" class="sequence-link">IA et éducation</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="casusage_6_marketing_2.html" class="sequence-link">IA et marketing</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="casusage_6_productivite_3.html" class="sequence-link">IA et productivité</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="casusage_6_adaptive_2.html" class="sequence-link">Audit et implémentation</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="casusage_6_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">💼 Business Impact</div>
                         </div>
                     </div>
 
                     <!-- Module 7 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">7</div>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLp8CYTsnxVEhPhAG-S4hdRidR9C7hnhOFxQvjx7ERY81lvVhMJj4Tx2ZELjg1I3vFDmRQQMd1WjU4KO1TiWGKp3CHyNkaznw13fgzzqK64FnfvXH7iypKP1tZN-v7GUX-I6b2tnpg7BRKMUiErYQYBiiscfqllpwdWEbUxh39LHxtwetLqcYDn8UN9cijKGO9xIXg4kPo1mta1e-eHaMClrTgPP9iB0J6EIdw1A15eqjmKaP8PucCV70xZeL4R3zAy0HcHPO2Rl0');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 7 • 2h</span>
                             <div class="module-title">Éthique et IA</div>
-                            <div class="module-duration">2h</div>
-                        </div>
-                        <p class="module-description">
-                            Enjeux éthiques, bonnes pratiques et utilisation responsable de l'intelligence artificielle.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="ethique_7_enjeux_1a.html" class="sequence-link">Enjeux et défis éthiques</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="ethique_7_biais_2.html" class="sequence-link">Pratiques responsables</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="ethique_7_futur_3.html" class="sequence-link">Atelier audit éthique</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="ethique_7_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                            <p class="module-description">
+                                Enjeux éthiques, bonnes pratiques et utilisation responsable de l'intelligence artificielle.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="ethique_7_enjeux_1a.html" class="sequence-link">Enjeux et défis éthiques</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="ethique_7_biais_2.html" class="sequence-link">Pratiques responsables</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="ethique_7_futur_3.html" class="sequence-link">Atelier audit éthique</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="ethique_7_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">⚖️ Legal & Éthique</div>
                         </div>
                     </div>
 
                     <!-- Module 8 -->
                     <div class="module-card">
-                        <div class="module-header">
-                            <div class="module-number">8</div>
-                            <div class="module-title">Projet Final ** en construction **</div>
-                            <div class="module-duration">5h</div>
-                        </div>
-                        <p class="module-description">
-                            Consolidez vos apprentissages avec un projet personnel utilisant les technologies IA étudiées.
-                        </p>
-                        <ul class="sequences-list">
-                            <li class="sequence-item">
-                                <div class="sequence-number">1</div>
-                                <a href="projet_8_brief_1.html" class="sequence-link">Brief et définition</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">2</div>
-                                <a href="projet_8_conception_2.html" class="sequence-link">Conception et architecture</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">3</div>
-                                <a href="projet_8_realisation_3.html" class="sequence-link">Réalisation et développement</a>
-                            </li>
-                            <li class="sequence-item">
-                                <div class="sequence-number">4</div>
-                                <a href="projet_8_presentation_4.html" class="sequence-link">Présentation et feedback</a>
-                            </li>
-                        </ul>
-                        <div class="module-actions">
-                            <a href="projet_8_overview.html" class="btn btn-primary">
-                                Commencer le module →
-                            </a>
+                        <div class="module-card-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUEHNCFurz7IChQfyCnnwptXqL1Fw3t2hFBi8_IDJO2NBcXe2grox_40KNsTW64jrQJF8_X5rxrsbK3mdSL3-IwPJxsgMBLwL_b4AvCk8A3MxG7CY7FDy9HqZPGDW5WZ4YjBovARjtWuJOzX33ZGu2TLWhxBeNnrHU-MLL6qi4xZ1Z9phlZEPRRzHhDqUwSGNiifEhQBm0npv1tUCfoq1itKv_KJibLcuPJqIxwi7VFD6YIjYukYGLy0gOnO4j9DAcMwoPu5rCFMc');"></div>
+                        <div class="module-content">
+                            <span class="module-badge">Module 8 • 5h</span>
+                            <div class="module-title">Projet Final <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted);">en construction</span></div>
+                            <p class="module-description">
+                                Consolidez vos apprentissages avec un projet personnel utilisant les technologies IA étudiées.
+                            </p>
+                            <ul class="sequences-list">
+                                <li class="sequence-item">
+                                    <div class="sequence-number">1</div>
+                                    <a href="projet_8_brief_1.html" class="sequence-link">Brief et définition</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">2</div>
+                                    <a href="projet_8_conception_2.html" class="sequence-link">Conception et architecture</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">3</div>
+                                    <a href="projet_8_realisation_3.html" class="sequence-link">Réalisation et développement</a>
+                                </li>
+                                <li class="sequence-item">
+                                    <div class="sequence-number">4</div>
+                                    <a href="projet_8_presentation_4.html" class="sequence-link">Présentation et feedback</a>
+                                </li>
+                            </ul>
+                            <div class="module-actions">
+                                <a href="projet_8_overview.html" class="btn btn-primary">
+                                    Commencer le module →
+                                </a>
+                            </div>
+                            <div class="module-card-footer">🚀 Projet Capstone</div>
                         </div>
                     </div>
                 </div>
